@@ -2,6 +2,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaFacebook } from "react-icons/fa6";
+import { Link } from "react-router";
 
 const Contact = () => {
   return (
@@ -28,7 +29,7 @@ const Contact = () => {
                 HOME
               </li>
               <li className="text-lg font-LatoRegular hover:text-LBackground">
-                ABOUT
+                <Link to="/about">ABOUT</Link>
               </li>
               <li className="text-lg font-LatoRegular hover:text-LBackground">
                 FAQs
