@@ -14,11 +14,11 @@ const HowToAppoint = () => {
           <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>
 
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-          <div className="relative z-10 px-4">
-            <h1 className="text-[40px] font-semibold uppercase mb-4 border-b-8 border-white pb-6 max-w-[500px]">
+          <div className="relative z-10 px-4 max-w-[900px] tracking-widest">
+            <h1 className="text-[50px]  font-semibold uppercase mb-4 border-b-8 border-white pb-6 w-[800px]">
               Wisdom Based on the Truth is Priceless
             </h1>
-            <p className="text-[20px] max-w-[500px]">
+            <p className="text-[30px] ">
               Well-known for offering quality education with a focus on
               Christian values, moral development, and academic excellence.
             </p>
@@ -30,20 +30,20 @@ const HowToAppoint = () => {
 
         {/* Appointment Steps */}
         <div className="bg-[#161F55] text-white py-12 px-4 flex justify-around h-screen">
-          <div className=" flex flex-col justify-center w-[500px]">
-            <h2 className="text-[40px] font-semibold text-center mb-6 border-b-8 border-[#F3BC62] ">
+          <div className=" flex flex-col justify-center w-[500px] tracking-widest leading-normal">
+            <h2 className="text-[50px] font-semibold text-center mb-6 border-b-8 border-[#F3BC62] ">
               APPOINTMENT SCHEDULING
             </h2>
-            <p className="text-center mb-8 text-[25px]">
+            <p className="text-center mb-8 text-[30px]">
               How to schedule an appointment in 5 easy steps
             </p>
           </div>
 
           {/* Steps */}
           <div className="flex justify-center items-center">
-            <div className="space-y-6">
+            <div className="space-y-6 tracking-wider leading-10 text-[20px] pt-10">
               {/* Step 1 */}
-              <div className="flex items-start">
+              <div className="flex items-start ">
                 <span className="text-5xl font-bold mr-4 border-r-8 border-[#F3BC62]">
                   01.
                 </span>
