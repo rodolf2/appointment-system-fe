@@ -32,7 +32,7 @@ const Contact = () => {
                 <Link to="/about">ABOUT</Link>
               </li>
               <li className="text-lg font-LatoRegular hover:text-LBackground">
-                FAQs
+                <Link to="/faqs">FAQs</Link>
               </li>
               <li className="text-lg font-LatoRegular hover:text-LBackground relative">
                 CONTACT
