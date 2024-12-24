@@ -6,12 +6,15 @@ import HowToAppoint from "./pages/HowToAppoint";
 import LandingPage from "./pages/LandingPage";
 import FAQs from "./pages/FAQs";
 import Contact from "./pages/Contact";
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage";
+import Home from "./pages/HomePage";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Layout />
+      <Header />
+      <HowToAppoint />
+      <Footer />
     </BrowserRouter>
   );
 };
@@ -28,7 +31,7 @@ const Layout = () => {
         <Route path="/aboutus" element={<About />} />
         <Route path="/howtoappoint" element={<HowToAppoint />} />
         <Route path="/faqs" element={<FAQs />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
       {showHeaderFooter && <Footer />}
