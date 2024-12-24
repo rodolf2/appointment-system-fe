@@ -29,7 +29,7 @@ const About = () => {
                 <span className="absolute bottom-[-5px] left-0 w-full h-1 bg-[#F3BC62]"></span>
               </li>
               <li className="text-lg font-LatoRegular hover:text-LBackground">
-                <Link>FAQs</Link>
+                <Link to="/faqs">FAQs</Link>
               </li>
 
               <li className="text-lg font-LatoRegular hover:text-LBackground relative">
