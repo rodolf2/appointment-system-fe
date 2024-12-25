@@ -6,3 +6,7 @@
   font-family: "Tolkien";
   src: url("/font/Tolkien.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Lato";
+  src: url("/font/Lato-Regular.ttf") format("truetype");
+}

@@ -17,7 +17,7 @@ export default {
           "linear-gradient(180deg, rgba(37, 47, 106, 0.20) 58%, rgba(243, 188, 98, 0.30) 92%)",
         "custom-gradient_about":
           "linear-gradient(180deg, rgba(22, 31, 85, 0.20) 50%, rgba(243, 188, 98, 0.30) 100%)",
-        "custom-gradient_home":
+        "custom-gradient_announcement":
           "linear-gradient(180deg, rgba(37, 47, 106, 0.30) 58%, rgba(243, 188, 98, 0.50) 92%)",
       },
     },
