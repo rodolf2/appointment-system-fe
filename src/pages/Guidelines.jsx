@@ -1,5 +1,6 @@
 import Buttons from "../components/Buttons";
 import Documents from "../components/Documents";
+import DocumentsStatic from "../components/DocumentsStatic";
 const Guidelines = () => {
   return (
     <div className="max-w-[1440px] mx-auto font-lato">
@@ -166,7 +167,7 @@ const Guidelines = () => {
           </h2>
           <div className="w-[400px] h-1 bg-[#F3BC62] mx-auto my-8"></div>
         </div>
-        <Documents />
+        <DocumentsStatic />
       </div>
     </div>
   );
