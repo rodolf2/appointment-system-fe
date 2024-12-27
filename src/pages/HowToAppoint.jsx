@@ -29,12 +29,13 @@ const HowToAppoint = () => {
         <Buttons />
 
         {/* Appointment Steps */}
-        <div className="bg-[#161F55] text-white py-12 px-4 flex justify-around h-screen">
+        <div className="bg-[#161F55] text-white py-12 px-4 flex justify-around h-[800px]">
           <div className=" flex flex-col justify-center w-[500px] tracking-widest leading-normal">
-            <h2 className="text-[50px] font-semibold text-center mb-6 border-b-8 border-[#F3BC62] ">
+            <h2 className="text-[50px] font-semibold text-center ">
               APPOINTMENT SCHEDULING
             </h2>
-            <p className="text-center mb-8 text-[30px]">
+            <span className=" border-b-[10px] border-[#F3BC62] my-4"></span>
+            <p className="text-center text-[30px]">
               How to schedule an appointment in 5 easy steps
             </p>
           </div>
@@ -43,10 +44,9 @@ const HowToAppoint = () => {
           <div className="flex justify-center items-center">
             <div className="space-y-6 tracking-wider leading-10 text-[20px] pt-10">
               {/* Step 1 */}
-              <div className="flex items-start ">
-                <span className="text-5xl font-bold mr-4 border-r-8 border-[#F3BC62]">
-                  01.
-                </span>
+              <div className="flex items-center pb-2 ">
+                <span className="text-5xl font-bold">01.</span>
+                <span className="border-r-[8px] border-[#F3BC62] h-20 mx-5"></span>
                 <div>
                   <h3 className="uppercase text-3xl font-bold ">Step 1:</h3>
                   <p className="text-1xl ">Click the appointment button</p>
@@ -54,10 +54,9 @@ const HowToAppoint = () => {
               </div>
 
               {/* Step 2 */}
-              <div className="flex items-start">
-                <span className="text-5xl font-bold mr-4 border-r-8 border-[#F3BC62]">
-                  02.
-                </span>
+              <div className="flex items-center pb-2">
+                <span className="text-5xl font-bold">02.</span>
+                <span className="border-r-[8px] border-[#F3BC62] h-20 mx-5"></span>
                 <div>
                   <h3 className="uppercase text-3xl font-bold  gap-4">
                     Step 2:
@@ -67,10 +66,9 @@ const HowToAppoint = () => {
               </div>
 
               {/* Step 3 */}
-              <div className="flex items-start">
-                <span className="text-5xl font-bold mr-4 border-r-8 border-[#F3BC62]">
-                  03.
-                </span>
+              <div className="flex items-center pb-2">
+                <span className="text-5xl font-bold ">03.</span>
+                <span className="border-r-[8px] border-[#F3BC62] h-20 mx-5"></span>
                 <div>
                   <h3 className="uppercase text-3xl font-bold ">Step 3:</h3>
                   <p className="text-1xl ">Upload the necessary requirements</p>
@@ -78,10 +76,9 @@ const HowToAppoint = () => {
               </div>
 
               {/* Step 4 */}
-              <div className="flex items-start">
-                <span className="text-5xl font-bold mr-4 border-r-8 border-[#F3BC62]">
-                  04.
-                </span>
+              <div className="flex items-center pb-2">
+                <span className="text-5xl font-bold ">04.</span>
+                <span className="border-r-[8px] border-[#F3BC62] h-20 mx-5"></span>
                 <div>
                   <h3 className="uppercase text-3xl font-bold ">Step 4:</h3>
                   <p className="text-1xl ">Choose an appointment date</p>
@@ -89,10 +86,9 @@ const HowToAppoint = () => {
               </div>
 
               {/* Step 5 */}
-              <div className="flex items-start">
-                <span className="text-5xl font-bold mr-4 border-r-8 border-[#F3BC62]">
-                  05.
-                </span>
+              <div className="flex items-center pb-2">
+                <span className="text-5xl font-bold ">05.</span>
+                <span className="border-r-[8px] border-[#F3BC62] h-20 mx-5"></span>
                 <div>
                   <h3 className="uppercase text-3xl font-bold ">Step 5:</h3>
                   <p className="text-1xl ">

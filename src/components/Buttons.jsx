@@ -10,7 +10,7 @@ const Buttons = () => {
           {/* Announcement Tab */}
           <button
             onClick={() => setActiveTab("announcement")}
-            className={`border-b-4 bg-[#D2D2D2] p-5 rounded-sm w-[399px] h-[104px] ${
+            className={`border-b-4 bg-[#D2D2D2] p-5 rounded-sm w-[390px] h-[100px] ${
               activeTab === "announcement"
                 ? "border-orange-500"
                 : "border-transparent text-gray-600 hover:border-gray-400"
@@ -22,7 +22,7 @@ const Buttons = () => {
           {/* How to Appoint Tab */}
           <button
             onClick={() => setActiveTab("howtoappoint")}
-            className={`border-b-4 bg-[#D2D2D2] p-5 rounded-sm w-[399px] h-[104px] ${
+            className={`border-b-4 bg-[#D2D2D2] p-5 rounded-sm w-[390px] h-[100px] ${
               activeTab === "howtoappoint"
                 ? "border-orange-500"
                 : "border-transparent text-gray-600 hover:border-gray-400"
@@ -34,7 +34,7 @@ const Buttons = () => {
           {/* Guidelines Tab */}
           <button
             onClick={() => setActiveTab("guidelines")}
-            className={`border-b-4 bg-[#D2D2D2] p-5 rounded-sm w-[399px] h-[104px] ${
+            className={`border-b-4 bg-[#D2D2D2] p-5 rounded-sm w-[390px] h-[100px] ${
               activeTab === "guidelines"
                 ? "border-orange-500"
                 : "border-transparent text-gray-600 hover:border-gray-400"
