@@ -1,19 +1,21 @@
-import React from "react";
-
 const Footer = () => {
   return (
     <>
-      <div className="flex justify-between items-center bg-[#eef2f7] p-8 max-w-[1440px] h-[100px] mx-auto text-[#161F55] px-20 ">
-        <div className="font-custom text-[25px] pl-0 mr-[350px] font-tolkien">
-          LA VERDAD CHRISTIAN COLLEGE
-        </div>
-        <div>
-          <p className="text-center p-1 text-[25px] font-lato">CONTACT US</p>
-          <p className="text-center p-1 text-[15px] font-lato">
-            support@laverdad.edu.ph
+      <footer>
+        <div className="flex justify-between items-center h-[130px] px-12">
+          <p className="font-regular ml-12 text-[24px] text-LBackground ">
+            LA VERDAD CHRISTIAN COLLEGE
           </p>
+          <div className="flex flex-col items-center space-y-3 ">
+            <p className="font-LatoRegular mr-2 text-[24px] text-LBackground ">
+              CONTACT US
+            </p>
+            <p className=" text-[22px] font-LatoRegular text-LBackground">
+              support@laverdad.edu.ph
+            </p>
+          </div>
         </div>
-      </div>
+      </footer>
     </>
   );
 };

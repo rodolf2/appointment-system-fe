@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { Link } from "react-router";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -41,9 +42,12 @@ const Carousel = () => {
         </h2>
         <div className=" border-b-4 border-[#F3BC62] w-[50%] my-5"></div>
         <p className="text-[30px] pb-10">{slides[currentIndex].description}</p>
-        <button className="text-[25px] border border-white px-4 py-2 rounded hover:bg-white hover:text-[#2A3064] transition">
-          See more
-        </button>
+        <Link to={"/guidelines"}>
+          {" "}
+          <button className="text-[25px] border border-white px-4 py-2 rounded hover:bg-white hover:text-[#2A3064] transition">
+            See more
+          </button>
+        </Link>
       </div>
 
       {/* Navigation Arrows */}

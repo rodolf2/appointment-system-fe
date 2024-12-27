@@ -1,47 +1,77 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom"; // Import useLocation
 
 const Buttons = () => {
+  const location = useLocation(); // Get the current location
   const [activeTab, setActiveTab] = useState("");
+
+  // Update activeTab based on the current location
+  useEffect(() => {
+    const path = location.pathname.split("/")[1]; // Get the path after the first slash
+    setActiveTab(path); // Set activeTab based on the path
+  }, [location]);
 
   return (
     <div className="relative">
       <div className="flex items-center justify-center flex-col max-w-[1297px] mx-auto">
+        {/* Tab Buttons */}
         <div className="absolute z-10 text-[27px] flex justify-around w-full">
           {/* Announcement Tab */}
-          <button
-            onClick={() => setActiveTab("announcement")}
-            className={`border-b-4 bg-[#D2D2D2] transition mx-20 p-4 rounded-sm w-[390px] h-[200px]${
-              activeTab === "announcement"
-                ? "border-orange-500"
-                : "border-transparent text-gray-600 hover:border-gray-400"
+          <Link
+            to="/announcement"
+            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
+              activeTab === "announcement" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
-            Announcement
-          </button>
+            <span
+              className={`relative mb-2 ${
+                activeTab === "announcement" ? "text-black" : "text-gray-600"
+              }`} // Added margin-bottom
+            >
+              Announcement
+              {activeTab === "announcement" && (
+                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-orange-500"></span>
+              )}
+            </span>
+          </Link>
 
           {/* How to Appoint Tab */}
-          <button
-            onClick={() => setActiveTab("howtoappoint")}
-            className={`border-b-4 bg-[#D2D2D2] transition mx-20 p-4 rounded-sm w-[200px] ${
-              activeTab === "howtoappoint"
-                ? "border-orange-500"
-                : "border-transparent text-gray-600 hover:border-gray-400"
+          <Link
+            to="/howtoappoint"
+            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
+              activeTab === "howtoappoint" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
-            How to Appoint
-          </button>
+            <span
+              className={`relative mb-2 ${
+                activeTab === "howtoappoint" ? "text-black" : "text-gray-600"
+              }`} // Added margin-bottom
+            >
+              How to Appoint
+              {activeTab === "howtoappoint" && (
+                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-orange-500"></span>
+              )}
+            </span>
+          </Link>
 
           {/* Guidelines Tab */}
-          <button
-            onClick={() => setActiveTab("guidelines")}
-            className={`border-b-4 bg-[#D2D2D2] transition mx-20 p-4 rounded-sm w-[200px] ${
-              activeTab === "guidelines"
-                ? "border-orange-500"
-                : "border-transparent text-gray-600 hover:border-gray-400"
+          <Link
+            to="/guidelines"
+            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
+              activeTab === "guidelines" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
-            Guidelines
-          </button>
+            <span
+              className={`relative mb-2 ${
+                activeTab === "guidelines" ? "text-black" : "text-gray-600"
+              }`} // Added margin-bottom
+            >
+              Guidelines
+              {activeTab === "guidelines" && (
+                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
+              )}
+            </span>
+          </Link>
         </div>
       </div>
     </div>

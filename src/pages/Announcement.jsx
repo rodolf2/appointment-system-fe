@@ -44,7 +44,7 @@ const Announcement = () => {
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
-          <section className="absolute left-20 text-start z-20">
+          <section className="absolute left-20 text-start z-20 pb-20">
             <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>
@@ -53,9 +53,6 @@ const Announcement = () => {
               Simplifying appointment scheduling. Stay organized, save time, and
               never miss an appointment. Easy, fast, and hassle-free
             </p>
-            <button className="bg-[#161F55] p-4 rounded-lg w-[240px] text-[20px]">
-              LEARN MORE
-            </button>
           </section>
         </div>
         <Buttons />

@@ -1,5 +1,4 @@
 import Buttons from "../components/Buttons";
-import Documents from "../components/Documents";
 import DocumentsStatic from "../components/DocumentsStatic";
 const Guidelines = () => {
   return (
