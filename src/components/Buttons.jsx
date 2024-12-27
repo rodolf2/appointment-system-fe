@@ -26,7 +26,7 @@ const Buttons = () => {
             <span
               className={`relative mb-2 ${
                 activeTab === "announcement" ? "text-black" : "text-gray-600"
-              }`} // Added margin-bottom
+              }`}
             >
               Announcement
               {activeTab === "announcement" && (

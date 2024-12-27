@@ -35,7 +35,6 @@ const Carousel = () => {
 
   return (
     <div className="relative w-full max-w-[1440px] h-screen mx-auto bg-[#2A3064] text-white p-6 flex flex-col items-center justify-center pt-10 font-lato">
-      {/* Slide Content */}
       <div className="text-center max-w-[1000px] flex flex-col justify-center items-center h-screen">
         <h2 className="text-[36px] font-semibold w-[800px]">
           {slides[currentIndex].title}
@@ -50,7 +49,6 @@ const Carousel = () => {
         </Link>
       </div>
 
-      {/* Navigation Arrows */}
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl font-bold ">
         <button onClick={handlePrev}>
           <FaArrowLeft className="w-10 h-10" />
@@ -62,7 +60,6 @@ const Carousel = () => {
         </button>
       </div>
 
-      {/* Pagination Dots */}
       <div className="flex justify-center">
         {slides.map((_, index) => (
           <span

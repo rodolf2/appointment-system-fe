@@ -2,10 +2,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const Header = () => {
-  // State to track the active link
   const [activeLink, setActiveLink] = useState("/home");
 
-  // Function to handle link click
   const handleLinkClick = (link) => {
     setActiveLink(link);
   };
@@ -13,7 +11,6 @@ const Header = () => {
   return (
     <main className="bg-Bbackground py-4">
       <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
-        {/* Logo and Title */}
         <h2 className="flex items-center">
           <img
             src="/src/assets/image/LV_Logo.png"
@@ -28,7 +25,6 @@ const Header = () => {
           </span>
         </h2>
 
-        {/* Navigation */}
         <nav>
           <ul className="flex space-x-10 text-[#000] relative left-40">
             {["/home", "/about", "/faqs", "/contact"].map((link) => (
@@ -47,7 +43,6 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Button */}
         <button className="px-6 py-3 bg-[#252F6A] text-[#FAFAFA] text-sm uppercase rounded-[10px] hover:bg-blue-700 relative right-3">
           Appoint Now
         </button>
