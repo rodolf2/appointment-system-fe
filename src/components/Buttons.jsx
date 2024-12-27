@@ -1,22 +1,19 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation
+import { Link, useLocation } from "react-router-dom";
 
 const Buttons = () => {
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("");
 
-  // Update activeTab based on the current location
   useEffect(() => {
-    const path = location.pathname.split("/")[1]; // Get the path after the first slash
-    setActiveTab(path); // Set activeTab based on the path
+    const path = location.pathname.split("/")[1];
+    setActiveTab(path);
   }, [location]);
 
   return (
     <div className="relative">
       <div className="flex items-center justify-center flex-col max-w-[1297px] mx-auto">
-        {/* Tab Buttons */}
         <div className="absolute z-10 text-[27px] flex justify-around w-full">
-          {/* Announcement Tab */}
           <Link
             to="/announcement"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
@@ -35,7 +32,6 @@ const Buttons = () => {
             </span>
           </Link>
 
-          {/* How to Appoint Tab */}
           <Link
             to="/howtoappoint"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
@@ -45,7 +41,7 @@ const Buttons = () => {
             <span
               className={`relative mb-2 ${
                 activeTab === "howtoappoint" ? "text-black" : "text-gray-600"
-              }`} // Added margin-bottom
+              }`}
             >
               How to Appoint
               {activeTab === "howtoappoint" && (
@@ -54,7 +50,6 @@ const Buttons = () => {
             </span>
           </Link>
 
-          {/* Guidelines Tab */}
           <Link
             to="/guidelines"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
@@ -64,7 +59,7 @@ const Buttons = () => {
             <span
               className={`relative mb-2 ${
                 activeTab === "guidelines" ? "text-black" : "text-gray-600"
-              }`} // Added margin-bottom
+              }`}
             >
               Guidelines
               {activeTab === "guidelines" && (

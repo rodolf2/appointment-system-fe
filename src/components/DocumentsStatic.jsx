@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 const DocumentsStatic = () => {
-  const [openDropdowns, setOpenDropdowns] = useState([]); // Array to track open dropdowns
+  const [openDropdowns, setOpenDropdowns] = useState([]);
 
   const dropdowns = [
     {
@@ -83,11 +83,9 @@ const DocumentsStatic = () => {
   return (
     <div>
       <section className="bg-[#161F55] w-full flex justify-center flex-col text-center relative">
-        {/* QUESTIONS AND ANSWERS */}
         <div className="w-full max-w-md mx-auto mt-2 mb-32 flex flex-col items-center">
           {dropdowns.map((dropdown) => (
             <div key={dropdown.id} className="mb-8">
-              {/* Dropdown Header */}
               <div
                 onClick={() => toggleDropdown(dropdown.id)}
                 className={`flex justify-between items-center text-3xl w-[900px] text-white p-4 border-[3px] cursor-pointer ${
@@ -102,7 +100,6 @@ const DocumentsStatic = () => {
                 </span>
               </div>
 
-              {/* Dropdown Content */}
               {openDropdowns.includes(dropdown.id) && (
                 <div className="text-white p-4 border-2 cursor-pointer text-start">
                   <p className="text-[24px]  mb-4">

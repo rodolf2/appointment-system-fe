@@ -1,4 +1,3 @@
-// src/pages/Home.jsx
 import React from "react";
 import Announcement from "../pages/Announcement";
 import HowToAppoint from "../pages/HowToAppoint";
