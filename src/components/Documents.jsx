@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { db } from "/firebase.js";
 import { collection, getDocs } from "firebase/firestore";
 
-const Faqs = () => {
+const Documents = () => {
   const [dropdowns, setDropdowns] = useState([]);
   const [openDropdowns, setOpenDropdowns] = useState([]); // Array to track open dropdowns
 
@@ -37,27 +37,15 @@ const Faqs = () => {
           ))}
         </ul>
       );
-    } else if (typeof conditions === "string") {
-      // If conditions is a string, split by commas to create a bullet list
-      const conditionList = conditions.split(",").map((condition, index) => (
-        <li key={index} className="text-[24px]">
-          {condition.trim()}
-        </li>
-      ));
-
-      return <ul className="list-disc pl-6">{conditionList}</ul>;
     }
-    return null;
   };
 
   return (
     <>
       <section className="bg-[#161F55] w-full flex justify-center flex-col text-center relative">
-        {/* QUESTIONS AND ANSWERS */}
         <div className="w-full max-w-md mx-auto mt-2 mb-32 flex flex-col items-center">
           {dropdowns.map((dropdown) => (
             <div key={dropdown.id} className="mb-8">
-              {/* Dropdown Header */}
               <div
                 onClick={() => toggleDropdown(dropdown.id)}
                 className={`flex justify-between items-center text-3xl w-[900px] text-white p-4 border-[3px] cursor-pointer ${
@@ -72,16 +60,13 @@ const Faqs = () => {
                 </span>
               </div>
 
-              {/* Dropdown Content */}
               {openDropdowns.includes(dropdown.id) && (
                 <div className="text-white p-8 border-2 cursor-pointer text-start h-[25rem] flex items-start justify-center flex-col">
-                  {/* Display ProcessingDays */}
                   <p className="text-[24px]">
                     <span className="font-bold">Processing Days:</span>{" "}
                     {dropdown.ProcessingDays}
                   </p>
                   <p className="text-[24px] my-2">Conditions: </p>
-                  {/* Display Conditions as Bullet Points */}
                   {dropdown.Conditions && renderConditions(dropdown.Conditions)}
                 </div>
               )}
@@ -93,4 +78,4 @@ const Faqs = () => {
   );
 };
 
-export default Faqs;
+export default Documents;
