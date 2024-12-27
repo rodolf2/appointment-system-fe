@@ -6,70 +6,47 @@ const Header = () => {
 
   return (
     <>
-      <nav className="flex justify-between items-center bg-[#eef2f7] py-4 px-20 max-w-[1440px] h-[80px] mx-auto">
-        <div className="flex items-center">
-          <img src="/image/LOGO.png" alt="LOGO" className="h-[75px]" />
-          <h1 className="text-[26px] font-tolkien text-[#252f6a] ml-4">
-            LVCC <span className="font-lato">AppointEase</span>
-          </h1>
+      <main className=" bg-Bbackground py-4">
+        <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
+          {/* Logo and Title */}
+          <h2 className="flex items-center">
+            <img
+              src="/src/assets/image/LV_Logo.png"
+              alt="LV logo"
+              className="w-16 h-16 mr-2 mb-1"
+            />
+            <span className="font-regular text-2xl text-LBackground">LVCC</span>
+            <span className="font-Lato-Bold text-2xl text-LBackground pl-2 mb-1">
+              AppointEase
+            </span>
+          </h2>
+
+          {/* Navigation */}
+          <nav>
+            <ul className="flex space-x-10 text-[#000] relative left-40">
+              <li className="text-lg font-LatoRegular hover:text-LBackground">
+                <Link>HOME</Link>
+              </li>
+              <li className="text-lg font-LatoRegular hover:text-LBackground ">
+                <Link to="/about">ABOUT</Link>
+              </li>
+              <li className=" relative text-lg font-LatoRegular hover:text-LBackground">
+                <Link>FAQs</Link>
+                <span className="absolute bottom-[-5px] left-0 w-full h-1 bg-[#F3BC62]"></span>
+              </li>
+
+              <li className="text-lg font-LatoRegular hover:text-LBackground relative">
+                <Link to="/contact">CONTACT</Link>
+              </li>
+            </ul>
+          </nav>
+
+          {/* Button */}
+          <button className="px-6 py-3 bg-[#252F6A] text-[#FAFAFA] text-sm uppercase rounded-[10px] hover:bg-blue-700 relative right-3">
+            Appoint Now
+          </button>
         </div>
-        <ul className="flex space-x-8 items-center">
-          {/* HOME */}
-          <li
-            className={`hover:bg-gray-300 px-2 ${
-              location.pathname === "/home"
-                ? "border-b-4 border-orange-500 "
-                : ""
-            }`}
-          >
-            <Link to="/home">HOME</Link>
-          </li>
-
-          {/* ABOUT */}
-          <li
-            className={`hover:bg-gray-300 px-2 ${
-              location.pathname === "/aboutus"
-                ? "border-b-4 border-orange-500 "
-                : ""
-            }`}
-          >
-            <Link to="/aboutus">ABOUT</Link>
-          </li>
-
-          {/* FAQs */}
-          <li
-            className={`hover:bg-gray-300 px-2 ${
-              location.pathname === "/faqs"
-                ? "border-b-4 border-orange-500 "
-                : ""
-            }`}
-          >
-            <Link to="/faqs">FAQs</Link>
-          </li>
-
-          {/* CONTACT */}
-          <li
-            className={`hover:bg-gray-300 px-2 ${
-              location.pathname === "/contact"
-                ? "border-b-4 border-orange-500 "
-                : ""
-            }`}
-          >
-            <Link to="/contact">CONTACT</Link>
-          </li>
-
-          {/* APPOINT NOW */}
-          <li
-            className={`bg-primary text-white p-3 rounded-md hover:bg-blue-500 ${
-              location.pathname === "/howtoappoint"
-                ? "border-b-4 border-orange-500 "
-                : ""
-            }`}
-          >
-            <Link to="/howtoappoint">APPOINT NOW</Link>
-          </li>
-        </ul>
-      </nav>
+      </main>
     </>
   );
 };

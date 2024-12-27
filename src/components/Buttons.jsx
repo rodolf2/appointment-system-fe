@@ -10,7 +10,7 @@ const Buttons = () => {
           {/* Announcement Tab */}
           <button
             onClick={() => setActiveTab("announcement")}
-            className={`border-b-4 bg-[#D2D2D2] transition mx-20 p-4 rounded-sm w-[200px] ${
+            className={`border-b-4 bg-[#D2D2D2] transition mx-20 p-4 rounded-sm w-[390px] h-[200px]${
               activeTab === "announcement"
                 ? "border-orange-500"
                 : "border-transparent text-gray-600 hover:border-gray-400"
