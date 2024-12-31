@@ -12,7 +12,7 @@ const LandingPage = () => {
             className="w-full h-full object-cover opacity-90 drop-shadow-2xl"
           />
           {/* Linear Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/30 to-[#252F6A]/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/40 to-[#252F6A]/80"></div>
         </div>
 
         {/* Overlay Content */}
@@ -49,7 +49,7 @@ const LandingPage = () => {
 
           {/* Get Started Button */}
           <Link
-            to="/contact"
+            to="/home"
             className="mt-6 bg-LBackground hover:bg-blue-800 text-white font-semibold py-3 px-6 rounded-md shadow-lg"
           >
             Get Started

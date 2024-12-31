@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 import { db } from "../firebase.js";
 import { collection, getDocs } from "firebase/firestore";
 
@@ -29,47 +28,6 @@ const Faqs = () => {
 
   return (
     <>
-      <main className=" bg-Bbackground py-4">
-        <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
-          {/* Logo and Title */}
-          <h2 className="flex items-center">
-            <img
-              src="/src/assets/image/LV_Logo.png"
-              alt="LV logo"
-              className="w-16 h-16 mr-2 mb-1"
-            />
-            <span className="font-regular text-2xl text-LBackground">LVCC</span>
-            <span className="font-Lato-Bold text-2xl text-LBackground pl-2 mb-1">
-              AppointEase
-            </span>
-          </h2>
-
-          {/* Navigation */}
-          <nav>
-            <ul className="flex space-x-10 text-[#000] relative left-40">
-              <li className="text-lg font-LatoRegular hover:text-LBackground">
-                <Link>HOME</Link>
-              </li>
-              <li className="text-lg font-LatoRegular hover:text-LBackground ">
-                <Link to="/about">ABOUT</Link>
-              </li>
-              <li className=" relative text-lg font-LatoRegular hover:text-LBackground">
-                <Link>FAQs</Link>
-                <span className="absolute bottom-[-5px] left-0 w-full h-1 bg-[#F3BC62]"></span>
-              </li>
-
-              <li className="text-lg font-LatoRegular hover:text-LBackground relative">
-                <Link to="/contact">CONTACT</Link>
-              </li>
-            </ul>
-          </nav>
-
-          {/* Button */}
-          <button className="px-6 py-3 bg-[#252F6A] text-[#FAFAFA] text-sm uppercase rounded-[10px] hover:bg-blue-700 relative right-3">
-            Appoint Now
-          </button>
-        </div>
-      </main>
 
       <section className=" bg-[#161F55] w-full flex justify-center flex-col text-center relative  ">
         <h2 className=" text-Fwhite font-LatoBold text-[60px] mb-8 mt-24 tracking-widest ">
@@ -113,21 +71,7 @@ const Faqs = () => {
         </div>
       </section>
 
-      <footer className=" bg-Footer ">
-        <div className="flex justify-between items-center h-[130px] px-12">
-          <p className="font-regular ml-12 text-[24px] text-LBackground ">
-            LA VERDAD CHRISTIAN COLLEGE
-          </p>
-          <div className="flex flex-col items-center space-y-3 ">
-            <p className="font-LatoRegular mr-2 text-[24px] text-LBackground ">
-              CONTACT US
-            </p>
-            <p className=" text-[22px] font-LatoRegular text-LBackground">
-              support@laverdad.edu.ph
-            </p>
-          </div>
-        </div>
-      </footer>
+
     </>
   );
 };

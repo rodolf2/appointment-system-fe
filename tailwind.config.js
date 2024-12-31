@@ -7,6 +7,8 @@ export default {
         regular: ["Regular"],
         LatoRegular: ["Lato-Regular"],
         LatoBold: ["Lato-Bold"],
+        LatoSemiBold: ["Lato-Semibold, sans-serif"],
+        LatoItalic: ["Lato-Italic"],
       },
 
       colors: {
