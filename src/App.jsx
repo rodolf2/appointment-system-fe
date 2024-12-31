@@ -7,9 +7,9 @@ import Students from "./pages/Students";
 const App = () => {
   return (
     <BrowserRouter>
-      <Header />
+      {/* <Header /> */}
       <Students />
-      <Footer />
+      {/* <Footer />s */}
     </BrowserRouter>
   );
 };
