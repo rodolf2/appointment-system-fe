@@ -3,7 +3,7 @@ import { Link } from "react-router";
 const LandingPage = () => {
   return (
     <>
-      <main className="relative w-full h-screen">
+      <main className="relative w-full h-screen over">
         {/* Background Image */}
         <div className="relative w-full h-full">
           <img
