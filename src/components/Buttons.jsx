@@ -11,7 +11,7 @@ const Buttons = () => {
   }, [location]);
 
   return (
-    <div className="relative font-regular">
+    <div className="relative font-lato">
       <div className="flex items-center justify-center flex-col max-w-[1297px] mx-auto">
         <div className="absolute z-10 text-[27px] flex justify-around w-full">
           <Link
