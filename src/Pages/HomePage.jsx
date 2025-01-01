@@ -1,6 +1,6 @@
 import Announcement from "./Announcement";
 
-const Home = () => {
+const HomePage = () => {
   return (
     <div>
       <Announcement />
@@ -8,4 +8,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
