@@ -3,12 +3,10 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaFacebook } from "react-icons/fa6";
 
-
 const Contact = () => {
   return (
     <>
       {/* CONTENT */}
-
       <section>
         <div className="relative">
           <img
@@ -30,7 +28,6 @@ const Contact = () => {
           </div>
         </div>
       </section>
-
       <section className="bg-[#0D1B39] text-Fwhite w-full h-auto py-10 relative">
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-10 px-10">
           {/* Left Side: Image */}
@@ -95,10 +92,6 @@ const Contact = () => {
           </div>
         </div>
       </section>
-<<<<<<< HEAD:src/Pages/Contact.jsx
-
-=======
->>>>>>> 7bcd819adcf560811ac4fa19bfab16c71a15bbc3:src/components/Contact.jsx
     </>
   );
 };

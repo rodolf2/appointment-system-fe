@@ -1,4 +1,3 @@
-import React from "react";
 import Buttons from "../components/Buttons";
 import Carousel from "../components/Carousel";
 

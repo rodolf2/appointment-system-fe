@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Buttons from "../components/Buttons";
 const HowToAppoint = () => {
   return (
