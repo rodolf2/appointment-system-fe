@@ -28,10 +28,6 @@ const Faqs = () => {
 
   return (
     <>
-<<<<<<< HEAD:src/Pages/Faqs.jsx
-
-=======
->>>>>>> 7bcd819adcf560811ac4fa19bfab16c71a15bbc3:src/components/Faqs.jsx
       <section className=" bg-[#161F55] w-full flex justify-center flex-col text-center relative  ">
         <h2 className=" text-Fwhite font-LatoBold text-[60px] mb-8 mt-24 tracking-widest ">
           FAQs
@@ -73,11 +69,6 @@ const Faqs = () => {
           ))}
         </div>
       </section>
-<<<<<<< HEAD:src/Pages/Faqs.jsx
-
-
-=======
->>>>>>> 7bcd819adcf560811ac4fa19bfab16c71a15bbc3:src/components/Faqs.jsx
     </>
   );
 };
