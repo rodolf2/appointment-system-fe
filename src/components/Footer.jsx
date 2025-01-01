@@ -5,7 +5,7 @@ const Footer = () => {
     <>
       <footer>
         <div className="flex justify-between items-center h-[130px] px-12 text-LBackground">
-          <p className="ml-12 text-[24px] font-tolkien">
+          <p className="ml-12 text-[24px] font-regular">
             LA VERDAD CHRISTIAN COLLEGE
           </p>
           <div className="flex flex-col items-center space-y-3 ">

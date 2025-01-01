@@ -4,16 +4,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        tolkien: ["Tolkien", "serif"],
-        lato: ["Lato", "sans-serif"],
         regular: ["Regular"],
         LatoRegular: ["Lato-Regular"],
         LatoBold: ["Lato-Bold"],
       },
+
       colors: {
-        primary: "#252f6a",
-        highlight: "#f3bc62",
-        arrow: "#C9C9C9",
         Fwhite: "#FEFEFE",
         Bbackground: "#EEF2F7",
         LBackground: "#152F6A",
