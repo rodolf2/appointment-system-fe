@@ -2,13 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const Header = () => {
-  // Get current location
   const location = useLocation();
 
-  // Set the active link based on the current location
   const [activeLink, setActiveLink] = useState(location.pathname);
 
-  // Update active link when the location changes (e.g., after navigation)
   useEffect(() => {
     setActiveLink(location.pathname);
   }, [location]);
