@@ -84,7 +84,7 @@ const AppInfo = ({ onNext }) => {
               backgroundAttachment: "fixed",
             }}
           ></div>
-          <div className=" h-1/2 bg-[#161f55] "></div>
+          <div className=" h-1/2 bg-[#161f55]"></div>
         </div>
 
         {/* INFORMATION */}
