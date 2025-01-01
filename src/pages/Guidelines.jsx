@@ -1,8 +1,9 @@
 import Buttons from "../components/Buttons";
+import Documents from "../components/Documents";
 import DocumentsStatic from "../components/DocumentsStatic";
 const Guidelines = () => {
   return (
-    <div className="max-w-[1440px] mx-auto font-lato">
+    <div className="max-w-[1440px] mx-auto font-LatoRegular">
       <div
         className="relative w-full h-[1000px] bg-fit bg-center flex items-end justify-center text-white text-center pb-28"
         style={{

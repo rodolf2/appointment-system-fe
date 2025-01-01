@@ -3,7 +3,6 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaFacebook } from "react-icons/fa6";
 
-
 const Contact = () => {
   return (
     <>
@@ -95,10 +94,6 @@ const Contact = () => {
           </div>
         </div>
       </section>
-<<<<<<< HEAD:src/Pages/Contact.jsx
-
-=======
->>>>>>> 7bcd819adcf560811ac4fa19bfab16c71a15bbc3:src/components/Contact.jsx
     </>
   );
 };

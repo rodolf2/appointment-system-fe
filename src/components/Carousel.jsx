@@ -11,14 +11,14 @@ const Carousel = () => {
       description:
         "To ensure efficient and orderly processing of document requests, the following regulations have been established for both Basic Education and Higher Education. Please be guided accordingly.",
     },
-    // {
-    //   title: "Second Page",
-    //   description: "This is the second page",
-    // },
-    // {
-    //   title: "Third Page",
-    //   description: "This is the third page",
-    // },
+    {
+      title: "Second Page",
+      description: "This is the second page",
+    },
+    {
+      title: "Third Page",
+      description: "This is the third page",
+    },
   ];
 
   const handlePrev = () => {
