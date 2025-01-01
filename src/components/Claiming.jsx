@@ -1,4 +1,3 @@
-import React from "react";
 
 const Claiming = () => {
   return (
@@ -23,7 +22,63 @@ const Claiming = () => {
             </h2>
             {/* Content Card */}
             <div className="bottom-44 relative flex flex-col bg-white p-8 rounded-lg shadow-md w-[90%] max-w-md text-center z-10">
-              <h2>UPON CLAIMING THE DOCUMENT:</h2>
+              <h2 className="text-lg font-semibold mb-4">
+                UPON CLAIMING THE DOCUMENT:
+              </h2>
+
+              {/* Options */}
+              <div className="text-left">
+                <label className="block mb-4 text-[#000] text-[18px]">
+                  <input
+                    type="radio"
+                    name="claimOption"
+                    value="self"
+                    className="mr-2"
+                  />
+                  I will claim my document personally.
+                </label>
+
+                <label className="block mb-4 text-[#000] text-[18px]">
+                  <input
+                    type="radio"
+                    name="claimOption"
+                    value="authorized"
+                    className="mr-2"
+                  />
+                  I cannot claim my document personally. I will authorize
+                  someone else to claim it on my behalf.
+                </label>
+              </div>
+
+              {/* Instructions */}
+              <p className="text-[16px] font-LatoItalic text-[#161F55] text-left mb-6">
+                Please note that if you authorize someone to claim your
+                documents, the following must be provided:
+                <ul className="list-disc pl-6 mt-2">
+                  <li>
+                    Authorization Letter indicating the name of the person
+                    authorized.
+                  </li>
+                  <li>
+                    Photocopies of valid ID (front and back) of both the student
+                    and the authorized person, with 3 signatures.
+                  </li>
+                  <li>
+                    Photocopies of valid ID (front and back) of the authorized
+                    person processing the request, with 3 signatures.
+                  </li>
+                </ul>
+              </p>
+
+              {/* Navigation Buttons */}
+              <div className="flex justify-between">
+                <button className="px-6 py-2 bg-[#161f55] text-white rounded-md hover:bg-[#1b2a6b]">
+                  Back
+                </button>
+                <button className="px-6 py-2 bg-[#161f55] text-white rounded-md hover:bg-[#1b2a6b]">
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>
