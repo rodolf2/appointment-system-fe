@@ -1,4 +1,4 @@
-import Announcement from "../pages/Announcement";
+import Announcement from "./Announcement";
 
 const Home = () => {
   return (
