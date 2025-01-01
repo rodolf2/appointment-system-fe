@@ -33,7 +33,7 @@ const Buttons = () => {
           </Link>
 
           <Link
-            to="/howtoappoint"
+            to="/hta"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
               activeTab === "howtoappoint" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
@@ -44,7 +44,7 @@ const Buttons = () => {
               }`}
             >
               How to Appoint
-              {activeTab === "howtoappoint" && (
+              {activeTab === "hta" && (
                 <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
               )}
             </span>
