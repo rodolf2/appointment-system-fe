@@ -5,7 +5,7 @@ import Carousel from "../components/Carousel";
 const Announcement = () => {
   const calendar = (day, hours) => {
     return (
-      <div className="relative min-w-[450px] h-[450px] flex-shrink-0 borders">
+      <div className="relative min-w-[450px] h-[450px] flex-shrink-0 borders font-regular">
         <img
           src="src/assets/image/calendar.png"
           alt="calendar icon"
@@ -35,7 +35,7 @@ const Announcement = () => {
   };
   return (
     <>
-      <div className="max-w-[1440px] mx-auto font-lato ">
+      <div className="max-w-[1440px] mx-auto font-regular">
         <div
           className="relative w-full min-h-screen h-[1000px] bg-cover bg-center flex items-end justify-center text-white text-center pb-28"
           style={{
@@ -98,7 +98,7 @@ const Announcement = () => {
             </div>
 
             {/* Text Content */}
-            <div className="absolute inset-0 flex flex-col items-start justify-center max-w-[850px] pl-10 pt-[95px] z-10">
+            <div className="absolute inset-0 flex flex-col items-start justify-center max-w-[900px] pl-10 pt-[95px] z-10">
               <h1 className="text-[40px] font-bold text-center tracking-[5px]">
                 REGISTRAR OFFICE APPOINTMENT
               </h1>

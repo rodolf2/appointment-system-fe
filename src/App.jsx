@@ -10,7 +10,9 @@ import Guidelines from "./pages/Guidelines";
 const App = () => {
   return (
     <BrowserRouter>
+      <Header />
       <Layout />
+      <Footer />
     </BrowserRouter>
   );
 };
@@ -20,14 +22,14 @@ const Layout = () => {
   const showHeaderFooter = location.pathname !== "/";
   return (
     <>
-      {showHeaderFooter && <Header />}
+      {/* {showHeaderFooter && <Header />} */}
       <Routes>
         <Route path="/home" element={<Home />} />{" "}
         <Route path="/announcement" element={<Announcement />} />
         <Route path="/howtoappoint" element={<HowToAppoint />} />
         <Route path="/guidelines" element={<Guidelines />} />
       </Routes>
-      {showHeaderFooter && <Footer />}
+      {/* {showHeaderFooter && <Footer />}s */}
     </>
   );
 };

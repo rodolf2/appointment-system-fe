@@ -17,9 +17,7 @@ const Header = () => {
             alt="LV logo"
             className="w-16 h-16 mr-2 mb-1"
           />
-          <span className="font-regular text-2xl text-LBackground font-tolkien">
-            LVCC
-          </span>
+          <span className="text-2xl text-LBackground font-tolkien">LVCC</span>
           <span className="font-Lato-Bold text-2xl text-LBackground pl-2 mb-1">
             AppointEase
           </span>

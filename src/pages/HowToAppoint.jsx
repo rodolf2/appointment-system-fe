@@ -3,7 +3,7 @@ import Buttons from "../components/Buttons";
 const HowToAppoint = () => {
   return (
     <>
-      <div className="max-w-[1440px] mx-auto h-full relative font-lato">
+      <div className="max-w-[1440px] mx-auto h-full relative font-regular">
         {/* Header Section */}
         <div
           className="relative w-full h-[1000px] bg-cover  bg-center flex items-center justify-center text-white text-center"
