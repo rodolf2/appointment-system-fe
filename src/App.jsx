@@ -41,7 +41,7 @@ const Layout = () => {
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
-      {showHeaderFooter && <Footer />}s
+      {showHeaderFooter && <Footer />}
     </>
   );
 };
