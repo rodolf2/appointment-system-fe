@@ -252,10 +252,11 @@ const AppInfo = ({ onNext, onBack }) => {
               </div>
               <div className="flex justify-between">
                 <button
-                  className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700" onClick={(e) => {
-                    e.preventDefault(); onBack();
+                  className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onBack();
                   }}
-
                 >
                   Back
                 </button>
