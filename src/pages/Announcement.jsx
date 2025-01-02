@@ -6,7 +6,7 @@ const Announcement = () => {
     return (
       <div className="relative min-w-[450px] h-[450px] flex-shrink-0 borders font-LatoRegular">
         <img
-          src="src/assets/image/calendar.png"
+          src="public/assets/image/calendar.png"
           alt="calendar icon"
           className="w-full h-full"
         />
@@ -25,7 +25,7 @@ const Announcement = () => {
     return (
       <div className="absolute top-[130px] right-0 w-[1500px] z-50 pl-[900px] pointer-events-none">
         <img
-          src="src/assets/image/mobile.png"
+          src="public/assets/image/mobile.png"
           alt="mobile icon"
           className="w-full object-contain"
         />
@@ -39,11 +39,11 @@ const Announcement = () => {
           className="relative w-full min-h-screen h-[1000px] bg-cover bg-center flex items-end justify-center text-white text-center pb-28"
           style={{
             backgroundImage:
-              "url('/src/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
+              "url('/public/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
-          <section className="absolute left-20 text-start z-20 pb-20">
+          <section className="absolute  text-center z-20 pb-20">
             <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>
@@ -90,7 +90,7 @@ const Announcement = () => {
               className="absolute inset-0 bg-cover bg-center h-[500px]"
               style={{
                 backgroundImage:
-                  "url('/src/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+                  "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
               }}
             >
               <div className="absolute inset-0 bg-[#0D1858] opacity-30"></div>

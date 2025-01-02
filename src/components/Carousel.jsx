@@ -34,7 +34,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="relative w-full max-w-[1440px] h-screen mx-auto bg-[#2A3064] text-white p-6 flex flex-col items-center justify-center pt-10 font-lato">
+    <div className="relative w-full max-w-[1440px] h-screen mx-auto bg-[#161f55] text-white p-6 flex flex-col items-center justify-center pt-10 font-lato">
       <div className="text-center max-w-[1000px] flex flex-col justify-center items-center h-screen">
         <h2 className="text-[36px] font-semibold w-[800px]">
           {slides[currentIndex].title}

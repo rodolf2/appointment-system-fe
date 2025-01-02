@@ -7,7 +7,7 @@ const Hta = () => {
         <div
           className="relative w-full h-[1000px] bg-cover  bg-center flex items-center justify-center text-white text-center"
           style={{
-            backgroundImage: "url('/src/assets/image/BackGround.png')",
+            backgroundImage: "url('/public/assets/image/BackGround.png')",
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>

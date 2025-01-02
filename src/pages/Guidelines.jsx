@@ -6,7 +6,7 @@ const Guidelines = () => {
       <div
         className="relative w-full h-[1000px] bg-fit bg-center flex items-end justify-center text-white text-center pb-28"
         style={{
-          backgroundImage: "url('src/assets/image/guidelines_bg.JPG')",
+          backgroundImage: "url('public/assets/image/guidelines_bg.JPG')",
         }}
       >
         <div className="absolute inset-0 bg-custom-gradient_guidelines z-0 pb-10"></div>
