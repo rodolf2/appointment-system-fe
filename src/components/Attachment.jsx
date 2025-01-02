@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-const Attachment = ({ onNext }) => {
+const Attachment = ({ onNext, onBack }) => {
   const [files, setFiles] = useState([]); // To store selected files
   const fileInputRef = useRef(null); // Reference to the hidden file input
   const [error, setError] = useState("");
@@ -100,7 +100,13 @@ const Attachment = ({ onNext }) => {
 
           {/* Navigation Buttons */}
           <div className="flex justify-between">
-            <button className="bg-[#161f55] text-white px-6 py-2 rounded-lg hover:bg-blue-800">
+            <button
+              className="bg-[#161f55] text-white px-6 py-2 rounded-lg hover:bg-blue-800"
+              onClick={(e) => {
+                e.preventDefault();
+                onBack();
+              }}
+            >
               Back
             </button>
             <button
