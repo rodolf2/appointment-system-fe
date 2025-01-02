@@ -4,6 +4,7 @@ import DataPrivacy from "../components/DataPrivacy";
 import Attachment from "../components/Attachment";
 import AppInfo from "../components/AppInfo";
 import Claiming from "../components/Claiming";
+import AppSchedule from "../components/AppSchedule";
 
 const AppointmentForm = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,12 +20,29 @@ const AppointmentForm = () => {
     setSearchParams({ step: nextStep }); // Update the URL query parameter
   };
 
+  const goToPreviousStep = () => {
+    const previousStep = currentStep - 1;
+    if (previousStep >= 1) {
+      setCurrentStep(previousStep);
+      setSearchParams({ step: previousStep }); // Update the URL query parameter
+    }
+  };
+
   return (
     <>
       {currentStep === 1 && <DataPrivacy onNext={goToNextStep} />}
-      {currentStep === 2 && <AppInfo onNext={goToNextStep} />}
-      {currentStep === 3 && <Attachment onNext={goToNextStep} />}
-      {currentStep === 4 && <Claiming onNext={goToNextStep} />}
+      {currentStep === 2 && (
+        <AppInfo onNext={goToNextStep} onBack={goToPreviousStep} />
+      )}
+      {currentStep === 3 && (
+        <Attachment onNext={goToNextStep} onBack={goToPreviousStep} />
+      )}
+      {currentStep === 4 && (
+        <Claiming onNext={goToNextStep} onBack={goToPreviousStep} />
+      )}
+      {currentStep === 5 && (
+        <AppSchedule onNext={goToNextStep} onBack={goToPreviousStep} />
+      )}
     </>
   );
 };
