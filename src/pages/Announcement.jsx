@@ -35,16 +35,17 @@ const Announcement = () => {
   };
   return (
     <>
-      <div className="max-w-[1440px] mx-auto font-lato ">
+      <div className="max-w-[1440px] mx-auto font-LatoRegular ">
         <div
           className="relative w-full h-[1000px] bg-cover bg-center flex items-end justify-center text-white text-center pb-28"
           style={{
             backgroundImage:
               "url('/src/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
+            filter: "brightness(1)",
           }}
         >
-          <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
-          <section className="absolute left-20 top-90 text-start z-20">
+          <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>
+          <section className="absolute left-20 top-[450px] text-start z-20">
             <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>

@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <main className="bg-Bbackground py-4 max-w-[1440px] mx-auto">
-      <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
+      <div className="h-16 mx-auto w-full flex justify-between items-center px-4">
         <h2 className="flex items-center">
           <img
             src="/src/assets/image/LV_Logo.png"
@@ -32,7 +32,9 @@ const Header = () => {
                 <Link
                   to={link}
                   className={`hover:text-LBackground ${
-                    activeLink === link ? "border-b-2 border-[#F3BC62]" : ""
+                    activeLink === link
+                      ? "border-b-2 border-[#F3BC62] pb-2" // Add padding bottom to create space
+                      : "pb-0"
                   }`}
                 >
                   {link.replace("/", "").toUpperCase()}
