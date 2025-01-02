@@ -93,6 +93,7 @@ const Announcement = () => {
               style={{
                 backgroundImage:
                   "url('/src/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+                filter: "brightness(0.7)",
               }}
             >
               <div className="absolute inset-0 bg-[#0D1858] opacity-30"></div>
