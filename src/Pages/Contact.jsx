@@ -35,12 +35,12 @@ const Contact = () => {
             <img
               src="/src/assets/image/loc.png"
               alt="Location Map"
-              className="w-[450px] lg:w-[455px] h-auto object-cover relative right-12"
+              className="w-[450px] lg:w-[455px] h-auto object-cover relative right-8"
             />
           </div>
 
           {/* Contact Information */}
-          <div className="w-full lg:w-1/2 text-center lg:text-left relative mt-8 right-32">
+          <div className="w-full lg:w-1/2 text-center lg:text-left relative mt-8 right-20">
             <h2 className="text-[36px] font-LatoBold mb-16">GET IN TOUCH</h2>
             <span className="absolute top-16 left-0 w-80 h-1 bg-[#F3BC62]"></span>
             <div className="space-y-16">

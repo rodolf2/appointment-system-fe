@@ -37,7 +37,7 @@ const About = () => {
             </h2>
             <div className="w-[400px] h-1 bg-[#F3BC62] mx-auto absolute inset-x-0 top-[50%] "></div>
 
-            <p className=" absolute inset-x-0 top-[57%] text-[35px] font-LatoBold text-Bbackground text-center tracking-widest w-[60rem] m-auto">
+            <p className=" absolute inset-x-0 top-[57%] text-[35px] font-LatoSemiBold text-Bbackground text-center tracking-widest w-[60rem] m-auto">
               The institution that ensures quality learning and biblical moral
               standards.
             </p>
@@ -52,7 +52,7 @@ const About = () => {
           </h2>
           <div className="w-[400px] h-1 bg-[#F3BC62] mx-auto mb-8"></div>
 
-          <p className="font-LatoBold text-Bbackground text-[35px] tracking-widest w-[986px] text-center">
+          <p className="font-LatoSemiBold text-Bbackground text-[35px] tracking-widest w-[986px] text-center">
             To be the frontrunner in providing academic excellence and normally
             upright principles.
           </p>
