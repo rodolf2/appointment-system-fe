@@ -32,7 +32,7 @@ const Header = () => {
                 <Link
                   to={link}
                   className={`hover:text-LBackground ${
-                    activeLink === link ? "border-b-2 border-orange-500" : ""
+                    activeLink === link ? "border-b-2 border-[#F3BC62]" : ""
                   }`}
                 >
                   {link.replace("/", "").toUpperCase()}

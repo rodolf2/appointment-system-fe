@@ -9,7 +9,7 @@ const HowToAppoint = () => {
           className="relative w-full h-[1000px] bg-cover  bg-center flex items-center justify-center text-white text-center"
           style={{
             backgroundImage: "url('/src/assets/image/BackGround.png')",
-            filter: "brightness(1.5)",
+            filter: "brightness(1.7)",
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>

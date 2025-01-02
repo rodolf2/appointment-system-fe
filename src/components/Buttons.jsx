@@ -11,7 +11,7 @@ const Buttons = () => {
   }, [location]);
 
   return (
-    <div className="relative font-lato">
+    <div className="relative font-LatoRegular">
       <div className="flex items-center justify-center flex-col max-w-[1297px] mx-auto">
         <div className="absolute z-10 text-[27px] flex justify-around w-full">
           <Link
@@ -24,10 +24,15 @@ const Buttons = () => {
               className={`relative mb-2 ${
                 activeTab === "announcement" ? "text-black" : "text-gray-600"
               }`}
+              // Added paddingBottom to create space between text and border when active
+              style={{
+                paddingBottom: activeTab === "announcement" ? "5px" : "0", // Adjust space when active
+              }}
             >
               Announcement
               {activeTab === "announcement" && (
-                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-orange-500"></span>
+                // Adjusted bottom position of the border for better alignment
+                <span className="absolute left-0 right-0 bottom-[-4px] border-b-4 border-[#F3BC62]"></span>
               )}
             </span>
           </Link>
@@ -42,10 +47,15 @@ const Buttons = () => {
               className={`relative mb-2 ${
                 activeTab === "howtoappoint" ? "text-black" : "text-gray-600"
               }`}
+              // Added paddingBottom to create space between text and border when active
+              style={{
+                paddingBottom: activeTab === "howtoappoint" ? "5px" : "0", // Adjust space when active
+              }}
             >
               How to Appoint
               {activeTab === "howtoappoint" && (
-                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-orange-500"></span>
+                // Adjusted bottom position of the border for better alignment
+                <span className="absolute left-0 right-0 bottom-[-4px] border-b-4 border-[#F3BC62]"></span>
               )}
             </span>
           </Link>
@@ -60,10 +70,15 @@ const Buttons = () => {
               className={`relative mb-2 ${
                 activeTab === "guidelines" ? "text-black" : "text-gray-600"
               }`}
+              // Added paddingBottom to create space between text and border when active
+              style={{
+                paddingBottom: activeTab === "guidelines" ? "5px" : "0", // Adjust space when active
+              }}
             >
               Guidelines
               {activeTab === "guidelines" && (
-                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
+                // Adjusted bottom position of the border for better alignment
+                <span className="absolute left-0 right-0 bottom-[-4px] border-b-4 border-[#F3BC62]"></span>
               )}
             </span>
           </Link>

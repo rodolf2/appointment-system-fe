@@ -5,7 +5,7 @@ import Carousel from "../components/Carousel";
 const Announcement = () => {
   const calendar = (day, hours) => {
     return (
-      <div className="relative min-w-[450px] h-[450px] flex-shrink-0 borders">
+      <div className="relative min-w-[450px] h-[450px] flex-shrink-0 borders font-LatoRegular">
         <img
           src="src/assets/image/calendar.png"
           alt="calendar icon"
