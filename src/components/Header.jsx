@@ -20,7 +20,7 @@ const Header = () => {
             className="w-16 h-16 mr-2 mb-1"
           />
           <span className="text-2xl text-LBackground font-regular">LVCC</span>
-          <span className="font-Lato-Bold text-2xl text-LBackground pl-2 mb-1">
+          <span className="font-LatoBold text-2xl text-LBackground pl-2 mb-1">
             AppointEase
           </span>
         </h2>
@@ -33,7 +33,7 @@ const Header = () => {
                   to={link}
                   className={`hover:text-LBackground ${
                     activeLink === link
-                      ? "border-b-2 border-[#F3BC62] pb-2" // Add padding bottom to create space
+                      ? "border-b-2 border-[#F3BC62] pb-2"
                       : "pb-0"
                   }`}
                 >
