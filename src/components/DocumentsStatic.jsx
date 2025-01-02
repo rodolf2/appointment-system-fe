@@ -88,9 +88,9 @@ const DocumentsStatic = () => {
             <div key={dropdown.id} className="mb-8">
               <div
                 onClick={() => toggleDropdown(dropdown.id)}
-                className={`flex justify-between items-center text-3xl w-[900px] text-white p-4 border-[3px] cursor-pointer ${
+                className={`flex justify-between items-center text-3xl w-[900px] text-Fwhite p-4 border-[3px] cursor-pointer ${
                   openDropdowns.includes(dropdown.id)
-                    ? "bg-[#D9D9D9] text-[#0a1d8b90] font-LatoBold"
+                    ? "bg-[#d9d9d9] text-[#0a1d8b90] font-LatoBold"
                     : "hover:bg-white hover:text-black hover:font-LatoBold "
                 }`}
               >

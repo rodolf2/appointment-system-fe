@@ -41,6 +41,7 @@ const Announcement = () => {
           style={{
             backgroundImage:
               "url('/src/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
+            filter: "brightness(0.9)",
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
