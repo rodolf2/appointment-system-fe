@@ -2,13 +2,13 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router";
 import HowToAppoint from "./pages/HowToAppoint";
-import Students from "./pages/Students";
+import Alumni from "./components/Alumni.jsx";
 
 const App = () => {
   return (
     <BrowserRouter>
       {/* <Header /> */}
-      <Students />
+      <Alumni />
       {/* <Footer />s */}
     </BrowserRouter>
   );

@@ -6,18 +6,8 @@ import Header from "../components/registrar/Header";
 
 const Students = () => {
   return (
-    <div
-      className="max-w-[1440px] mx-auto h-[2000px]"
-      style={{
-        backgroundImage: "url('/src/assets/image/BackGround.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        height: "1100px",
-        mainHeight: "screen",
-      }}
-    >
+    <div>
       <Header />
-      <SideBar />
       <Table />
       <Footer />
     </div>
