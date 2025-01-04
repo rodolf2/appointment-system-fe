@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { db } from "../firebase"; // Import Firestore instance
 import { collection, addDoc } from "firebase/firestore"; // Firestore functions
-import { Link } from "react-router";
 
-const AppInfo = ({ onNext }) => {
+const AppInfo = ({ onNext, onBack }) => {
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [formData, setFormData] = useState({
     surname: "",
@@ -252,8 +251,13 @@ const AppInfo = ({ onNext }) => {
                 />
               </div>
               <div className="flex justify-between">
-                <button className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700">
-                  <Link to="/home">Back</Link>
+                <button
+                  className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700" onClick={(e) => {
+                    e.preventDefault(); onBack();
+                  }}
+
+                >
+                  Back
                 </button>
                 <button
                   type="submit"

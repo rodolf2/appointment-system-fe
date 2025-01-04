@@ -1,6 +1,5 @@
-import React, { useState } from "react";
 import Buttons from "../components/Buttons";
-const HowToAppoint = () => {
+const Hta = () => {
   return (
     <>
       <div className="max-w-[1440px] mx-auto h-full relative font-LatoRegular">
@@ -105,4 +104,4 @@ const HowToAppoint = () => {
   );
 };
 
-export default HowToAppoint;
+export default Hta;

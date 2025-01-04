@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 
 const Buttons = () => {
   const location = useLocation();
@@ -11,7 +11,7 @@ const Buttons = () => {
   }, [location]);
 
   return (
-    <div className="relative font-LatoRegular">
+    <div className="relative">
       <div className="flex items-center justify-center flex-col max-w-[1297px] mx-auto">
         <div className="absolute z-10 text-[27px] flex justify-around w-full">
           <Link
@@ -31,14 +31,13 @@ const Buttons = () => {
             >
               Announcement
               {activeTab === "announcement" && (
-                // Adjusted bottom position of the border for better alignment
-                <span className="absolute left-0 right-0 bottom-[-4px] border-b-4 border-[#F3BC62]"></span>
+                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
               )}
             </span>
           </Link>
 
           <Link
-            to="/howtoappoint"
+            to="/hta"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
               activeTab === "howtoappoint" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
@@ -53,9 +52,8 @@ const Buttons = () => {
               }}
             >
               How to Appoint
-              {activeTab === "howtoappoint" && (
-                // Adjusted bottom position of the border for better alignment
-                <span className="absolute left-0 right-0 bottom-[-4px] border-b-4 border-[#F3BC62]"></span>
+              {activeTab === "hta" && (
+                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
               )}
             </span>
           </Link>
