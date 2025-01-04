@@ -43,13 +43,13 @@ const Announcement = () => {
             filter: "brightness(1)",
           }}
         >
-          <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>
-          <section className="absolute left-20 top-[450px] text-start z-20">
+          <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
+          <section className="absolute text-center z-20 bottom-60">
             <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>
-            <div className="border-b-8 border-white w-90 h-1 my-5"></div>
-            <p className="text-[30px] mb-10 w-[900px]">
+            <div className="border-b-8 border-white my-4"></div>
+            <p className="text-[30px] mb-20 w-[900px]">
               Simplifying appointment scheduling. Stay organized, save time, and
               never miss an appointment. Easy, fast, and hassle-free
             </p>
