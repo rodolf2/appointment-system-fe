@@ -14,6 +14,7 @@ const Buttons = () => {
     <div className="relative">
       <div className="flex items-center justify-center flex-col max-w-[1297px] mx-auto">
         <div className="absolute z-10 text-[27px] flex justify-around w-full">
+          {/* Announcement Link */}
           <Link
             to="/announcement"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
@@ -24,9 +25,8 @@ const Buttons = () => {
               className={`relative mb-2 ${
                 activeTab === "announcement" ? "text-black" : "text-gray-600"
               }`}
-              // Added paddingBottom to create space between text and border when active
               style={{
-                paddingBottom: activeTab === "announcement" ? "5px" : "0", // Adjust space when active
+                paddingBottom: activeTab === "announcement" ? "5px" : "0",
               }}
             >
               Announcement
@@ -36,19 +36,19 @@ const Buttons = () => {
             </span>
           </Link>
 
+          {/* How to Appoint Link */}
           <Link
             to="/hta"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
-              activeTab === "howtoappoint" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
+              activeTab === "hta" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
             <span
               className={`relative mb-2 ${
-                activeTab === "howtoappoint" ? "text-black" : "text-gray-600"
+                activeTab === "hta" ? "text-black" : "text-gray-600"
               }`}
-              // Added paddingBottom to create space between text and border when active
               style={{
-                paddingBottom: activeTab === "howtoappoint" ? "5px" : "0", // Adjust space when active
+                paddingBottom: activeTab === "hta" ? "5px" : "0",
               }}
             >
               How to Appoint
@@ -58,6 +58,7 @@ const Buttons = () => {
             </span>
           </Link>
 
+          {/* Guidelines Link */}
           <Link
             to="/guidelines"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
@@ -68,15 +69,13 @@ const Buttons = () => {
               className={`relative mb-2 ${
                 activeTab === "guidelines" ? "text-black" : "text-gray-600"
               }`}
-              // Added paddingBottom to create space between text and border when active
               style={{
-                paddingBottom: activeTab === "guidelines" ? "5px" : "0", // Adjust space when active
+                paddingBottom: activeTab === "guidelines" ? "5px" : "0",
               }}
             >
               Guidelines
               {activeTab === "guidelines" && (
-                // Adjusted bottom position of the border for better alignment
-                <span className="absolute left-0 right-0 bottom-[-4px] border-b-4 border-[#F3BC62]"></span>
+                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
               )}
             </span>
           </Link>
