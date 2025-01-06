@@ -18,3 +18,30 @@
   src: local("Lato-Bold"),
     url("/src/assets/fonts/Lato-Bold.ttf") format("truetype");
 }
+.overflow-x-auto {
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  overflow-x: auto;
+}
+/* Target scrollbars */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust scrollbar width */
+  height: 8px; /* Adjust scrollbar height (for horizontal scrollbars) */
+}
+
+/* Scrollbar track */
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Light gray background */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background: #a0aec0; /* Gray thumb */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #718096; /* Darker gray on hover */
+}
