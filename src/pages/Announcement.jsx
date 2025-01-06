@@ -34,27 +34,21 @@ const Announcement = () => {
   };
   return (
     <>
-      <div className="max-w-[1440px] mx-auto font-LatoRegular ">
+      <div className="max-w-[1440px] mx-auto font-LatoRegular">
         <div
-          className="relative w-full h-[1000px] bg-cover bg-center flex items-end justify-center text-white text-center pb-28"
+          className="relative w-full min-h-screen h-[1000px] bg-cover bg-center flex items-end justify-center text-white text-center pb-28"
           style={{
             backgroundImage:
-              "url('/src/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
-            filter: "brightness(1)",
+              "url('/public/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
           }}
         >
-          <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
-          <section className="absolute text-center z-20 bottom-60">
-              "url('/public/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
-      
-       </section> 
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
           <section className="absolute  text-center z-20 pb-20">
             <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>
-            <div className="border-b-8 border-white my-4"></div>
-            <p className="text-[30px] mb-20 w-[900px]">
+            <div className="border-b-8 border-white w-90 h-1 my-5"></div>
+            <p className="text-[30px] mb-10 w-[900px]">
               Simplifying appointment scheduling. Stay organized, save time, and
               never miss an appointment. Easy, fast, and hassle-free
             </p>
@@ -96,15 +90,14 @@ const Announcement = () => {
               className="absolute inset-0 bg-cover bg-center h-[500px]"
               style={{
                 backgroundImage:
-                  "url('/src/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
-                filter: "brightness(0.7)",
+                  "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
               }}
             >
               <div className="absolute inset-0 bg-[#0D1858] opacity-30"></div>
             </div>
 
             {/* Text Content */}
-            <div className="absolute inset-0 flex flex-col items-start justify-center max-w-[850px] pl-10 pt-[95px] z-10">
+            <div className="absolute inset-0 flex flex-col items-start justify-center max-w-[900px] pl-10 pt-[95px] z-10">
               <h1 className="text-[40px] font-bold text-center tracking-[5px]">
                 REGISTRAR OFFICE APPOINTMENT
               </h1>
