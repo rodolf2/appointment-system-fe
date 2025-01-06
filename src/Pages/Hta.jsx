@@ -9,7 +9,6 @@ const Hta = () => {
           style={{
             backgroundImage: "url('/src/assets/image/BackGround.png')",
             filter: "brightness(1.7)",
-            backgroundImage: "url('/public/assets/image/BackGround.png')",
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>
