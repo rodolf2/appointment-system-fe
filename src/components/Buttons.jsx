@@ -35,12 +35,12 @@ const Buttons = () => {
           <Link
             to="/hta"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
-              activeTab === "howtoappoint" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
+              activeTab === "hta" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
             <span
               className={`relative mb-2 ${
-                activeTab === "howtoappoint" ? "text-black" : "text-gray-600"
+                activeTab === "hta" ? "text-black" : "text-gray-600"
               }`}
             >
               How to Appoint
