@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "compilerOptions": {
       // ...
       "baseUrl": ".",
@@ -11,3 +12,14 @@
     }
   }
   
+=======
+  "compilerOptions": {
+    // ...
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+    // ...
+  }
+}
+>>>>>>> Raf-calendar-form

@@ -13,7 +13,7 @@ const DataPrivacy = ({ onNext }) => {
       className="flex items-center justify-center min-h-screen bg-cover bg-center "
       style={{
         backgroundImage:
-          "url('/src/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+          "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
       }}
     >
       <div className="bg-[#EEF2F7] p-10 rounded-lg shadow-lg max-w-xl w-full relative my-20 ">

@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <>
       <footer className=" bg-Footer">
-        <div className="flex justify-between items-center h-[100px] px-12 mt-4">
+        <div className="flex justify-between items-center h-[110px] px-12 mt-4">
           <p className="font-regular ml-8 text-[24px] text-LBackground ">
             LA VERDAD CHRISTIAN COLLEGE
           </p>

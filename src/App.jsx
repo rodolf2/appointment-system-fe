@@ -2,14 +2,14 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Announcement from "./Pages/Announcement";
-import Guidelines from "./Pages/Guidelines";
+import Guidelines from "./Pages//homepage/Guidelines";
 import LandingPage from "./Pages/LandingPage";
-import About from "./Pages/About";
-import Faqs from "./Pages/Faqs";
-import Contact from "./Pages/Contact";
+import About from "./Pages/homepage/About";
+import Faqs from "./Pages//homepage/Faqs";
+import Contact from "./Pages/homepage/Contact";
 import AppointmentForm from "./Pages/AppointmentForm";
 import Hta from "./Pages/HTA";
-import HomePage from "./Pages/HomePage";
+import HomePage from "./Pages/homepage/HomePage";
 
 const App = () => {
   return (

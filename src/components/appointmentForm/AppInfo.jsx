@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { db } from "../firebase"; // Import Firestore instance
+import { db } from "../../firebase"; // Import Firestore instance
 import { collection, addDoc } from "firebase/firestore"; // Firestore functions
 
 const AppInfo = ({ onNext, onBack }) => {
@@ -42,7 +42,7 @@ const AppInfo = ({ onNext, onBack }) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // Save data to Firestore
+        // Save data to  Firestore
         const docRef = await addDoc(collection(db, "information"), {
           ...formData,
           selectedDocuments,
@@ -78,7 +78,7 @@ const AppInfo = ({ onNext, onBack }) => {
             className=" h-screen bg-cover bg-bottom "
             style={{
               backgroundImage:
-                "url('/src/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+                "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
               opacity: "0.3",
               backgroundAttachment: "fixed",
             }}
@@ -255,7 +255,6 @@ const AppInfo = ({ onNext, onBack }) => {
                   className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700" onClick={(e) => {
                     e.preventDefault(); onBack();
                   }}
-
                 >
                   Back
                 </button>

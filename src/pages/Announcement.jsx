@@ -6,7 +6,7 @@ const Announcement = () => {
     return (
       <div className="relative min-w-[450px] h-[450px] flex-shrink-0 borders font-LatoRegular">
         <img
-          src="src/assets/image/calendar.png"
+          src="public/assets/image/calendar.png"
           alt="calendar icon"
           className="w-full h-full"
         />
@@ -25,7 +25,7 @@ const Announcement = () => {
     return (
       <div className="absolute top-[130px] right-0 w-[1500px] z-50 pl-[900px] pointer-events-none">
         <img
-          src="src/assets/image/mobile.png"
+          src="public/assets/image/mobile.png"
           alt="mobile icon"
           className="w-full object-contain"
         />
@@ -45,6 +45,11 @@ const Announcement = () => {
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
           <section className="absolute text-center z-20 bottom-60">
+              "url('/public/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
+      
+       </section> 
+          <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
+          <section className="absolute  text-center z-20 pb-20">
             <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>

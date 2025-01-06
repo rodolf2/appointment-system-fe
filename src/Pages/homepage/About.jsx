@@ -27,7 +27,7 @@ const About = () => {
         <div className=" mt-40 relative flex flex-col items-center w-full">
           <div className=" relative w-full">
             <img
-              src="/src/assets/image/about.png"
+              src="/public/assets/image/about.png"
               alt=""
               className=" w-full max-w[1440px] h-[750px] mx-auto object-cover"
             />

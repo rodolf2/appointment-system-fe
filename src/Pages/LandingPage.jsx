@@ -7,7 +7,7 @@ const LandingPage = () => {
         {/* Background Image */}
         <div className="relative w-full h-full">
           <img
-            src="/src/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg"
+            src="/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg"
             alt="La Verdad Christian College"
             className="w-full h-full object-cover opacity-90 drop-shadow-2xl"
           />
@@ -20,7 +20,7 @@ const LandingPage = () => {
           {/* Header: Logo and AppointEase */}
           <div className="flex items-center absolute top-6 left-6">
             <img
-              src="/src/assets/image/LV_Logo.png"
+              src="/public/assets/image/LV_Logo.png"
               alt="LVCC Logo"
               className="w-20 h-20 md:w-24 md:h-24 mr-2"
             />
