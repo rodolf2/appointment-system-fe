@@ -1,12 +1,9 @@
 {
-  "homepage": "https://Grraffic.github.io/appointment-system",
   "name": "appointment-system",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
