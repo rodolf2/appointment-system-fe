@@ -1,4 +1,4 @@
-import Announcement from "./Announcement";
+import Announcement from "../Announcement.jsx";
 
 const HomePage = () => {
   return (

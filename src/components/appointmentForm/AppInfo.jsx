@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { db } from "../firebase"; // Import Firestore instance
+import { db } from "../../firebase"; // Import Firestore instance
 import { collection, addDoc } from "firebase/firestore"; // Firestore functions
 
 const AppInfo = ({ onNext, onBack }) => {
@@ -42,7 +42,7 @@ const AppInfo = ({ onNext, onBack }) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // Save data to Firestore
+        // Save data to  Firestore
         const docRef = await addDoc(collection(db, "information"), {
           ...formData,
           selectedDocuments,
