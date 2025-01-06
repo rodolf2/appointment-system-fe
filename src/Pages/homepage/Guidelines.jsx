@@ -1,8 +1,6 @@
 import Buttons from "../components/Buttons";
 import Documents from "../components/Documents";
 import DocumentsStatic from "../components/DocumentsStatic";
-import Buttons from "/src/components/Buttons";
-import DocumentsStatic from "/src/components/DocumentsStatic";
 const Guidelines = () => {
   return (
     <div className="max-w-[1440px] mx-auto font-LatoRegular">
