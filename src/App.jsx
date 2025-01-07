@@ -10,6 +10,7 @@ import Contact from "./Pages/homepage/Contact";
 import AppointmentForm from "./Pages/AppointmentForm";
 import Hta from "./Pages/HTA";
 import HomePage from "./Pages/homepage/HomePage";
+import Students from ".Pages/registrar/Students";
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const Layout = () => {
         <Route path="/about" element={<About />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/students" element={<Students />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>
