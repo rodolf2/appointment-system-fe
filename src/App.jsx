@@ -10,7 +10,7 @@ import Contact from "./Pages/homepage/Contact";
 import AppointmentForm from "./Pages/AppointmentForm";
 import Hta from "./Pages/HTA";
 import HomePage from "./Pages/homepage/HomePage";
-import Students from ".Pages/registrar/Students";
+import Students from "./Pages/registrar/Students";
 
 const App = () => {
   return (

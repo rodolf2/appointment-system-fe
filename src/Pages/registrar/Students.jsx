@@ -2,18 +2,13 @@ import React, { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { CgProfile } from "react-icons/cg";
 import { IoMdArrowDropdown } from "react-icons/io";
-import Sidebar from "src/components/Sidebar.jsx";
+import Sidebar from "/src/components/Sidebar";
 
 const Students = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
-  };
-  const dropdown = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-    return <></>;
   };
   return (
     <div className="flex h-screen font-LatoRegular">
@@ -50,7 +45,7 @@ const Students = () => {
             <div className="flex items-center gap-3">
               <CgProfile className="text-5xl" />
               <span className="text-[20px] ">Juan Dela Cruz</span>
-              <IoMdArrowDropdown className="text-5xl" onClick={dropdown} />
+              <IoMdArrowDropdown className="text-5xl" />
             </div>
           </header>
           <div>
