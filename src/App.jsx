@@ -22,7 +22,7 @@ const App = () => {
 
 const Layout = () => {
   const location = useLocation();
-  const excludedPaths = ["/", "/appointmentForm"];
+  const excludedPaths = ["/", "/appointmentForm", "/students"];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
   return (

@@ -16,9 +16,9 @@ const Students = () => {
 
       <div className="flex-1 overflow-y-auto">
         <main
-          className=" max-w-[1440px] mx-auto h-[1150px] bg-[#161F55]"
+          className=" max-w-[1440px] mx-auto h-[1200px]"
           style={{
-            backgroundImage: `url(${"/src/assets/image/BackGround.png"})`,
+            backgroundImage: `url(${"public/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -49,7 +49,7 @@ const Students = () => {
             </div>
           </header>
           <div>
-            <section className="h-[1000px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
+            <section className="h-[1050px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
               {" "}
               <div className="bg-[#D9D9D9] h-44 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">
