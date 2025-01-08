@@ -237,7 +237,7 @@ const Students = () => {
                   </tbody>
                 </table>
               </div>
-              <div className="flex justify-between items-center mt-4 text-[18px] pl-4">
+              <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
                 <span className="text-[#161F55]">
                   SHOWING 1 TO 10 OF 10 ENTRIES
                 </span>

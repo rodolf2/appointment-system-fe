@@ -130,7 +130,7 @@ const Pending = () => {
                         dateOfAppointment: "",
                         timeSlot: "",
                         dateOfRequest: "",
-                        actions: "2025-01-01",
+                        actions: "",
                       },
                       {
                         status: "PENDING",
@@ -140,7 +140,7 @@ const Pending = () => {
                         dateOfAppointment: "",
                         timeSlot: "",
                         dateOfRequest: "",
-                        actions: "2025-01-01",
+                        actions: "",
                       },
                       {
                         status: "PENDING",
@@ -150,7 +150,7 @@ const Pending = () => {
                         dateOfAppointment: "",
                         timeSlot: "",
                         dateOfRequest: "",
-                        actions: "2025-01-01",
+                        actions: "",
                       },
                       {
                         status: "PENDING",
@@ -160,7 +160,7 @@ const Pending = () => {
                         dateOfAppointment: "",
                         timeSlot: "",
                         dateOfRequest: "",
-                        actions: "2025-01-01",
+                        actions: "",
                       },
                       {
                         status: "PENDING",
@@ -170,7 +170,7 @@ const Pending = () => {
                         dateOfAppointment: "",
                         timeSlot: "",
                         dateOfRequest: "",
-                        actions: "2025-01-01",
+                        actions: "",
                       },
                       {
                         status: "PENDING",
@@ -180,7 +180,7 @@ const Pending = () => {
                         dateOfAppointment: "",
                         timeSlot: "",
                         dateOfRequest: "",
-                        actions: "2025-01-01",
+                        actions: "",
                       },
                       {
                         status: "PENDING",
@@ -190,7 +190,7 @@ const Pending = () => {
                         dateOfAppointment: "",
                         timeSlot: "",
                         dateOfRequest: "",
-                        actions: "2025-01-01",
+                        actions: "",
                       },
                       {
                         status: "PENDING",
@@ -200,7 +200,7 @@ const Pending = () => {
                         dateOfAppointment: "",
                         timeSlot: "",
                         dateOfRequest: "",
-                        actions: "2025-01-01",
+                        actions: "",
                       },
                     ].map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
@@ -242,7 +242,7 @@ const Pending = () => {
                   </tbody>
                 </table>
               </div>
-              <div className="flex justify-between items-center mt-4 text-[18px] pl-4">
+              <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
                 <span className="text-[#161F55]">
                   SHOWING 1 TO 8 OF 6 ENTRIES
                 </span>
