@@ -13,6 +13,7 @@ import HomePage from "./Pages/homepage/HomePage";
 import Students from "./Pages/registrar/Students";
 import Pending from "./Pages/registrar/Pending";
 import Approved from "./Pages/registrar/Approved";
+import Rejected from "./pages/registrar/Rejected";
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const Layout = () => {
     "/students",
     "/pending",
     "/approved",
+    "/rejected",
   ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
@@ -52,6 +54,7 @@ const Layout = () => {
         <Route path="/students" element={<Students />} />
         <Route path="/pending" element={<Pending />} />
         <Route path="/approved" element={<Approved />} />
+        <Route path="/rejected" element={<Rejected />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>
