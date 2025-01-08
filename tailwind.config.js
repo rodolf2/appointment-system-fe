@@ -10,6 +10,7 @@ export default {
         LatoBold: ["Lato-Bold"],
         LatoSemiBold: ["Lato-Semibold, sans-serif"],
         LatoItalic: ["Lato-Italic"],
+        LatoMedium: ["Lato-Medium"],
       },
       colors: {
         Fwhite: "#FEFEFE",

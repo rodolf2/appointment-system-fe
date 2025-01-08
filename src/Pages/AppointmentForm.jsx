@@ -5,6 +5,8 @@ import Attachment from "../components/appointmentForm/Attachment";
 import AppInfo from "../components/appointmentForm/AppInfo";
 import AppSchedule from "../components/appointmentForm/AppSchedule";
 import Claiming from "../components/Claiming";
+import ReturnHome from "../components/appointmentForm/ReturnHome";
+import Feedback from "@/components/appointmentForm/Feedback";
 
 const AppointmentForm = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -42,6 +44,10 @@ const AppointmentForm = () => {
       )}
       {currentStep === 5 && (
         <AppSchedule onNext={goToNextStep} onBack={goToPreviousStep} />
+      )}
+      {currentStep === 6 && <Feedback onNext={goToNextStep} />}
+      {currentStep === 7 && (
+        <ReturnHome onNext={goToNextStep} onBack={goToPreviousStep} />
       )}
     </>
   );

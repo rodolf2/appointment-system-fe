@@ -30,6 +30,11 @@
   src: local("Lato-Italic"),
     url("/src/assets/fonts/Lato-Italic.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Lato-Medium";
+  src: local("Lato-Medium"),
+    url("/src/assets/fonts/Lato-Medium.ttf") format("truetype");
+}
 
 body,
 html {
