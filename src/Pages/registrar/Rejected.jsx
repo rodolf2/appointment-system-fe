@@ -5,9 +5,10 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { FaThumbsUp } from "react-icons/fa6";
 import { LuCircleCheckBig } from "react-icons/lu";
 import { FaThumbsDown } from "react-icons/fa6";
+import { BsTrash3 } from "react-icons/bs";
 import Sidebar from "/src/components/Sidebar";
 
-const Approved = () => {
+const Rejected = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -40,7 +41,7 @@ const Approved = () => {
                   {isSidebarOpen ? <RxHamburgerMenu /> : <RxHamburgerMenu />}
                 </button>
               </div>
-              <h1 className="text-[20px] font-bold">Approved Appointment</h1>
+              <h1 className="text-[20px] font-bold">Rejected Appointment</h1>
             </div>
 
             <div className="flex items-center gap-3">
@@ -55,7 +56,7 @@ const Approved = () => {
               <div className="bg-[#D9D9D9] h-44 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
-                    LIST OF APPROVED APPOINTMENT
+                    LIST OF REJECTED APPOINTMENT
                   </h2>
                   <div className="border-b-4 border-[#F3BC62] w-[720px] my-3"></div>
                 </div>
@@ -123,7 +124,7 @@ const Approved = () => {
                   <tbody>
                     {[
                       {
-                        status: "APPROVED",
+                        status: "REJECTED",
                         transactionNumber: ["TR112438-322 ", "JOSE DELA CRUZ"],
                         request: "",
                         emailAddress: "",
@@ -133,7 +134,7 @@ const Approved = () => {
                         actions: "",
                       },
                       {
-                        status: "APPROVED",
+                        status: "REJECTED",
                         transactionNumber: ["TTR155938-883 ", "LUKAS GARCIA"],
                         request: "",
                         emailAddress: "",
@@ -142,26 +143,26 @@ const Approved = () => {
                         dateOfRequest: "",
                         actions: "",
                       },
-                      {
-                        status: "APPROVED",
-                        transactionNumber: ["TR44368-444", "CELINE MARAJAS"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "APPROVED",
-                        transactionNumber: ["TTR26662-599", "JELA ELAURIA"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
+                      //   {
+                      //     status: "APPROVED",
+                      //     transactionNumber: ["TR44368-444", "CELINE MARAJAS"],
+                      //     request: "",
+                      //     emailAddress: "",
+                      //     dateOfAppointment: "",
+                      //     timeSlot: "",
+                      //     dateOfRequest: "",
+                      //     actions: "",
+                      //   },
+                      //   {
+                      //     status: "APPROVED",
+                      //     transactionNumber: ["TTR26662-599", "JELA ELAURIA"],
+                      //     request: "",
+                      //     emailAddress: "",
+                      //     dateOfAppointment: "",
+                      //     timeSlot: "",
+                      //     dateOfRequest: "",
+                      //     actions: "",
+                      //   },
                       //   {
                       //     status: "PENDING",
                       //     transactionNumber: ["TR254393-678", "JED DELFIN"],
@@ -205,7 +206,7 @@ const Approved = () => {
                     ].map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
                         <td className="border p-4">
-                          <span className="bg-[#299057] px-2 py-1 rounded text-white">
+                          <span className="bg-[#D52121] px-2 py-1 rounded text-white">
                             {data.status}
                           </span>
                         </td>
@@ -226,11 +227,11 @@ const Approved = () => {
                         <td className="border p-4">{data.dateOfRequest}</td>
                         <td className="border p-4">
                           <div className="flex gap-2 justify-center">
-                            <div className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700">
-                              <LuCircleCheckBig className="text-white" />
+                            <div className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700">
+                              <FaThumbsUp className="text-white" />
                             </div>
-                            <div className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700">
-                              <FaThumbsDown className="text-white" />
+                            <div className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700">
+                              <BsTrash3 className="text-white" />
                             </div>
                           </div>
                         </td>
@@ -241,7 +242,7 @@ const Approved = () => {
               </div>
               <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
                 <span className="text-[#161F55]">
-                  SHOWING 1 TO 4 OF 1 ENTRIES
+                  SHOWING 1 TO 2 OF 1 ENTRIES
                 </span>
                 <div className="mr-6">
                   <button className="border p-1 text-[#161F55]">
@@ -265,4 +266,4 @@ const Approved = () => {
   );
 };
 
-export default Approved;
+export default Rejected;

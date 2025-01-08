@@ -72,10 +72,10 @@ const Pending = () => {
                       <option>4</option>
                       <option>5</option>
                       <option>6</option>
-                      <option>7</option>
+                      {/* <option>7</option>
                       <option>8</option>
                       <option>9</option>
-                      <option>10</option>
+                      <option>10</option> */}
                     </select>
                     <span className="ml-2">ENTRIES</span>
                   </div>
@@ -211,10 +211,10 @@ const Pending = () => {
                         </td>
                         <td className="border p-4">
                           <div className="flex flex-col text-center">
-                            <span className="text-[#354CCE]">
+                            <span className="text-[#354CCE] font-bold">
                               {data.transactionNumber[0]}
                             </span>{" "}
-                            <span className="text-[#3A993D]">
+                            <span className="text-[#3A993D] font-extrabold">
                               {data.transactionNumber[1]}
                             </span>{" "}
                           </div>
