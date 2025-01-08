@@ -11,6 +11,8 @@ import AppointmentForm from "./Pages/AppointmentForm";
 import Hta from "./Pages/HTA";
 import HomePage from "./Pages/homepage/HomePage";
 import Students from "./Pages/registrar/Students";
+import SignIn from "./Pages/registrar/Login/SignIn";
+import SignUp from "./Pages/registrar/Login/SignUp";
 
 const App = () => {
   return (
@@ -22,7 +24,13 @@ const App = () => {
 
 const Layout = () => {
   const location = useLocation();
-  const excludedPaths = ["/", "/appointmentForm", "/students"];
+  const excludedPaths = [
+    "/",
+    "/appointmentForm",
+    "/students",
+    "/signin",
+    "/signup",
+  ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
   return (
@@ -42,6 +50,8 @@ const Layout = () => {
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/students" element={<Students />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>
