@@ -40,9 +40,7 @@ const Pending = () => {
                   {isSidebarOpen ? <RxHamburgerMenu /> : <RxHamburgerMenu />}
                 </button>
               </div>
-              <h1 className="text-[20px] font-bold">
-                Students/Alumni's Records
-              </h1>
+              <h1 className="text-[20px] font-bold">Pending Appointment</h1>
             </div>
 
             <div className="flex items-center gap-3">
