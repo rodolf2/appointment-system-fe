@@ -248,7 +248,7 @@ const Pending = () => {
                 <span className="text-[#161F55]">
                   SHOWING 1 TO 8 OF 6 ENTRIES
                 </span>
-                <div>
+                <div className="mr-6">
                   <button className="border p-1 text-[#161F55]">
                     Previous
                   </button>
