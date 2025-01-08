@@ -16,6 +16,7 @@ import Approved from "./Pages/registrar/Approved";
 import SignIn from "./Pages/registrar/Login/SignIn";
 import SignUp from "./Pages/registrar/Login/SignUp";
 import Rejected from "./pages/registrar/Rejected";
+import Completed from "./pages/registrar/Completed";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const Layout = () => {
     "/signin",
     "/signup",
     "/rejected",
+    "/completed",
   ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
@@ -61,6 +63,7 @@ const Layout = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/rejected" element={<Rejected />} />
+        <Route path="/completed" element={<Completed />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>
