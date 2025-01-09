@@ -1,67 +1,85 @@
 import React, { useState } from "react";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { CgProfile } from "react-icons/cg";
-import { IoMdArrowDropdown } from "react-icons/io";
 import { FaThumbsUp } from "react-icons/fa6";
-import { LuCircleCheckBig } from "react-icons/lu";
-import { FaThumbsDown } from "react-icons/fa6";
 import { BsTrash3 } from "react-icons/bs";
+import Footer from "/src/pages/registrar/components/Footer.jsx";
+import Header from "/src/pages/registrar/components/Header.jsx";
 import Sidebar from "/src/components/Sidebar";
 
 const Rejected = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [appointments, setAppointments] = useState([
+    {
+      status: "REJECTED",
+      transactionNumber: ["TR13234-322", "KARLA MERCADO"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+    },
+    {
+      status: "REJECTED",
+      transactionNumber: ["TR444938-432 ", "YEHLEN HAMAYA"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+    },
+  ]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const openModal = (appointment) => {
+    setSelectedAppointment(appointment);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedAppointment(null);
+    setIsModalOpen(false);
+  };
+
+  const deleteAppointment = () => {
+    setAppointments(
+      appointments.filter((appt) => appt !== selectedAppointment)
+    );
+    closeModal();
+  };
+
   return (
     <div className="flex h-screen font-LatoRegular">
       {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
 
       <div className="flex-1 overflow-y-auto">
         <main
-          className=" max-w-[1440px] mx-auto h-auto"
+          className="max-w-[1440px] mx-auto h-auto"
           style={{
             backgroundImage: `url(${"public/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
         >
-          <header className="flex justify-between items-center  bg-Bbackground h-[87px]">
-            <div className="flex items-center">
-              <div
-                className={`flex-1 p-4 transition-margin duration-300 ${
-                  isSidebarOpen ? "ml-0" : "ml-0"
-                }`}
-              >
-                <button
-                  onClick={toggleSidebar}
-                  className=" p-2 text-black rounded text-5xl font-bold"
-                >
-                  {isSidebarOpen ? <RxHamburgerMenu /> : <RxHamburgerMenu />}
-                </button>
-              </div>
-              <h1 className="text-[20px] font-bold">Rejected Appointment</h1>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <CgProfile className="text-5xl" />
-              <span className="text-[20px] ">Juan Dela Cruz</span>
-              <IoMdArrowDropdown className="text-5xl" />
-            </div>
-          </header>
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            title="Rejected Appointment"
+          />
           <div>
-            <section className="h-[1200px] z-10 bg-white max-w-[1300px] mx-auto  p-5 my-5">
-              {" "}
+            <section className="h-[1200px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
               <div className="bg-[#D9D9D9] h-44 m-4">
-                <div className=" text-[#161F55] px-3 ml-3 pt-2">
+                <div className="text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                     LIST OF REJECTED APPOINTMENT
                   </h2>
                   <div className="border-b-4 border-[#F3BC62] w-[720px] my-3"></div>
                 </div>
 
-                <div className="flex justify-between items-center mt-16 ml-4 ">
+                <div className="flex justify-between items-center mt-16 ml-4">
                   <div className="text-[#161F55] font-semibold text-[18px]">
                     <label htmlFor="show" className="mr-2">
                       SHOW
@@ -122,91 +140,10 @@ const Rejected = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      {
-                        status: "REJECTED",
-                        transactionNumber: ["TR112438-322 ", "JOSE DELA CRUZ"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "REJECTED",
-                        transactionNumber: ["TTR155938-883 ", "LUKAS GARCIA"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      //   {
-                      //     status: "APPROVED",
-                      //     transactionNumber: ["TR44368-444", "CELINE MARAJAS"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "",
-                      //   },
-                      //   {
-                      //     status: "APPROVED",
-                      //     transactionNumber: ["TTR26662-599", "JELA ELAURIA"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "",
-                      //   },
-                      //   {
-                      //     status: "PENDING",
-                      //     transactionNumber: ["TR254393-678", "JED DELFIN"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "2025-01-01",
-                      //   },
-                      //   {
-                      //     status: "PENDING",
-                      //     transactionNumber: ["TR324693-786", "DENISE JULIA"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "2025-01-01",
-                      //   },
-                      //   {
-                      //     status: "PENDING",
-                      //     transactionNumber: ["TR382793-876", "MIKAELA KUSH"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "2025-01-01",
-                      //   },
-                      //   {
-                      //     status: "PENDING",
-                      //     transactionNumber: ["TR38883-999", "SHELLA YING"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "2025-01-01",
-                      //   },
-                    ].map((data, index) => (
+                    {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
                         <td className="border p-4">
-                          <span className="bg-[#D52121] px-2 py-1 rounded text-white">
+                          <span className="bg-[#D52121] px-2 py-2 rounded text-white">
                             {data.status}
                           </span>
                         </td>
@@ -230,8 +167,11 @@ const Rejected = () => {
                             <div className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700">
                               <FaThumbsUp className="text-white" />
                             </div>
-                            <div className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700">
-                              <BsTrash3 className="text-white" />
+                            <div className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700">
+                              <BsTrash3
+                                className="text-white"
+                                onClick={() => openModal(data)}
+                              />
                             </div>
                           </div>
                         </td>
@@ -257,11 +197,33 @@ const Rejected = () => {
             </section>
           </div>
 
-          <footer className="bg-Bbackground h-[70px] flex items-center justify-end pr-9 w-full">
-            <p className="font-regular">LA VERDAD CHRISTIAN COLLEGE, INC.</p>
-          </footer>
+          <Footer />
         </main>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
+          <div className="bg-white p-20 rounded-xl shadow-md">
+            <h2 className="text-xl font-bold mb-4">
+              Are you sure you want to delete this appointment?
+            </h2>
+            <div className="flex justify-between gap-4 mt-10">
+              <button
+                className="bg-gray-300 text-black px-8 py-2 rounded-2xl"
+                onClick={closeModal}
+              >
+                No
+              </button>
+              <button
+                className="bg-[#161F55] text-white px-8 py-2 rounded-2xl"
+                onClick={deleteAppointment}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

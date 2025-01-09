@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { CgProfile } from "react-icons/cg";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { FaThumbsUp } from "react-icons/fa6";
+import Footer from "/src/pages/registrar/components/Footer.jsx";
+import Header from "/src/pages/registrar/components/Header.jsx";
 import { LuCircleCheckBig } from "react-icons/lu";
 import { FaThumbsDown } from "react-icons/fa6";
 import Sidebar from "/src/components/Sidebar";
@@ -13,6 +11,88 @@ const Approved = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  const [appointments, setAppointments] = useState([
+    {
+      status: "APPROVED",
+      transactionNumber: ["TR112438-322 ", "JOSE DELA CRUZ"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "APPROVED",
+      transactionNumber: ["TTR155938-883 ", "LUKAS GARCIA"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "APPROVED",
+      transactionNumber: ["TR44368-444", "CELINE MARAJAS"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "APPROVED",
+      transactionNumber: ["TTR26662-599", "JELA ELAURIA"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    //   {
+    //     status: "PENDING",
+    //     transactionNumber: ["TR254393-678", "JED DELFIN"],
+    //     request: "",
+    //     emailAddress: "",
+    //     dateOfAppointment: "",
+    //     timeSlot: "",
+    //     dateOfRequest: "",
+    //     actions: "2025-01-01",
+    //   },
+    //   {
+    //     status: "PENDING",
+    //     transactionNumber: ["TR324693-786", "DENISE JULIA"],
+    //     request: "",
+    //     emailAddress: "",
+    //     dateOfAppointment: "",
+    //     timeSlot: "",
+    //     dateOfRequest: "",
+    //     actions: "2025-01-01",
+    //   },
+    //   {
+    //     status: "PENDING",
+    //     transactionNumber: ["TR382793-876", "MIKAELA KUSH"],
+    //     request: "",
+    //     emailAddress: "",
+    //     dateOfAppointment: "",
+    //     timeSlot: "",
+    //     dateOfRequest: "",
+    //     actions: "2025-01-01",
+    //   },
+    //   {
+    //     status: "PENDING",
+    //     transactionNumber: ["TR38883-999", "SHELLA YING"],
+    //     request: "",
+    //     emailAddress: "",
+    //     dateOfAppointment: "",
+    //     timeSlot: "",
+    //     dateOfRequest: "",
+    //     actions: "2025-01-01",
+    //   },
+  ]);
   return (
     <div className="flex h-screen font-LatoRegular">
       {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
@@ -26,29 +106,11 @@ const Approved = () => {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <header className="flex justify-between items-center  bg-Bbackground h-[87px]">
-            <div className="flex items-center">
-              <div
-                className={`flex-1 p-4 transition-margin duration-300 ${
-                  isSidebarOpen ? "ml-0" : "ml-0"
-                }`}
-              >
-                <button
-                  onClick={toggleSidebar}
-                  className=" p-2 text-black rounded text-5xl font-bold"
-                >
-                  {isSidebarOpen ? <RxHamburgerMenu /> : <RxHamburgerMenu />}
-                </button>
-              </div>
-              <h1 className="text-[20px] font-bold">Approved Appointment</h1>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <CgProfile className="text-5xl" />
-              <span className="text-[20px] ">Juan Dela Cruz</span>
-              <IoMdArrowDropdown className="text-5xl" />
-            </div>
-          </header>
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            title="Approved Appointment"
+          />
           <div>
             <section className="h-[1200px] z-10 bg-white max-w-[1300px] mx-auto  p-5 my-5">
               {" "}
@@ -121,91 +183,10 @@ const Approved = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      {
-                        status: "APPROVED",
-                        transactionNumber: ["TR112438-322 ", "JOSE DELA CRUZ"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "APPROVED",
-                        transactionNumber: ["TTR155938-883 ", "LUKAS GARCIA"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "APPROVED",
-                        transactionNumber: ["TR44368-444", "CELINE MARAJAS"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "APPROVED",
-                        transactionNumber: ["TTR26662-599", "JELA ELAURIA"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      //   {
-                      //     status: "PENDING",
-                      //     transactionNumber: ["TR254393-678", "JED DELFIN"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "2025-01-01",
-                      //   },
-                      //   {
-                      //     status: "PENDING",
-                      //     transactionNumber: ["TR324693-786", "DENISE JULIA"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "2025-01-01",
-                      //   },
-                      //   {
-                      //     status: "PENDING",
-                      //     transactionNumber: ["TR382793-876", "MIKAELA KUSH"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "2025-01-01",
-                      //   },
-                      //   {
-                      //     status: "PENDING",
-                      //     transactionNumber: ["TR38883-999", "SHELLA YING"],
-                      //     request: "",
-                      //     emailAddress: "",
-                      //     dateOfAppointment: "",
-                      //     timeSlot: "",
-                      //     dateOfRequest: "",
-                      //     actions: "2025-01-01",
-                      //   },
-                    ].map((data, index) => (
+                    {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
                         <td className="border p-4">
-                          <span className="bg-[#299057] px-2 py-1 rounded text-white">
+                          <span className="bg-[#299057] px-2 py-2 rounded text-white">
                             {data.status}
                           </span>
                         </td>
@@ -256,9 +237,7 @@ const Approved = () => {
             </section>
           </div>
 
-          <footer className="bg-Bbackground h-[70px] flex items-center justify-end pr-9 w-full">
-            <p className="font-regular">LA VERDAD CHRISTIAN COLLEGE, INC.</p>
-          </footer>
+          <Footer />
         </main>
       </div>
     </div>

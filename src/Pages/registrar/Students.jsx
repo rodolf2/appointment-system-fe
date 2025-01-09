@@ -3,9 +3,101 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { CgProfile } from "react-icons/cg";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Sidebar from "/src/components/Sidebar";
+import Footer from "/src/pages/registrar/components/Footer.jsx";
+import Header from "/src/pages/registrar/components/Header.jsx";
 
 const Students = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [appointments, setAppointments] = useState([
+    {
+      name: "Alice Smith",
+      lastSY: "2020-2021",
+      program: "Grade 11 - STEM",
+      contact: "+1 (123) 456-7890",
+      email: "alice.smith@example.com",
+      attachment: "ID Card",
+      request: "Transcript of Records",
+      date: "2025-01-01",
+      claiming: "Pick-up",
+    },
+    {
+      name: "Bob Johnson",
+      lastSY: "2019-2020",
+      program: "Grade 12 - ABM",
+      contact: "+1 (234) 567-8901",
+      email: "bob.johnson@example.com",
+      attachment: "Enrollment Form",
+      request: "Certificate of Graduation",
+      date: "2025-01-02",
+      claiming: "Email",
+    },
+    {
+      name: "Charlie Brown",
+      lastSY: "2021-2022",
+      program: "Grade 10",
+      contact: "+1 (345) 678-9012",
+      email: "charlie.brown@example.com",
+      attachment: "Payment Receipt",
+      request: "Good Moral Certificate",
+      date: "2025-01-03",
+      claiming: "Courier",
+    },
+    {
+      name: "Daisy Miller",
+      lastSY: "2022-2023",
+      program: "Grade 11 - HUMSS",
+      contact: "+1 (456) 789-0123",
+      email: "daisy.miller@example.com",
+      attachment: "Report Card",
+      request: "Form 137",
+      date: "2025-01-04",
+      claiming: "Pick-up",
+    },
+    {
+      name: "Evan Davis",
+      lastSY: "2018-2019",
+      program: "Grade 12 - ICT",
+      contact: "+1 (567) 890-1234",
+      email: "evan.davis@example.com",
+      attachment: "Certificate of Attendance",
+      request: "Diploma",
+      date: "2025-01-05",
+      claiming: "Email",
+    },
+    {
+      name: "Fiona Garcia",
+      lastSY: "2017-2018",
+      program: "Grade 9",
+      contact: "+1 (678) 901-2345",
+      email: "fiona.garcia@example.com",
+      attachment: "ID Card",
+      request: "Transcript of Records",
+      date: "2025-01-06",
+      claiming: "Courier",
+    },
+    {
+      name: "George Wilson",
+      lastSY: "2023-2024",
+      program: "Grade 8",
+      contact: "+1 (789) 012-3456",
+      email: "george.wilson@example.com",
+      attachment: "Enrollment Form",
+      request: "Certificate of Enrollment",
+      date: "2025-01-07",
+      claiming: "Pick-up",
+    },
+    {
+      name: "Hannah Lee",
+      lastSY: "2016-2017",
+      program: "Grade 7",
+      contact: "+1 (890) 123-4567",
+      email: "hannah.lee@example.com",
+      attachment: "Report Card",
+      request: "Diploma",
+      date: "2025-01-08",
+      claiming: "Email",
+    },
+  ]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -23,31 +115,11 @@ const Students = () => {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <header className="flex justify-between items-center  bg-Bbackground h-[87px]">
-            <div className="flex items-center">
-              <div
-                className={`flex-1 p-4 transition-margin duration-300 ${
-                  isSidebarOpen ? "ml-0" : "ml-0"
-                }`}
-              >
-                <button
-                  onClick={toggleSidebar}
-                  className=" p-2 text-black rounded text-5xl font-bold"
-                >
-                  {isSidebarOpen ? <RxHamburgerMenu /> : <RxHamburgerMenu />}
-                </button>
-              </div>
-              <h1 className="text-[20px] font-bold">
-                Students/Alumni's Records
-              </h1>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <CgProfile className="text-5xl" />
-              <span className="text-[20px] ">Juan Dela Cruz</span>
-              <IoMdArrowDropdown className="text-5xl" />
-            </div>
-          </header>
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            title="Students/Alumni's Records"
+          />
           <div>
             <section className="h-[1050px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
               {" "}
@@ -131,96 +203,7 @@ const Students = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      {
-                        name: "Alice Smith",
-                        lastSY: "2020-2021",
-                        program: "Grade 11 - STEM",
-                        contact: "+1 (123) 456-7890",
-                        email: "alice.smith@example.com",
-                        attachment: "ID Card",
-                        request: "Transcript of Records",
-                        date: "2025-01-01",
-                        claiming: "Pick-up",
-                      },
-                      {
-                        name: "Bob Johnson",
-                        lastSY: "2019-2020",
-                        program: "Grade 12 - ABM",
-                        contact: "+1 (234) 567-8901",
-                        email: "bob.johnson@example.com",
-                        attachment: "Enrollment Form",
-                        request: "Certificate of Graduation",
-                        date: "2025-01-02",
-                        claiming: "Email",
-                      },
-                      {
-                        name: "Charlie Brown",
-                        lastSY: "2021-2022",
-                        program: "Grade 10",
-                        contact: "+1 (345) 678-9012",
-                        email: "charlie.brown@example.com",
-                        attachment: "Payment Receipt",
-                        request: "Good Moral Certificate",
-                        date: "2025-01-03",
-                        claiming: "Courier",
-                      },
-                      {
-                        name: "Daisy Miller",
-                        lastSY: "2022-2023",
-                        program: "Grade 11 - HUMSS",
-                        contact: "+1 (456) 789-0123",
-                        email: "daisy.miller@example.com",
-                        attachment: "Report Card",
-                        request: "Form 137",
-                        date: "2025-01-04",
-                        claiming: "Pick-up",
-                      },
-                      {
-                        name: "Evan Davis",
-                        lastSY: "2018-2019",
-                        program: "Grade 12 - ICT",
-                        contact: "+1 (567) 890-1234",
-                        email: "evan.davis@example.com",
-                        attachment: "Certificate of Attendance",
-                        request: "Diploma",
-                        date: "2025-01-05",
-                        claiming: "Email",
-                      },
-                      {
-                        name: "Fiona Garcia",
-                        lastSY: "2017-2018",
-                        program: "Grade 9",
-                        contact: "+1 (678) 901-2345",
-                        email: "fiona.garcia@example.com",
-                        attachment: "ID Card",
-                        request: "Transcript of Records",
-                        date: "2025-01-06",
-                        claiming: "Courier",
-                      },
-                      {
-                        name: "George Wilson",
-                        lastSY: "2023-2024",
-                        program: "Grade 8",
-                        contact: "+1 (789) 012-3456",
-                        email: "george.wilson@example.com",
-                        attachment: "Enrollment Form",
-                        request: "Certificate of Enrollment",
-                        date: "2025-01-07",
-                        claiming: "Pick-up",
-                      },
-                      {
-                        name: "Hannah Lee",
-                        lastSY: "2016-2017",
-                        program: "Grade 7",
-                        contact: "+1 (890) 123-4567",
-                        email: "hannah.lee@example.com",
-                        attachment: "Report Card",
-                        request: "Diploma",
-                        date: "2025-01-08",
-                        claiming: "Email",
-                      },
-                    ].map((data, index) => (
+                    {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
                         <td className="border p-5">{index + 1}</td>
                         <td className="border p-5 w-[200px]">{data.name}</td>
@@ -254,9 +237,7 @@ const Students = () => {
             </section>
           </div>
 
-          <footer className="bg-Bbackground h-[70px] flex items-center justify-end pr-9 w-full">
-            <p className="font-regular">LA VERDAD CHRISTIAN COLLEGE, INC.</p>
-          </footer>
+          <Footer />
         </main>
       </div>
     </div>

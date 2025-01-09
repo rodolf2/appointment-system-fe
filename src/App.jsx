@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Announcement from "./Pages/Announcement";
@@ -27,7 +27,6 @@ const App = () => {
 };
 
 const Layout = () => {
-  const location = useLocation();
   const excludedPaths = [
     "/",
     "/appointmentForm",

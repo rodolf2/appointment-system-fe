@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { CgProfile } from "react-icons/cg";
-import { IoMdArrowDropdown } from "react-icons/io";
 import { FaThumbsUp } from "react-icons/fa6";
 import { LuCircleCheckBig } from "react-icons/lu";
 import { FaThumbsDown } from "react-icons/fa6";
+import Footer from "/src/pages/registrar/components/Footer.jsx";
+import Header from "/src/pages/registrar/components/Header.jsx";
 import Sidebar from "/src/components/Sidebar";
 
 const Pending = () => {
@@ -13,6 +12,89 @@ const Pending = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const [appointments, setAppointments] = useState([
+    {
+      status: "PENDING",
+      transactionNumber: ["TR102938-123", "JUAN DELA CRUZ"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TTR122938-343", "MARC REYES"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR131238-534", "PAO LING"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR232352-536", "ANGELA DELEON"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR254393-678", "JED DELFIN"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR324693-786", "DENISE JULIA"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR382793-876", "MIKAELA KUSH"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR38883-999", "SHELLA YING"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+  ]);
   return (
     <div className="flex h-screen font-LatoRegular">
       {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
@@ -26,29 +108,11 @@ const Pending = () => {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <header className="flex justify-between items-center  bg-Bbackground h-[87px]">
-            <div className="flex items-center">
-              <div
-                className={`flex-1 p-4 transition-margin duration-300 ${
-                  isSidebarOpen ? "ml-0" : "ml-0"
-                }`}
-              >
-                <button
-                  onClick={toggleSidebar}
-                  className=" p-2 text-black rounded text-5xl font-bold"
-                >
-                  {isSidebarOpen ? <RxHamburgerMenu /> : <RxHamburgerMenu />}
-                </button>
-              </div>
-              <h1 className="text-[20px] font-bold">Pending Appointment</h1>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <CgProfile className="text-5xl" />
-              <span className="text-[20px] ">Juan Dela Cruz</span>
-              <IoMdArrowDropdown className="text-5xl" />
-            </div>
-          </header>
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            title="Pending Appointment"
+          />
           <div>
             <section className="h-[1200px] z-10 bg-white max-w-[1300px] mx-auto  p-5 my-5">
               {" "}
@@ -121,91 +185,10 @@ const Pending = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      {
-                        status: "PENDING",
-                        transactionNumber: ["TR102938-123", "JUAN DELA CRUZ"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "PENDING",
-                        transactionNumber: ["TTR122938-343", "MARC REYES"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "PENDING",
-                        transactionNumber: ["TR131238-534", "PAO LING"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "PENDING",
-                        transactionNumber: ["TR232352-536", "ANGELA DELEON"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "PENDING",
-                        transactionNumber: ["TR254393-678", "JED DELFIN"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "PENDING",
-                        transactionNumber: ["TR324693-786", "DENISE JULIA"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "PENDING",
-                        transactionNumber: ["TR382793-876", "MIKAELA KUSH"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                      {
-                        status: "PENDING",
-                        transactionNumber: ["TR38883-999", "SHELLA YING"],
-                        request: "",
-                        emailAddress: "",
-                        dateOfAppointment: "",
-                        timeSlot: "",
-                        dateOfRequest: "",
-                        actions: "",
-                      },
-                    ].map((data, index) => (
+                    {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
                         <td className="border p-4">
-                          <span className="bg-[#F3BC62] px-2 py-1 rounded text-white">
+                          <span className="bg-[#F3BC62] px-2 py-2 rounded text-white">
                             {data.status}
                           </span>
                         </td>
@@ -259,9 +242,7 @@ const Pending = () => {
             </section>
           </div>
 
-          <footer className="bg-Bbackground h-[70px] flex items-center justify-end pr-9 w-full">
-            <p className="font-regular">LA VERDAD CHRISTIAN COLLEGE, INC.</p>
-          </footer>
+          <Footer />
         </main>
       </div>
     </div>
