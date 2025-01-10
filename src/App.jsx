@@ -74,12 +74,4 @@ const Layout = () => {
   );
 };
 
-const App = () => {
-  return (
-    <BrowserRouter>
-      <Layout />
-    </BrowserRouter>
-  );
-};
-
 export default App;

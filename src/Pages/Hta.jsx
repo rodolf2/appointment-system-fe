@@ -2,25 +2,27 @@ import Buttons from "../components/Buttons";
 const Hta = () => {
   return (
     <>
-      <div className="max-w-[1440px] mx-auto h-full relative font-LatoRegular">
+      <div className="max-w-[1440px] mx-auto font-LatoRegular">
         {/* Header Section */}
         <div
           className="relative w-full h-[900px] bg-cover  bg-center flex items-center justify-center text-white text-center"
           style={{
             backgroundImage: "url('/public/assets/image/BackGround.png')",
-            filter: "brightness(1.7)",
+            filter: "brightness(1.5)",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/30 to-[#252F6A]/70"></div>
-
+          <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-          <div className="relative z-10 px-4 max-w-[900px] tracking-widest">
-            <h1 className="text-[50px]  tracking-widest font-LatoSemiBold uppercase mb-4 border-b-8 border-white pb-6 w-[800px]">
-              Wisdom Based on the Truth is Priceless
+          <div className="relative z-10 px-4 max-w-[800px] ">
+            <h1 className="text-[50px] font-semibold uppercase tracking-widest">
+              WISDOM BASED ON
+              <br />
+              THE TRUTH IS PRICELESS
             </h1>
+            <div className="border-b-8 border-white my-4"></div>
             <p className="text-[30px] ">
               Well-known for offering quality education with a focus on
-              Christian values, moral development, and academic excellence.
+              Christian values, moral development, and academic excellence
             </p>
           </div>
         </div>

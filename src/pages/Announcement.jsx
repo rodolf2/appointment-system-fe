@@ -43,10 +43,12 @@ const Announcement = () => {
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
-          <div className="relative z-10 px-4 max-w-[900px] tracking-widest">
-            <h1 className="text-[50px] font-semibold uppercase mb-4 border-b-8 border-white pb-6 w-[800px]">
-              LA VERDAD CHRISTIAN COLLEGE
+          <div className="relative z-10 px-4 max-w-[800px] ">
+            <h1 className="text-[50px] font-semibold uppercase tracking-widest">
+              La Verdad <br />
+              Christian College
             </h1>
+            <div className="border-b-8 border-white my-4"></div>
             <p className="text-[30px] ">
               Simplifying appointment scheduling. Stay organized, save time, and
               never miss an appointment. Easy, fast, and hassle-free

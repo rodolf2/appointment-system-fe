@@ -2,25 +2,26 @@ import Buttons from "/src/components/Buttons";
 import DocumentsStatic from "/src/components/DocumentsStatic";
 const Guidelines = () => {
   return (
-    <div className="max-w-[1440px] mx-auto font-lato">
+    <div className="max-w-[1440px] mx-auto font-LatoRegular">
       <div
-        className="relative w-full h-[900px] bg-fit bg-center flex items-end justify-center text-white text-center pb-28"
+        className="relative w-full h-[900px] bg-cover bg-center flex items-center justify-center text-white text-center"
         style={{
           backgroundImage: "url('/assets/image/guidelines_bg.JPG')",
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/30 to-[#252F6A]/70 "></div>
-        <section className="absolute text-center z-20 bottom-60">
-          <h1 className=" text-[60px]  tracking-widest font-LatoSemiBold w-[900px]">
-            LA VERDAD CHRISTIAN COLLEGE
+        <div className="relative z-10 px-4 max-w-[800px] ">
+          <h1 className="text-[50px] font-semibold uppercase tracking-widest">
+            La Verdad Christian <br />
+            College
           </h1>
           <div className="border-b-8 border-white my-4"></div>
-          <p className="text-[30px] mb-20  w-[900px]">
+          <p className="text-[30px] ">
             Promotes a holistic approach to education, emphasizing the
             development of the intellectual, emotional, social, and spiritual
             aspects of students
           </p>
-        </section>
+        </div>
       </div>
       <Buttons />
       <div className="h-[650px] flex justify-center items-center flex-col bg-[#161F55] text-white ">

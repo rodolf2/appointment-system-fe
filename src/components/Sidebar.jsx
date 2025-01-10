@@ -7,10 +7,10 @@ import { FaSquareXmark } from "react-icons/fa6";
 import { FaTasks } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
 import { FaCalendar } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Sidebar = ({ isSidebarOpen }) => {
-  const [activeMenu, setActiveMenu] = useState("HOME"); // Track the active menu item
+  const [activeMenu, setActiveMenu] = useState("HOME");
 
   const handleMenuClick = (menu) => {
     setActiveMenu(menu);
