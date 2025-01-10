@@ -1,14 +1,11 @@
-import React from "react";
-import HowToAppoint from "./HowToAppoint";
-import Announcement from "./Announcement";
-import Guidelines from "./Guidelines";
+import { Outlet } from "react-router-dom";
+import Buttons from "../components/Buttons";
+
 const Home = () => {
   return (
-    <>
-      <Announcement />
-      <HowToAppoint />
-      <Guidelines />
-    </>
+    <div>
+      <Outlet />
+    </div>
   );
 };
 

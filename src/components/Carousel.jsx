@@ -11,14 +11,14 @@ const Carousel = () => {
       description:
         "To ensure efficient and orderly processing of document requests, the following regulations have been established for both Basic Education and Higher Education. Please be guided accordingly.",
     },
-    // {
-    //   title: "Second Page",
-    //   description: "This is the second page",
-    // },
-    // {
-    //   title: "Third Page",
-    //   description: "This is the third page",
-    // },
+    {
+      title: "Second Page",
+      description: "This is the second page",
+    },
+    {
+      title: "Third Page",
+      description: "This is the third page",
+    },
   ];
 
   const handlePrev = () => {
@@ -41,7 +41,7 @@ const Carousel = () => {
         </h2>
         <div className=" border-b-4 border-[#F3BC62] w-[50%] my-5"></div>
         <p className="text-[30px] pb-10">{slides[currentIndex].description}</p>
-        <Link to={"/guidelines"}>
+        <Link to={"/home/guidelines"}>
           {" "}
           <button className="text-[25px] border border-white px-4 py-2 rounded hover:bg-white hover:text-[#2A3064] transition">
             See more

@@ -10,7 +10,7 @@ const Contact = () => {
       <section>
         <div className="relative">
           <img
-            src="/public/assets/image/bg.png"
+            src="/assets/image/bg.png"
             alt="Image"
             className=" w-full h-full object-cover"
           />{" "}
@@ -33,7 +33,7 @@ const Contact = () => {
           {/* Left Side: Image */}
           <div className="w-full lg:w-1/2 flex justify-center">
             <img
-              src="/public/assets/image/loc.png"
+              src="/assets/image/loc.png"
               alt="Location Map"
               className="w-[450px] lg:w-[455px] h-auto object-cover relative right-8"
             />

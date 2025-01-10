@@ -6,7 +6,7 @@ const Announcement = () => {
     return (
       <div className="relative min-w-[450px] h-[450px] flex-shrink-0 borders font-LatoRegular">
         <img
-          src="public/assets/image/calendar.png"
+          src="/assets/image/calendar.png"
           alt="calendar icon"
           className="w-full h-full"
         />
@@ -25,7 +25,7 @@ const Announcement = () => {
     return (
       <div className="absolute top-[130px] right-0 w-[1500px] z-50 pl-[900px] pointer-events-none">
         <img
-          src="public/assets/image/mobile.png"
+          src="/assets/image/mobile.png"
           alt="mobile icon"
           className="w-full object-contain"
         />
@@ -36,23 +36,32 @@ const Announcement = () => {
     <>
       <div className="max-w-[1440px] mx-auto font-LatoRegular">
         <div
-          className="relative w-full min-h-screen h-[1000px] bg-cover bg-center flex items-end justify-center text-white text-center pb-28"
+          className="relative w-full h-[900px] bg-cover bg-center flex items-center justify-center text-white text-center"
           style={{
             backgroundImage:
-              "url('/public/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
+              "url('/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
-          <section className="absolute  text-center z-20 pb-20">
-            <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
+          {/* <section className="relative z-10 px-4 max-w-[900px] tracking-widest">
+            <h1 className=" text-[50px] font-semibold uppercase mb-4 border-b-8 border-white pb-6 w-[800px]">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>
             <div className="border-b-8 border-white w-90 h-1 my-5"></div>
-            <p className="text-[30px] mb-10 w-[900px]">
+            <p className="text-[30px]">
               Simplifying appointment scheduling. Stay organized, save time, and
               never miss an appointment. Easy, fast, and hassle-free
             </p>
-          </section>
+          </section> */}
+          <div className="relative z-10 px-4 max-w-[900px] tracking-widest">
+            <h1 className="text-[50px] font-semibold uppercase mb-4 border-b-8 border-white pb-6 w-[800px]">
+              LA VERDAD CHRISTIAN COLLEGE
+            </h1>
+            <p className="text-[30px] ">
+              Simplifying appointment scheduling. Stay organized, save time, and
+              never miss an appointment. Easy, fast, and hassle-free
+            </p>
+          </div>
         </div>
         <Buttons />
         <div>
@@ -90,7 +99,7 @@ const Announcement = () => {
               className="absolute inset-0 bg-cover bg-center h-[500px]"
               style={{
                 backgroundImage:
-                  "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+                  "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
               }}
             >
               <div className="absolute inset-0 bg-[#0D1858] opacity-30"></div>

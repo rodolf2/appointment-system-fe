@@ -1,12 +1,12 @@
+import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router";
 
 const Buttons = () => {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState("/announcement");
 
   useEffect(() => {
-    const path = location.pathname.split("/")[1];
+    const path = location.pathname.split("/")[2];
     setActiveTab(path);
   }, [location]);
 
@@ -15,14 +15,16 @@ const Buttons = () => {
       <div className="flex items-center justify-center flex-col max-w-[1297px] mx-auto">
         <div className="absolute z-10 text-[27px] flex justify-around w-full">
           <Link
-            to="/announcement"
+            to="/home/announcement"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
               activeTab === "announcement" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
             <span
               className={`relative mb-2 ${
-                activeTab === "announcement" ? "text-black" : "text-gray-600"
+                activeTab === "announcement"
+                  ? "text-black pb-1"
+                  : "text-gray-600"
               }`}
             >
               Announcement
@@ -33,14 +35,14 @@ const Buttons = () => {
           </Link>
 
           <Link
-            to="/hta"
+            to="/home/hta"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
               activeTab === "hta" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
             <span
               className={`relative mb-2 ${
-                activeTab === "hta" ? "text-black" : "text-gray-600"
+                activeTab === "hta" ? "text-black pb-1" : "text-gray-600"
               }`}
             >
               How to Appoint
@@ -51,14 +53,14 @@ const Buttons = () => {
           </Link>
 
           <Link
-            to="/guidelines"
+            to="/home/guidelines"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
               activeTab === "guidelines" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
             <span
               className={`relative mb-2 ${
-                activeTab === "guidelines" ? "text-black" : "text-gray-600"
+                activeTab === "guidelines" ? "text-black pb-1" : "text-gray-600"
               }`}
             >
               Guidelines
