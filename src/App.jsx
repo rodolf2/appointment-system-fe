@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import LandingPage from "./pages/LandingPage";
@@ -17,6 +17,16 @@ import SignIn from "./pages/registrar/Login/SignIn";
 import SignUp from "./pages/registrar/Login/SignUp";
 import Rejected from "./pages/registrar/Rejected";
 import Completed from "./pages/registrar/Completed";
+import RegistrarHome from "./Pages/registrar/Dashboard/RegistrarHome";
+import Events from "./Pages/registrar/Dashboard/Events";
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
+  );
+};
 
 const Layout = () => {
   const location = useLocation();
@@ -30,6 +40,7 @@ const Layout = () => {
     "/signup",
     "/rejected",
     "/completed",
+    "/registrarHome",
   ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
@@ -55,6 +66,8 @@ const Layout = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/rejected" element={<Rejected />} />
         <Route path="/completed" element={<Completed />} />
+        <Route path="/registrarHome" element={<RegistrarHome />} />
+        <Route path="/events" element={<Events />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>

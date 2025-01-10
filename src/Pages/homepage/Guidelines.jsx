@@ -9,9 +9,9 @@ const Guidelines = () => {
           backgroundImage: "url('/assets/image/guidelines_bg.JPG')",
         }}
       >
-        <div className="absolute inset-0 bg-custom-gradient_guidelines z-0 pb-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/30 to-[#252F6A]/70 "></div>
         <section className="absolute text-center z-20 bottom-60">
-          <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
+          <h1 className=" text-[60px]  tracking-widest font-LatoSemiBold w-[900px]">
             LA VERDAD CHRISTIAN COLLEGE
           </h1>
           <div className="border-b-8 border-white my-4"></div>

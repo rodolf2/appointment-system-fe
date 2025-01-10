@@ -23,7 +23,7 @@ const SignIn = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/students");
+      navigate("/registrarHome");
     } catch (error) {
       setError(error.message); // Display user-friendly error
     }
@@ -33,7 +33,7 @@ const SignIn = () => {
     e.preventDefault();
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/students");
+      navigate("/registrarHome");
     } catch (error) {
       setError(error.message); // Display user-friendly error
     }
@@ -115,7 +115,7 @@ const SignIn = () => {
               >
                 Log In
               </button>
-              <div className="mt-4 text-center text-gray-600">or  </div>
+              <div className="mt-4 text-center text-gray-600">or </div>
               <button
                 onClick={handleGmail}
                 className="mt-4 w-full py-2 px-4 bg-[#161F55] font-LatoRegular text-[#fefefe] rounded-md flex items-center justify-center hover:bg-blue-700"

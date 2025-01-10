@@ -11,11 +11,11 @@ const Hta = () => {
             filter: "brightness(1.7)",
           }}
         >
-          <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/30 to-[#252F6A]/70"></div>
 
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative z-10 px-4 max-w-[900px] tracking-widest">
-            <h1 className="text-[50px]  font-semibold uppercase mb-4 border-b-8 border-white pb-6 w-[800px]">
+            <h1 className="text-[50px]  tracking-widest font-LatoSemiBold uppercase mb-4 border-b-8 border-white pb-6 w-[800px]">
               Wisdom Based on the Truth is Priceless
             </h1>
             <p className="text-[30px] ">
