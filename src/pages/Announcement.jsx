@@ -42,13 +42,13 @@ const Announcement = () => {
               "url('/public/assets/image/JPampangaBarangays0646dfvf_11.JPG')",
           }}
         >
-          <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/50 to-[#252F6A]/80 contrast-30 brightness-[60%]"></div>
           <section className="absolute  text-center z-20 pb-20">
             <h1 className=" text-[60px]  tracking-widest font-bold w-[900px]">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>
             <div className="border-b-8 border-white w-90 h-1 my-5"></div>
-            <p className="text-[30px] mb-10 w-[900px]">
+            <p className="text-[30px] mb-10 w-[900px] drop-shadow-md">
               Simplifying appointment scheduling. Stay organized, save time, and
               never miss an appointment. Easy, fast, and hassle-free
             </p>
@@ -93,7 +93,7 @@ const Announcement = () => {
                   "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
               }}
             >
-              <div className="absolute inset-0 bg-[#0D1858] opacity-30"></div>
+              <div className="absolute inset-0 bg-[#0D1858] opacity-50"></div>
             </div>
 
             {/* Text Content */}

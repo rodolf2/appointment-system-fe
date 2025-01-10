@@ -37,11 +37,12 @@ const AppointmentForm = () => {
         <AppInfo onNext={goToNextStep} onBack={goToPreviousStep} />
       )}
       {currentStep === 3 && (
-        <Attachment onNext={goToNextStep} onBack={goToPreviousStep} />
-      )}
-      {currentStep === 4 && (
         <Claiming onNext={goToNextStep} onBack={goToPreviousStep} />
       )}
+      {currentStep === 4 && (
+        <Attachment onNext={goToNextStep} onBack={goToPreviousStep} />
+      )}
+
       {currentStep === 5 && (
         <AppSchedule onNext={goToNextStep} onBack={goToPreviousStep} />
       )}

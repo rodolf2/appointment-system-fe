@@ -1,291 +1,268 @@
-// import React, { useState } from "react";
-// import FullCalendar from "@fullcalendar/react";
-// import dayGridPlugin from "@fullcalendar/daygrid";
-// import timeGridPlugin from "@fullcalendar/timegrid";
-// import interactionPlugin from "@fullcalendar/interaction";
-
-// const AppSchedule = ({ onNext, onBack }) => {
-//   const [selectedDate, setSelectedDate] = useState();
-//   const [availableSlots, setAvailableSlots] = useState([]);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-
-//   // Mock data for appointment slots
-//   const [appointmentData, setAppointmentData] = useState({
-//     "2025-01-07": ["08:00 AM - 08:30 AM", "09:00 AM - 09:30 AM"], // Available
-//     "2025-01-08": ["10:00 AM - 10:30 AM"], // Available
-//     "2025-01-09": ["10:00 AM - 10:30 AM"], // Fully booked
-//     "2025-01-10": ["10:00 AM - 10:30 AM"], // Fully booked
-//     "2025-01-13": [], // Fully booked
-//   });
-
-//   // Handle date click
-//   const handleDateClick = (info) => {
-//     const date = info.dateStr;
-//     setSelectedDate(date);
-//     setAvailableSlots(appointmentData[date] || []);
-//   };
-
-//   // Handle slot selection
-//   const handleSlotSelection = (slot) => {
-//     // Update the available slots for the selected date
-//     const updatedSlots = availableSlots.filter((s) => s !== slot);
-
-//     setAvailableSlots(updatedSlots);
-
-//     // Update the main appointment data state
-//     setAppointmentData((prevData) => ({
-//       ...prevData,
-//       [selectedDate]: updatedSlots,
-//     }));
-//   };
-
-//   // Add class to available or fully booked dates
-//   const getDayClass = (date) => {
-//     const dateString = date.toISOString().split("T")[0];
-
-//     // Check if the date exists in the appointment data
-//     if (appointmentData[dateString]) {
-//       const slots = appointmentData[dateString];
-
-//       // Fully booked dates
-//       if (0 >= slots.length) {
-//         return "bg-red-500 text-white"; // Fully booked
-//       }
-
-//       // Available dates
-//       if (slots.length) {
-//         return "bg-green-500 text-white"; // Available
-//       }
-//     }
-
-//     // Default styling for dates not in appointmentData
-//     return "bg-gray-200"; // Neutral
-//   };
-
-//   return (
-//     <>
-//       <div className="h-full flex items-center justify-center bg-[#161f55]">
-//         {/* Background Overlay */}
-//         <div className="absolute inset-0 flex flex-col">
-//           <div
-//             className="h-1/2 bg-cover bg-bottom"
-//             style={{
-//               backgroundImage:
-//                 "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
-//               opacity: "0.3",
-//               backgroundAttachment: "fixed",
-//             }}
-//           ></div>
-//           <div className="h-1/2 bg-[#161f55]"></div>
-//         </div>
-
-//         {/* Content Section */}
-//         <div className="flex flex-col justify-center text-center m-8">
-//           <h2 className="mx-auto relative inset-0 font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-6 mb-8">
-//             REGISTRAR APPOINTMENT
-//           </h2>
-//           <div className="relative mx-auto flex flex-col bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
-//             <p className="text-[#161f55] text-[2] font-LatoItalic mb-4">
-//               Please note that you will receive an email confirmation once your
-//               appointment has been scheduled.
-//             </p>
-//             <h3 className="text-[18px] tracking-wider font-LatoRegular text-[#000] mb-4">
-//               SELECT YOUR PREFERRED DATE AND TIME TO CLAIM YOUR DOCUMENT:
-//             </h3>
-
-//             {/* Calendar */}
-//             <div
-//               style={{
-//                 width: "100%",
-//                 maxWidth: "700px",
-//                 border: "2px solid #161f55",
-//                 borderRadius: "8px",
-//                 padding: "10px",
-//               }}
-//             >
-//               <FullCalendar
-//                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-//                 initialView="dayGridMonth"
-//                 headerToolbar={{
-//                   start: "dayGridMonth",
-//                   center: "title",
-//                   end: "today prev,next",
-//                 }}
-//                 weekends={false}
-//                 aspectRatio={1.2}
-//                 dateClick={handleDateClick}
-//                 dayCellClassNames={({ date }) => getDayClass(date)} // Apply classes dynamically
-//               />
-//             </div>
-
-//             {/* Display Available Slots */}
-//             {selectedDate && (
-//               <div className="mt-6">
-//                 <h4 className="text-lg font-bold text-[#161f55] mb-2">
-//                   Available Slots on {selectedDate}:
-//                 </h4>
-//                 {availableSlots.length > 0 ? (
-//                   <ul>
-//                     {availableSlots.map((slot, index) => (
-//                       <li
-//                         key={index}
-//                         className="flex justify-between items-center mb-2"
-//                       >
-//                         <span className="text-sm text-gray-700">{slot}</span>
-//                         <button
-//                           className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-700"
-//                           onClick={() => handleSlotSelection(slot)}
-//                         >
-//                           Select
-//                         </button>
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 ) : (
-//                   <p className="text-sm text-gray-500">No slots available.</p>
-//                 )}
-//               </div>
-//             )}
-
-//             {/* Buttons */}
-//             <div className="flex justify-between mt-4">
-//               <button
-//                 className="px-4 py-2 bg-[#161f55] text-white rounded hover:bg-blue-700"
-//                 onClick={onBack}
-//               >
-//                 Back
-//               </button>
-//               <button
-//                 type="button"
-//                 className="px-4 py-2 bg-[#161f55] text-white rounded hover:bg-indigo-700"
-//                 onClick={() => setIsModalOpen(true)}
-//               >
-//                 Submit
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Modal */}
-//       {isModalOpen && (
-//         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-//           <div className="bg-white p-6 rounded-lg shadow-lg text-center w-[400px]">
-//             <h3 className="text-lg font-bold mb-4">Confirm Submission</h3>
-//             <p className="text-gray-600 mb-6">
-//               Are you sure you want to submit your appointment?
-//             </p>
-//             <div className="flex justify-between">
-//               <button
-//                 className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
-//                 onClick={() => setIsModalOpen(false)}
-//               >
-//                 No
-//               </button>
-//               <button
-//                 className="px-4 py-2 bg-[#161f55] text-white rounded hover:bg-indigo-700"
-//                 onClick={() => {
-//                   setIsModalOpen(false);
-//                   onNext();
-//                 }}
-//               >
-//                 Yes
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </>
-//   );
-// };
-
-// export default AppSchedule;
 import React, { useState } from "react";
-import { Calendar } from "../ui/calendar";
+import dayjs from "dayjs";
 
-const AppSchedule = () => {
+const AppSchedule = ({ onNext, onBack }) => {
+  const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [bookings, setBookings] = useState({
+    "2025-01-07": {
+      status: "available",
+      slots: ["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "2:00 PM"],
+    },
+    "2025-01-08": { status: "fully booked", slots: [] },
+    "2025-01-09": {
+      status: "available",
+      slots: ["9:00 AM", "10:00 AM", "11:00 AM"],
+    },
+  });
 
-  const availableDates = [
-    "2025-02-04",
-    "2025-02-05",
-    "2025-02-06",
-    "2025-02-07",
-  ];
-  const fullyBookedDates = ["2025-02-08"];
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
 
-  const isAvailable = (dateString) => availableDates.includes(dateString);
-  const isFullyBooked = (dateString) => fullyBookedDates.includes(dateString);
+  const [showConfirmation, setShowConfirmation] = useState(false); // State for the confirmation dialog
+
+  const startOfMonth = currentMonth.startOf("month");
+  const endOfMonth = currentMonth.endOf("month");
+  const startOfCalendar = startOfMonth.startOf("week");
+  const endOfCalendar = endOfMonth.endOf("week");
+
+  const daysInCalendar = [];
+  let currentDay = startOfCalendar;
+
+  while (currentDay.isBefore(endOfCalendar)) {
+    daysInCalendar.push(currentDay);
+    currentDay = currentDay.add(1, "day");
+  }
+
+  const isSameDay = (day1, day2) => day1.isSame(day2, "day");
+
+  const handlePrevMonth = () => {
+    setCurrentMonth(currentMonth.subtract(1, "month"));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth(currentMonth.add(1, "month"));
+  };
+
+  const handleDateClick = (day) => {
+    const formattedDate = day.format("YYYY-MM-DD");
+    if (bookings[formattedDate]) {
+      setSelectedDate({ date: formattedDate, ...bookings[formattedDate] });
+      setSelectedTimeSlot(null); // Reset time slot when a new date is selected
+    } else {
+      setSelectedDate(null);
+    }
+    setErrorMessage(""); // Clear the error message
+  };
+
+  const handleTimeSlotClick = (slot) => {
+    setSelectedTimeSlot(slot); // Update selected time slot
+    setErrorMessage(""); // Clear the error message
+  };
+
+  const handleSubmit = () => {
+    if (!selectedDate?.date || !selectedTimeSlot) {
+      setErrorMessage(
+        "Please select both a date and a time slot before submitting."
+      );
+    } else {
+      setErrorMessage(""); // Clear error message if both are selected
+      setShowConfirmation(true); // Show the confirmation modal
+    }
+  };
+
+  const handleConfirmSubmit = () => {
+    // Proceed with the submission process
+    setShowConfirmation(false);
+    onNext(); // Proceed to next step
+  };
+
+  const handleCancelSubmit = () => {
+    setShowConfirmation(false); // Close the confirmation dialog without submitting
+  };
 
   return (
-    <div className="flex flex-col items-center bg-gray-100 py-8 min-h-screen">
-      <div className="bg-white shadow-md rounded-lg p-6 w-11/12 max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-4">
-          Registrar Appointment
-        </h1>
-        <p className="text-center text-gray-600 mb-6">
-          Select your preferred date and time to claim your document:
-        </p>
-        <Calendar
-          className="border rounded-md"
-          value={selectedDate}
-          onChange={setSelectedDate}
-          renderDay={(date) => {
-            const dateString = date.toISOString().split("T")[0];
-            const isSelected =
-              dateString === selectedDate?.toISOString().split("T")[0];
-            const isAvailable = availableDates.includes(dateString);
-            const isFullyBooked = fullyBookedDates.includes(dateString);
-
-            let className = "p-2 text-center rounded-full ";
-            if (isSelected) {
-              className +=
-                "bg-green-500 text-white font-bold border-2 border-green-700";
-            } else if (isAvailable) {
-              className += "bg-green-100 text-green-800";
-            } else if (isFullyBooked) {
-              className += "bg-red-100 text-red-800";
-            }
-
-            return (
-              <div
-                className={className}
-                onClick={() => setSelectedDate(date)}
-                role="button"
-                aria-label={dateString}
-              >
-                {date.getDate()}
-              </div>
-            );
+    <div className="min-h-screen flex flex-col bg-[#161f55] relative">
+      {/* Background Layers */}
+      <div className="absolute inset-0 flex flex-col">
+        <div
+          className="h-1/2 bg-cover bg-bottom"
+          style={{
+            backgroundImage:
+              "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+            opacity: "0.3",
+            backgroundAttachment: "fixed",
           }}
-        />
+        ></div>
+        <div className="h-1/2 bg-[#161f55]"></div>
+      </div>
 
-        <div className="mt-6">
-          <h2 className="text-lg font-medium mb-2">Available Time Slots</h2>
-          <div className="flex justify-between">
-            <span>Morning</span>
-            <span className="text-gray-600">7:00 AM - 8:00 AM</span>
-            <span className="text-green-600">15 slots</span>
+      {/* Content Container */}
+      <div className="relative z-10 flex flex-col justify-center items-center m-8">
+        {/* Title */}
+        <h1 className="font-LatoBold text-[35px] text-white tracking-widest mt-6 mb-4">
+          REGISTRAR APPOINTMENT
+        </h1>
+        <div className="bg-white rounded-lg shadow-lg p-8 w-[32rem]">
+          <p className="text-sm text-center font-LatoItalic text-[#161F55] mb-6">
+            Please note that you will receive an email confirmation once your
+            appointment has been scheduled.
+          </p>
+          <p className="text-center font-LatoRegular text-[#000] mb-6">
+            SELECT YOUR PREFERRED DATE AND TIME TO CLAIM YOUR DOCUMENT:
+          </p>
+
+          {/* Calendar */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-[#161f55]">
+                {currentMonth.format("MMMM YYYY")}
+              </h2>
+              <div className="flex space-x-2">
+                <button
+                  onClick={handlePrevMonth}
+                  className="bg-[#161f55] text-white px-2 text-[20px] font-LatoBold rounded"
+                >
+                  &lt;
+                </button>
+                <button
+                  onClick={handleNextMonth}
+                  className="bg-[#161f55] text-[20px] text-white px-2 font-LatoBold rounded"
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-7 text-center border-b border-gray-300 mb-2">
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                <div key={day} className="text-[#161f55] font-bold">
+                  {day}
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-7 text-center">
+              {daysInCalendar.map((day) => {
+                const formattedDate = day.format("YYYY-MM-DD");
+                const booking = bookings[formattedDate];
+
+                return (
+                  <div
+                    key={formattedDate}
+                    className={`p-2 border cursor-pointer ${
+                      day.isSame(currentMonth, "month")
+                        ? "text-black"
+                        : "text-gray-400"
+                    } ${
+                      booking
+                        ? booking.status === "available"
+                          ? "bg-[#3A993D] hover:bg-green-300 rounded"
+                          : "bg-[#D52121] hover:bg-red-300 rounded"
+                        : ""
+                    } ${
+                      isSameDay(day, dayjs())
+                        ? "bg-[#161f55] text-white rounded"
+                        : ""
+                    }`}
+                    onClick={() => handleDateClick(day)}
+                  >
+                    {day.date()}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          <div className="flex justify-between mt-2">
-            <span>Afternoon</span>
-            <span className="text-gray-600">9:00 AM - 10:00 AM</span>
-            <span className="text-green-600">20 slots</span>
+
+          {/* Time Slots */}
+          <div className="mt-6 min-h-[100px] transition-all duration-300">
+            {selectedDate ? (
+              <>
+                <h3 className="text-lg font-bold text-[#161f55]">
+                  {dayjs(selectedDate.date).format("MMMM D, YYYY")}
+                </h3>
+                <p
+                  className={`mt-2 font-bold ${
+                    selectedDate.status === "available"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {selectedDate.status === "available"
+                    ? "Available Slots"
+                    : "Fully Booked"}
+                </p>
+                {selectedDate.status === "available" ? (
+                  <div className="grid grid-cols-2 gap-2 mt-4">
+                    {selectedDate.slots.map((slot) => (
+                      <button
+                        key={slot}
+                        className={`px-2 py-1 rounded ${
+                          selectedTimeSlot === slot
+                            ? "bg-[#161f55] text-white"
+                            : "bg-gray-200 text-black hover:bg-gray-300"
+                        }`}
+                        onClick={() => handleTimeSlotClick(slot)}
+                      >
+                        {slot}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </>
+            ) : (
+              <p className="text-gray-500 text-center">
+                Select a date to see available slots.
+              </p>
+            )}
+            {/* Error Message */}
+            {errorMessage && (
+              <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+            )}
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-between mt-6">
+            <button
+              onClick={onBack}
+              className="bg-[#161f55] hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+            >
+              Back
+            </button>
+            <button
+              onClick={handleSubmit}
+              className={`px-4 py-2 rounded-md ${
+                selectedTimeSlot
+                  ? "bg-[#161f55] hover:bg-blue-700 text-[#fff]"
+                  : "bg-[#161f55] hover:bg-blue-700 text-[#fff]"
+              }`}
+            >
+              Submit
+            </button>
           </div>
         </div>
-        <div className="mt-6 flex justify-between">
-          <button className="bg-gray-200 text-gray-600 py-2 px-4 rounded-md">
-            Back
-          </button>
-          <button
-            className="bg-blue-600 text-white py-2 px-4 rounded-md"
-            onClick={() =>
-              alert(`You selected: ${selectedDate?.toDateString()}`)
-            }
-          >
-            Submit
-          </button>
-        </div>
+        {/* Confirmation Modal */}
+        {showConfirmation && (
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-lg font-bold text-[#161f55] mb-4">
+                Are you sure you want to submit now?
+              </h2>
+              <div className="flex justify-between">
+                <button
+                  onClick={handleConfirmSubmit}
+                  className="bg-green-500 text-white px-4 py-2 rounded-md"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={handleCancelSubmit}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

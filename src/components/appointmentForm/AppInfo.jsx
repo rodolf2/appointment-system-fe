@@ -20,20 +20,35 @@ const AppInfo = ({ onNext, onBack }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Ensure Contact Number only accepts numeric input
+    if (name === "contactNumber" && !/^\d*$/.test(value)) {
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validateForm = () => {
     const newErrors = {};
+
+    // Check if fields are empty
     for (const key in formData) {
       if (formData[key].trim() === "") {
         newErrors[key] = "This field is required.";
       }
     }
+
+    // Ensure Contact Number is numeric
+    if (formData.contactNumber && !/^\d+$/.test(formData.contactNumber)) {
+      newErrors.contactNumber = "Contact Number must contain only numbers.";
+    }
+
     if (selectedDocuments.length === 0) {
       newErrors.selectedDocuments = "You must select at least one document.";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -42,7 +57,7 @@ const AppInfo = ({ onNext, onBack }) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // Save data to  Firestore
+        // Save data to Firestore
         const docRef = await addDoc(collection(db, "information"), {
           ...formData,
           selectedDocuments,
@@ -64,13 +79,13 @@ const AppInfo = ({ onNext, onBack }) => {
     // Clear error when a document is selected
     setErrors((prev) => ({ ...prev, selectedDocuments: "" }));
   };
+
   const handleRemoveDocument = (value) => {
     setSelectedDocuments((prev) => prev.filter((doc) => doc !== value));
   };
 
   return (
     <>
-      {/* Form UI remains unchanged */}
       <div className="h-full flex items-center justify-center bg-[#161f55]">
         {/* Background Layers */}
         <div className="absolute inset-0 flex flex-col">
@@ -87,16 +102,16 @@ const AppInfo = ({ onNext, onBack }) => {
         </div>
 
         {/* INFORMATION */}
-        <div className=" flex flex-col justify-center text-center m-8">
-          <h2 className=" mx-auto relative inset-0 font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-6 mb-8 ">
+        <div className="flex flex-col justify-center text-center m-8">
+          <h2 className="mx-auto relative inset-0 font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-6 mb-8">
             APPLICATION FOR RECORDS
           </h2>
-          <div className=" mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
+          <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
             <form className="space-y-4" onSubmit={handleNext}>
-              <div className=" grid grid-cols-3 gap-4  ">
+              <div className="grid grid-cols-3 gap-4">
                 {["surname", "firstName", "middleName"].map((field) => (
                   <div key={field}>
-                    <label className="text-start block text-sm font-LatoRegular  text-[#000] uppercase">
+                    <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
                       {field.replace(/([A-Z])/g, " $1").toUpperCase()}
                     </label>
                     <input
@@ -109,7 +124,7 @@ const AppInfo = ({ onNext, onBack }) => {
                       }`}
                     />
                     {errors[field] && (
-                      <p className=" text-red-600 text-sm mt-0 relative text-start">
+                      <p className="text-red-600 text-sm mt-0 relative text-start">
                         {errors[field]}
                       </p>
                     )}
@@ -136,9 +151,17 @@ const AppInfo = ({ onNext, onBack }) => {
                     className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
                       errors[field.name] ? "border-red-500" : ""
                     }`}
+                    onKeyPress={(e) => {
+                      if (
+                        field.name === "contactNumber" &&
+                        !/[0-9]/.test(e.key)
+                      ) {
+                        e.preventDefault();
+                      }
+                    }}
                   />
                   {errors[field.name] && (
-                    <p className=" text-red-600 text-sm block text-start">
+                    <p className="text-red-600 text-sm block text-start">
                       {errors[field.name]}
                     </p>
                   )}
@@ -149,7 +172,7 @@ const AppInfo = ({ onNext, onBack }) => {
                 SELECT DOCUMENTS:
               </label>
               <div className="border rounded-lg p-4 shadow-md">
-                <div className=" cursor-pointer grid grid-cols-2 gap-y-4 gap-x-6 font-LatoRegular text-[#000] ">
+                <div className="cursor-pointer grid grid-cols-2 gap-y-4 gap-x-6 font-LatoRegular text-[#000]">
                   {[
                     {
                       label: "Certificate of Enrollment",
@@ -189,7 +212,6 @@ const AppInfo = ({ onNext, onBack }) => {
                     </label>
                   ))}
                 </div>
-                {/* Error message if no document is selected */}
                 {errors.selectedDocuments && (
                   <p className="text-red-600 text-sm mt-2">
                     {errors.selectedDocuments}
