@@ -248,16 +248,16 @@ const AppSchedule = ({ onNext, onBack }) => {
               </h2>
               <div className="flex justify-between">
                 <button
-                  onClick={handleConfirmSubmit}
-                  className="bg-green-500 text-white px-4 py-2 rounded-md"
-                >
-                  Yes
-                </button>
-                <button
                   onClick={handleCancelSubmit}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md"
+                  className="bg-[#161F55]  hover:bg-blue-700 text-white px-4 py-2 rounded-md"
                 >
                   No
+                </button>
+                <button
+                  onClick={handleConfirmSubmit}
+                  className="bg-[#161F55] hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                >
+                  Yes
                 </button>
               </div>
             </div>
