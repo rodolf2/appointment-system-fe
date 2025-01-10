@@ -68,7 +68,7 @@ const Layout = () => {
         <Route path="/rejected" element={<Rejected />} />
         <Route path="/completed" element={<Completed />} />
         <Route path="/registrarHome" element={<RegistrarHome />} />
-        <Route path="/registrarHome" element={<Events />} />
+        <Route path="/events" element={<Events />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>
