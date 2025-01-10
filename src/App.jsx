@@ -33,7 +33,7 @@ const Layout = () => {
   const excludedPaths = [
     "/",
     "/appointmentForm",
-    "/students",
+    "/students-alumni",
     "/pending",
     "/approved",
     "/signin",
@@ -60,7 +60,7 @@ const Layout = () => {
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/appointmentForm" element={<AppointmentForm />} />
-        <Route path="/students" element={<Students />} />
+        <Route path="/students-alumni" element={<Students />} />
         <Route path="/pending" element={<Pending />} />
         <Route path="/approved" element={<Approved />} />
         <Route path="/signin" element={<SignIn />} />
