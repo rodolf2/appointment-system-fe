@@ -140,9 +140,10 @@ const Sidebar = ({ isSidebarOpen }) => {
               <li className="pb-8">
                 <Link
                   to="/schedule"
-                  className={`flex items-center gap-4 p-2 rounded-lg ${
-                    isActive("/schedule") ? "bg-[#d9d9d9] text-black" : ""
-                  }`}
+                  className={
+                    activeMenu === "SCHEDULE" ? activeStyle : inactiveStyle
+                  }
+                  onClick={() => handleMenuClick("SCHEDULE")}
                 >
                   <FaUsers className="text-4xl" />
                   SCHEDULE
@@ -151,9 +152,10 @@ const Sidebar = ({ isSidebarOpen }) => {
               <li>
                 <Link
                   to="/holidays"
-                  className={`flex items-center gap-4 p-2 rounded-lg ${
-                    isActive("/holidays") ? "bg-[#d9d9d9] text-black" : ""
-                  }`}
+                  className={
+                    activeMenu === "HOLIDAYS" ? activeStyle : inactiveStyle
+                  }
+                  onClick={() => handleMenuClick("HOLIDAYS")}
                 >
                   <FaUsers className="text-4xl" />
                   HOLIDAYS
