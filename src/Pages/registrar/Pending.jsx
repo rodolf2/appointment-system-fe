@@ -103,7 +103,7 @@ const Pending = () => {
         <main
           className=" max-w-[1440px] mx-auto h-auto"
           style={{
-            backgroundImage: `url(${"public/assets/image/BackGround.png"})`,
+            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"public/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -121,7 +121,7 @@ const Pending = () => {
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                     LIST OF PENDING APPOINTMENT
                   </h2>
-                  <div className="border-b-4 border-[#F3BC62] w-[720px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[600px] my-3"></div>
                 </div>
 
                 <div className="flex justify-between items-center mt-16 ml-4 ">
@@ -129,18 +129,13 @@ const Pending = () => {
                     <label htmlFor="show" className="mr-2">
                       SHOW
                     </label>
-                    <select id="show" className="border p-1 bg-white">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      {/* <option>7</option>
-                      <option>8</option>
-                      <option>9</option>
-                      <option>10</option> */}
-                    </select>
+                    <input
+                      type="number"
+                      min={"0"}
+                      max={"6"}
+                      defaultValue={"1"}
+                      className="text-center always-show-spinner"
+                    />
                     <span className="ml-2">ENTRIES</span>
                   </div>
                   <div className="text-[#161F55] font-semibold text-[18px]">

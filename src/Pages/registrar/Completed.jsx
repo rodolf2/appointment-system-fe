@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { FaThumbsUp, FaThumbsDown } from "react-icons/fa6";
 import { BsTrash3 } from "react-icons/bs";
 import Footer from "/src/pages/registrar/components/Footer.jsx";
 import Header from "/src/pages/registrar/components/Header.jsx";
@@ -60,7 +59,7 @@ const Rejected = () => {
         <main
           className="max-w-[1440px] mx-auto h-auto"
           style={{
-            backgroundImage: `url(${"public/assets/image/BackGround.png"})`,
+            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"public/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -85,18 +84,13 @@ const Rejected = () => {
                     <label htmlFor="show" className="mr-2">
                       SHOW
                     </label>
-                    <select id="show" className="border p-1 bg-white">
-                      <option>1</option>
-                      {/* <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      <option>7</option>
-                      <option>8</option>
-                      <option>9</option>
-                      <option>10</option> */}
-                    </select>
+                    <input
+                      type="number"
+                      min={"0"}
+                      max={"10"}
+                      defaultValue={"1"}
+                      className="text-center always-show-spinner"
+                    />
                     <span className="ml-2">ENTRIES</span>
                   </div>
                   <div className="text-[#161F55] font-semibold text-[18px]">

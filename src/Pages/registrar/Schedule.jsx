@@ -114,7 +114,7 @@ const Schedule = () => {
         <main
           className="max-w-[1440px] mx-auto h-auto"
           style={{
-            backgroundImage: `url(${"/assets/image/BackGround.png"})`,
+            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)),url(${"/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -125,15 +125,15 @@ const Schedule = () => {
             title="Schedule Records"
           />
           <section className="h-[1200px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
-            <div className="bg-[#D9D9D9] h-52 m-4 z-10">
-              <div className="text-[#161F55] flex justify-between px-4 pt-3">
+            <div className="bg-[#D9D9D9] h-52 m-4 pt-2">
+              <div className="text-[#161F55] flex justify-between px-3 pt-2 ml-3">
                 <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                   LIST OF SCHEDULES
                   <div className="border-b-4 border-[#F3BC62] w-[400px] my-3"></div>
                 </h2>
                 <div>
                   <button
-                    className="bg-[#161F55] text-white px-5 py-1 mt-2 rounded-md hover:bg-blue-800"
+                    className="bg-[#161F55] text-white px-5 py-1 mt-2 mr-2 rounded-md hover:bg-blue-800"
                     onClick={openAddModal}
                   >
                     + ADD
