@@ -9,7 +9,7 @@ const Header = () => {
         {/* Logo and Title */}
         <h2 className="flex items-center">
           <img
-            src="/public/assets/image/LV_Logo.png"
+            src="/assets/image/LV_logo.png"
             alt="LV logo"
             className="w-16 h-16 mr-2 mb-1"
           />

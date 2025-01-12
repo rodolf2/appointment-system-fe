@@ -14,7 +14,7 @@ const ReturnHome = () => {
         className="relative h-screen w-screen bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage:
-            "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+            "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
         }}
       >
         {/* Overlay for Background Shadow */}

@@ -54,7 +54,7 @@ const SignIn = () => {
       {/* Logo and Title */}
       <header className="flex items-center absolute p-5">
         <img
-          src="public/assets/image/LV_Logo.png"
+          src="/assets/image/LV_logo.png"
           alt="LV logo"
           className="w-16 h-16 mr-4"
         />
@@ -118,7 +118,7 @@ const SignIn = () => {
               <div className="mt-4 text-center text-gray-600">or </div>
               <button
                 onClick={handleGmail}
-                className="mt-4 w-full py-2 px-4 bg-[#161F55] font-LatoRegular text-[#fefefe] rounded-md flex items-center justify-center hover:bg-blue-700"
+                className="mt-4 w-full py-2 px-4 text-[#161f55] font-LatoRegular border-2 border-[#161f55] rounded-md flex items-center justify-center hover:bg-[#161f55] hover:text-white"
               >
                 <FcGoogle className="text-2xl mr-2" />
                 Log in using Google

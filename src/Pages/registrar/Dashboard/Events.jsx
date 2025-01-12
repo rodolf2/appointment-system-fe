@@ -105,7 +105,7 @@ const Events = () => {
           className="max-w-[1440px] mx-auto h-auto"
           style={{
             backgroundColor: "#161f55",
-            backgroundImage: `url(${"public/assets/image/BackGround.png"})`,
+            backgroundImage: `url(${"/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}

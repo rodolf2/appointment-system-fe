@@ -7,7 +7,7 @@ const Hta = () => {
         <div
           className="relative w-full h-[900px] bg-cover  bg-center flex items-center justify-center text-white text-center"
           style={{
-            backgroundImage: "url('/public/assets/image/BackGround.png')",
+            backgroundImage: "url('/assets/image/BackGround.png')",
             filter: "brightness(1.5)",
           }}
         >

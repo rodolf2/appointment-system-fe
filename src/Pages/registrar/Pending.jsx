@@ -103,7 +103,7 @@ const Pending = () => {
         <main
           className=" max-w-[1440px] mx-auto h-auto"
           style={{
-            backgroundImage: `url(${"public/assets/image/BackGround.png"})`,
+            backgroundImage: `url(${"/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
