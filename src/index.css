@@ -134,3 +134,17 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #718096; /* Darker gray on hover */
 }
+input[type="number"].always-show-spinner {
+  -moz-appearance: textfield;
+}
+
+input[type="number"].always-show-spinner::-webkit-outer-spin-button,
+input[type="number"].always-show-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: inner-spin-button;
+  opacity: 1;
+}
+
+input[type="number"].always-show-spinner::-moz-inner-spin-button {
+  -moz-appearance: inner-spin-button;
+  opacity: 1;
+}
