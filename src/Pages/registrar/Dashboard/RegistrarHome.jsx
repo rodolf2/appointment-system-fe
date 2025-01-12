@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { FaUserEdit } from "react-icons/fa";
+import { useNavigate } from "react-router";
+import { FaSignOutAlt } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { IoMdArrowDropdown } from "react-icons/io";
 import dayjs from "dayjs";
@@ -7,10 +10,21 @@ import Sidebar from "/src/components/Sidebar";
 
 const RegistrarHome = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [currentDate, setCurrentDate] = useState(dayjs()); // Track current month and year
+  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSignOut = () => {
+    // Redirect to sign-in page
+    navigate("/signin");
   };
 
   // Calculate calendar data
@@ -45,7 +59,7 @@ const RegistrarHome = () => {
         <div className="relative">
           {/* Optional overlay for blending */}
           <div
-            className="absolute inset-0 bg-[#161f55] opacity-70"
+            className="absolute inset-0 bg-[#161f55] opacity-30"
             style={{ zIndex: -1 }}
           ></div>
 
@@ -71,10 +85,30 @@ const RegistrarHome = () => {
                 </h1>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="relative flex items-center gap-3">
                 <CgProfile className="text-5xl" />
                 <span className="text-[20px]">Juan Dela Cruz</span>
-                <IoMdArrowDropdown className="text-5xl" />
+                <button onClick={toggleDropdown}>
+                  <IoMdArrowDropdown className="text-5xl" />
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 top-[80px] bg-white border shadow-lg rounded-lg py-2 w-48">
+                    <button
+                      className="block flex px-4 py-2 text-left hover:bg-gray-200 w-full"
+                      onClick={() => alert("Edit Profile Clicked")}
+                    >
+                      <FaUserEdit className="mr-2 w-[24px] h-[24px]" />
+                      Edit Profile
+                    </button>
+                    <button
+                      className=" px-4 flex py-2 text-left hover:bg-gray-200 w-full"
+                      onClick={handleSignOut}
+                    >
+                      <FaSignOutAlt className="mr-2 mt-[2px] w-[24px] h-[24px]" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
               </div>
             </header>
 
