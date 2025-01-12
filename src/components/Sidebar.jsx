@@ -71,7 +71,7 @@ const Sidebar = ({ isSidebarOpen }) => {
               </li>
               <li className="mb-4">
                 <Link
-                  to="/students-alumni"
+                  to="/students"
                   className={
                     activeMenu === "STUDENTS/ALUMNI"
                       ? activeStyle
