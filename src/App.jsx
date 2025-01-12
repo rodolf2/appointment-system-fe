@@ -42,6 +42,8 @@ const Layout = () => {
     "/completed",
     "/registrarHome",
     "/events",
+    "/schedule",
+    "/holidays",
   ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
