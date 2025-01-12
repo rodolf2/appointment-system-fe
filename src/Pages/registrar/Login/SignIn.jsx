@@ -131,7 +131,7 @@ const SignIn = () => {
               </Link>
             </p>
             {error && (
-              <p className="mt-4 text-center text-red-500 font-semibold">
+              <p className="mt-2 text-center text-red-500 font-semibold">
                 {error}
               </p>
             )}

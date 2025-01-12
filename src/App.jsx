@@ -19,6 +19,7 @@ import Rejected from "./pages/registrar/Rejected";
 import Completed from "./pages/registrar/Completed";
 import RegistrarHome from "./Pages/registrar/Dashboard/RegistrarHome";
 import Events from "./Pages/registrar/Dashboard/Events";
+import Profile from "./Pages/registrar/components/Profile";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const Layout = () => {
     "/completed",
     "/registrarHome",
     "/events",
+    "/profile",
   ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
@@ -70,6 +72,7 @@ const Layout = () => {
         <Route path="/completed" element={<Completed />} />
         <Route path="/registrarHome" element={<RegistrarHome />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>

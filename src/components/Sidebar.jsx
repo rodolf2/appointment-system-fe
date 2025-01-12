@@ -32,7 +32,7 @@ const Sidebar = ({ isSidebarOpen }) => {
         <div className="font-LatoRegular">
           <div className="flex items-center mb-6 mt-3">
             <img
-              src="\public\assets\image\LV_logo.png"
+              src="/assets/image/LV_logo.png"
               alt="LVCC Logo"
               className="w-[50%] h-[50%]"
             />
