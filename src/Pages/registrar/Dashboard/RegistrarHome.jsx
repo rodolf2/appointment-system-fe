@@ -1,30 +1,19 @@
 import React, { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaUserEdit } from "react-icons/fa";
-import { useNavigate } from "react-router";
 import { FaSignOutAlt } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { IoMdArrowDropdown } from "react-icons/io";
 import dayjs from "dayjs";
 import Sidebar from "/src/components/Sidebar";
+import Header from "/src/pages/registrar/components/Header.jsx";
 
 const RegistrarHome = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown
-  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleSignOut = () => {
-    // Redirect to sign-in page
-    navigate("/signin");
   };
 
   // Calculate calendar data
@@ -57,60 +46,24 @@ const RegistrarHome = () => {
 
       <div className="flex-1 overflow-y-auto relative">
         <div className="relative">
-          {/* Optional overlay for blending */}
-          <div
-            className="absolute inset-0 bg-[#161f55] opacity-30"
-            style={{ zIndex: -1 }}
-          ></div>
-
           <main
             className="max-w-[1440px] mx-auto h-auto"
             style={{
               backgroundColor: "#161f55", // Fallback background
+<<<<<<< HEAD
               backgroundImage: `url(${"public/assets/image/BackGround.png"})`,
+=======
+              backgroundImage: `url(${"/assets/image/BackGround.png"})`,
+>>>>>>> 587a2be4f6a496341bbbbf20b6b97b6449999195
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
           >
-            <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5">
-              <div className="flex items-center">
-                <button
-                  onClick={toggleSidebar}
-                  className="p-2 text-black rounded text-5xl font-bold"
-                >
-                  <RxHamburgerMenu />
-                </button>
-                <h1 className="text-[20px] font-bold ml-4">
-                  Registrar Office Dashboard
-                </h1>
-              </div>
-
-              <div className="relative flex items-center gap-3">
-                <CgProfile className="text-5xl" />
-                <span className="text-[20px]">Juan Dela Cruz</span>
-                <button onClick={toggleDropdown}>
-                  <IoMdArrowDropdown className="text-5xl" />
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute right-0 top-[80px] bg-white border shadow-lg rounded-lg py-2 w-48">
-                    <button
-                      className="block flex px-4 py-2 text-left hover:bg-gray-200 w-full"
-                      onClick={() => alert("Edit Profile Clicked")}
-                    >
-                      <FaUserEdit className="mr-2 w-[24px] h-[24px]" />
-                      Edit Profile
-                    </button>
-                    <button
-                      className=" px-4 flex py-2 text-left hover:bg-gray-200 w-full"
-                      onClick={handleSignOut}
-                    >
-                      <FaSignOutAlt className="mr-2 mt-[2px] w-[24px] h-[24px]" />
-                      Sign Out
-                    </button>
-                  </div>
-                )}
-              </div>
-            </header>
+            <Header
+              toggleSidebar={toggleSidebar}
+              isSidebarOpen={isSidebarOpen}
+              title=" Registrar Office Dashboard"
+            />
 
             <div className="p-6">
               <section className="h-auto bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg">

@@ -93,7 +93,7 @@ const AppInfo = ({ onNext, onBack }) => {
             className=" h-screen bg-cover bg-bottom "
             style={{
               backgroundImage:
-                "url('/public/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+                "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
               opacity: "0.3",
               backgroundAttachment: "fixed",
             }}

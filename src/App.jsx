@@ -22,6 +22,8 @@ import Events from "./Pages/registrar/Dashboard/Events";
 import Schedule from "./pages/registrar/Schedule";
 import Holidays from "./pages/registrar/Holidays";
 
+import Profile from "./Pages/registrar/components/Profile";
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -46,6 +48,7 @@ const Layout = () => {
     "/events",
     "/schedule",
     "/holidays",
+    "/profile",
   ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
@@ -81,6 +84,7 @@ const Layout = () => {
         <Route path="/events" element={<Events />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/holidays" element={<Holidays />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>

@@ -60,6 +60,7 @@ const Rejected = () => {
           className="max-w-[1440px] mx-auto h-auto"
           style={{
             backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"public/assets/image/BackGround.png"})`,
+
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
