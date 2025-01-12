@@ -6,7 +6,7 @@ import Footer from "/src/pages/registrar/components/Footer.jsx";
 import Header from "/src/pages/registrar/components/Header.jsx";
 import { useState } from "react";
 
-const Schedule = () => {
+const Holidays = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -14,21 +14,59 @@ const Schedule = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
 
-  const [newSchedule, setNewSchedule] = useState({
+  const [newHoliday, setNewHoliday] = useState({
     no: "",
-    slots: "",
     date: "",
-    startTime: "",
-    endTime: "",
+    description: "",
     actions: "",
   });
-  const [schedules, setSchedules] = useState([
+  const [holidays, setHolidays] = useState([
     {
       no: "1",
-      slots: "80",
-      date: "12/27/24",
-      startTime: "8:00 AM",
-      endTime: "4:00 PM",
+      date: "2025/01/01",
+      description: "New Year's Day",
+      actions: "",
+    },
+    {
+      no: "2",
+      date: "2025/03/31",
+      description: "Eidul-Fitar",
+      actions: "",
+    },
+    {
+      no: "3",
+      date: "2025/04/09",
+      description: "The Day of Valor",
+      actions: "",
+    },
+    {
+      no: "4",
+      date: "2025/05/01",
+      description: "Labor Day",
+      actions: "",
+    },
+    {
+      no: "5",
+      date: "2025/06/07",
+      description: "Eid al-Adha (Feast of Sacrifice)",
+      actions: "",
+    },
+    {
+      no: "6",
+      date: "2025/06/08",
+      description: "Eid al-Adha Day 2",
+      actions: "",
+    },
+    {
+      no: "7",
+      date: "2025/06/12",
+      description: "Independence Day",
+      actions: "",
+    },
+    {
+      no: "8",
+      date: "2025/08/21",
+      description: "Ninoy Aquino Day",
       actions: "",
     },
   ]);
@@ -42,12 +80,10 @@ const Schedule = () => {
   };
 
   const closeAddModal = () => {
-    setNewSchedule({
+    setNewHoliday({
       no: "",
-      slots: "",
       date: "",
-      startTime: "",
-      endTime: "",
+      description: "",
       actions: "",
     });
     setIsAddModalOpen(false);
@@ -55,17 +91,15 @@ const Schedule = () => {
 
   const openEditModal = (index) => {
     setEditIndex(index);
-    setNewSchedule(schedules[index]);
+    setNewHoliday(holidays[index]);
     setIsEditModalOpen(true);
   };
 
   const closeEditModal = () => {
-    setNewSchedule({
+    setNewHoliday({
       no: "",
-      slots: "",
       date: "",
-      startTime: "",
-      endTime: "",
+      description: "",
       actions: "",
     });
     setIsEditModalOpen(false);
@@ -73,18 +107,25 @@ const Schedule = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewSchedule((prev) => ({
+    setNewHoliday((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const addSchedule = () => {
-    const newNo = schedules.length + 1;
-    setSchedules((prev) => [...prev, { ...newSchedule, no: newNo.toString() }]);
+  const addHolidays = () => {
+    if (!newHoliday.date || !newHoliday.description) {
+      alert("Please fill out all fields.");
+      return;
+    }
+    const newNo = holidays.length + 1;
+    setHolidays((prev) => [...prev, { ...newHoliday, no: newNo.toString() }]);
     closeAddModal();
   };
 
+  const deleteHoliday = (index) => {
+    setHolidays((prevHolidays) => prevHolidays.filter((_, i) => i !== index));
+  };
   const openDeleteModal = (index) => {
     setDeleteIndex(index);
     setIsDeleteModalOpen(true);
@@ -94,13 +135,12 @@ const Schedule = () => {
     setDeleteIndex(null);
     setIsDeleteModalOpen(false);
   };
+
   const confirmDelete = () => {
-    setSchedules((prevSchedules) => {
-      const updatedSchedules = prevSchedules.filter(
-        (_, i) => i !== deleteIndex
-      );
-      return updatedSchedules.map((sched, index) => ({
-        ...sched,
+    setHolidays((prevHolidays) => {
+      const updatedHolidays = prevHolidays.filter((_, i) => i !== deleteIndex);
+      return updatedHolidays.map((holiday, index) => ({
+        ...holiday,
         no: (index + 1).toString(),
       }));
     });
@@ -122,14 +162,14 @@ const Schedule = () => {
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
-            title="Schedule Records"
+            title="Holidays Record"
           />
           <section className="h-[1200px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
             <div className="bg-[#D9D9D9] h-52 m-4 z-10">
               <div className="text-[#161F55] flex justify-between px-4 pt-3">
                 <h2 className="text-3xl font-bold tracking-[5px] pt-1">
-                  LIST OF SCHEDULES
-                  <div className="border-b-4 border-[#F3BC62] w-[400px] my-3"></div>
+                  LIST OF HOLIDAYS
+                  <div className="border-b-4 border-[#F3BC62] w-[340px] my-3"></div>
                 </h2>
                 <div>
                   <button
@@ -167,57 +207,47 @@ const Schedule = () => {
                 </div>
               </div>
             </div>
-            <table className="text-[18px] w-[97%] border-collapse text-[#161F55] mt-8 mx-auto">
+            <table
+              className="text-[18px] w-[97%] border-collapse text-[#161F55] mt-8 mx-auto"
+              style={{ tableLayout: "fixed" }}
+            >
               <thead>
                 <tr className="bg-gray-200 text-center">
-                  <th className="border p-4">NO.</th>
-                  <th className="border p-4">SLOTS</th>
-                  <th className="border p-4">DATE</th>
-                  <th className="border p-4">START TIME</th>
-                  <th className="border p-4">END TIME</th>
-                  <th className="border p-4">ACTIONS</th>
+                  <th className="border p-5">NO.</th>
+                  <th className="border p-5">DATE</th>
+                  <th className="border p-5">Description</th>
+                  <th className="border p-5">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {Array.from({ length: 9 }).map((_, rowIndex) => {
-                  const schedule = schedules[rowIndex]; // Check if there's a schedule for the current rowIndex
-                  return (
-                    <tr
-                      key={rowIndex}
-                      className={`${
-                        rowIndex % 2 === 0 ? "bg-gray-100" : ""
-                      } text-center`}
-                    >
-                      <td className="border p-5">{schedule?.no || ""}</td>
-                      <td className="border p-5">{schedule?.slots || ""}</td>
-                      <td className="border p-5">{schedule?.date || ""}</td>
-                      <td className="border p-5">
-                        {schedule?.startTime || ""}
-                      </td>
-                      <td className="border p-5">{schedule?.endTime || ""}</td>
-                      <td className="border p-5">
-                        {schedule ? (
-                          <div className="flex gap-2 justify-center">
-                            <div
-                              className="bg-[#CF5824] p-2 rounded cursor-pointer hover:bg-orange-700"
-                              onClick={() => openEditModal(rowIndex)}
-                            >
-                              <FaEdit className="text-white" />
-                            </div>
-                            <div
-                              className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
-                              onClick={() => openDeleteModal(rowIndex)}
-                            >
-                              <BsTrash3 className="text-white" />
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="h-9"></div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {holidays.map((holiday, rowIndex) => (
+                  <tr
+                    key={rowIndex}
+                    className={`${
+                      rowIndex % 2 === 0 ? "bg-gray-100" : ""
+                    } text-center`}
+                  >
+                    <td className="border p-5">{holiday.no}</td>
+                    <td className="border p-5">{holiday.date}</td>
+                    <td className="border p-5">{holiday.description}</td>
+                    <td className="border p-5">
+                      <div className="flex gap-2 justify-center">
+                        <div
+                          className="bg-[#CF5824] p-2 rounded cursor-pointer hover:bg-orange-700"
+                          onClick={() => openEditModal(rowIndex)}
+                        >
+                          <FaEdit className="text-white" />
+                        </div>
+                        <div
+                          className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
+                          onClick={() => openDeleteModal(rowIndex)}
+                        >
+                          <BsTrash3 className="text-white" />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
@@ -239,58 +269,40 @@ const Schedule = () => {
       {isAddModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
           <div className="bg-white p-20 rounded-xl shadow-md">
-            <h2 className="text-xl font-bold mb-4">Add Schedule</h2>
+            <h2 className="text-xl font-bold mb-4">Add Holiday</h2>
             <div className="border-b-2 border-[#F3BC62] w-60 my-2"></div>
             <div className="w-96">
-              <p>Add Slots</p>
-              <input
-                name="slots"
-                type="number"
-                value={newSchedule.slots}
-                onChange={handleInputChange}
-                placeholder="Enter number of slots"
-                className="border w-full p-2 mb-2"
-              />
               <p>Date</p>
               <input
                 name="date"
                 type="date"
-                value={newSchedule.date}
+                value={newHoliday.date}
                 onChange={handleInputChange}
-                placeholder="Date"
+                placeholder="Enter number of slots"
                 className="border w-full p-2 mb-2"
               />
-              <p>Start Time</p>
+              <p>Description</p>
               <input
-                name="startTime"
-                type="time"
-                value={newSchedule.startTime}
+                name="description"
+                type="text"
+                value={newHoliday.description}
                 onChange={handleInputChange}
-                placeholder="Start Time"
-                className="border w-full p-2 mb-2"
-              />
-              <p>End Time</p>
-              <input
-                name="endTime"
-                type="time"
-                value={newSchedule.endTime}
-                onChange={handleInputChange}
-                placeholder="End Time"
+                placeholder="Description"
                 className="border w-full p-2 mb-2"
               />
             </div>
-            <div className="flex justify-between gap-4 mt-6">
+            <div className="flex justify-end gap-4 mt-6">
               <button
-                className="bg-gray-300 text-black px-8 py-2 rounded-2xl"
+                className=" text-[#989898] px-8 py-2 hover:bg-gray-600 border-2"
                 onClick={closeAddModal}
               >
                 Cancel
               </button>
               <button
-                className="bg-blue-500 text-white px-8 py-2 rounded-2xl"
-                onClick={addSchedule}
+                className="bg-[#161F55] text-white px-8 py-2 hover:bg-blue-600"
+                onClick={addHolidays}
               >
-                Add
+                Save
               </button>
             </div>
           </div>
@@ -299,43 +311,25 @@ const Schedule = () => {
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
           <div className="bg-white p-20 rounded-xl shadow-md">
-            <h2 className="text-xl font-bold mb-4">Update Schedule</h2>
+            <h2 className="text-xl font-bold mb-4">Update Holiday</h2>
             <div className="border-b-2 border-[#F3BC62] w-60 my-2"></div>
             <div className="w-96">
-              <p>Edit Slots</p>
-              <input
-                name="slots"
-                type="number"
-                value={newSchedule.slots}
-                onChange={handleInputChange}
-                placeholder="Enter number of slots"
-                className="border w-full p-2 mb-2"
-              />
               <p>Date</p>
               <input
                 name="date"
                 type="date"
-                value={newSchedule.date}
+                value={newHoliday.date}
                 onChange={handleInputChange}
-                placeholder="Date"
+                placeholder="Enter number of slots"
                 className="border w-full p-2 mb-2"
               />
-              <p>Start Time</p>
+              <p>Description</p>
               <input
-                name="startTime"
-                type="time"
-                value={newSchedule.startTime}
+                name="description"
+                type="text"
+                value={newHoliday.date}
                 onChange={handleInputChange}
-                placeholder="Start Time"
-                className="border w-full p-2 mb-2"
-              />
-              <p>End Time</p>
-              <input
-                name="endTime"
-                type="time"
-                value={newSchedule.endTime}
-                onChange={handleInputChange}
-                placeholder="End Time"
+                placeholder="Description"
                 className="border w-full p-2 mb-2"
               />
             </div>
@@ -349,12 +343,12 @@ const Schedule = () => {
               <button
                 className="bg-blue-500 text-white px-8 py-2 rounded-2xl"
                 onClick={() => {
-                  const updatedSchedules = schedules.map((schedule, index) =>
+                  const updatedHolidays = holidays.map((Holiday, index) =>
                     index === editIndex
-                      ? { ...schedule, ...newSchedule }
-                      : schedule
+                      ? { ...holidays, ...newHoliday }
+                      : Holiday
                   );
-                  setSchedules(updatedSchedules);
+                  setHolidays(updatedHolidays);
                   closeEditModal();
                 }}
               >
@@ -368,7 +362,7 @@ const Schedule = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-10 rounded-md shadow-md text-center">
             <h2 className="text-lg font-bold mb-4">
-              Are you sure you want to delete this Schedule?
+              Are you sure you want to delete this Holiday?
             </h2>
             <div className="flex justify-between mt-6">
               <button
@@ -391,4 +385,4 @@ const Schedule = () => {
   );
 };
 
-export default Schedule;
+export default Holidays;

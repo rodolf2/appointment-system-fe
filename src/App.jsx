@@ -20,6 +20,7 @@ import Completed from "./pages/registrar/Completed";
 import RegistrarHome from "./Pages/registrar/Dashboard/RegistrarHome";
 import Events from "./Pages/registrar/Dashboard/Events";
 import Schedule from "./pages/registrar/Schedule";
+import Holidays from "./pages/registrar/Holidays";
 
 const App = () => {
   return (
@@ -74,6 +75,7 @@ const Layout = () => {
         <Route path="/registrarHome" element={<RegistrarHome />} />
         <Route path="/events" element={<Events />} />
         <Route path="/schedule" element={<Schedule />} />
+        <Route path="/holidays" element={<Holidays />} />
       </Routes>
       {showHeaderFooter && <Footer />}
     </>
