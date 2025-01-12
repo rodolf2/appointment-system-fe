@@ -50,11 +50,7 @@ const RegistrarHome = () => {
             className="max-w-[1440px] mx-auto h-auto"
             style={{
               backgroundColor: "#161f55", // Fallback background
-<<<<<<< HEAD
-              backgroundImage: `url(${"public/assets/image/BackGround.png"})`,
-=======
               backgroundImage: `url(${"/assets/image/BackGround.png"})`,
->>>>>>> 587a2be4f6a496341bbbbf20b6b97b6449999195
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
