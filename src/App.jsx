@@ -34,7 +34,7 @@ const Layout = () => {
   const excludedPaths = [
     "/",
     "/appointmentForm",
-    "/students-alumni",
+    "/students",
     "/pending",
     "/approved",
     "/signin",

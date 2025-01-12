@@ -19,7 +19,7 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   return (
     <aside
-      className={`bg-custom-gradient_students p-4 text-white transition-all duration-300 ${
+      className={`bg-custom-gradient_students p-4 text-white transition-all duration-900 ${
         isSidebarOpen ? "w-[300px]" : "w-0"
       }`}
       style={{ height: "100%", overflowY: "auto" }}
