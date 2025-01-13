@@ -11,7 +11,7 @@ const Guidelines = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/30 to-[#252F6A]/70 "></div>
         <div className="relative z-10 px-4 max-w-[800px] ">
-          <h1 className="text-[50px] font-semibold uppercase tracking-widest">
+          <h1 className="text-[50px] font-LatoSemiBold uppercase tracking-widest">
             La Verdad Christian <br />
             College
           </h1>

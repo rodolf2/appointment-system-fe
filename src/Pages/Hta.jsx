@@ -14,7 +14,7 @@ const Hta = () => {
           <div className="absolute inset-0 bg-custom-gradient_howtoappoint z-10 pb-10"></div>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative z-10 px-4 max-w-[800px] ">
-            <h1 className="text-[50px] font-semibold uppercase tracking-widest">
+            <h1 className="text-[50px] font-LatoSemiBold uppercase tracking-widest">
               WISDOM BASED ON
               <br />
               THE TRUTH IS PRICELESS
