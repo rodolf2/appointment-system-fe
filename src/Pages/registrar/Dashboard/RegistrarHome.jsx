@@ -55,29 +55,11 @@ const RegistrarHome = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto relative">
-<<<<<<< HEAD
-        <div className="relative">
-          <main
-            className="max-w-[1440px] mx-auto h-auto"
-            style={{
-              backgroundColor: "#161f55", // Fallback background
-              backgroundImage: `url(${"/assets/image/BackGround.png"})`,
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-            }}
-          >
-            <Header
-              toggleSidebar={toggleSidebar}
-              isSidebarOpen={isSidebarOpen}
-              title=" Registrar Office Dashboard"
-            />
-=======
         <Header
           toggleSidebar={toggleSidebar}
           isSidebarOpen={isSidebarOpen}
           title=" Registrar Office Dashboard"
         />
->>>>>>> 9cefcca3650201e25cd07bfcc4e5bd186810a604
 
         <div className="p-6">
           <section className="h-auto bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg">
