@@ -44,7 +44,8 @@ const Announcement = () => {
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
           <div className="relative z-10 px-4 max-w-[800px] ">
-            <h1 className="text-[50px] font-semibold uppercase tracking-widest">
+            <h1 className="text-[50px] font-LatoSemiBold
+             uppercase tracking-widest">
               La Verdad <br />
               Christian College
             </h1>
