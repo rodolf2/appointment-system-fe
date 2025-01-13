@@ -23,7 +23,7 @@ import Schedule from "./pages/registrar/Schedule";
 import Holidays from "./pages/registrar/Holidays";
 
 import Profile from "./Pages/registrar/components/Profile";
-
+  
 const App = () => {
   return (
     <BrowserRouter>
