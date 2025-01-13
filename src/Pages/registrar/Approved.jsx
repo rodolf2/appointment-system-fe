@@ -6,7 +6,7 @@ import { FaThumbsDown } from "react-icons/fa6";
 import Sidebar from "/src/components/Sidebar";
 
 const Approved = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

@@ -7,7 +7,7 @@ import Footer from "/src/pages/registrar/components/Footer.jsx";
 import Header from "/src/pages/registrar/components/Header.jsx";
 
 const Students = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [appointments, setAppointments] = useState([
     {
       name: "Alice Smith",

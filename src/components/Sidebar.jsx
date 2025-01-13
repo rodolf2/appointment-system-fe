@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa6";
 import { FaSpinner } from "react-icons/fa6";
 import { FaCheckSquare } from "react-icons/fa";
@@ -12,10 +12,15 @@ import { FaCalendarAlt } from "react-icons/fa";
 
 const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState(location.pathname);
 
-  const handleMenuClick = (menu) => {
+  useEffect(() => {
     setActiveMenu(location.pathname);
+  }, [location.pathname]);
+
+  const handleMenuClick = (path) => {
+    navigate(path);
   };
 
   const isActive = (path) => location.pathname === path;
@@ -27,7 +32,7 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   return (
     <aside
-      className={`bg-custom-gradient_students p-4 text-white transition-all duration-900 ${
+      className={`bg-custom-gradient_students p-4 text-white transition-all duration-500 ${
         isSidebarOpen ? "w-[300px]" : "w-0"
       }`}
       style={{ height: "100%", overflowY: "auto" }}
@@ -50,8 +55,7 @@ const Sidebar = ({ isSidebarOpen }) => {
           <nav>
             <ul className="pl-2 text-[18px] space-y-4">
               <li>
-                <Link
-                  to="/registrarHome"
+                <div
                   className={
                     isActive("/registrarHome") ? activeStyle : inactiveStyle
                   }
@@ -59,46 +63,42 @@ const Sidebar = ({ isSidebarOpen }) => {
                 >
                   <IoMdHome className="text-xl" />
                   HOME
-                </Link>
+                </div>
               </li>
               <li>
-                <Link
-                  to="/events"
+                <div
                   className={isActive("/events") ? activeStyle : inactiveStyle}
                   onClick={() => handleMenuClick("/events")}
                 >
                   <FaCalendarAlt className="text-xl" />
                   EVENTS
-                </Link>
+                </div>
               </li>
               <li>
-                <Link
-                  to="/students"
+                <div
                   className={
                     isActive("/students") ? activeStyle : inactiveStyle
                   }
-                  onClick={() => handleMenuClick("/students-alumni")}
+                  onClick={() => handleMenuClick("/students")}
                 >
                   <FaUsers className="text-xl" />
                   STUDENTS/ALUMNI
-                </Link>
+                </div>
               </li>
             </ul>
             <h1 className="text-[20px] pl-4 pt-6 pb-4">APPOINTMENT</h1>
             <ul className="pl-2 text-[18px] space-y-4">
               <li>
-                <Link
-                  to="/pending"
+                <div
                   className={isActive("/pending") ? activeStyle : inactiveStyle}
                   onClick={() => handleMenuClick("/pending")}
                 >
                   <FaSpinner className="text-xl" />
                   PENDING
-                </Link>
+                </div>
               </li>
               <li>
-                <Link
-                  to="/approved"
+                <div
                   className={
                     isActive("/approved") ? activeStyle : inactiveStyle
                   }
@@ -106,11 +106,10 @@ const Sidebar = ({ isSidebarOpen }) => {
                 >
                   <FaCheckSquare className="text-xl" />
                   APPROVED
-                </Link>
+                </div>
               </li>
               <li>
-                <Link
-                  to="/rejected"
+                <div
                   className={
                     isActive("/rejected") ? activeStyle : inactiveStyle
                   }
@@ -118,11 +117,10 @@ const Sidebar = ({ isSidebarOpen }) => {
                 >
                   <FaSquareXmark className="text-xl" />
                   REJECTED
-                </Link>
+                </div>
               </li>
               <li>
-                <Link
-                  to="/completed"
+                <div
                   className={
                     isActive("/completed") ? activeStyle : inactiveStyle
                   }
@@ -130,34 +128,32 @@ const Sidebar = ({ isSidebarOpen }) => {
                 >
                   <FaTasks className="text-xl" />
                   COMPLETED
-                </Link>
+                </div>
               </li>
             </ul>
             <h1 className="text-[20px] pl-4 pt-6 pb-4">MAINTENANCE</h1>
             <ul className="pl-4 text-[18px] space-y-4">
               <li>
-                <Link
-                  to="/schedule"
+                <div
                   className={
-                    activeMenu === "SCHEDULE" ? activeStyle : inactiveStyle
+                    isActive("/schedule") ? activeStyle : inactiveStyle
                   }
-                  onClick={() => handleMenuClick("SCHEDULE")}
+                  onClick={() => handleMenuClick("/schedule")}
                 >
                   <FaRegClock className="text-xl" />
                   SCHEDULE
-                </Link>
+                </div>
               </li>
               <li>
-                <Link
-                  to="/holidays"
+                <div
                   className={
-                    activeMenu === "holidays" ? activeStyle : inactiveStyle
+                    isActive("/holidays") ? activeStyle : inactiveStyle
                   }
-                  onClick={() => handleMenuClick("holidays")}
+                  onClick={() => handleMenuClick("/holidays")}
                 >
                   <FaCalendar className="text-xl" />
                   HOLIDAYS
-                </Link>
+                </div>
               </li>
             </ul>
           </nav>

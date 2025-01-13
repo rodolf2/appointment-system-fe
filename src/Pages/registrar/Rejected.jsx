@@ -6,7 +6,7 @@ import Header from "/src/pages/registrar/components/Header.jsx";
 import Sidebar from "/src/components/Sidebar";
 
 const Rejected = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointments, setAppointments] = useState([

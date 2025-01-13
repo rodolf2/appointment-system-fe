@@ -4,7 +4,7 @@ import Sidebar from "/src/components/Sidebar";
 import Header from "/src/pages/registrar/components/Header.jsx";
 
 const Events = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [events, setEvents] = useState({});
   const [newEvent, setNewEvent] = useState({

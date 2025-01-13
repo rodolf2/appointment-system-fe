@@ -7,7 +7,7 @@ import Header from "/src/pages/registrar/components/Header.jsx";
 import Sidebar from "/src/components/Sidebar";
 
 const Pending = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
