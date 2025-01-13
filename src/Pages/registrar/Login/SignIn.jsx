@@ -21,11 +21,23 @@ const SignIn = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+
+    // Error messages mapped to error codes
+    const errorMessages = {
+      "auth/invalid-email": "Invalid email format. Please enter a valid email.",
+      "auth/user-not-found":
+        "User does not exist. Please check your email or sign up.",
+      "auth/invalid-password": "Password is incorrect. Please try again.",
+    };
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/registrarHome");
     } catch (error) {
-      setError(error.message); // Display user-friendly error
+      setError(
+        errorMessages[error.code] ||
+          "An unexpected error occurred. Please try again."
+      );
     }
   };
 
