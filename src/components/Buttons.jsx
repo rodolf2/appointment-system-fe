@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 const Buttons = () => {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState("/announcement");
+  const [activeTab, setActiveTab] = useState("");
 
   useEffect(() => {
     // Update activeTab based on the current pathname

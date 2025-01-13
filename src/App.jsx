@@ -57,7 +57,12 @@ const Layout = () => {
       {showHeaderFooter && <Header />}
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />}>
+          <Route index element={<Announcement />} />
+          <Route path="announcement" element={<Announcement />} />
+          <Route path="hta" element={<Hta />} />
+          <Route path="guidelines" element={<Guidelines />} />
+        </Route>
         <Route path="/about" element={<About />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/contact" element={<Contact />} />
