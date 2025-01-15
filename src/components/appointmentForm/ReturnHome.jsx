@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FiHome } from "react-icons/fi";
 
 const ReturnHome = () => {
   const navigate = useNavigate();
@@ -28,12 +29,13 @@ const ReturnHome = () => {
             Please wait for the email notification regarding the status of your
             document request.
           </p>
-          <div className="right-0">
+          <div className="flex justify-center">
             <button
-              className="px-4 py-2 bg-[#C9C9C9] font-LatoSemiBold text-[#161F55] rounded hover:bg-gray-400 transition"
+              className="px-4 py-2 bg-[#C9C9C9] font-LatoSemiBold text-[#161F55] rounded hover:bg-gray-400 transition flex justify-center items-center gap-3"
               onClick={handleReturnToHome}
             >
               Return to Home
+              <FiHome />
             </button>
           </div>
         </div>

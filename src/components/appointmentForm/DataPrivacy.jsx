@@ -3,23 +3,21 @@ import { Link } from "react-router";
 
 const DataPrivacy = ({ onNext }) => {
   const [isChecked, setIsChecked] = useState(false);
+  const [highlight, setHighlight] = useState(false);
   const textRef = useRef(null); // Reference for the privacy text
 
   const handleCheckBox = (e) => {
-    setIsChecked(e.target.checked);
-    if (e.target.checked) {
-      // Restore the original color
-      textRef.current.classList.remove("text-[#B50A0A]");
-      textRef.current.classList.add("text-[#161F55]");
+    setIsChecked(e.target.value);
+    if (e.target.value) {
+      setHighlight(false);
     }
   };
-
   const handleNext = () => {
     if (!isChecked) {
-      // Scroll to the text and highlight it
+      setHighlight(true);
       textRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      textRef.current.classList.add("text-[#B50A0A]"); // Add highlight
     } else {
+      setHighlight(false);
       onNext();
     }
   };
@@ -47,7 +45,20 @@ const DataPrivacy = ({ onNext }) => {
           organizational, technical, and physical security measures, and retain
           them in accordance with our retention policy. We don’t share them with
           any external group without your consent unless otherwise stated in our
-          privacy notice.
+          privacy notice.You have the right to be informed, to object, to
+          access, to rectify, to erase or to block the processing of your
+          personal information, as well as your right to data portability, to
+          file a complaint and be entitled to damages for violation of your
+          rights under this data privacy.
+          <br />
+          <br />
+          For your data privacy inquiries, you may reach our Data Protection
+          Officer through:
+          <br />
+          Email:
+          <span className="underline text-[#161F55] font-bold cursor-pointer">
+            dpo@laverdad.edu.ph
+          </span>
         </p>
         <form className="mb-6">
           <div className="flex items-start space-x-2">
@@ -55,11 +66,18 @@ const DataPrivacy = ({ onNext }) => {
               type="checkbox"
               id="agree"
               onChange={handleCheckBox}
-              className="w-4 h-4 mt-1 border-[#161F55] border-2 checked:border-[#161f55]"
+              className={`w-4 h-4 mt-1 border-2 ${
+                highlight && !isChecked
+                  ? "border-[#B50A0A] border-8"
+                  : "border-[#161F55]"
+              }`}
+              aria-label="Agree to the terms and conditions"
             />
             <label
               htmlFor="agree"
-              className="text-[16px] text-justify text-[#161F55] font-LatoRegular"
+              className={`text-[16px] text-justify text-[#161F55] font-LatoRegular ${
+                highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
+              }`}
             >
               I agree to the terms and conditions.
             </label>
@@ -67,7 +85,9 @@ const DataPrivacy = ({ onNext }) => {
         </form>
         <p
           ref={textRef} // Reference to the important text
-          className="text-[16px] text-justify mb-6 text-[#161F55] font-LatoRegular"
+          className={`text-[16px] text-justify mb-6 font-LatoRegular ${
+            highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
+          }`}
         >
           I have read and agree to the{" "}
           <span className="font-LatoBold">Data Privacy Notice</span> of LVCC

@@ -241,21 +241,21 @@ const AppSchedule = ({ onNext, onBack }) => {
         </div>
         {/* Confirmation Modal */}
         {showConfirmation && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-              <h2 className="text-lg font-bold text-[#161f55] mb-4">
+          <div className="fixed inset-0 bg-[#D2D2D2] bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96 h-50 flex  justify-center flex-col">
+              <h2 className="text-lg  text-[#161f55] mb-10 text-center">
                 Are you sure you want to submit now?
               </h2>
               <div className="flex justify-between">
                 <button
                   onClick={handleCancelSubmit}
-                  className="bg-[#161F55]  hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                  className="bg-[#C9C9C9]  hover:bg-gray-400 text-[#161F55] px-10 py-1 rounded-lg"
                 >
                   No
                 </button>
                 <button
                   onClick={handleConfirmSubmit}
-                  className="bg-[#161F55] hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                  className="bg-[#161F55] hover:bg-blue-700 text-white px-10 py-1 rounded-lg"
                 >
                   Yes
                 </button>

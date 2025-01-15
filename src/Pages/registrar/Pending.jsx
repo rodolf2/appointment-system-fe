@@ -97,7 +97,11 @@ const Pending = () => {
   ]);
   return (
     <div className="flex h-screen font-LatoRegular">
-      {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
+      {isSidebarOpen && (
+        <div>
+          <Sidebar isSidebarOpen={isSidebarOpen} />
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto">
         <main

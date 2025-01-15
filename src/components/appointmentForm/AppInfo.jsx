@@ -109,64 +109,127 @@ const AppInfo = ({ onNext, onBack }) => {
           <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
             <form className="space-y-4" onSubmit={handleNext}>
               <div className="grid grid-cols-3 gap-4">
-                {["surname", "firstName", "middleName"].map((field) => (
-                  <div key={field}>
+                <div>
+                  <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
+                    SURNAME
+                  </label>
+                  <input
+                    type="text"
+                    name="surname"
+                    value={formData.surname}
+                    onChange={handleInputChange}
+                    placeholder="Cruz"
+                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
+                      errors.surname ? "border-red-500" : ""
+                    }`}
+                  />
+                  {errors.surname && (
+                    <p className="text-red-600 text-sm mt-0 relative text-start">
+                      {errors.surname}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
+                    FIRST NAME
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    placeholder="Juan"
+                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
+                      errors.firstName ? "border-red-500" : ""
+                    }`}
+                  />
+                  {errors.firstName && (
+                    <p className="text-red-600 text-sm mt-0 relative text-start">
+                      {errors.firstName}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
+                    MIDDLE NAME
+                  </label>
+                  <input
+                    type="text"
+                    name="middleName"
+                    value={formData.middleName}
+                    onChange={handleInputChange}
+                    placeholder="Dela"
+                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
+                      errors.middleName ? "border-red-500" : ""
+                    }`}
+                  />
+                  {errors.middleName && (
+                    <p className="text-red-600 text-sm mt-0 relative text-start">
+                      {errors.middleName}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {/* Additional Fields */}
+              <div className="flex flex-col gap-4">
+                {[
+                  {
+                    label: "Last School Year Attended",
+                    name: "schoolYear",
+                    placeholder: "ex. 2016 - 2017",
+                  },
+                  {
+                    label: "Course/Program/Grade/Strand",
+                    name: "course",
+                    placeholder: "ex. Grade 1",
+                  },
+                  {
+                    label: "Present Address",
+                    name: "address",
+                    placeholder: "ex. Sampaloc Apalit Pampanga",
+                  },
+                  {
+                    label: "Contact Number",
+                    name: "contactNumber",
+                    placeholder: "ex. 0981 255 9915",
+                  },
+                  {
+                    label: "Email Address",
+                    name: "email",
+                    placeholder: "ex. juandelacruz@gmail.com",
+                  },
+                ].map((field) => (
+                  <div>
                     <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
-                      {field.replace(/([A-Z])/g, " $1").toUpperCase()}
+                      {field.label}
                     </label>
                     <input
-                      type="text"
-                      name={field}
-                      value={formData[field]}
+                      name={field.name}
+                      type={field.name === "email" ? "email" : "text"}
+                      value={formData[field.name]}
                       onChange={handleInputChange}
+                      placeholder={field.placeholder}
                       className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
-                        errors[field] ? "border-red-500" : ""
+                        errors[field.name] ? "border-red-500" : ""
                       }`}
+                      onKeyPress={(e) => {
+                        if (
+                          field.name === "contactNumber" &&
+                          !/[0-9]/.test(e.key)
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
                     />
-                    {errors[field] && (
-                      <p className="text-red-600 text-sm mt-0 relative text-start">
-                        {errors[field]}
+                    {errors[field.name] && (
+                      <p className="text-red-600 text-sm block text-start">
+                        {errors[field.name]}
                       </p>
                     )}
                   </div>
                 ))}
               </div>
-              {/* Additional Fields */}
-              {[
-                { label: "Last School Year Attended", name: "schoolYear" },
-                { label: "Course/Program/Grade/Strand", name: "course" },
-                { label: "Present Address", name: "address" },
-                { label: "Contact Number", name: "contactNumber" },
-                { label: "Email", name: "email" },
-              ].map((field) => (
-                <div key={field.name}>
-                  <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
-                    {field.label}
-                  </label>
-                  <input
-                    name={field.name}
-                    type={field.name === "email" ? "email" : "text"}
-                    value={formData[field.name]}
-                    onChange={handleInputChange}
-                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
-                      errors[field.name] ? "border-red-500" : ""
-                    }`}
-                    onKeyPress={(e) => {
-                      if (
-                        field.name === "contactNumber" &&
-                        !/[0-9]/.test(e.key)
-                      ) {
-                        e.preventDefault();
-                      }
-                    }}
-                  />
-                  {errors[field.name] && (
-                    <p className="text-red-600 text-sm block text-start">
-                      {errors[field.name]}
-                    </p>
-                  )}
-                </div>
-              ))}
+
               {/* Documents Selection */}
               <label className="text-start block text-lg font-LatoRegular text-[#000] mb-4">
                 SELECT DOCUMENTS:
@@ -253,6 +316,7 @@ const AppInfo = ({ onNext, onBack }) => {
                   name="purpose"
                   value={formData.purpose}
                   onChange={handleInputChange}
+                  placeholder="Type Here..."
                   className={`pl-2 pt-1 mt-1 block w-full h-[200px] border-2 rounded-md shadow-sm ${
                     errors.purpose ? "border-red-500" : "border-gray-300"
                   }`}

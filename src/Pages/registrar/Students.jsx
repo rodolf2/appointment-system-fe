@@ -104,8 +104,11 @@ const Students = () => {
   };
   return (
     <div className="flex h-screen font-LatoRegular">
-      {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
-
+      {isSidebarOpen && (
+        <div>
+          <Sidebar isSidebarOpen={isSidebarOpen} />
+        </div>
+      )}
       <div className="flex-1 overflow-y-auto">
         <main
           className=" max-w-[1440px] mx-auto h-[1200px]"

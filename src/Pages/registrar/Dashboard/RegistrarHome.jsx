@@ -5,7 +5,7 @@ import Header from "/src/pages/registrar/components/Header.jsx";
 import Footer from "../components/Footer";
 
 const RegistrarHome = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [currentDate, setCurrentDate] = useState(dayjs());
 
   const toggleSidebar = () => {

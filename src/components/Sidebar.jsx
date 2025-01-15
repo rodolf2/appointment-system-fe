@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa6";
 import { FaSpinner } from "react-icons/fa6";
@@ -13,15 +13,24 @@ import { FaCalendarAlt } from "react-icons/fa";
 const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const sidebarRef = useRef();
   const [activeMenu, setActiveMenu] = useState(location.pathname);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     setActiveMenu(location.pathname);
   }, [location.pathname]);
 
   const handleMenuClick = (path) => {
+    setScrollPosition(sidebarRef.current.scroll(0, 0));
     navigate(path);
   };
+
+  useEffect(() => {
+    if (sidebarRef.current) {
+      sidebarRef.current.scrollTop = scrollPosition;
+    }
+  }, [location.pathname]);
 
   const isActive = (path) => location.pathname === path;
 
@@ -32,10 +41,11 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   return (
     <aside
+      ref={sidebarRef}
       className={`bg-custom-gradient_students p-4 text-white transition-all duration-500 ${
-        isSidebarOpen ? "w-[300px]" : "w-0"
+        isSidebarOpen ? "w-[300px]" : ""
       }`}
-      style={{ height: "100%", overflowY: "auto" }}
+      style={{ height: "100%", overflowX: "auto" }}
     >
       {isSidebarOpen && (
         <div className="font-LatoRegular">
