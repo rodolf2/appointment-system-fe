@@ -34,7 +34,7 @@ const Announcement = () => {
   };
   return (
     <>
-      <div className="max-w-[1440px] mx-auto font-LatoRegular">
+      <div className="font-LatoRegular">
         <div
           className="relative w-full h-[900px] bg-cover bg-center flex items-center justify-center text-white text-center"
           style={{

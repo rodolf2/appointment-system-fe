@@ -2,7 +2,7 @@ import Buttons from "../components/Buttons";
 const Hta = () => {
   return (
     <>
-      <div className="max-w-[1440px] mx-auto font-LatoRegular">
+      <div className="ont-LatoRegular">
         {/* Header Section */}
         <div
           className="relative w-full h-[900px] bg-cover  bg-center flex items-center justify-center text-white text-center"
