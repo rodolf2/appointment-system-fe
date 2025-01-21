@@ -111,7 +111,7 @@ const Students = () => {
       )}
       <div className="flex-1 overflow-y-auto">
         <main
-          className=" max-w-[1440px] mx-auto h-[1200px]"
+          className="h-[1200px]"
           style={{
             backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"public/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
