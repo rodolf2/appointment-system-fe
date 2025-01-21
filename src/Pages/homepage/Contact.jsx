@@ -28,7 +28,7 @@ const Contact = () => {
           </div>
         </div>
       </section>
-      <section className="bg-[#0D1B39] text-Fwhite w-full h-auto py-10 relative">
+      <section className="bg-[#161F55] text-Fwhite w-full h-auto py-10 relative">
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-10 px-10">
           {/* Left Side: Image */}
           <div className="w-full lg:w-1/2 flex justify-center">
