@@ -4,14 +4,14 @@ import Carousel from "../components/Carousel";
 const Announcement = () => {
   const calendar = (day, hours) => {
     return (
-      <div className="relative min-w-[450px] h-[450px] flex-shrink-0 borders font-LatoRegular">
+      <div className="relative min-w-[420px] h-[420px] flex-shrink-0 borders font-LatoRegular">
         <img
           src="/assets/image/calendar.png"
           alt="calendar icon"
           className="w-full h-full"
         />
-        <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-opacity-70 p-2 rounded-md">
-          <div className="text-center p-1 pt-20 w-[350px] text-[#161F55] tracking-wide">
+        <div className="absolute inset-0 flex  justify-center bg-opacity-70 p-2 rounded-md">
+          <div className="text-center p-1 w-[350px] text-[#161F55] tracking-wide  bg-[#E4E4E4] absolute top-[140px] h-[58%] bg-opacity-40 rounded-3xl">
             <h3 className="text-[32px] font-bold">{day}</h3>
             <div className="border-b-4 border-[#F3BC62] w-full my-4 "></div>
             <p className="text-[50px]">{hours}</p>
@@ -44,8 +44,10 @@ const Announcement = () => {
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
           <div className="relative z-10 px-4 max-w-[800px] ">
-            <h1 className="text-[50px] font-LatoSemiBold
-             uppercase tracking-widest">
+            <h1
+              className="text-[50px] font-LatoSemiBold
+             uppercase tracking-widest"
+            >
               La Verdad <br />
               Christian College
             </h1>
@@ -122,7 +124,7 @@ const Announcement = () => {
             <a
               href="https://www.facebook.com/lvcc.apalit"
               target="_blank"
-              className="underline text-blue-300 z-50 relative pr-70"
+              className="underline text-blue-300 z-50 relative pr-70 hover:text-white"
             >
               https://www.facebook.com/lvcc.apalit
             </a>

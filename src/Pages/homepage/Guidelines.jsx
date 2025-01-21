@@ -165,7 +165,7 @@ const Guidelines = () => {
           <h2 className="text-[36px] text-center ">
             CONDITIONS AND PROCESSING DAY(S) OF EACH DOCUMENTS
           </h2>
-          <div className="w-[400px] h-1 bg-[#F3BC62] mx-auto my-8"></div>
+          <div className="w-[750px] h-1 bg-[#F3BC62] mx-auto my-8"></div>
         </div>
         <DocumentsStatic />
       </div>

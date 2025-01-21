@@ -79,7 +79,9 @@ const DataPrivacy = ({ onNext }) => {
                 highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
               }`}
             >
-              I agree to the terms and conditions.
+              I have read and agree to the{" "}
+              <span className="font-LatoBold">Data Privacy Notice</span> of LVCC
+              AppointEase.
             </label>
           </div>
         </form>
@@ -89,10 +91,7 @@ const DataPrivacy = ({ onNext }) => {
             highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
           }`}
         >
-          I have read and agree to the{" "}
-          <span className="font-LatoBold">Data Privacy Notice</span> of LVCC
-          AppointEase.
-          <p className="pt-4 font-LatoRegular">
+          <p className="font-LatoRegular w-[450px] mx-auto">
             By ticking “I Agree,” I voluntarily give my consent to LVCC in
             collecting, processing, recording, using, and retaining my personal
             information for the above-mentioned purpose in accordance with this

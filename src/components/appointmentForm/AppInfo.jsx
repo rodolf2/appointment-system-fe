@@ -255,7 +255,8 @@ const AppInfo = ({ onNext, onBack }) => {
                       value: "transcript of records",
                     },
                     {
-                      label: "(ESC) Certificate",
+                      label:
+                        "Educational Service Contracting (ESC) Certificate",
                       value: "Education Service Contracting Certificate",
                     },
                   ].map((doc) => (
@@ -289,12 +290,12 @@ const AppInfo = ({ onNext, onBack }) => {
                       {selectedDocuments.map((doc) => (
                         <li
                           key={doc}
-                          className="flex items-center justify-between bg-gray-100 p-2 rounded-lg shadow-sm"
+                          className="flex items-center justify-between bg-gray-100 p-2 rounded-lg shadow-sm "
                         >
                           <span>{doc.toUpperCase()}</span>
                           <button
                             onClick={() => handleRemoveDocument(doc)}
-                            className="text-red-600 hover:text-red-800 text-sm font-LatoRegular"
+                            className="text-red-600 hover:text-red-800 text-sm font-LatoRegular "
                           >
                             Remove
                           </button>

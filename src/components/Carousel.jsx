@@ -34,7 +34,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="relative w-full max-w-[1440px] h-screen mx-auto bg-[#161f55] text-white p-6 flex flex-col items-center justify-center pt-10 font-lato">
+    <div className="relative w-full max-w-[1440px] h-screen mx-auto bg-[#161f55] text-white p-6 flex flex-col items-center justify-center pt-10 font-lato ">
       <div className="text-center max-w-[1000px] flex flex-col justify-center items-center h-screen">
         <h2 className="text-[36px] font-semibold w-[800px]">
           {slides[currentIndex].title}
@@ -49,12 +49,12 @@ const Carousel = () => {
         </Link>
       </div>
 
-      <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl font-bold ">
+      <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl font-bold hover:text-gray-400">
         <button onClick={handlePrev}>
           <FaArrowLeft className="w-10 h-10" />
         </button>
       </div>
-      <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-2xl font-bold ">
+      <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-2xl font-bold hover:text-gray-400">
         <button onClick={handleNext}>
           <FaArrowRight className="w-10 h-10" />
         </button>
