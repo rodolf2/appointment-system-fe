@@ -2,7 +2,7 @@ const About = () => {
   return (
     <>
       {/* CONTENT */}
-      <section className="mx-auto bg-[#161F55] flex flex-col items-center max-w-[1440px]">
+      <section className="mx-auto bg-[#161F55] flex flex-col items-center">
         <div className="mt-20  ">
           <h2 className="text-[48px] font-LatoBold text-Bbackground tracking-widest relative mb-8 text-center ">
             ABOUT US
