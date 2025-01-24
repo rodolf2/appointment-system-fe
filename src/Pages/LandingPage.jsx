@@ -49,7 +49,7 @@ const LandingPage = () => {
 
           {/* Get Started Button */}
           <Link
-            to="/home"
+            to="/home/announcement"
             className="mt-6 bg-LBackground hover:bg-blue-800 text-white font-semibold py-3 px-6 rounded-md shadow-lg"
           >
             Get Started
