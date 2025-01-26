@@ -7,6 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
@@ -14,11 +15,27 @@ const SignUp = () => {
   const handleEmail = (e) => {
     setEmail(e.target.value);
   };
+
   const handlePassword = (e) => {
     setPassword(e.target.value);
   };
 
+  const handleConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+
   const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    // Check if password is at least 8 characters
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate("/signin");
@@ -99,10 +116,15 @@ const SignUp = () => {
                   <input
                     placeholder="Confirm Password"
                     type="password"
+                    onChange={handleConfirmPassword}
                     className="w-full px-4 py-2 border-[#6F6F6F] border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-[#000]"
                   />
                 </div>
               </div>
+
+              {error && (
+                <p className="mt-2 text-red-500 text-sm text-center">{error}</p>
+              )}
 
               <button
                 type="button"
@@ -125,7 +147,7 @@ const SignUp = () => {
               </div>
             </form>
 
-            <div className="mt-4  text-center">
+            <div className="mt-4 text-center">
               <p className="text-gray-600">or</p>
               <button
                 type="button"
@@ -134,8 +156,7 @@ const SignUp = () => {
               >
                 <FcGoogle className="text-2xl mr-2" />
                 Sign Up with Google
-              </button>{" "}
-              {error && <p>{error}</p>}
+              </button>
             </div>
           </div>
         </section>

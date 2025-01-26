@@ -45,6 +45,11 @@ const AppInfo = ({ onNext, onBack }) => {
       newErrors.contactNumber = "Contact Number must contain only numbers.";
     }
 
+    // Ensure a valid date is selected
+    if (!formData.date) {
+      newErrors.date = "Please select a date.";
+    }
+
     if (selectedDocuments.length === 0) {
       newErrors.selectedDocuments = "You must select at least one document.";
     }
@@ -248,7 +253,7 @@ const AppInfo = ({ onNext, onBack }) => {
                       label: "Good Moral Certificate",
                       value: "good moral certificate",
                     },
-                    { label: "Form 137", value: "form_137" },
+                    { label: "Form 137", value: "form 137" },
                     {
                       label: "Certified True Copy of Documents",
                       value: "certified true copy of Documents",
@@ -336,8 +341,15 @@ const AppInfo = ({ onNext, onBack }) => {
                   name="date"
                   value={formData.date}
                   onChange={handleInputChange}
-                  className="mt-1 block w-[200px] h-[30px] pl-2 border-gray-300 border-2 rounded-md shadow-sm"
+                  className={`mt-1 block w-[200px] h-[30px] pl-2 border-2 rounded-md shadow-sm ${
+                    errors.date ? "border-red-500" : "border-gray-300"
+                  }`}
                 />
+                {errors.date && (
+                  <p className="text-red-600 text-sm block text-start">
+                    {errors.date}
+                  </p>
+                )}
               </div>
               <div className="flex justify-between">
                 <button

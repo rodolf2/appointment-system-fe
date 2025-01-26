@@ -68,7 +68,7 @@ const Buttons = () => {
             >
               Guidelines
               {activeTab === "guidelines" && (
-                <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
+                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 border-b-4 border-[#F3BC62] w-[10rem]"></span>
               )}
             </span>
           </Link>

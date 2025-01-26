@@ -100,7 +100,7 @@ const AppSchedule = ({ onNext, onBack }) => {
       {/* Content Container */}
       <div className="relative z-10 flex flex-col justify-center items-center m-8">
         {/* Title */}
-        <h1 className="font-LatoBold text-[35px] text-white tracking-widest mt-6 mb-4">
+        <h1 className="font-LatoBold text-[35px] text-white tracking-widest mt-6 mb-4 w-[450px] text-center">
           REGISTRAR APPOINTMENT
         </h1>
         <div className="bg-white rounded-lg shadow-lg p-8 w-[32rem]">
