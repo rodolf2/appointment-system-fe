@@ -9,7 +9,7 @@
 [![Made with React](https://img.shields.io/badge/Made%20with-React-61dafb.svg)](https://reactjs.org/)
 [![Built with Vite](https://img.shields.io/badge/Built%20with-Vite-646cff.svg)](https://vitejs.dev/)
 
-![Project Logo](/Assets/image/logo.png)
+![Project Logo](/public/Assets/image/logo.png)
 
 </div>
 
@@ -94,7 +94,7 @@
     <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-UI%2FUX%20Designer-purple?style=for-the-badge&logo=figma&logoColor=white"/>
       <br>
-      <img src="/Assets/image/Lenie.jpg.png" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/Assets/image/Lenie.jpg.png" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Lenie Jane Tinagsa</b>
       <br>
