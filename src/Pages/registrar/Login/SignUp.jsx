@@ -2,6 +2,7 @@ import { auth, googleProvider } from "@/firebase"; // Ensure googleProvider is c
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import Header from "./Header";
 import { FcGoogle } from "react-icons/fc";
 
 const SignUp = () => {
@@ -67,17 +68,7 @@ const SignUp = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/50 to-[#252F6A]/50"></div>
 
         {/* Logo and Title */}
-        <header className="absolute top-4 left-4 flex items-center">
-          <img
-            src="/assets/image/LV_logo.png"
-            alt="LV logo"
-            className="w-16 h-16 mr-4"
-          />
-          <h1 className="text-2xl text-white">
-            <span className="font-regular">LVCC</span>{" "}
-            <span className="font-LatoSemiBold">AppointEase</span>
-          </h1>
-        </header>
+        <Header />
 
         {/* Sign Up Form */}
         <section className="absolute inset-0 flex items-center justify-center mt-10">
