@@ -41,7 +41,7 @@ const LandingPage = () => {
             </h1>
             <span className="absolute top-36 left-0 w-[770px] h-1 bg-[#EEF2F7] "></span>
             <p className="text-Fwhite text-sm md:text-[24px] max-w-2xl leading-relaxed mt-10 font-LatoRegular ">
-              La Verdad Christian School provides students a high quality and
+              La Verdad Christian School provides students a high-quality and
               carefully defined educational program emphasizing Christian
               values, various skills, and vast creative activities.
             </p>
