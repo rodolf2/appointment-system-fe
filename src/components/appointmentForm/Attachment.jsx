@@ -42,7 +42,7 @@ const Attachment = ({ onNext, onBack }) => {
 
       {/* Bottom Half - Solid Color */}
       <div className="h-1/2 relative bg-[#161f55] flex flex-col items-center justify-center">
-        <h2 className="text-white relative bottom-60 font-LatoBold w-[450px] text-center flex justify-center text-[35px] tracking-widest z-10">
+        <h2 className="text-white relative bottom-56 font-LatoBold w-[450px] text-center flex justify-center text-[35px] tracking-widest z-10 pt-20">
           APPLICATION FOR RECORDS
         </h2>
         {/* Content Card */}

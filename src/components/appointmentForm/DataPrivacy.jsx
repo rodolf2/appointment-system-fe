@@ -7,11 +7,12 @@ const DataPrivacy = ({ onNext }) => {
   const textRef = useRef(null); // Reference for the privacy text
 
   const handleCheckBox = (e) => {
-    setIsChecked(e.target.value);
-    if (e.target.value) {
+    setIsChecked(e.target.checked);
+    if (e.target.checked) {
       setHighlight(false);
     }
   };
+
   const handleNext = () => {
     if (!isChecked) {
       setHighlight(true);
@@ -45,7 +46,7 @@ const DataPrivacy = ({ onNext }) => {
           organizational, technical, and physical security measures, and retain
           them in accordance with our retention policy. We don’t share them with
           any external group without your consent unless otherwise stated in our
-          privacy notice.You have the right to be informed, to object, to
+          privacy notice. You have the right to be informed, to object, to
           access, to rectify, to erase or to block the processing of your
           personal information, as well as your right to data portability, to
           file a complaint and be entitled to damages for violation of your
@@ -55,11 +56,18 @@ const DataPrivacy = ({ onNext }) => {
           For your data privacy inquiries, you may reach our Data Protection
           Officer through:
           <br />
-          Email:
+          Email:{" "}
           <span className="underline text-[#161F55] font-bold cursor-pointer">
-            dpo@laverdad.edu.ph
+            <a
+              href="mailto:dpo@laverdad.edu.ph"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              dpo@laverdad.edu.ph
+            </a>
           </span>
         </p>
+
         <form className="mb-6">
           <div className="flex items-start space-x-2">
             <input
