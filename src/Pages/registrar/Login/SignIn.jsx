@@ -3,6 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { googleProvider, auth } from "@/firebase";
+import Header from "./Header";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -39,7 +40,6 @@ const SignIn = () => {
 
       if (remember) {
         localStorage.setItem("savedEmail", email);
-        
       } else {
         localStorage.removeItem("savedEmail");
       }
@@ -74,17 +74,7 @@ const SignIn = () => {
     >
       {/* Background and Form */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/50 to-[#252F6A]/50"></div>
-      <header className="flex items-center absolute p-5">
-        <img
-          src="/assets/image/LV_logo.png"
-          alt="LV logo"
-          className="w-16 h-16 mr-4"
-        />
-        <h1 className="text-2xl text-white">
-          <span className="font-regular">LVCC</span>{" "}
-          <span className="font-LatoSemiBold">AppointEase</span>
-        </h1>
-      </header>
+      <Header />
       <section className="absolute inset-0 flex items-center justify-center mt-10">
         <div className="bg-[#FEFEFE] bg-opacity-30 p-10 rounded-lg shadow-lg max-w-lg h-[600px] w-full">
           <h2 className="text-[30px] font-bold text-[#fefefe] mb-2 tracking-wider mt-[-10px]">
