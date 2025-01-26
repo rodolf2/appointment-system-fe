@@ -27,7 +27,7 @@ const Guidelines = () => {
       <div className="h-[650px] flex justify-center items-center flex-col bg-[#161F55] text-white ">
         <div className="max-w-[1100px] tracking-[0.5px] text-center">
           <h1 className="text-[35px] font-bold">
-            REQUESTING AND RELEASING OF DOCUMENTS GENERAL GUIDELINES
+            REQUESTING AND RELEASING OF DOCUMENTS <br /> GENERAL GUIDELINES
           </h1>
           <div className="border-b-8 border-[#F3BC62] h-1 w-full my-4"></div>
           <p className="text-[34px]">
@@ -165,7 +165,7 @@ const Guidelines = () => {
           <h2 className="text-[36px] text-center ">
             CONDITIONS AND PROCESSING DAY(S) OF EACH DOCUMENTS
           </h2>
-          <div className="w-[750px] h-1 bg-[#F3BC62] mx-auto my-8"></div>
+          <div className="w-[850px] h-2 bg-[#F3BC62] mx-auto my-8"></div>
         </div>
         <DocumentsStatic />
       </div>

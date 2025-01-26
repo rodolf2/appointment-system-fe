@@ -6,7 +6,7 @@ const ReturnHome = () => {
   const navigate = useNavigate();
 
   const handleReturnToHome = () => {
-    navigate("/home"); // Replace "/" with the path of your home page if it's different
+    navigate("/home/announcement"); // Replace "/" with the path of your home page if it's different
   };
 
   return (

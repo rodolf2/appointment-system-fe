@@ -1,7 +1,7 @@
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { FaPhoneAlt } from "react-icons/fa";
-import { MdOutlineEmail } from "react-icons/md";
-import { FaFacebook } from "react-icons/fa6";
+import location_icon from "/icons/marker-06.png";
+import phone_icon from "/icons/phone.png";
+import mail_icon from "/icons/mail-03.png";
+import fb_icon from "/icons/fb logo.png";
 
 const Contact = () => {
   return (
@@ -47,7 +47,13 @@ const Contact = () => {
               {/* Address */}
               <div className="flex items-center justify-center lg:justify-start gap-4">
                 <span className="text-lg">
-                  <FaMapMarkerAlt className=" text-[24px]" />
+                  <img
+                    className="text-[24px]"
+                    src={location_icon}
+                    alt="Location Icon"
+                    width={24}
+                    height={24}
+                  />
                 </span>
                 <p className="text-[24px] font-LatoRegular text-Fwhite">
                   MacArthur Highway, Sampaloc, Apalit, Pampanga
@@ -57,7 +63,13 @@ const Contact = () => {
               {/* Phone */}
               <div className="flex items-center justify-center lg:justify-start gap-4">
                 <span className="text-lg">
-                  <FaPhoneAlt className="text-[24px]" />
+                  <img
+                    className="text-[24px]"
+                    src={phone_icon}
+                    alt="Phone Icon"
+                    width={24}
+                    height={24}
+                  />
                 </span>
                 <p className="text-[24px] font-LatoRegular text-Fwhite">
                   (+63) 947 9998 499
@@ -67,7 +79,14 @@ const Contact = () => {
               {/* Email */}
               <div className="flex items-center justify-center lg:justify-start gap-4">
                 <span className="text-lg">
-                  <MdOutlineEmail className="text-[24px] relative top-0.5" />
+                  <FaFacebook className="text-[24px] relative top-0.5" />
+                  <img
+                    className="text-[24px]"
+                    src={mail_icon}
+                    alt="Mail Icon"
+                    width={24}
+                    height={24}
+                  />
                 </span>
                 <p className="text-[24px] font-LatoRegular text-Fwhite">
                   registrar@laverdad.edu.ph
@@ -77,7 +96,13 @@ const Contact = () => {
               {/* Facebook */}
               <div className="flex items-center justify-center lg:justify-start gap-4">
                 <span className="text-lg">
-                  <FaFacebook className="text-[24px]" />
+                  <img
+                    className="text-[24px]"
+                    src={fb_icon}
+                    alt="Facebook Icon"
+                    width={24}
+                    height={24}
+                  />
                 </span>
                 <a
                   href="https://www.facebook.com/lvcc.apalit "

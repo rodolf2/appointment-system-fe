@@ -37,7 +37,7 @@ const Hta = () => {
               APPOINTMENT SCHEDULING
             </h2>
             <span className=" border-b-[10px] border-[#F3BC62] my-4"></span>
-            <p className="text-center text-[30px]">
+            <p className="text-center text-[30px] uppercase">
               How to schedule an appointment in 5 easy steps
             </p>
           </div>
