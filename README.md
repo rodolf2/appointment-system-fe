@@ -9,7 +9,7 @@
 [![Made with React](https://img.shields.io/badge/Made%20with-React-61dafb.svg)](https://reactjs.org/)
 [![Built with Vite](https://img.shields.io/badge/Built%20with-Vite-646cff.svg)](https://vitejs.dev/)
 
-![Project Logo](/public/Assets/image/logo.png)
+![Project Logo](/public/assets/image/logo.png)
 
 </div>
 
@@ -24,7 +24,7 @@
     <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-Lead%20Developer-black?style=for-the-badge&logo=javascript&logoColor=white"/>
       <br>
-      <img src="/public/Assets/image/p.jpg" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/assets/image/p.jpg" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Rafael Ramos</b>
       <br>
