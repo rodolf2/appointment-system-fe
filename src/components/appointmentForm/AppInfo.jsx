@@ -171,7 +171,10 @@ const AppInfo = ({ onNext, onBack }) => {
                 </div>
               </div>
               {/* Additional Fields */}
-              <div className="flex flex-col gap-4">
+              <form
+                onSubmit={(e) => e.preventDefault()}
+                className="flex flex-col gap-4"
+              >
                 {[
                   {
                     label: "Last School Year Attended",
@@ -199,7 +202,7 @@ const AppInfo = ({ onNext, onBack }) => {
                     placeholder: "ex. juandelacruz@gmail.com",
                   },
                 ].map((field) => (
-                  <div>
+                  <div key={field.name}>
                     <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
                       {field.label}
                     </label>
@@ -228,7 +231,7 @@ const AppInfo = ({ onNext, onBack }) => {
                     )}
                   </div>
                 ))}
-              </div>
+              </form>
 
               {/* Documents Selection */}
               <label className="text-start block text-lg font-LatoRegular text-[#000] mb-4">
@@ -255,8 +258,7 @@ const AppInfo = ({ onNext, onBack }) => {
                       value: "transcript of records",
                     },
                     {
-                      label:
-                        "Educational Service Contracting (ESC) Certificate",
+                      label: " (ESC) Certificate",
                       value: "Education Service Contracting Certificate",
                     },
                   ].map((doc) => (
