@@ -1,6 +1,6 @@
 import { auth, googleProvider } from "@/firebase"; // Ensure googleProvider is correctly configured in your firebase setup
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
 
@@ -139,7 +139,7 @@ const SignUp = () => {
                   Already have an account?{" "}
                   <Link
                     to="/signin"
-                    className="font-LatoSemiBold text-blue-500 hover:text-[#161f55]"
+                    className="font-LatoSemiBold text-[#F3BC62] hover:text-[#161f55]"
                   >
                     Sign In
                   </Link>
