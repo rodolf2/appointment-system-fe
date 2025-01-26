@@ -51,8 +51,8 @@ const Contact = () => {
                     className="text-[24px]"
                     src={location_icon}
                     alt="Location Icon"
-                    width={24}
-                    height={24}
+                    width={50}
+                    height={50}
                   />
                 </span>
                 <p className="text-[24px] font-LatoRegular text-Fwhite">
@@ -67,8 +67,8 @@ const Contact = () => {
                     className="text-[24px]"
                     src={phone_icon}
                     alt="Phone Icon"
-                    width={24}
-                    height={24}
+                    width={50}
+                    height={50}
                   />
                 </span>
                 <p className="text-[24px] font-LatoRegular text-Fwhite">
@@ -79,13 +79,12 @@ const Contact = () => {
               {/* Email */}
               <div className="flex items-center justify-center lg:justify-start gap-4">
                 <span className="text-lg">
-                  <FaFacebook className="text-[24px] relative top-0.5" />
                   <img
                     className="text-[24px]"
                     src={mail_icon}
                     alt="Mail Icon"
-                    width={24}
-                    height={24}
+                    width={50}
+                    height={50}
                   />
                 </span>
                 <p className="text-[24px] font-LatoRegular text-Fwhite">
@@ -100,8 +99,8 @@ const Contact = () => {
                     className="text-[24px]"
                     src={fb_icon}
                     alt="Facebook Icon"
-                    width={24}
-                    height={24}
+                    width={50}
+                    height={50}
                   />
                 </span>
                 <a
