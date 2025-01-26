@@ -203,16 +203,36 @@ const Students = () => {
                   <tbody>
                     {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
-                        <td className="border p-5">{index + 1}</td>
-                        <td className="border p-5 w-[200px]">{data.name}</td>
-                        <td className="border p-5">{data.lastSY}</td>
-                        <td className="border p-5">{data.program}</td>
-                        <td className="border p-5 w-[200px]">{data.contact}</td>
-                        <td className="border p-5">{data.email}</td>
-                        <td className="border p-5">{data.attachment}</td>
-                        <td className="border p-5 w-[300px]">{data.request}</td>
-                        <td className="border p-5">{data.date}</td>
-                        <td className="border p-5">{data.claiming}</td>
+                        <td className="border-2 p-5 border-r-[#989898] border-l-[#989898] ">
+                          {index + 1}
+                        </td>
+                        <td className="border-2  p-5 w-[200px] border-r-[#989898]">
+                          {data.name}
+                        </td>
+                        <td className="border-2  p-5 border-r-[#989898]">
+                          {data.lastSY}
+                        </td>
+                        <td className="border-2  p-5 border-r-[#989898]">
+                          {data.program}
+                        </td>
+                        <td className="border-2  p-5 w-[200px] border-r-[#989898]">
+                          {data.contact}
+                        </td>
+                        <td className="border-2  p-5 border-r-[#989898]">
+                          {data.email}
+                        </td>
+                        <td className="border-2  p-5 border-r-[#989898]">
+                          {data.attachment}
+                        </td>
+                        <td className="border-2  p-5 w-[300px] border-r-[#989898]">
+                          {data.request}
+                        </td>
+                        <td className="border-2  p-5 border-r-[#989898]">
+                          {data.date}
+                        </td>
+                        <td className="border-2 p-5 border-r-[#989898] ">
+                          {data.claiming}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

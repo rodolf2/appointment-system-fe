@@ -81,7 +81,7 @@ const Rejected = () => {
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                     LIST OF REJECTED APPOINTMENT
                   </h2>
-                  <div className="border-b-4 border-[#F3BC62] w-[720px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[610px] my-3"></div>
                 </div>
 
                 <div className="flex justify-between items-center mt-16 ml-4">

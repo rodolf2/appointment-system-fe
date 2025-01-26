@@ -173,7 +173,7 @@ const Holidays = () => {
               <div className="text-[#161F55] flex justify-between px-3 pt-2 ml-3">
                 <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                   LIST OF HOLIDAYS
-                  <div className="border-b-4 border-[#F3BC62] w-[340px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[330px] my-3"></div>
                 </h2>
                 <div>
                   <button
