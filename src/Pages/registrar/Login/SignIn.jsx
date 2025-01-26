@@ -78,7 +78,7 @@ const SignIn = () => {
       <Header />
       <section className="absolute inset-0 flex items-center justify-center mt-10">
         <div className="bg-[#FEFEFE] bg-opacity-30 p-10 rounded-lg shadow-lg max-w-lg h-[600px] w-full">
-          <h2 className="text-[30px] font-bold text-[#fefefe] mb-2 tracking-wider mt-[-10px]">
+          <h2 className="text-[30px] font-LatoBold text-[#fefefe] mb-2 tracking-wider mt-[-10px]">
             SIGN IN
           </h2>
           <div className="w-[200px] h-1 bg-[#F3BC62] mb-6"></div>
