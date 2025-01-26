@@ -38,7 +38,7 @@
     <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-Lead%20Developer-black?style=for-the-badge&logo=javascript&logoColor=white"/>
       <br>
-      <img src="/public/Assets/image/Rodolfo.jpg.png" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/assets/image/Rodolfo.jpg.png" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Rodolfo Ebajan</b>
       <br>
@@ -59,7 +59,7 @@
     <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-Project%20Manager-blue?style=for-the-badge&logo=jira&logoColor=white"/>
       <br>
-      <img src="/public/Assets/image/Justine.jpg" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/assets/image/Justine.jpg" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Justine Jynne Patrice Marco</b>
       <br>
@@ -73,7 +73,7 @@
     <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-Project%20Manager-blue?style=for-the-badge&logo=jira&logoColor=white"/>
       <br>
-      <img src="/public/Assets/image/Eleng.jpg.png" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/assets/image/Eleng.jpg.png" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Ma. Ellaine Pregunta</b>
       <br>
@@ -94,7 +94,7 @@
     <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-UI%2FUX%20Designer-purple?style=for-the-badge&logo=figma&logoColor=white"/>
       <br>
-      <img src="/public/Assets/image/Lenie.jpg.png" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/assets/image/Lenie.jpg.png" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Lenie Jane Tinagsa</b>
       <br>
@@ -108,7 +108,7 @@
     <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-UI%2FUX%20Designer-purple?style=for-the-badge&logo=figma&logoColor=white"/>
       <br>
-      <img src="/public/Assets/image/Trisha.jpg" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/assets/image/Trisha.jpg" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Trisha May Olorvida</b>
       <br>
@@ -122,7 +122,7 @@
 <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-UI%2FUX%20Designer-purple?style=for-the-badge&logo=figma&logoColor=white"/>
       <br>
-      <img src="/public/Assets/image/Borja.png" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/assets/image/Borja.png" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Astrid Borja</b>
       <br>
@@ -158,7 +158,7 @@
     <td align="center" width="400">
       <img src="https://img.shields.io/badge/Role-SQA-red?style=for-the-badge&logo=testcafe&logoColor=white"/>
       <br>
-      <img src="/public/Assets/image/Kylie.jpg.png" width="100" height="100" style="border-radius: 50%"/>
+      <img src="/public/assets/image/Kylie.jpg.png" width="100" height="100" style="border-radius: 50%"/>
       <br>
       <b>Kylie Nicole Luzon</b>
       <br>
