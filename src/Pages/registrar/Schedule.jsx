@@ -73,15 +73,79 @@ const Schedule = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setNewSchedule((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
+  const saveScheduleChanges = () => {
+    const originalSchedule = schedules[editIndex];
+
+    const hasChanges =
+      newSchedule.slots !== originalSchedule.slots ||
+      newSchedule.date !== originalSchedule.date ||
+      newSchedule.startTime !== originalSchedule.startTime ||
+      newSchedule.endTime !== originalSchedule.endTime;
+
+    if (!hasChanges) {
+      alert("No changes made to the schedule.");
+      return;
+    }
+
+    const updatedStartTime = newSchedule.startTime
+      ? formatTime(newSchedule.startTime)
+      : originalSchedule.startTime;
+    const updatedEndTime = newSchedule.endTime
+      ? formatTime(newSchedule.endTime)
+      : originalSchedule.endTime;
+
+    setSchedules((prevSchedules) =>
+      prevSchedules.map((schedule, index) =>
+        index === editIndex
+          ? {
+              ...schedule,
+              ...newSchedule,
+              startTime: updatedStartTime,
+              endTime: updatedEndTime,
+            }
+          : schedule
+      )
+    );
+
+    closeEditModal();
+  };
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const year = String(d.getFullYear()).slice(-2);
+    return `${month}/${day}/${year}`;
+  };
+  const formatTime = (time) => {
+    const [hour, minute] = time.split(":");
+    const h = parseInt(hour, 10);
+    const period = h >= 12 ? "PM" : "AM";
+    const formattedHour = h % 12 || 12;
+    return `${formattedHour}:${minute} ${period}`;
+  };
+
   const addSchedule = () => {
-    const newNo = schedules.length + 1;
-    setSchedules((prev) => [...prev, { ...newSchedule, no: newNo.toString() }]);
+    const formattedSchedule = {
+      ...newSchedule,
+      no: (schedules.length + 1).toString(),
+      date: formatDate(newSchedule.date),
+      startTime: newSchedule.startTime
+        ? formatTime(newSchedule.startTime)
+        : newSchedule.startTime,
+      endTime: newSchedule.endTime
+        ? formatTime(newSchedule.endTime)
+        : newSchedule.endTime,
+    };
+
+    setSchedules((prev) => [...prev, formattedSchedule]);
     closeAddModal();
   };
 
@@ -352,12 +416,29 @@ const Schedule = () => {
               <button
                 className="bg-blue-500 text-white px-8 py-2 rounded-2xl"
                 onClick={() => {
-                  const updatedSchedules = schedules.map((schedule, index) =>
-                    index === editIndex
-                      ? { ...schedule, ...newSchedule }
-                      : schedule
+                  const updatedSchedule = schedules[editIndex];
+
+                  // Update the newSchedule with the original values if not modified
+                  const formattedSchedule = {
+                    ...updatedSchedule, // Retain the original values
+                    ...newSchedule, // Overwrite with the updated fields
+                    date: newSchedule.date
+                      ? formatDate(newSchedule.date)
+                      : updatedSchedule.date,
+                    startTime: newSchedule.startTime
+                      ? formatTime(newSchedule.startTime) // Format startTime only if changed
+                      : updatedSchedule.startTime,
+                    endTime: newSchedule.endTime
+                      ? formatTime(newSchedule.endTime) // Format endTime only if changed
+                      : updatedSchedule.endTime,
+                  };
+
+                  setSchedules((prevSchedules) =>
+                    prevSchedules.map((schedule, index) =>
+                      index === editIndex ? formattedSchedule : schedule
+                    )
                   );
-                  setSchedules(updatedSchedules);
+
                   closeEditModal();
                 }}
               >

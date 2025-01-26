@@ -215,7 +215,7 @@ const Pending = () => {
                               <LuCircleCheckBig className="text-white" />
                             </div>
                             <div className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700">
-                              <FaThumbsDown className="text-white" />
+                              <FaThumbsDown className="text-white transform scale-x-[-1]" />
                             </div>
                           </div>
                         </td>
