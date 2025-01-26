@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { BsTrash3 } from "react-icons/bs";
 import Footer from "/src/pages/registrar/components/Footer.jsx";
 import Header from "/src/pages/registrar/components/Header.jsx";
@@ -80,7 +80,7 @@ const Rejected = () => {
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                     LIST OF COMPLETED APPOINTMENT
                   </h2>
-                  <div className="border-b-4 border-[#F3BC62] w-[720px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[660px] my-3"></div>
                 </div>
 
                 <div className="flex justify-between items-center mt-16 ml-4">

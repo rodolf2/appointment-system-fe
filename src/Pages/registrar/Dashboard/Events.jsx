@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import Sidebar from "/src/components/Sidebar";
 import Header from "/src/pages/registrar/components/Header.jsx";
@@ -6,7 +6,7 @@ import Header from "/src/pages/registrar/components/Header.jsx";
 const Events = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const [events, setEvents] = useState({});
+  const [events, setEvents] = useState({}); // Stores events per month
   const [newEvent, setNewEvent] = useState({
     title: "",
     description: "",
@@ -14,19 +14,6 @@ const Events = () => {
     endDate: "",
   });
   const [selectedEvent, setSelectedEvent] = useState(null);
-
-  // // Load events from localStorage when the component mounts
-  // useEffect(() => {
-  //   const savedEvents = localStorage.getItem("events");
-  //   if (savedEvents) {
-  //     setEvents(JSON.parse(savedEvents));
-  //   }
-  // }, []);
-
-  // // Save events to localStorage whenever the events state changes
-  // useEffect(() => {
-  //   localStorage.setItem("events", JSON.stringify(events));
-  // }, [events]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -47,20 +34,40 @@ const Events = () => {
 
   const handleSaveEvent = () => {
     const { title, startDate, endDate } = newEvent;
-    if (title && startDate) {
-      const eventDate = dayjs(startDate).date();
-      setEvents((prevEvents) => ({
-        ...prevEvents,
-        [eventDate]: {
+    if (!title || !startDate) {
+      alert("Please provide a title and a valid start date.");
+      return;
+    }
+
+    const eventDate = dayjs(startDate);
+
+    // Check if the eventDate is in the currently displayed month and year
+    if (
+      eventDate.month() !== currentDate.month() ||
+      eventDate.year() !== currentDate.year()
+    ) {
+      alert("The event must be within the currently displayed month.");
+      return;
+    }
+
+    const monthKey = eventDate.format("YYYY-MM"); // e.g., "2023-01"
+    const day = eventDate.date(); // Day of the month (e.g., 27)
+
+    setEvents((prevEvents) => ({
+      ...prevEvents,
+      [monthKey]: {
+        ...prevEvents[monthKey],
+        [day]: {
           label: title,
           description: newEvent.description,
           color: "bg-[#299057]",
           startDate,
           endDate,
         },
-      }));
-      setNewEvent({ title: "", description: "", startDate: "", endDate: "" });
-    }
+      },
+    }));
+
+    setNewEvent({ title: "", description: "", startDate: "", endDate: "" });
   };
 
   const handleCancelEvent = () => {
@@ -68,17 +75,19 @@ const Events = () => {
   };
 
   const handleDayClick = (day) => {
-    if (events[day]) {
-      setSelectedEvent({ day, ...events[day] });
+    const monthKey = currentDate.format("YYYY-MM");
+    if (events[monthKey] && events[monthKey][day]) {
+      setSelectedEvent({ day, ...events[monthKey][day] });
     }
   };
 
   const handleDeleteEvent = () => {
     if (selectedEvent) {
       const { day } = selectedEvent;
+      const monthKey = currentDate.format("YYYY-MM");
       setEvents((prevEvents) => {
         const updatedEvents = { ...prevEvents };
-        delete updatedEvents[day];
+        delete updatedEvents[monthKey][day];
         return updatedEvents;
       });
       setSelectedEvent(null);
@@ -91,6 +100,7 @@ const Events = () => {
 
   const daysInMonth = currentDate.daysInMonth();
   const startOfMonth = currentDate.startOf("month").day();
+  const monthKey = currentDate.format("YYYY-MM");
   const monthName = currentDate.format("MMMM");
   const year = currentDate.year();
 
@@ -127,7 +137,7 @@ const Events = () => {
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-3xl font-bold tracking-[5px] text-[#161F55]">
                   {monthName} {year}
-                  <div className="border-b-4 border-[#F3BC62] w-[200px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62]  my-3"></div>
                 </h2>
                 <div>
                   <button
@@ -161,42 +171,45 @@ const Events = () => {
                   <div key={index} className="bg-white"></div>
                 ))}
 
-                {Array.from({ length: daysInMonth }).map((_, index) => (
-                  <div
-                    key={index}
-                    className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
-                      currentDate.date() === index + 1 &&
-                      currentDate.month() === dayjs().month() &&
-                      currentDate.year() === dayjs().year()
-                        ? "bg-blue-300 font-bold"
-                        : ""
-                    }`}
-                    onClick={() => handleDayClick(index + 1)}
-                  >
-                    {index + 1}
-                    {events[index + 1] && (
-                      <span
-                        className={`flex justify-center mt-4 text-xs text-white px-2 py-1 rounded ${
-                          events[index + 1].color
-                        }`}
-                      >
-                        {events[index + 1].label}
-                      </span>
-                    )}
-                  </div>
-                ))}
+                {Array.from({ length: daysInMonth }).map((_, index) => {
+                  const day = index + 1;
+                  const event = events[monthKey]?.[day];
+
+                  return (
+                    <div
+                      key={index}
+                      className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
+                        currentDate.date() === day &&
+                        currentDate.month() === dayjs().month() &&
+                        currentDate.year() === dayjs().year()
+                          ? "bg-blue-300 font-bold"
+                          : ""
+                      }`}
+                      onClick={() => handleDayClick(day)}
+                    >
+                      {day}
+                      {event && (
+                        <span
+                          className={`flex justify-center mt-4 text-xs text-white px-2 py-1 rounded ${event.color}`}
+                        >
+                          {event.label}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
             {/* Add New Event Section */}
             <div className="p-5 border-2 border-[#161f55] rounded-lg">
-              <h3 className="text-2xl font-bold tracking-[3px] text-[#161F55]">
+              <h3 className="text-2xl font-LatoSemiBold tracking-[3px] text-[#161F55]">
                 Add New Event
               </h3>
-              <div className="border-b-4 border-[#F3BC62] w-[150px] my-3"></div>
+              <div className="border-b-4 border-[#F3BC62] w-[200px] my-3"></div>
               <form>
                 <div className="mb-4">
-                  <label className="block text-[#161f55] font-bold mb-2">
+                  <label className="block font-LatoSemiBold text-[#161f55] text-[18px]  mb-2">
                     Title
                   </label>
                   <input
@@ -209,7 +222,7 @@ const Events = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-[#161f55] font-bold mb-2">
+                  <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
                     Description
                   </label>
                   <textarea
@@ -221,7 +234,7 @@ const Events = () => {
                   ></textarea>
                 </div>
                 <div className="mb-4">
-                  <label className="block text-[#161f55] font-bold mb-2">
+                  <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
                     Start Date
                   </label>
                   <input
@@ -233,7 +246,7 @@ const Events = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-[#161f55] font-bold mb-2">
+                  <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
                     End Date
                   </label>
                   <input

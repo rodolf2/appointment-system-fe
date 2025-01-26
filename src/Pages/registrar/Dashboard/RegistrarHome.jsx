@@ -65,10 +65,10 @@ const RegistrarHome = () => {
           <section className="h-auto bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg">
             {/* Overview of the Month */}
             <div className="p-6">
-              <h2 className="text-3xl font-bold tracking-[5px] text-[#000]">
+              <h2 className="text-3xl font-LatoRegular tracking-[5px] text-[#000]">
                 Overview of the Month
               </h2>
-              <div className="border-b-4 border-[#F3BC62] w-[300px] my-3"></div>
+              <div className="border-b-4 border-[#F3BC62] w-[410px] my-3"></div>
 
               <div className="grid grid-cols-3 gap-6 mt-6">
                 {/* Appointments */}
@@ -88,13 +88,14 @@ const RegistrarHome = () => {
                           <span className="text-[#299057] text-[16px] opacity-50">
                             ●
                           </span>{" "}
-                          Morning: <span className=" font-LatoBold">10</span>
+                          Morning <span className="ml-4 font-LatoBold">10</span>
                         </p>
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#299057] text-[16px] opacity-50">
                             ●
                           </span>{" "}
-                          Afternoon: <span className=" font-LatoBold">10</span>
+                          Afternoon{" "}
+                          <span className="ml-2 font-LatoBold">10</span>
                         </p>
                       </div>
                     </div>
@@ -116,11 +117,12 @@ const RegistrarHome = () => {
                       <div className="mt-2 text-sm">
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#E5E68B] text-[16px] ">●</span>{" "}
-                          Morning: <span className=" font-LatoBold">20</span>
+                          Morning <span className="ml-4 font-LatoBold">20</span>
                         </p>
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#E5E68B] text-[16px] ">●</span>{" "}
-                          Afternoon: <span className=" font-LatoBold">10</span>
+                          Afternoon{" "}
+                          <span className="ml-2 font-LatoBold">10</span>
                         </p>
                       </div>
                     </div>
@@ -142,11 +144,12 @@ const RegistrarHome = () => {
                       <div className="mt-2 text-sm">
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#DB3E3E] text-[16px] ">●</span>{" "}
-                          Morning: <span className=" font-LatoBold">15</span>
+                          Morning <span className="ml-4 font-LatoBold">15</span>
                         </p>
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#DB3E3E] text-[16px] ">●</span>{" "}
-                          Afternoon: <span className=" font-LatoBold">5</span>
+                          Afternoon{" "}
+                          <span className="ml-2 font-LatoBold">5</span>
                         </p>
                       </div>
                     </div>
@@ -164,7 +167,7 @@ const RegistrarHome = () => {
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-3xl font-bold tracking-[5px] text-[#161F55]">
                   {monthName} {year}
-                  <div className="border-b-4 border-[#F3BC62] w-[200px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62]  my-3"></div>
                 </h2>
                 <div>
                   <button
@@ -232,7 +235,7 @@ const RegistrarHome = () => {
               <h3 className="text-2xl font-bold tracking-[3px] text-[#161F55]">
                 Holidays
               </h3>
-              <div className="border-b-4 border-[#F3BC62] w-[150px] my-3"></div>
+              <div className="border-b-4 border-[#F3BC62] w-[120px] my-3"></div>
               <ul className="list-disc ml-5 text-lg">
                 <li>Wed 1 - New Year’s Day</li>
               </ul>
