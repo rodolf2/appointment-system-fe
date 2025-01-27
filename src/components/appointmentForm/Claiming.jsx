@@ -1,23 +1,26 @@
 import { useState } from "react";
 
 const Claiming = ({ onNext, onBack }) => {
-  const [selectedOption, setSelectedOption] = useState("");
-  const [error, setError] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(""); // Track selected option
+  const [error, setError] = useState(false); // Error handling state
 
+  // Handle change when user selects an option
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
-    setError(false);
+    setError(false); // Reset error when an option is selected
   };
+
+  // Handle the "Next" button click
   const handleNext = () => {
     if (selectedOption) {
-      onNext(selectedOption); // Pass the selected option to the next step if needed
+      onNext(selectedOption); // Pass the selected option to the parent (AppointmentForm)
     } else {
-      setError(true); // Set error if no option is selected
+      setError(true); // Show error if no option is selected
     }
   };
+
   return (
     <>
-      {/* Form UI remains unchanged */}
       <div className="h-full flex items-center justify-center bg-[#161f55]">
         {/* Background Layers */}
         <div className="absolute inset-0 flex flex-col">
@@ -34,13 +37,12 @@ const Claiming = ({ onNext, onBack }) => {
         </div>
 
         {/* INFORMATION */}
-        <div className=" flex flex-col justify-center text-center m-8">
-          <h2 className=" mx-auto relative inset-0 font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-6 mb-8 ">
+        <div className="flex flex-col justify-center text-center m-8">
+          <h2 className="mx-auto relative inset-0 font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-6 mb-8">
             APPLICATION FOR RECORDS
           </h2>
-          <div className=" relative mx-auto flex flex-col bg-white p-8 rounded-lg shadow-md w-[500px] max-w-[90%] text-center z-10">
+          <div className="relative mx-auto flex flex-col bg-white p-8 rounded-lg shadow-md w-[500px] max-w-[90%] text-center z-10">
             {/* Content Card */}
-
             <h2 className="text-lg font-semibold mb-4">
               UPON CLAIMING THE DOCUMENT:
             </h2>
@@ -51,7 +53,7 @@ const Claiming = ({ onNext, onBack }) => {
                 <input
                   type="radio"
                   name="claimOption"
-                  value="self"
+                  value="self" // Option 1: Claim personally
                   onChange={handleOptionChange}
                   className="mr-2"
                 />
@@ -62,7 +64,7 @@ const Claiming = ({ onNext, onBack }) => {
                 <input
                   type="radio"
                   name="claimOption"
-                  value="authorized"
+                  value="authorized" // Option 2: Authorize someone else
                   onChange={handleOptionChange}
                   className="mr-2"
                 />
@@ -104,7 +106,7 @@ const Claiming = ({ onNext, onBack }) => {
                 className="px-6 py-2 bg-[#161f55] text-white rounded-md hover:bg-[#1b2a6b]"
                 onClick={(e) => {
                   e.preventDefault();
-                  onBack();
+                  onBack(); // Go back to previous step
                 }}
               >
                 Back
@@ -113,11 +115,11 @@ const Claiming = ({ onNext, onBack }) => {
                 className={`px-6 py-2 rounded-md text-white ${
                   selectedOption
                     ? "bg-[#161f55] hover:bg-[#1b2a6b]"
-                    : "bg-[#161f55] "
+                    : "bg-[#161f55]"
                 }`}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleNext();
+                  handleNext(); // Proceed to next step
                 }}
               >
                 Next
