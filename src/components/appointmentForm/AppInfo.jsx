@@ -32,6 +32,7 @@ const AppInfo = ({ onNext, onBack }) => {
 
   const validateForm = () => {
     const newErrors = {};
+    // const newErrors = { contactNumber: "This field is required." };
 
     // Check if fields are empty
     for (const key in formData) {
@@ -55,18 +56,17 @@ const AppInfo = ({ onNext, onBack }) => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors).length === 0; // yung mga walang laman binabalik yun yung dinidisplay niya
   };
 
   const handleNext = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent form submission, when reload the page automatically submit the form
     if (validateForm()) {
       try {
         // Save data to Firestore
         const docRef = await addDoc(collection(db, "information"), {
           ...formData,
           selectedDocuments,
-          timestamp: new Date(), // Optional: add timestamp
         });
         console.log("Document written with ID: ", docRef.id);
         onNext(); // Proceed to the next step
@@ -79,7 +79,7 @@ const AppInfo = ({ onNext, onBack }) => {
   const handleRadioClick = (value) => {
     setSelectedDocuments((prev) =>
       prev.includes(value) ? prev : [...prev, value]
-    );
+    ); // yung value na paramaeter inaidentify niya kung meron siyang laman sa array kung wala siya idadagdag niya yung value
 
     // Clear error when a document is selected
     setErrors((prev) => ({ ...prev, selectedDocuments: "" }));
@@ -263,7 +263,7 @@ const AppInfo = ({ onNext, onBack }) => {
                       value: "transcript of records",
                     },
                     {
-                      label: " (ESC) Certificate",
+                      label: " ESC Certificate",
                       value: "Education Service Contracting Certificate",
                     },
                   ].map((doc) => (
