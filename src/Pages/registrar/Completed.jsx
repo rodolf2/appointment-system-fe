@@ -10,7 +10,7 @@ const Rejected = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointments, setAppointments] = useState([
     {
-      status: "REJECTED",
+      status: "COMPLETED",
       transactionNumber: ["TR13234-322", "KARLA MERCADO"],
       request: "",
       emailAddress: "",
@@ -19,7 +19,7 @@ const Rejected = () => {
       dateOfRequest: "",
     },
     {
-      status: "REJECTED",
+      status: "COMPLETED",
       transactionNumber: ["TR444938-432 ", "YEHLEN HAMAYA"],
       request: "",
       emailAddress: "",

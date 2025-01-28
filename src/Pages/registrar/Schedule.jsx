@@ -133,6 +133,14 @@ const Schedule = () => {
   };
 
   const addSchedule = () => {
+    // Check if all fields are filled
+    if (!newSchedule.date || !newSchedule.startTime || !newSchedule.endTime) {
+      alert(
+        "All fields are required. Please fill in all fields before adding a schedule."
+      );
+      return; // Exit the function if validation fails
+    }
+
     const formattedSchedule = {
       ...newSchedule,
       no: (schedules.length + 1).toString(),
@@ -146,7 +154,18 @@ const Schedule = () => {
     };
 
     setSchedules((prev) => [...prev, formattedSchedule]);
+
+    // Close the modal after successfully adding the schedule
     closeAddModal();
+
+    // Optionally, reset the newSchedule fields
+    setNewSchedule({
+      date: "",
+      startTime: "",
+      endTime: "",
+    });
+
+    alert("Schedule added successfully!");
   };
 
   const openDeleteModal = (index) => {
