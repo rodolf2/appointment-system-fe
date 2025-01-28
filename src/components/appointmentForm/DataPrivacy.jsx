@@ -36,7 +36,7 @@ const DataPrivacy = ({ onNext }) => {
           DATA PRIVACY NOTICE
         </h2>
         <div className="absolute mx-[70px] w-[22rem] h-1 bg-[#F3BC62]"></div>
-        <p className="text-[16px] text-justify mb-6 mt-12 text-[#161F55] font-LatoRegular">
+        <p className="text-[16px] mb-6 mt-12 text-[#161F55] font-LatoRegular leading-relaxed">
           In compliance with data privacy laws such as, but not limited to,
           Republic Act No. 10173 (Data Privacy Act of 2012) and its implementing
           rules and regulations, we within the Organization of La Verdad
