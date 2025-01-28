@@ -113,7 +113,7 @@ const Students = () => {
         <main
           className="h-[1200px]"
           style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"public/assets/image/BackGround.png"})`,
+            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -240,7 +240,7 @@ const Students = () => {
               </div>
               <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
                 <span className="text-[#161F55]">
-                  SHOWING 1 TO 10 OF 10 ENTRIES
+                  Showing 1 to 10 of 10 entries
                 </span>
                 <div>
                   <button className="border p-1 text-[#161F55]">
