@@ -124,7 +124,7 @@ const Students = () => {
             title="Students/Alumni's Records"
           />
           <div>
-            <section className="h-[1050px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
+            <section className="h-[1050px] z-10 bg-white max-w-[1100px] mx-auto p-5 my-5">
               {" "}
               <div className="bg-[#D9D9D9] h-44 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">

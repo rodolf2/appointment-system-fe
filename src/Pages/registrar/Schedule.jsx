@@ -191,7 +191,7 @@ const Schedule = () => {
             isSidebarOpen={isSidebarOpen}
             title="Schedule Records"
           />
-          <section className="h-[1200px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
+          <section className="h-[1200px] z-10 bg-white max-w-[1100px] mx-auto p-5 my-5">
             <div className="bg-[#D9D9D9] h-52 m-4 pt-2">
               <div className="text-[#161F55] flex justify-between px-3 pt-2 ml-3">
                 <h2 className="text-3xl font-bold tracking-[5px] pt-1">
@@ -306,10 +306,12 @@ const Schedule = () => {
       {isAddModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
           <div className="bg-white p-20 rounded-xl shadow-md">
-            <h2 className="text-xl font-bold mb-4">Add Schedule</h2>
-            <div className="border-b-2 border-[#F3BC62] w-60 my-2"></div>
-            <div className="w-96">
-              <p>Add Slots</p>
+            <h2 className="text-xl tracking-wider font-LatoBold text-[#161f55] mb-2">
+              ADD SCHEDULE
+            </h2>
+            <div className="border-b-4 border-[#F3BC62] w-[170px] my-2"></div>
+            <div className="w-96 mt-4">
+              <p>SLOTS</p>
               <input
                 name="slots"
                 type="number"
@@ -318,7 +320,7 @@ const Schedule = () => {
                 placeholder="Enter number of slots"
                 className="border w-full p-2 mb-2"
               />
-              <p>Date</p>
+              <p>DATE</p>
               <input
                 name="date"
                 type="date"
@@ -327,7 +329,7 @@ const Schedule = () => {
                 placeholder="Date"
                 className="border w-full p-2 mb-2"
               />
-              <p>Start Time</p>
+              <p>START TIME</p>
               <input
                 name="startTime"
                 type="time"
@@ -336,7 +338,7 @@ const Schedule = () => {
                 placeholder="Start Time"
                 className="border w-full p-2 mb-2"
               />
-              <p>End Time</p>
+              <p>END TIME</p>
               <input
                 name="endTime"
                 type="time"
@@ -354,7 +356,7 @@ const Schedule = () => {
                 Cancel
               </button>
               <button
-                className="bg-blue-500 text-white px-8 py-2 rounded-2xl"
+                className="bg-[#161f55] text-white px-8 py-2 rounded-2xl"
                 onClick={addSchedule}
               >
                 Add
