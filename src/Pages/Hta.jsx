@@ -33,7 +33,7 @@ const Hta = () => {
         {/* Appointment Steps */}
         <div className="bg-[#161F55] text-white py-12 px-4 flex justify-around h-[800px]">
           <div className=" flex flex-col justify-center w-[500px] tracking-widest leading-normal">
-            <h2 className="text-[50px] font-semibold text-center ">
+            <h2 className="text-[50px] font-semibold text-center tracking-[12px]">
               APPOINTMENT SCHEDULING
             </h2>
             <span className=" border-b-[10px] border-[#F3BC62] my-4"></span>

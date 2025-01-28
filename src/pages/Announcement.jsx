@@ -13,7 +13,7 @@ const Announcement = () => {
         <div className="absolute inset-0 flex  justify-center bg-opacity-70 p-2 rounded-md">
           <div className="text-center p-1 w-[350px] text-[#161F55] tracking-wide  bg-[#E4E4E4] absolute top-[140px] h-[58%] bg-opacity-40 rounded-3xl">
             <h3 className="text-[32px] font-bold">{day}</h3>
-            <div className="border-b-4 border-[#F3BC62] w-[300px] my-4 text-center"></div>
+            <div className="border-b-8 border-[#F3BC62] w-[250px] my-4 text-center mx-auto"></div>
             <p className="text-[50px]">{hours}</p>
           </div>
         </div>

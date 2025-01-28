@@ -14,7 +14,7 @@ const Approved = () => {
   const [appointments, setAppointments] = useState([
     {
       status: "APPROVED",
-      transactionNumber: ["TR112438-322 ", "JOSE DELA CRUZ"],
+      transactionNumber: ["TR112438-322 "],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -24,7 +24,7 @@ const Approved = () => {
     },
     {
       status: "APPROVED",
-      transactionNumber: ["TTR155938-883 ", "LUKAS GARCIA"],
+      transactionNumber: ["TTR155938-883 "],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -34,7 +34,7 @@ const Approved = () => {
     },
     {
       status: "APPROVED",
-      transactionNumber: ["TR44368-444", "CELINE MARAJAS"],
+      transactionNumber: ["TR44368-444"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -44,7 +44,7 @@ const Approved = () => {
     },
     {
       status: "APPROVED",
-      transactionNumber: ["TTR26662-599", "JELA ELAURIA"],
+      transactionNumber: ["TTR26662-599"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -191,10 +191,7 @@ const Approved = () => {
                         <td className="border p-4">
                           <div className="flex flex-col text-center">
                             <span className="text-[#354CCE] font-bold">
-                              {data.transactionNumber[0]}
-                            </span>{" "}
-                            <span className="text-[#3A993D] font-extrabold">
-                              {data.transactionNumber[1]}
+                              {data.transactionNumber}
                             </span>{" "}
                           </div>
                         </td>

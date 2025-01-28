@@ -11,7 +11,7 @@ const Rejected = () => {
   const [appointments, setAppointments] = useState([
     {
       status: "COMPLETED",
-      transactionNumber: ["TR13234-322", "KARLA MERCADO"],
+      transactionNumber: ["TR13234-322"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -20,7 +20,7 @@ const Rejected = () => {
     },
     {
       status: "COMPLETED",
-      transactionNumber: ["TR444938-432 ", "YEHLEN HAMAYA"],
+      transactionNumber: ["TR444938-432 "],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -149,10 +149,7 @@ const Rejected = () => {
                         <td className="border p-4">
                           <div className="flex flex-col text-center">
                             <span className="text-[#354CCE] font-bold">
-                              {data.transactionNumber[0]}
-                            </span>{" "}
-                            <span className="text-[#3A993D] font-extrabold">
-                              {data.transactionNumber[1]}
+                              {data.transactionNumber}
                             </span>{" "}
                           </div>
                         </td>
