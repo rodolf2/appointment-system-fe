@@ -437,30 +437,50 @@ const Schedule = () => {
               <button
                 className="bg-blue-500 text-white px-8 py-2 rounded-2xl"
                 onClick={() => {
-                  const updatedSchedule = schedules[editIndex];
+                  const originalSchedule = schedules[editIndex];
 
-                  // Update the newSchedule with the original values if not modified
+                  // Determine the updated fields and only apply changes
                   const formattedSchedule = {
-                    ...updatedSchedule, // Retain the original values
-                    ...newSchedule, // Overwrite with the updated fields
-                    date: newSchedule.date
-                      ? formatDate(newSchedule.date)
-                      : updatedSchedule.date,
-                    startTime: newSchedule.startTime
-                      ? formatTime(newSchedule.startTime) // Format startTime only if changed
-                      : updatedSchedule.startTime,
-                    endTime: newSchedule.endTime
-                      ? formatTime(newSchedule.endTime) // Format endTime only if changed
-                      : updatedSchedule.endTime,
+                    ...originalSchedule, // Keep all original values
+                    slots:
+                      newSchedule.slots !== originalSchedule.slots
+                        ? newSchedule.slots
+                        : originalSchedule.slots,
+                    date:
+                      newSchedule.date !== originalSchedule.date
+                        ? formatDate(newSchedule.date)
+                        : originalSchedule.date,
+                    startTime:
+                      newSchedule.startTime !== originalSchedule.startTime
+                        ? formatTime(newSchedule.startTime)
+                        : originalSchedule.startTime,
+                    endTime:
+                      newSchedule.endTime !== originalSchedule.endTime
+                        ? formatTime(newSchedule.endTime)
+                        : originalSchedule.endTime,
                   };
 
+                  // Check if any field has been changed
+                  const isUnchanged =
+                    formattedSchedule.slots === originalSchedule.slots &&
+                    formattedSchedule.date === originalSchedule.date &&
+                    formattedSchedule.startTime ===
+                      originalSchedule.startTime &&
+                    formattedSchedule.endTime === originalSchedule.endTime;
+
+                  if (isUnchanged) {
+                    alert("No changes made to the schedule.");
+                    return; // Do not close the modal, allow user to continue editing
+                  }
+
+                  // Update the schedule in state
                   setSchedules((prevSchedules) =>
                     prevSchedules.map((schedule, index) =>
                       index === editIndex ? formattedSchedule : schedule
                     )
                   );
 
-                  closeEditModal();
+                  closeEditModal(); // Close the modal if there are changes
                 }}
               >
                 Save
