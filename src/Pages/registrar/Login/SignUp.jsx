@@ -48,7 +48,7 @@ const SignUp = () => {
   const handleGoogleSignUp = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/students"); // Navigate to your desired page after successful sign-up
+      navigate("/registrarHome"); // Navigate to your desired page after successful sign-up
     } catch (error) {
       setError(`Error: ${error.message}`);
     }
