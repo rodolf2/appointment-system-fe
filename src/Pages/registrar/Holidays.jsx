@@ -353,7 +353,7 @@ const Holidays = () => {
                 type="date"
                 value={newHoliday.date}
                 onChange={handleInputChange}
-                placeholder="Enter number of slots"
+                placeholder="yyyy/mm/dd"
                 className="border w-full p-2 mb-2"
               />
               <p>Description</p>
