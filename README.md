@@ -2,7 +2,7 @@
 
 #
 
-## LV AppointEase
+## LVAppointEase: Appointment Schedule System for LVCS/LVCC Registrar's Office
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Status](https://img.shields.io/badge/Status-In%20Development-blue.svg)](https://learn-vanguard.vercel.app/)
