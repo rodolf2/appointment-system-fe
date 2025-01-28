@@ -113,7 +113,7 @@ const Students = () => {
         <main
           className="h-[1200px]"
           style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"public/assets/image/BackGround.png"})`,
+            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
