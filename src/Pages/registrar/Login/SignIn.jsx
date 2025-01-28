@@ -68,8 +68,8 @@ const SignIn = () => {
       className="w-full h-screen bg-cover bg-center relative"
       style={{
         backgroundImage: "url('/assets/image/SignIn.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundSize: "center",
+        backgroundPosition: "bottom",
       }}
     >
       {/* Background and Form */}
@@ -77,12 +77,12 @@ const SignIn = () => {
       {/* Header */}
       <Header />
       <section className="absolute inset-0 flex items-center justify-center mt-10">
-        <div className="bg-[#FEFEFE] bg-opacity-30 p-10 rounded-lg shadow-lg max-w-lg h-[600px] w-full">
+        <div className="bg-[#FEFEFE] bg-opacity-30 p-10 rounded-lg shadow-lg max-w-lg h-[640px] w-full">
           <h2 className="text-[30px] font-LatoBold text-[#fefefe] mb-2 tracking-wider mt-[-10px]">
             SIGN IN
           </h2>
           <div className="w-[200px] h-1 bg-[#F3BC62] mb-6"></div>
-          <div className="bg-[#FEFEFE] bg-opacity-70 p-10 rounded-lg shadow-lg max-w-md h-[470px] w-full">
+          <div className="bg-[#FEFEFE] bg-opacity-70 p-10 rounded-lg shadow-lg max-w-md h-[500px] w-full">
             <form>
               <div className="mb-4">
                 <label className="block text-sm font-semibold text-[#161f55] uppercase mb-2 tracking-wider">
@@ -140,7 +140,10 @@ const SignIn = () => {
             </form>
             <p className="mt-4 text-center text-[16px] font-LatoSemiBold tracking-wide text-[#161f55]">
               Don’t have an account?{" "}
-              <Link to="/signup" className="text-blue-500 font-LatoSemiBold">
+              <Link
+                to="/signup"
+                className="text-[#F3BC62] hover:text-[#161f55] font-LatoSemiBold"
+              >
                 Sign Up
               </Link>
             </p>
