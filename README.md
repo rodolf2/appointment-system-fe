@@ -13,11 +13,41 @@
 
 </div>
 
+---
+
+## Business Need
+
+All appointments of the registrar's office to be scheduled online, especially to request student's school records or documents, check the office's availability, and control all appointments scheduled in a single system and are approved through email. This project was initiated to reduce the manual scheduling of appointments at the registrar's office and create a system to obtain, track, and manage the approvals/declines of requested documents. As well as to systematically schedule appointments to ease both the Registrar's office and Parents/Visitors regarding filing for appointments and appointments held on specific dates.
+
+---
+
+## Project Scope
+
+Create a system that will cater the students/parents/visitors walk-in/face-to-face appointment schedules for retrieval of documents or student records at the Registrar's Office.
+
+---
+
+## 🛠️ Technologies Used
+
+**Client Side:** React, Vite, Tailwind,
+
+![Client](https://skillicons.dev/icons?i=react,vite,tailwind&perline=4)
+
+**Operating System:** Windows OS
+
+![Operating System](https://skillicons.dev/icons?i=windows&perline=3)
+
+**IDE/Code Editor:** VS Code
+
+![IDE](https://skillicons.dev/icons?i=vscode&perline=3)
+
+---
+
 ## 👥 Our Team
 
 <div align="center">
 
-## 🚀 Development Team
+## 🚀 Project Team
 
 <table align="center">
   <tr>
