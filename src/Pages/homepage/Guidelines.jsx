@@ -40,16 +40,17 @@ const Guidelines = () => {
       {/* Third Section */}
       <div className="py-20 min-h-screen max-w-[1200px] mx-auto">
         {/* Section 1 */}
+
         <div className="flex items-center mb-20 ">
           <div className="flex-shrink-0">
-            <div className="flex items-center justify-center w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
+            <div className="flex items-center justify-center  w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
               1
             </div>
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
             <p>
               All document requests{" "}
-              <span className="font-extrabold">must be submitted </span>to the
+              <span className="font-extrabold">must be submitted </span> to the
               Office of the Registrar via the designated request forms.
             </p>
           </div>
@@ -63,9 +64,8 @@ const Guidelines = () => {
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
             <p>
-              All document requests{" "}
-              <span className="font-extrabold">must be submitted </span> to the
-              Office of the Registrar via the designated request forms.
+              The Registrar reserves the right to extend processing times during
+              peak periods such as enrollment and graduation seasons.
             </p>
           </div>
         </div>
@@ -78,8 +78,8 @@ const Guidelines = () => {
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
             <p>
-              The Registrar reserves the right to extend processing times during
-              peak periods such as enrollment and graduation seasons.
+              It is recommended that requests be submitted well in advance of
+              any deadlines to ensure timely processing.
             </p>
           </div>
         </div>
@@ -92,8 +92,9 @@ const Guidelines = () => {
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
             <p>
-              It is recommended that requests be submitted well in advance of
-              any deadlines to ensure timely processing.
+              Students are required to meet specific requirements before their
+              requests can be processed. Failure to comply with the requirements
+              may result in delays or non-issuance of the requested documents.
             </p>
           </div>
         </div>
@@ -106,32 +107,17 @@ const Guidelines = () => {
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
             <p>
-              Students are required to meet specific requirements before their
-              requests can be processed. Failure to comply with the requirements
-              may result in delays or non-issuance of the requested documents.
-            </p>
-          </div>
-        </div>
-        {/* Section 6 */}
-        <div className="flex items-center mb-20 ">
-          <div className="flex-shrink-0">
-            <div className="flex items-center justify-center  w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
-              6
-            </div>
-          </div>
-          <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
-            <p>
               A student who is a minor cannot process their own document
               request. Only a parent or designated guardian can make the request
               on their behalf.
             </p>
           </div>
         </div>
-        {/* Section 7 */}
+        {/* Section 6 */}
         <div className="flex items-start">
           <div className="flex-shrink-0">
             <div className="flex items-center justify-center  w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
-              7
+              6
             </div>
           </div>
           <div className="ml-10 text-[#161F55] text-[30px]">
