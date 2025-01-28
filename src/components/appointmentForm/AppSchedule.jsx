@@ -160,8 +160,8 @@ const AppSchedule = ({ onNext, onBack }) => {
                     } ${
                       booking
                         ? booking.status === "available"
-                          ? "bg-[#3A993D] hover:bg-green-300 rounded"
-                          : "bg-[#D52121] hover:bg-red-300 rounded"
+                          ? "bg-[#3A993D] hover:bg-green-300 focus:bg-green-300 rounded"
+                          : "bg-[#D52121] hover:bg-red-300 rounded focus:bg-red-300 "
                         : ""
                     } ${
                       isSameDay(day, dayjs())
