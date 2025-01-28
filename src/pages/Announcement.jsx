@@ -43,7 +43,7 @@ const Announcement = () => {
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
-          <div className="relative z-10 px-4 max-w-[800px] ">
+          <div className="relative z-10 px-4 max-w-[900px] ">
             <h1
               className="text-[50px] font-LatoSemiBold
              uppercase tracking-widest"
@@ -53,8 +53,9 @@ const Announcement = () => {
             </h1>
             <div className="border-b-8 border-white my-4"></div>
             <p className="text-[30px] ">
-              Simplifying appointment scheduling. Stay organized, save time, and
-              never miss an appointment. Easy, fast, and hassle-free
+              Simplifying appointment scheduling. <br />
+              Stay organized, save time, and never miss an appointment. <br />
+              Easy, fast, and hassle-free
             </p>
           </div>
         </div>
