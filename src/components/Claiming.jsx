@@ -34,8 +34,8 @@ const Claiming = ({ onNext, onBack }) => {
         </div>
 
         {/* INFORMATION */}
-        <div className=" flex flex-col justify-center text-center m-8">
-          <h2 className=" mx-auto relative inset-0 font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-6 mb-8 ">
+        <div className=" flex flex-col justify-center text-center">
+          <h2 className=" mx-auto relative inset-0 font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-5 mb-4 ">
             APPLICATION FOR RECORDS
           </h2>
           <div className=" relative mx-auto flex flex-col bg-white p-8 rounded-lg shadow-md w-[500px] max-w-[90%] text-center z-10">
@@ -79,7 +79,7 @@ const Claiming = ({ onNext, onBack }) => {
             )}
 
             {/* Instructions */}
-            <p className="text-[16px] font-LatoItalic text-[#161F55] text-left mb-6">
+            <p className="text-[16px] font-LatoItalic text-[#161F55] text-left mb-6 ">
               Please note that if you authorize someone to claim your documents,
               the following must be provided:
               <ul className="list-disc pl-6 mt-2">
@@ -88,11 +88,11 @@ const Claiming = ({ onNext, onBack }) => {
                   authorized.
                 </li>
                 <li className="mb-2">
-                  Photocopies of valid ID (front and back) of both the student
-                  and the authorized person, with 3 signatures.
+                  Photocopy of Valid ID (front and back) of the student/alumnus,
+                  with 3 signatures.
                 </li>
                 <li className="mb-2">
-                  Photocopies of valid ID (front and back) of the authorized
+                  Photocopy of Valid ID (front and back) of the authorized
                   person processing the request, with 3 signatures.
                 </li>
               </ul>

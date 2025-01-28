@@ -59,7 +59,8 @@ const DocumentsStatic = () => {
           main: "The TOR can be requested once for the following purposes:",
           subtopics: [
             "PRC Licensure Examination - must attach proof.",
-            "Employment - must attach proof..",
+            "Employment - must attach proof.",
+            "Transfer - A request letter must be provided for processing.",
             "Continuing studies - A request letter must be provided for processing.",
           ],
         },
@@ -112,14 +113,89 @@ const DocumentsStatic = () => {
                     {dropdown.Conditions.map((condition, index) => (
                       <li key={index} className="text-[24px]">
                         {typeof condition === "string" ? (
-                          condition
+                          <>
+                            {condition.includes("3 request per school year") ? (
+                              <>
+                                A maximum of{" "}
+                                <strong>3 requests per school year</strong> is
+                                allowed.
+                              </>
+                            ) : condition.includes("once") ? (
+                              <>
+                                This document can only be requested{" "}
+                                <strong>once</strong>.
+                              </>
+                            ) : condition.includes("request letter") &&
+                              dropdown.Title !== "Form 137" &&
+                              dropdown.Title !==
+                                "Education Service Contracting (ESC) Certificate" ? (
+                              <>
+                                Must attach a <strong>request letter</strong>{" "}
+                                when submitting their application.
+                              </>
+                            ) : condition.includes(
+                                "notarized Affidavit of Loss"
+                              ) && dropdown.Title === "Form 137" ? (
+                              <>
+                                In case of loss, a{" "}
+                                <strong>notarized Affidavit of Loss</strong>{" "}
+                                must be submitted before a replacement can be
+                                issued.
+                              </>
+                            ) : condition.includes("No limitations") ? (
+                              <>
+                                <strong>No limitations</strong> on the number of
+                                requests.
+                              </>
+                            ) : condition.includes(
+                                "TOR 20 days after the date of graduation"
+                              ) ? (
+                              <>
+                                Students who have recently graduated may request
+                                their{" "}
+                                <strong>
+                                  TOR 20 days after the date of graduation
+                                </strong>
+                                .
+                              </>
+                            ) : (
+                              condition
+                            )}
+                          </>
                         ) : (
                           <>
                             {condition.main}
                             <ul className="list-disc list-inside ml-8">
                               {condition.subtopics.map((subtopic, subIndex) => (
                                 <li key={subIndex} className="text-[24px]">
-                                  {subtopic}
+                                  {subtopic.includes(
+                                    "PRC Licensure Examination"
+                                  ) ? (
+                                    <>
+                                      <strong>PRC Licensure Examination</strong>{" "}
+                                      - must attach proof.
+                                    </>
+                                  ) : subtopic.includes("Employment") ? (
+                                    <>
+                                      <strong>Employment</strong> - must attach
+                                      proof.
+                                    </>
+                                  ) : subtopic.includes(
+                                      "Continuing studies"
+                                    ) ? (
+                                    <>
+                                      <strong>Continuing studies</strong> - A
+                                      request letter must be provided for
+                                      processing.
+                                    </>
+                                  ) : subtopic.includes("Transfer") ? (
+                                    <>
+                                      <strong>Transfer</strong> - A request
+                                      letter must be procided for processing.
+                                    </>
+                                  ) : (
+                                    subtopic
+                                  )}
                                 </li>
                               ))}
                             </ul>
