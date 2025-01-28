@@ -10,6 +10,7 @@ const Students = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [appointments, setAppointments] = useState([
     {
+      transactionNumber: ["TR13234-322"],
       name: "Alice Smith",
       lastSY: "2020-2021",
       program: "Grade 11 - STEM",
@@ -21,6 +22,7 @@ const Students = () => {
       claiming: "Pick-up",
     },
     {
+      transactionNumber: ["TR13234-323"],
       name: "Bob Johnson",
       lastSY: "2019-2020",
       program: "Grade 12 - ABM",
@@ -32,6 +34,7 @@ const Students = () => {
       claiming: "Email",
     },
     {
+      transactionNumber: ["TR13234-324"],
       name: "Charlie Brown",
       lastSY: "2021-2022",
       program: "Grade 10",
@@ -43,6 +46,7 @@ const Students = () => {
       claiming: "Courier",
     },
     {
+      transactionNumber: ["TR13234-325"],
       name: "Daisy Miller",
       lastSY: "2022-2023",
       program: "Grade 11 - HUMSS",
@@ -54,6 +58,7 @@ const Students = () => {
       claiming: "Pick-up",
     },
     {
+      transactionNumber: ["TR13234-326"],
       name: "Evan Davis",
       lastSY: "2018-2019",
       program: "Grade 12 - ICT",
@@ -65,6 +70,7 @@ const Students = () => {
       claiming: "Email",
     },
     {
+      transactionNumber: ["TR13234-327"],
       name: "Fiona Garcia",
       lastSY: "2017-2018",
       program: "Grade 9",
@@ -75,28 +81,30 @@ const Students = () => {
       date: "2025-01-06",
       claiming: "Courier",
     },
-    {
-      name: "George Wilson",
-      lastSY: "2023-2024",
-      program: "Grade 8",
-      contact: "+1 (789) 012-3456",
-      email: "george.wilson@example.com",
-      attachment: "Enrollment Form",
-      request: "Certificate of Enrollment",
-      date: "2025-01-07",
-      claiming: "Pick-up",
-    },
-    {
-      name: "Hannah Lee",
-      lastSY: "2016-2017",
-      program: "Grade 7",
-      contact: "+1 (890) 123-4567",
-      email: "hannah.lee@example.com",
-      attachment: "Report Card",
-      request: "Diploma",
-      date: "2025-01-08",
-      claiming: "Email",
-    },
+    // {
+    //   transactionNumber: ["TR13234-328"],
+    //   name: "George Wilson",
+    //   lastSY: "2023-2024",
+    //   program: "Grade 8",
+    //   contact: "+1 (789) 012-3456",
+    //   email: "george.wilson@example.com",
+    //   attachment: "Enrollment Form",
+    //   request: "Certificate of Enrollment",
+    //   date: "2025-01-07",
+    //   claiming: "Pick-up",
+    // },
+    // {
+    //   transactionNumber: ["TR13234-329"],
+    //   name: "Hannah Lee",
+    //   lastSY: "2016-2017",
+    //   program: "Grade 7",
+    //   contact: "+1 (890) 123-4567",
+    //   email: "hannah.lee@example.com",
+    //   attachment: "Report Card",
+    //   request: "Diploma",
+    //   date: "2025-01-08",
+    //   claiming: "Email",
+    // },
   ]);
 
   const toggleSidebar = () => {
@@ -164,7 +172,7 @@ const Students = () => {
                 <table className="text-[18px] w-[2000px] border-collapse">
                   <thead>
                     <tr className="bg-gray-200 text-center">
-                      <th className="border p-4">NO.</th>
+                      <th className="border p-4">TRANSACTION NUMBER</th>
                       <th className="border p-4 w-[200px]">NAME</th>
                       <th className="border p-4  w-[200px]">
                         LAST S.Y.
@@ -203,8 +211,8 @@ const Students = () => {
                   <tbody>
                     {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
-                        <td className="border-2 p-5 border-r-[#989898] border-l-[#989898] ">
-                          {index + 1}
+                        <td className="border-2 p-5 border-r-[#989898] border-l-[#989898]  text-[#354CCE] font-bold">
+                          {data.transactionNumber[0]}
                         </td>
                         <td className="border-2  p-5 w-[200px] border-r-[#989898]">
                           {data.name}
