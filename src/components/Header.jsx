@@ -11,7 +11,7 @@ const Header = () => {
           <img
             src="/assets/image/LV_logo.png"
             alt="LV logo"
-            className="w-20 h-20 mr-2 ml-8 mb-1"
+            className="w-20 h-20 mr-2 mb-1"
           />
           <span className="font-regular text-2xl text-LBackground">LVCC</span>
           <span className=" font-LatoRegular text-[26px]  text-[#252F6A] pl-2 mb-1">
@@ -21,7 +21,7 @@ const Header = () => {
 
         {/* Navigation */}
         <nav>
-          <ul className="flex space-x-10 text-[#000] relative left-40">
+          <ul className="flex space-x-10 text-[26px] text-[#000] relative left-[14rem]">
             <li
               className={`text-lg font-LatoRegular hover:text-LBackground ${
                 location.pathname.startsWith("/home")
