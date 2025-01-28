@@ -61,7 +61,7 @@ const SignUp = () => {
         style={{
           backgroundImage: "url('/assets/image/SignIn.png')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "bottom",
         }}
       >
         {/* Background Overlay */}
