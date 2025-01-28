@@ -105,6 +105,14 @@ const Holidays = () => {
     setIsEditModalOpen(false);
   };
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}/${month}/${day}`;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewHoliday((prev) => ({
@@ -118,9 +126,33 @@ const Holidays = () => {
       alert("Please fill out all fields.");
       return;
     }
+
+    const formattedDate = formatDate(newHoliday.date); // Format the date as yyyy/mm/dd
     const newNo = holidays.length + 1;
-    setHolidays((prev) => [...prev, { ...newHoliday, no: newNo.toString() }]);
-    closeAddModal();
+
+    setHolidays((prev) => [
+      ...prev,
+      { ...newHoliday, no: newNo.toString(), date: formattedDate },
+    ]);
+
+    closeAddModal(); // Close the modal after adding
+  };
+
+  const updateHolidays = () => {
+    if (!newHoliday.date || !newHoliday.description) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    const formattedDate = formatDate(newHoliday.date); // Format the date as yyyy/mm/dd
+    const updatedHolidays = holidays.map((holiday, index) =>
+      index === editIndex
+        ? { ...holiday, ...newHoliday, date: formattedDate }
+        : holiday
+    );
+
+    setHolidays(updatedHolidays);
+    closeEditModal(); // Close the modal after updating
   };
 
   const deleteHoliday = (index) => {
@@ -219,8 +251,8 @@ const Holidays = () => {
                 <tr className="bg-gray-200 text-center">
                   <th className="border p-5">NO.</th>
                   <th className="border p-5">DATE</th>
-                  <th className="border p-5">Description</th>
-                  <th className="border p-5">Actions</th>
+                  <th className="border p-5">DESCRIPTION</th>
+                  <th className="border p-5">ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
@@ -315,7 +347,7 @@ const Holidays = () => {
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
           <div className="bg-white p-20 rounded-xl shadow-md">
-            <h2 className="text-xl font-bold mb-4">Update Holiday</h2>
+            <h2 className="text-xl font-bold mb-4 uppercase">Update Holiday</h2>
             <div className="border-b-2 border-[#F3BC62] w-60 my-2"></div>
             <div className="w-96">
               <p>Date</p>
@@ -331,7 +363,7 @@ const Holidays = () => {
               <input
                 name="description"
                 type="text"
-                value={newHoliday.date}
+                value={newHoliday.description}
                 onChange={handleInputChange}
                 placeholder="Description"
                 className="border w-full p-2 mb-2"
@@ -346,15 +378,7 @@ const Holidays = () => {
               </button>
               <button
                 className="bg-blue-500 text-white px-8 py-2 rounded-2xl"
-                onClick={() => {
-                  const updatedHolidays = holidays.map((Holiday, index) =>
-                    index === editIndex
-                      ? { ...holidays, ...newHoliday }
-                      : Holiday
-                  );
-                  setHolidays(updatedHolidays);
-                  closeEditModal();
-                }}
+                onClick={updateHolidays}
               >
                 Save
               </button>

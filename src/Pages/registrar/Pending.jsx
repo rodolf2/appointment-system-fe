@@ -13,7 +13,7 @@ const Pending = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const [appointments, setAppointments] = useState([
+  const appointments = [
     {
       status: "PENDING",
       transactionNumber: ["TR102938-123", "JUAN DELA CRUZ"],
@@ -94,7 +94,7 @@ const Pending = () => {
       dateOfRequest: "",
       actions: "",
     },
-  ]);
+  ];
   return (
     <div className="flex h-screen font-LatoRegular">
       {isSidebarOpen && (
