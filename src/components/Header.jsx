@@ -7,17 +7,17 @@ const Header = () => {
     <header className="bg-Bbackground py-4">
       <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
         {/* Logo and Title */}
-        <h2 className="flex items-center">
+        <p className="flex items-center">
           <img
             src="/assets/image/LV_logo.png"
             alt="LV logo"
-            className="w-16 h-16 mr-2 mb-1"
+            className="w-20 h-20 mr-2 ml-8 mb-1"
           />
           <span className="font-regular text-2xl text-LBackground">LVCC</span>
-          <span className="font-LatoBold text-2xl text-LBackground pl-2 mb-1">
+          <span className=" font-LatoRegular text-[26px]  text-[#252F6A] pl-2 mb-1">
             AppointEase
           </span>
-        </h2>
+        </p>
 
         {/* Navigation */}
         <nav>

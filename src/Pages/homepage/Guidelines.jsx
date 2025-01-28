@@ -63,6 +63,16 @@ const Guidelines = () => {
             </div>
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
+            <p>Processing times for documents exclude weekends and holidays.</p>
+          </div>
+        </div>
+        <div className="flex items-center mb-20 ">
+          <div className="flex-shrink-0">
+            <div className="flex items-center justify-center  w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
+              3
+            </div>
+          </div>
+          <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
             <p>
               The Registrar reserves the right to extend processing times during
               peak periods such as enrollment and graduation seasons.
@@ -73,7 +83,7 @@ const Guidelines = () => {
         <div className="flex items-center mb-20 ">
           <div className="flex-shrink-0">
             <div className="flex items-center justify-center  w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
-              3
+              4
             </div>
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
@@ -87,7 +97,7 @@ const Guidelines = () => {
         <div className="flex items-center mb-20 ">
           <div className="flex-shrink-0">
             <div className="flex items-center justify-center  w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
-              4
+              5
             </div>
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
@@ -102,7 +112,7 @@ const Guidelines = () => {
         <div className="flex items-center mb-20 ">
           <div className="flex-shrink-0">
             <div className="flex items-center justify-center  w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
-              5
+              6
             </div>
           </div>
           <div className="ml-10 text-[#161F55] text-[30px] flex items-center justify-center">
@@ -117,7 +127,7 @@ const Guidelines = () => {
         <div className="flex items-start">
           <div className="flex-shrink-0">
             <div className="flex items-center justify-center  w-[110px] h-[110px] bg-[#161F55] text-white font-bold rounded-lg text-[60px] mr-5">
-              6
+              7
             </div>
           </div>
           <div className="ml-10 text-[#161F55] text-[30px]">
