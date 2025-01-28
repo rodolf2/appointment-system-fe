@@ -89,7 +89,7 @@ const DocumentsStatic = () => {
             <div key={dropdown.id} className="mb-8">
               <div
                 onClick={() => toggleDropdown(dropdown.id)}
-                className={`flex justify-between items-center text-3xl w-[900px]  p-4 border-[3px] cursor-pointer ${
+                className={`flex justify-between items-center text-3xl w-[900px] p-4 border-[3px] cursor-pointer ${
                   openDropdowns.includes(dropdown.id)
                     ? "bg-[#D9D9D9] text-[#161f55] font-LatoBold"
                     : "hover:bg-white hover:text-black hover:font-LatoBold "
@@ -102,7 +102,7 @@ const DocumentsStatic = () => {
               </div>
 
               {openDropdowns.includes(dropdown.id) && (
-                <div className="text-white p-4 border-2 cursor-pointer text-start">
+                <div className="text-white p-8 border-2 cursor-pointer text-start">
                   <p className="text-[24px]  mb-4">
                     <strong>Processing Days:</strong> {dropdown.ProcessingDays}
                   </p>
