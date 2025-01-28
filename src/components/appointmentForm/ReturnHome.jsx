@@ -22,12 +22,9 @@ const ReturnHome = () => {
         <div className="absolute inset-0 bg-[#161f55] bg-opacity-70"></div>
 
         <div className="relative bg-[#FFFFFF] p-6 rounded-lg font-LatoMedium shadow-lg text-center w-[600px]">
-          <h3 className="text-lg font-bold mb-4 text-[#161F55]">
-            Thank you for completing the form.
-          </h3>
-          <p className="text-[#161F55] mb-6">
-            Please wait for the email notification regarding the status of your
-            document request.
+          <p className="text-[#161F55] font-LatoMedium mb-6">
+            Thank you for completing the form. Please wait for the email
+            notification regarding the status of your document request.
           </p>
           <div className="flex justify-center">
             <button

@@ -90,11 +90,11 @@ const Claiming = ({ onNext, onBack }) => {
                   authorized.
                 </li>
                 <li className="mb-2">
-                  Photocopies of valid ID (front and back) of both the student
-                  and the authorized person, with 3 signatures.
+                  Photocopy of Valid ID (front and back) of both the
+                  student/alumnus, with 3 signatures.
                 </li>
                 <li className="mb-2">
-                  Photocopies of valid ID (front and back) of the authorized
+                  Photocopy of Valid ID (front and back) of the authorized
                   person processing the request, with 3 signatures.
                 </li>
               </ul>

@@ -8,12 +8,12 @@ const AppSchedule = ({ onNext, onBack }) => {
   const [bookings, setBookings] = useState({
     "2025-01-07": {
       status: "available",
-      slots: ["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "2:00 PM"],
+      slots: ["8:00 AM - 12:00 PM", "1:00 PM - 5:00 PM"],
     },
     "2025-01-08": { status: "fully booked", slots: [] },
     "2025-01-09": {
       status: "available",
-      slots: ["9:00 AM", "10:00 AM", "11:00 AM"],
+      slots: ["8:00 AM - 12:00 PM", "1:00 PM - 5:00 PM"],
     },
   });
 

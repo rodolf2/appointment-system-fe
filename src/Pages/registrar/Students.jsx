@@ -239,7 +239,7 @@ const Students = () => {
                 </table>
               </div>
               <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
-                <span className="text-[#161F55]">
+                <span className="text-[#161F55] uppercase">
                   Showing 1 to 10 of 10 entries
                 </span>
                 <div>
