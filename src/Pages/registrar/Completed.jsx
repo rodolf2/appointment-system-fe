@@ -63,7 +63,7 @@ const Rejected = () => {
         <main
           className="h-auto"
           style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"public/assets/image/BackGround.png"})`,
+            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"/assets/image/BackGround.png"})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -74,7 +74,7 @@ const Rejected = () => {
             title="Completed Appointment"
           />
           <div>
-            <section className="h-[1200px] z-10 bg-white max-w-[1300px] mx-auto p-5 my-5">
+            <section className="h-[1200px] z-10 bg-white max-w-[1100px] mx-auto p-5 my-5">
               <div className="bg-[#D9D9D9] h-44 m-4">
                 <div className="text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
