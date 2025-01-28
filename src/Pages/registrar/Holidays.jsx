@@ -127,7 +127,7 @@ const Holidays = () => {
       return;
     }
 
-    const formattedDate = formatDate(newHoliday.date); // Format the date as yyyy/mm/dd
+    const formattedDate = formatDate(newHoliday.date);
     const newNo = holidays.length + 1;
 
     setHolidays((prev) => [
@@ -135,7 +135,7 @@ const Holidays = () => {
       { ...newHoliday, no: newNo.toString(), date: formattedDate },
     ]);
 
-    closeAddModal(); // Close the modal after adding
+    closeAddModal();
   };
 
   const updateHolidays = () => {
@@ -144,7 +144,7 @@ const Holidays = () => {
       return;
     }
 
-    const formattedDate = formatDate(newHoliday.date); // Format the date as yyyy/mm/dd
+    const formattedDate = formatDate(newHoliday.date);
     const updatedHolidays = holidays.map((holiday, index) =>
       index === editIndex
         ? { ...holiday, ...newHoliday, date: formattedDate }
@@ -152,12 +152,9 @@ const Holidays = () => {
     );
 
     setHolidays(updatedHolidays);
-    closeEditModal(); // Close the modal after updating
+    closeEditModal();
   };
 
-  const deleteHoliday = (index) => {
-    setHolidays((prevHolidays) => prevHolidays.filter((_, i) => i !== index));
-  };
   const openDeleteModal = (index) => {
     setDeleteIndex(index);
     setIsDeleteModalOpen(true);
