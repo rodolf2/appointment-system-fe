@@ -43,44 +43,9 @@ Create a system that will cater the students/parents/visitors walk-in/face-to-fa
 
 ---
 
-## 👥 Our Team
+## 🛠️ Project Team
 
 <div align="center">
-
-## 🚀 Project Team
-
-<table align="center">
-  <tr>
-    <td align="center" width="400">
-      <img src="https://img.shields.io/badge/Role-Lead%20Developer-black?style=for-the-badge&logo=javascript&logoColor=white"/>
-      <br>
-      <img src="/public/assets/image/p.jpg" width="100" height="100" style="border-radius: 50%"/>
-      <br>
-      <b>Rafael Ramos</b>
-      <br>
-      <sub><code>Frontend Architecture | Performance Optimization</code></sub>
-      <br>
-      <br>
-      <a href="https://github.com/Grraffic">
-        <img src="https://img.shields.io/badge/GitHub-Grraffic-black?style=flat-square&logo=github"/>
-      </a>
-    </td>
-    <td align="center" width="400">
-      <img src="https://img.shields.io/badge/Role-Lead%20Developer-black?style=for-the-badge&logo=javascript&logoColor=white"/>
-      <br>
-      <img src="/public/assets/image/Rodolfo.jpg.png" width="100" height="100" style="border-radius: 50%"/>
-      <br>
-      <b>Rodolfo Ebajan</b>
-      <br>
-      <sub><code>Component Development | Integration Testing</code></sub>
-      <br>
-      <br>
-      <a href="https://github.com/rodolf2">
-        <img src="https://img.shields.io/badge/GitHub-RudyTheThirdy-black?style=flat-square&logo=github"/>
-      </a>
-    </td>
-  </tr>
-</table>
 
 ## 📊 Project Management
 
@@ -112,6 +77,41 @@ Create a system that will cater the students/parents/visitors walk-in/face-to-fa
       <br>
       <a href="https://github.com/MaEllaine">
         <img src="https://img.shields.io/badge/GitHub-Ellaine-black?style=flat-square&logo=github"/>
+      </a>
+    </td>
+  </tr>
+</table>
+
+## 🚀 Development Team
+
+<table align="center">
+  <tr>
+    <td align="center" width="400">
+      <img src="https://img.shields.io/badge/Role-Lead%20Developer-black?style=for-the-badge&logo=javascript&logoColor=white"/>
+      <br>
+      <img src="/public/assets/image/p.jpg" width="100" height="100" style="border-radius: 50%"/>
+      <br>
+      <b>Rafael Ramos</b>
+      <br>
+      <sub><code>Frontend Architecture | Performance Optimization</code></sub>
+      <br>
+      <br>
+      <a href="https://github.com/Grraffic">
+        <img src="https://img.shields.io/badge/GitHub-Grraffic-black?style=flat-square&logo=github"/>
+      </a>
+    </td>
+    <td align="center" width="400">
+      <img src="https://img.shields.io/badge/Role-Lead%20Developer-black?style=for-the-badge&logo=javascript&logoColor=white"/>
+      <br>
+      <img src="/public/assets/image/Rodolfo.jpg.png" width="100" height="100" style="border-radius: 50%"/>
+      <br>
+      <b>Rodolfo Ebajan</b>
+      <br>
+      <sub><code>Component Development | Integration Testing</code></sub>
+      <br>
+      <br>
+      <a href="https://github.com/rodolf2">
+        <img src="https://img.shields.io/badge/GitHub-RudyTheThirdy-black?style=flat-square&logo=github"/>
       </a>
     </td>
   </tr>
