@@ -131,6 +131,9 @@ const Events = () => {
         />
 
         <div className="p-6">
+          <p className=" font-LatoRegular text-[30px] text-[#fefefe] p-7 ">
+            EVENT CALENDAR
+          </p>
           <section className="bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg grid grid-cols-3 gap-6">
             {/* Calendar Section */}
             <div className="col-span-2 p-5 border-2 border-[#161f55] rounded-lg">
