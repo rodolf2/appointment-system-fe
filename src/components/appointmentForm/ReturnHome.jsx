@@ -21,9 +21,10 @@ const ReturnHome = () => {
         {/* Overlay for Background Shadow */}
         <div className="absolute inset-0 bg-[#161f55] bg-opacity-70"></div>
 
-        <div className="relative bg-[#FFFFFF] p-6 rounded-lg font-LatoMedium shadow-lg text-center w-[600px]">
+        <div className="relative bg-[#FFFFFF] p-6 rounded-lg font-LatoMedium shadow-lg text-center w-[600px] py-8">
           <p className="text-[#161F55] font-LatoMedium mb-6">
             Thank you for completing the form. Please wait for the email
+            <br />
             notification regarding the status of your document request.
           </p>
           <div className="flex justify-center">

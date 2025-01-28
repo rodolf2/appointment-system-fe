@@ -45,8 +45,8 @@ const DataPrivacy = ({ onNext }) => {
           keeping them securely and with confidentiality using our
           organizational, technical, and physical security measures, and retain
           them in accordance with our retention policy. We don’t share them with
-          any external group without your consent unless otherwise stated in our
-          privacy notice. You have the right to be informed, to object, to
+          any external group without your consent, unless otherwise stated in
+          our privacy notice. You have the right to be informed, to object, to
           access, to rectify, to erase or to block the processing of your
           personal information, as well as your right to data portability, to
           file a complaint and be entitled to damages for violation of your

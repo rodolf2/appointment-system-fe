@@ -302,10 +302,10 @@ const Holidays = () => {
       {isAddModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
           <div className="bg-white p-20 rounded-xl shadow-md">
-            <h2 className="text-xl font-bold mb-4">Add Holiday</h2>
+            <h2 className="text-xl font-bold mb-4 uppercase">Add Holiday</h2>
             <div className="border-b-2 border-[#F3BC62] w-60 my-2"></div>
             <div className="w-96">
-              <p>Date</p>
+              <p>DATE</p>
               <input
                 name="date"
                 type="date"
@@ -314,7 +314,7 @@ const Holidays = () => {
                 placeholder="Enter number of slots"
                 className="border w-full p-2 mb-2"
               />
-              <p>Description</p>
+              <p>DESCRIPTION</p>
               <input
                 name="description"
                 type="text"
@@ -324,18 +324,18 @@ const Holidays = () => {
                 className="border w-full p-2 mb-2"
               />
             </div>
-            <div className="flex justify-end gap-4 mt-6">
+            <div className="flex justify-between gap-4 mt-6">
               <button
-                className=" text-[#989898] px-8 py-2 hover:bg-gray-600 border-2"
+                className=" bg-gray-300 text-black px-8 py-2 rounded-2xl"
                 onClick={closeAddModal}
               >
                 Cancel
               </button>
               <button
-                className="bg-[#161F55] text-white px-8 py-2 hover:bg-blue-600"
+                className="bg-[#161f55] text-white px-8 py-2 rounded-2xl"
                 onClick={addHolidays}
               >
-                Save
+                Add
               </button>
             </div>
           </div>

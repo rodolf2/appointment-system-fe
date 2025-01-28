@@ -53,7 +53,7 @@ const About = () => {
           <div className="w-[400px] h-1 bg-[#F3BC62] mx-auto mb-8"></div>
 
           <p className="font-LatoSemiBold text-Bbackground text-[35px] tracking-widest w-[986px] text-center">
-            To be the frontrunner in providing academic excellence and normally
+            To be the frontrunner in providing academic excellence and morally
             upright principles.
           </p>
         </div>

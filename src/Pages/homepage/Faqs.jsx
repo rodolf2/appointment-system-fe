@@ -60,7 +60,7 @@ const Faqs = () => {
               {/* Dropdown Content */}
               {openDropdowns.includes(dropdown.id) && (
                 <div className="text-Fwhite p-4 border-2 cursor-pointer h-[10rem] ">
-                  <p className=" text-[24px] flex justify-center items-center mb-20">
+                  <p className=" text-[24px] flex justify-center text-start p-4">
                     {dropdown.Content}
                   </p>
                 </div>

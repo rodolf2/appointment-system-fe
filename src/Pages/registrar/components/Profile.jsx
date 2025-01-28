@@ -94,10 +94,10 @@ const Profile = () => {
                 <h2 className="text-[32px] font-LatoSemiBold text-[#161f55] mb-6">
                   Edit Profile
                 </h2>
-                <form className="flex flex-col">
+                <form className="flex flex-col ">
                   {/* Input Fields */}
                   <div className="mb-4 flex items-center justify-start">
-                    <label className="block w-[145px] text-left font-LatoSemiBold text-gray-700 font-medium">
+                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       First Name:
                     </label>
                     <input
@@ -106,7 +106,7 @@ const Profile = () => {
                     />
                   </div>
                   <div className="mb-4 flex items-center justify-start">
-                    <label className="block w-[145px] text-left font-LatoSemiBold text-gray-700">
+                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55]">
                       Middle Name:
                     </label>
                     <input
@@ -115,7 +115,7 @@ const Profile = () => {
                     />
                   </div>
                   <div className="mb-4 flex items-center justify-start">
-                    <label className="block w-[145px] text-left font-LatoSemiBold text-gray-700 font-medium">
+                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Last Name:
                     </label>
                     <input
@@ -124,7 +124,7 @@ const Profile = () => {
                     />
                   </div>
                   <div className="mb-4 flex items-center justify-start">
-                    <label className="block w-[145px] text-left font-LatoSemiBold text-gray-700 font-medium">
+                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Email Address:
                     </label>
                     <input
@@ -133,7 +133,7 @@ const Profile = () => {
                     />
                   </div>
                   <div className="mb-4 flex items-center justify-start">
-                    <label className="block w-[145px] text-left font-LatoSemiBold text-gray-700 font-medium">
+                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Password:
                     </label>
                     <input

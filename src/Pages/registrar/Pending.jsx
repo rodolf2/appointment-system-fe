@@ -16,7 +16,7 @@ const Pending = () => {
   const appointments = [
     {
       status: "PENDING",
-      transactionNumber: ["TR102938-123", "JUAN DELA CRUZ"],
+      transactionNumber: ["TR102938-123"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -26,7 +26,7 @@ const Pending = () => {
     },
     {
       status: "PENDING",
-      transactionNumber: ["TTR122938-343", "MARC REYES"],
+      transactionNumber: ["TTR122938-343"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -36,7 +36,7 @@ const Pending = () => {
     },
     {
       status: "PENDING",
-      transactionNumber: ["TR131238-534", "PAO LING"],
+      transactionNumber: ["TR131238-534"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -46,7 +46,7 @@ const Pending = () => {
     },
     {
       status: "PENDING",
-      transactionNumber: ["TR232352-536", "ANGELA DELEON"],
+      transactionNumber: ["TR232352-536"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -56,7 +56,7 @@ const Pending = () => {
     },
     {
       status: "PENDING",
-      transactionNumber: ["TR254393-678", "JED DELFIN"],
+      transactionNumber: ["TR254393-678"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -66,7 +66,7 @@ const Pending = () => {
     },
     {
       status: "PENDING",
-      transactionNumber: ["TR324693-786", "DENISE JULIA"],
+      transactionNumber: ["TR324693-786"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -76,7 +76,7 @@ const Pending = () => {
     },
     {
       status: "PENDING",
-      transactionNumber: ["TR382793-876", "MIKAELA KUSH"],
+      transactionNumber: ["TR382793-876"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -86,7 +86,7 @@ const Pending = () => {
     },
     {
       status: "PENDING",
-      transactionNumber: ["TR38883-999", "SHELLA YING"],
+      transactionNumber: ["TR38883-999"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -194,10 +194,7 @@ const Pending = () => {
                         <td className="border p-4">
                           <div className="flex flex-col text-center">
                             <span className="text-[#354CCE] font-bold">
-                              {data.transactionNumber[0]}
-                            </span>{" "}
-                            <span className="text-[#3A993D] font-extrabold">
-                              {data.transactionNumber[1]}
+                              {data.transactionNumber}
                             </span>{" "}
                           </div>
                         </td>

@@ -13,7 +13,7 @@ const Announcement = () => {
         <div className="absolute inset-0 flex  justify-center bg-opacity-70 p-2 rounded-md">
           <div className="text-center p-1 w-[350px] text-[#161F55] tracking-wide  bg-[#E4E4E4] absolute top-[140px] h-[58%] bg-opacity-40 rounded-3xl">
             <h3 className="text-[32px] font-bold">{day}</h3>
-            <div className="border-b-4 border-[#F3BC62] w-full my-4 "></div>
+            <div className="border-b-8 border-[#F3BC62] w-[250px] my-4 text-center mx-auto"></div>
             <p className="text-[50px]">{hours}</p>
           </div>
         </div>
@@ -43,7 +43,7 @@ const Announcement = () => {
           }}
         >
           <div className="absolute inset-0 bg-custom-gradient_announcement z-10 pb-10"></div>
-          <div className="relative z-10 px-4 max-w-[800px] ">
+          <div className="relative z-10 px-4 max-w-[900px] ">
             <h1
               className="text-[50px] font-LatoSemiBold
              uppercase tracking-widest"
@@ -53,8 +53,9 @@ const Announcement = () => {
             </h1>
             <div className="border-b-8 border-white my-4"></div>
             <p className="text-[30px] ">
-              Simplifying appointment scheduling. Stay organized, save time, and
-              never miss an appointment. Easy, fast, and hassle-free
+              Simplifying appointment scheduling. <br />
+              Stay organized, save time, and never miss an appointment. <br />
+              Easy, fast, and hassle-free
             </p>
           </div>
         </div>
