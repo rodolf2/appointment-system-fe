@@ -13,7 +13,7 @@ const AppointmentForm = () => {
   const [currentStep, setCurrentStep] = useState(() => {
     // Get the step from the URL query parameter or default to 1
     const stepFromParams = searchParams.get("step");
-    return stepFromParams ? parseInt(stepFromParams, 10) : 1;
+    return stepFromParams ? parseInt(stepFromParams, 10) : 1; //10 is radix number
   });
   const [claimingOption, setClaimingOption] = useState(null); // Track claiming option
 
