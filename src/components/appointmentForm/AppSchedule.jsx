@@ -1,90 +1,89 @@
 import { useState } from "react";
-import dayjs from "dayjs";
+import dayjs from "dayjs"; // Import Day.js for date manipulation
 
 const AppSchedule = ({ onNext, onBack }) => {
-  const [currentMonth, setCurrentMonth] = useState(dayjs());
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [currentMonth, setCurrentMonth] = useState(dayjs()); // Tracks the current calendar month
+  const [selectedDate, setSelectedDate] = useState(null); // Stores the selected date and booking status
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null); // Tracks the selected time slot
   const [bookings, setBookings] = useState({
     "2025-01-07": {
       status: "available",
       slots: ["8:00 AM - 12:00 PM", "1:00 PM - 5:00 PM"],
     },
-    "2025-01-08": { status: "fully booked", slots: [] },
+    "2025-01-08": { status: "fully booked", slots: [] }, // Example of fully booked date
     "2025-01-09": {
       status: "available",
       slots: ["8:00 AM - 12:00 PM", "1:00 PM - 5:00 PM"],
     },
   });
 
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [errorMessage, setErrorMessage] = useState(""); // Stores error messages for invalid submissions
+  const [showConfirmation, setShowConfirmation] = useState(false); // Toggles confirmation modal visibility
 
-  const [showConfirmation, setShowConfirmation] = useState(false); // State for the confirmation dialog
+  const startOfMonth = currentMonth.startOf("month"); // Start of the currently displayed month
+  const endOfMonth = currentMonth.endOf("month"); // End of the currently displayed month
+  const startOfCalendar = startOfMonth.startOf("week"); // Start of the visible calendar grid (week aligned)
+  const endOfCalendar = endOfMonth.endOf("week"); // End of the visible calendar grid (week aligned)
 
-  const startOfMonth = currentMonth.startOf("month");
-  const endOfMonth = currentMonth.endOf("month");
-  const startOfCalendar = startOfMonth.startOf("week");
-  const endOfCalendar = endOfMonth.endOf("week");
-
-  const daysInCalendar = [];
+  const daysInCalendar = []; // Array to store all visible days in the calendar
   let currentDay = startOfCalendar;
 
   while (currentDay.isBefore(endOfCalendar)) {
-    daysInCalendar.push(currentDay);
-    currentDay = currentDay.add(1, "day");
+    daysInCalendar.push(currentDay); // Add each day to the calendar range
+    currentDay = currentDay.add(1, "day"); // Move to the next day
   }
 
-  const isSameDay = (day1, day2) => day1.isSame(day2, "day");
+  const isSameDay = (day1, day2) => day1.isSame(day2, "day"); // Helper to compare two days
 
   const handlePrevMonth = () => {
-    setCurrentMonth(currentMonth.subtract(1, "month"));
+    setCurrentMonth(currentMonth.subtract(1, "month")); // Navigate to the previous month
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(currentMonth.add(1, "month"));
+    setCurrentMonth(currentMonth.add(1, "month")); // Navigate to the next month
   };
 
   const handleDateClick = (day) => {
     const formattedDate = day.format("YYYY-MM-DD");
     if (bookings[formattedDate]) {
-      setSelectedDate({ date: formattedDate, ...bookings[formattedDate] });
-      setSelectedTimeSlot(null); // Reset time slot when a new date is selected
+      setSelectedDate({ date: formattedDate, ...bookings[formattedDate] }); // Set selected date with booking info
+      setSelectedTimeSlot(null); // Reset the time slot when selecting a new date
     } else {
-      setSelectedDate(null);
+      setSelectedDate(null); // Clear selected date if no bookings exist
     }
-    setErrorMessage(""); // Clear the error message
+    setErrorMessage(""); // Clear any error messages
   };
 
   const handleTimeSlotClick = (slot) => {
     setSelectedTimeSlot(slot); // Update selected time slot
-    setErrorMessage(""); // Clear the error message
+    setErrorMessage(""); // Clear any error messages
   };
 
   const handleSubmit = () => {
     if (!selectedDate?.date || !selectedTimeSlot) {
       setErrorMessage(
         "Please select both a date and a time slot before submitting."
-      );
+      ); // Validate inputs
     } else {
-      setErrorMessage(""); // Clear error message if both are selected
-      setShowConfirmation(true); // Show the confirmation modal
+      setErrorMessage(""); // Clear error if valid inputs are provided
+      setShowConfirmation(true); // Show confirmation modal
     }
   };
 
   const handleConfirmSubmit = () => {
-    // Proceed with the submission process
-    setShowConfirmation(false);
-    onNext(); // Proceed to next step
+    setShowConfirmation(false); // Hide the confirmation modal
+    onNext(); // Trigger the `onNext` callback to proceed
   };
 
   const handleCancelSubmit = () => {
-    setShowConfirmation(false); // Close the confirmation dialog without submitting
+    setShowConfirmation(false); // Close the confirmation modal without proceeding
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#161f55] relative">
       {/* Background Layers */}
       <div className="absolute inset-0 flex flex-col">
+        {/* Top half background */}
         <div
           className="h-1/2 bg-cover bg-bottom"
           style={{
@@ -94,16 +93,18 @@ const AppSchedule = ({ onNext, onBack }) => {
             backgroundAttachment: "fixed",
           }}
         ></div>
+        {/* Bottom half background */}
         <div className="h-1/2 bg-[#161f55]"></div>
       </div>
 
-      {/* Content Container */}
+      {/* Main Content */}
       <div className="relative z-10 flex flex-col justify-center items-center m-8">
         {/* Title */}
         <h1 className="font-LatoBold text-[35px] text-white tracking-widest mt-6 mb-4 w-[450px] text-center">
           REGISTRAR APPOINTMENT
         </h1>
         <div className="bg-white rounded-lg shadow-lg p-8 w-[32rem]">
+          {/* Instructional Text */}
           <p className="text-sm text-center font-LatoItalic text-[#161F55] mb-6">
             Please note that you will receive an email confirmation once your
             appointment has been scheduled.
@@ -111,20 +112,22 @@ const AppSchedule = ({ onNext, onBack }) => {
           <p className="text-center font-LatoRegular text-[#000] mb-6">
             SELECT YOUR PREFERRED DATE AND TIME TO CLAIM YOUR DOCUMENT:
           </p>
-
           {/* Calendar */}
           <div>
+            {/* Month Navigation */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-[#161f55]">
                 {currentMonth.format("MMMM YYYY")}
               </h2>
               <div className="flex space-x-2">
+                {/* Previous Month */}
                 <button
                   onClick={handlePrevMonth}
                   className="bg-[#161f55] text-white px-2 text-[20px] font-LatoBold rounded"
                 >
                   &lt;
                 </button>
+                {/* Next Month */}
                 <button
                   onClick={handleNextMonth}
                   className="bg-[#161f55] text-[20px] text-white px-2 font-LatoBold rounded"
@@ -133,6 +136,7 @@ const AppSchedule = ({ onNext, onBack }) => {
                 </button>
               </div>
             </div>
+            {/* Weekdays Header */}
             <div className="grid grid-cols-7 text-center border-b border-gray-300 mb-2">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
                 <div key={day} className="text-[#161f55] font-bold">
@@ -140,6 +144,7 @@ const AppSchedule = ({ onNext, onBack }) => {
                 </div>
               ))}
             </div>
+            {/* Calendar Days */}
             <div className="grid grid-cols-7 text-center">
               {daysInCalendar.map((day) => {
                 const formattedDate = day.format("YYYY-MM-DD");
@@ -150,7 +155,7 @@ const AppSchedule = ({ onNext, onBack }) => {
                     key={formattedDate}
                     className={`p-2 border cursor-pointer ${
                       day.isSame(currentMonth, "month")
-                        ? "text-black"
+                        ? "text-[#161f55] font-LatoSemiBold"
                         : "text-gray-400"
                     } ${
                       booking
@@ -176,6 +181,7 @@ const AppSchedule = ({ onNext, onBack }) => {
           <div className="mt-6 min-h-[100px] transition-all duration-300">
             {selectedDate ? (
               <>
+                {/* Selected Date and Slots */}
                 <h3 className="text-lg font-bold text-[#161f55]">
                   {dayjs(selectedDate.date).format("MMMM D, YYYY")}
                 </h3>
@@ -219,7 +225,7 @@ const AppSchedule = ({ onNext, onBack }) => {
             )}
           </div>
 
-          {/* Buttons */}
+          {/* Navigation Buttons */}
           <div className="flex justify-between mt-6">
             <button
               onClick={onBack}
@@ -239,6 +245,7 @@ const AppSchedule = ({ onNext, onBack }) => {
             </button>
           </div>
         </div>
+
         {/* Confirmation Modal */}
         {showConfirmation && (
           <div className="fixed inset-0 bg-[#D2D2D2] bg-opacity-50 flex items-center justify-center">
@@ -247,12 +254,14 @@ const AppSchedule = ({ onNext, onBack }) => {
                 Are you sure you want to submit now?
               </h2>
               <div className="flex justify-between">
+                {/* Cancel Submission */}
                 <button
                   onClick={handleCancelSubmit}
                   className="bg-[#C9C9C9]  hover:bg-gray-400 text-[#161F55] px-10 py-1 rounded-lg"
                 >
                   No
                 </button>
+                {/* Confirm Submission */}
                 <button
                   onClick={handleConfirmSubmit}
                   className="bg-[#161F55] hover:bg-blue-700 text-white px-10 py-1 rounded-lg"
