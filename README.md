@@ -1,15 +1,18 @@
-<div align="center">
+d<div align="center">
 
 #
 
 ## LVAppointEase: Appointment Schedule System for LVCS/LVCC Registrar's Office
 
+![Project Logo](/public/assets/image/logo.png)
+
+</div>
+
+<div align="center>
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Status](https://img.shields.io/badge/Status-In%20Development-blue.svg)](https://learn-vanguard.vercel.app/)
 [![Made with React](https://img.shields.io/badge/Made%20with-React-61dafb.svg)](https://reactjs.org/)
 [![Built with Vite](https://img.shields.io/badge/Built%20with-Vite-646cff.svg)](https://vitejs.dev/)
-
-![Project Logo](/public/assets/image/logo.png)
 
 </div>
 
