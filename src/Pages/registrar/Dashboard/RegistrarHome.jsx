@@ -165,7 +165,7 @@ const RegistrarHome = () => {
             <div className="col-span-2 p-5 border-2 border-[#161f55] rounded-lg">
               {/* Month Navigation */}
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-3xl font-bold tracking-[5px] text-[#161F55]">
+                <h2 className="text-3xl font-LatoSemiBold tracking-[5px] text-[#161F55]">
                   {monthName} {year}
                   <div className="border-b-4 border-[#F3BC62]  my-3"></div>
                 </h2>
