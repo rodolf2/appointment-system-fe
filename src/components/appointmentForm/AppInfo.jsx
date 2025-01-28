@@ -115,7 +115,7 @@ const AppInfo = ({ onNext, onBack }) => {
             <form className="space-y-4" onSubmit={handleNext}>
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
+                  <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
                     SURNAME
                   </label>
                   <input
@@ -135,7 +135,7 @@ const AppInfo = ({ onNext, onBack }) => {
                   )}
                 </div>
                 <div>
-                  <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
+                  <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
                     FIRST NAME
                   </label>
                   <input
@@ -155,7 +155,7 @@ const AppInfo = ({ onNext, onBack }) => {
                   )}
                 </div>
                 <div>
-                  <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
+                  <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
                     MIDDLE NAME
                   </label>
                   <input
@@ -208,7 +208,7 @@ const AppInfo = ({ onNext, onBack }) => {
                   },
                 ].map((field) => (
                   <div key={field.name}>
-                    <label className="text-start block text-sm font-LatoRegular text-[#000] uppercase">
+                    <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
                       {field.label}
                     </label>
                     <input
@@ -239,11 +239,11 @@ const AppInfo = ({ onNext, onBack }) => {
               </form>
 
               {/* Documents Selection */}
-              <label className="text-start block text-lg font-LatoRegular text-[#000] mb-4">
+              <label className="text-start block font-LatoRegular text-[#000] mb-4">
                 SELECT DOCUMENTS:
               </label>
               <div className="border rounded-lg p-4 shadow-md">
-                <div className="cursor-pointer grid grid-cols-2 gap-y-4 gap-x-6 font-LatoRegular text-[#000]">
+                <div className="cursor-pointer grid grid-cols-2 gap-y-4 gap-x-6 font-LatoRegular text-[#000] text-start">
                   {[
                     {
                       label: "Certificate of Enrollment",
@@ -263,7 +263,7 @@ const AppInfo = ({ onNext, onBack }) => {
                       value: "transcript of records",
                     },
                     {
-                      label: " ESC Certificate",
+                      label: "Education Service Contracting Certificate (ESC)",
                       value: "Education Service Contracting Certificate",
                     },
                   ].map((doc) => (
@@ -317,7 +317,7 @@ const AppInfo = ({ onNext, onBack }) => {
 
               {/* Purpose */}
               <div>
-                <label className="text-start block text-[20px] font-LatoRegular text-[#000]">
+                <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
                   State Your Purpose for Applying:
                 </label>
                 <textarea
@@ -333,7 +333,7 @@ const AppInfo = ({ onNext, onBack }) => {
 
               {/* Date */}
               <div>
-                <label className="block text-start font-LatoRegular text-[20px] text-[#000]">
+                <label className="block text-start font-LatoRegular text-[17px] text-[#000] uppercase">
                   Date of Request
                 </label>
                 <input
