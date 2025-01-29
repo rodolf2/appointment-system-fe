@@ -137,7 +137,7 @@ const Students = () => {
               <div className="bg-[#D9D9D9] h-44 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
-                    LIST OF STUDENTS/ALUMNI'S RECORDS
+                    LIST OF STUDENTS/ALUMNI'S RECORDS REQUEST
                   </h2>
                   <div className="border-b-4 border-[#F3BC62] w-[720px] my-3"></div>
                 </div>

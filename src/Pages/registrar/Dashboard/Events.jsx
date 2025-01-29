@@ -264,14 +264,14 @@ const Events = () => {
                   <button
                     type="button"
                     onClick={handleSaveEvent}
-                    className="w-full px-4 py-2 bg-green-500 text-white font-LatoSemiBold uppercase rounded hover:bg-green-600"
+                    className="w-full px-4 py-2 bg-[#3A993D] text-white font-LatoSemiBold uppercase rounded hover:bg-green-600"
                   >
                     Save
                   </button>
                   <button
                     type="button"
                     onClick={handleCancelEvent}
-                    className="w-full px-4 py-2 bg-gray-400 text-white uppercase rounded hover:bg-gray-500"
+                    className="w-full px-4 py-2 bg-[#9CA3AF] text-white font-LatoSemiBold uppercase rounded hover:bg-gray-500"
                   >
                     Cancel
                   </button>
