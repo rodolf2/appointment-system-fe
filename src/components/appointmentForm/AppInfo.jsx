@@ -263,7 +263,7 @@ const AppInfo = ({ onNext, onBack }) => {
                       value: "transcript of records",
                     },
                     {
-                      label: "Education Service Contracting Certificate (ESC)",
+                      label: "ESC Certificate",
                       value: "Education Service Contracting Certificate",
                     },
                   ].map((doc) => (
