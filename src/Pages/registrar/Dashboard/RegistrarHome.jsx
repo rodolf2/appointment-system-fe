@@ -133,21 +133,21 @@ const RegistrarHome = () => {
                 <div className="bg-[#FFFFFF] border-2 border-[#DCE0E5] p-6 rounded-lg shadow-md">
                   <div className="flex items-center justify-center">
                     {/* Circle */}
-                    <div className="w-32 h-32 rounded-full flex items-center justify-center bg-[#DB3E3E] bg-opacity-60 text-[#DB3E3E] text-[30px] font-LatoBold">
+                    <div className="w-32 h-32 rounded-full flex items-center justify-center bg-[#354CCE] bg-opacity-60 text-[#354CCE] text-[30px] font-LatoBold">
                       20
                     </div>
                     {/* Completed */}
                     <div className="ml-4 text-left">
-                      <h3 className="text-[#DB3E3E] text-xl font-semibold">
+                      <h3 className="text-[#354CCE] text-xl font-semibold">
                         Completed
                       </h3>
                       <div className="mt-2 text-sm">
                         <p className="text-[#000] text-[13px] font-LatoRegular">
-                          <span className="text-[#DB3E3E] text-[16px] ">●</span>{" "}
+                          <span className="text-[#354CCE] text-[16px] ">●</span>{" "}
                           Morning <span className="ml-4 font-LatoBold">15</span>
                         </p>
                         <p className="text-[#000] text-[13px] font-LatoRegular">
-                          <span className="text-[#DB3E3E] text-[16px] ">●</span>{" "}
+                          <span className="text-[#354CCE] text-[16px] ">●</span>{" "}
                           Afternoon{" "}
                           <span className="ml-2 font-LatoBold">5</span>
                         </p>
