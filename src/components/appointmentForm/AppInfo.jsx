@@ -46,6 +46,7 @@ const AppInfo = ({ onNext, onBack }) => {
       newErrors.contactNumber = "Contact Number must contain only numbers.";
     }
 
+
     // Ensure a valid date is selected
     if (!formData.date) {
       newErrors.date = "Please select a date.";
