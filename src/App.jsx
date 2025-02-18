@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
 import Announcement from "./Pages/Announcement";
 import Guidelines from "./Pages//homepage/Guidelines";
 import LandingPage from "./Pages/LandingPage";

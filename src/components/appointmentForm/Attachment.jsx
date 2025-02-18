@@ -77,7 +77,7 @@ const Attachment = ({ onNext, onBack }) => {
               <p className="text-gray-500">No files added.</p>
             )}
           </div>
-
+   
           {/* Hidden File Input */}
           <input
             type="file"
