@@ -4,7 +4,7 @@ const Header = () => {
   const location = useLocation();
 
   return (
-    <header className="bg-Bbackground py-4">
+    <header className="bg-Bbackground py-4 sticky top-0 z-50">
       <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
         {/* Logo and Title */}
         <p className="flex items-center">

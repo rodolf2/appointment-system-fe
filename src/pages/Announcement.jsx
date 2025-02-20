@@ -23,7 +23,7 @@ const Announcement = () => {
 
   const mobile = () => {
     return (
-      <div className="absolute top-[130px] right-0 w-[1500px] z-50 pl-[900px] pointer-events-none">
+      <div className="absolute top-[130px] right-0 w-[1500px] z-20 pl-[900px] pointer-events-none">
         <img
           src="/assets/image/mobile.png"
           alt="mobile icon"
