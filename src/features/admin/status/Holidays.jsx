@@ -2,8 +2,9 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { BsTrash3 } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import Sidebar from "/src/components/Sidebar";
-import Footer from "/src/pages/registrar/components/Footer.jsx";
-import Header from "/src/pages/registrar/components/Header.jsx";
+import Header from "/src/features/admin/components/Header";
+import Footer from "/src/features/admin/components/Footer";
+
 import { useState } from "react";
 
 const Holidays = () => {

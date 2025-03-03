@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import Sidebar from "/src/components/Sidebar";
-import Header from "/src/pages/registrar/components/Header.jsx";
-import Footer from "../components/Footer";
+import Header from "/src/features/admin/components/Header";
+import Footer from "/src/features/admin/components/Footer";
 
 const RegistrarHome = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

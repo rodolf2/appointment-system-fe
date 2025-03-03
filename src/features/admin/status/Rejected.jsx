@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { FaThumbsUp } from "react-icons/fa6";
 import { BsTrash3 } from "react-icons/bs";
-import Footer from "/src/pages/registrar/components/Footer.jsx";
-import Header from "/src/pages/registrar/components/Header.jsx";
+import Header from "/src/features/admin/components/Header";
+import Footer from "/src/features/admin/components/Footer";
 import Sidebar from "/src/components/Sidebar";
 
 const Rejected = () => {
@@ -10,7 +11,7 @@ const Rejected = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointments, setAppointments] = useState([
     {
-      status: "COMPLETED",
+      status: "REJECTED",
       transactionNumber: ["TR13234-322"],
       request: "",
       emailAddress: "",
@@ -19,7 +20,7 @@ const Rejected = () => {
       dateOfRequest: "",
     },
     {
-      status: "COMPLETED",
+      status: "REJECTED",
       transactionNumber: ["TR444938-432 "],
       request: "",
       emailAddress: "",
@@ -27,7 +28,6 @@ const Rejected = () => {
       timeSlot: "",
       dateOfRequest: "",
     },
-    // Add more appointments as needed
   ]);
 
   const toggleSidebar = () => {
@@ -64,6 +64,7 @@ const Rejected = () => {
           className="h-auto"
           style={{
             backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"/assets/image/BackGround.png"})`,
+
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -71,16 +72,16 @@ const Rejected = () => {
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
-            title="Completed Appointment"
+            title="Rejected Appointment"
           />
           <div>
             <section className="h-[1200px] z-10 bg-white max-w-[1100px] mx-auto p-5 my-5">
               <div className="bg-[#D9D9D9] h-44 m-4">
                 <div className="text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
-                    LIST OF COMPLETED APPOINTMENT
+                    LIST OF REJECTED APPOINTMENT
                   </h2>
-                  <div className="border-b-4 border-[#F3BC62] w-[660px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[610px] my-3"></div>
                 </div>
 
                 <div className="flex justify-between items-center mt-16 ml-4">
@@ -142,14 +143,14 @@ const Rejected = () => {
                     {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
                         <td className="border p-4">
-                          <span className="bg-[#354CCE] px-2 py-2 rounded text-white">
+                          <span className="bg-[#D52121] px-2 py-2 rounded text-white">
                             {data.status}
                           </span>
                         </td>
                         <td className="border p-4">
                           <div className="flex flex-col text-center">
                             <span className="text-[#354CCE] font-bold">
-                              {data.transactionNumber}
+                              {data.transactionNumber[0]}
                             </span>{" "}
                           </div>
                         </td>
@@ -160,6 +161,9 @@ const Rejected = () => {
                         <td className="border p-4">{data.dateOfRequest}</td>
                         <td className="border p-4">
                           <div className="flex gap-2 justify-center">
+                            <div className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700">
+                              <FaThumbsUp className="text-white" />
+                            </div>
                             <div className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700">
                               <BsTrash3
                                 className="text-white"

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { CgProfile } from "react-icons/cg";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Sidebar from "/src/components/Sidebar";
-import Footer from "/src/pages/registrar/components/Footer.jsx";
-import Header from "/src/pages/registrar/components/Header.jsx";
+import Header from "/src/features/admin/components/Header";
+import Footer from "/src/features/admin/components/Footer";
 
 const Students = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

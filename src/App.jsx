@@ -2,27 +2,27 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Announcement from "./Pages/Announcement";
-import Guidelines from "./Pages//homepage/Guidelines";
-import LandingPage from "./Pages/LandingPage";
-import About from "./Pages/homepage/About";
-import Faqs from "./Pages//homepage/Faqs";
-import Contact from "./Pages/homepage/Contact";
-import AppointmentForm from "./Pages/AppointmentForm";
-import Hta from "./Pages/HTA";
-import HomePage from "./Pages/homepage/HomePage";
-import Students from "./Pages/registrar/Students";
-import Pending from "./Pages/registrar/Pending";
-import Approved from "./Pages/registrar/Approved";
-import SignIn from "./Pages/registrar/Login/SignIn";
-import SignUp from "./Pages/registrar/Login/SignUp";
-import Rejected from "./pages/registrar/Rejected";
-import Completed from "./pages/registrar/Completed";
-import RegistrarHome from "./Pages/registrar/Dashboard/RegistrarHome";
-import Events from "./Pages/registrar/Dashboard/Events";
-import Schedule from "./pages/registrar/Schedule";
-import Holidays from "./pages/registrar/Holidays";
+import Guidelines from "./features/homepage/Guidelines";
+import LandingPage from "./features/landing/LandingPage";
+import About from "./features/homepage/About";
+import Faqs from "./features/homepage/Faqs";
+import Contact from "./features/homepage/Contact";
+import AppointmentForm from "./features/appointment/AppointmentForm";
+import Hta from "./features/appointment/Hta";
+import HomePage from "./features/homepage/HomePage";
+import Students from "./features/admin/status/Students";
+import Pending from "./features/admin/status/Pending";
+import Approved from "./features/admin/status/Approved";
+import SignIn from "./features/admin/Login/SignIn";
+import SignUp from "./features/admin/Login/SignUp";
+import Rejected from "./features/admin/status/Rejected";
+import Completed from "./features/admin/status/Completed";
+import RegistrarHome from "./features/admin/Dashboard/RegistrarHome";
+import Events from "./features/admin/Dashboard/Events";
+import Schedule from "./features/admin/status/Schedule";
+import Holidays from "./features/admin/status/Holidays";
 
-import Profile from "./Pages/registrar/components/Profile";
+import Profile from "./features/admin/components/Profile";
 
 const App = () => {
   return (

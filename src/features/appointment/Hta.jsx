@@ -1,4 +1,5 @@
-import Buttons from "../components/Buttons";
+import Buttons from "@/components/Buttons";
+
 const Hta = () => {
   return (
     <>

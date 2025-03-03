@@ -1,7 +1,7 @@
 import { useState } from "react";
 import dayjs from "dayjs";
 import Sidebar from "/src/components/Sidebar";
-import Header from "/src/pages/registrar/components/Header.jsx";
+import Header from "/src/features/admin/components/Header";
 
 const Events = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
