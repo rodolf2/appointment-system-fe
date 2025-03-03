@@ -3,9 +3,23 @@ const Footer = () => {
     <>
       <footer className=" bg-Footer">
         <div className="flex justify-between items-center h-[110px] px-12 ">
-          <p className="font-regular ml-8 text-[24px] text-LBackground ">
-            LA VERDAD CHRISTIAN COLLEGE
-          </p>
+          <div className="flex items-center space-x-4">
+            <img
+              src="/assets/image/LV_logo.png"
+              alt="LV logo"
+              className="w-20 h-20 mr-2 mb-1"
+            />
+            <div>
+              <p className="font-regular ml-8 text-[24px] text-LBackground ">
+                LA VERDAD CHRISTIAN COLLEGE
+              </p>
+              <span>
+                Seamless appointment management—stay organized, save time, and
+                never miss an appointment with ease and efficiency.
+              </span>
+            </div>
+          </div>
+
           <div className="flex flex-col items-center space-y-3 ">
             <p className="font-LatoRegular mr-2 text-[24px] text-LBackground ">
               CONTACT US

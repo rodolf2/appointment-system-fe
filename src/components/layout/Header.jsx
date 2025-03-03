@@ -29,7 +29,7 @@ const Header = () => {
                   : ""
               }`}
             >
-              <Link to="/home">HOME</Link>
+              <Link to="/home/announcement">HOME</Link>
             </li>
             <li
               className={`text-lg font-LatoRegular hover:text-LBackground ${
