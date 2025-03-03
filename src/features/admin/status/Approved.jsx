@@ -1,56 +1,98 @@
-import React, { useState } from "react";
-import { FaThumbsUp } from "react-icons/fa6";
-import { BsTrash3 } from "react-icons/bs";
-import Footer from "/src/pages/registrar/components/Footer.jsx";
-import Header from "/src/pages/registrar/components/Header.jsx";
+import { useState } from "react";
+import Header from "/src/features/admin/components/Header";
+import Footer from "/src/features/admin/components/Footer";
+import { LuCircleCheckBig } from "react-icons/lu";
+import { FaThumbsDown } from "react-icons/fa6";
 import Sidebar from "/src/components/Sidebar";
 
-const Rejected = () => {
+const Approved = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [appointments, setAppointments] = useState([
-    {
-      status: "REJECTED",
-      transactionNumber: ["TR13234-322"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-    },
-    {
-      status: "REJECTED",
-      transactionNumber: ["TR444938-432 "],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-    },
-  ]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  const openModal = (appointment) => {
-    setSelectedAppointment(appointment);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedAppointment(null);
-    setIsModalOpen(false);
-  };
-
-  const deleteAppointment = () => {
-    setAppointments(
-      appointments.filter((appt) => appt !== selectedAppointment)
-    );
-    closeModal();
-  };
-
+  const [appointments, setAppointments] = useState([
+    {
+      status: "APPROVED",
+      transactionNumber: ["TR112438-322 "],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "APPROVED",
+      transactionNumber: ["TTR155938-883 "],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "APPROVED",
+      transactionNumber: ["TR44368-444"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "APPROVED",
+      transactionNumber: ["TTR26662-599"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    //   {
+    //     status: "PENDING",
+    //     transactionNumber: ["TR254393-678", "JED DELFIN"],
+    //     request: "",
+    //     emailAddress: "",
+    //     dateOfAppointment: "",
+    //     timeSlot: "",
+    //     dateOfRequest: "",
+    //     actions: "2025-01-01",
+    //   },
+    //   {
+    //     status: "PENDING",
+    //     transactionNumber: ["TR324693-786", "DENISE JULIA"],
+    //     request: "",
+    //     emailAddress: "",
+    //     dateOfAppointment: "",
+    //     timeSlot: "",
+    //     dateOfRequest: "",
+    //     actions: "2025-01-01",
+    //   },
+    //   {
+    //     status: "PENDING",
+    //     transactionNumber: ["TR382793-876", "MIKAELA KUSH"],
+    //     request: "",
+    //     emailAddress: "",
+    //     dateOfAppointment: "",
+    //     timeSlot: "",
+    //     dateOfRequest: "",
+    //     actions: "2025-01-01",
+    //   },
+    //   {
+    //     status: "PENDING",
+    //     transactionNumber: ["TR38883-999", "SHELLA YING"],
+    //     request: "",
+    //     emailAddress: "",
+    //     dateOfAppointment: "",
+    //     timeSlot: "",
+    //     dateOfRequest: "",
+    //     actions: "2025-01-01",
+    //   },
+  ]);
   return (
     <div className="flex h-screen font-LatoRegular">
       {isSidebarOpen && (
@@ -58,13 +100,11 @@ const Rejected = () => {
           <Sidebar isSidebarOpen={isSidebarOpen} />
         </div>
       )}
-
       <div className="flex-1 overflow-y-auto">
         <main
           className="h-auto"
           style={{
             backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"/assets/image/BackGround.png"})`,
-
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -72,19 +112,20 @@ const Rejected = () => {
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
-            title="Rejected Appointment"
+            title="Approved Appointment"
           />
           <div>
-            <section className="h-[1200px] z-10 bg-white max-w-[1100px] mx-auto p-5 my-5">
+            <section className="h-[1200px] z-10 bg-white max-w-[1100px] mx-auto  p-5 my-5">
+              {" "}
               <div className="bg-[#D9D9D9] h-44 m-4">
-                <div className="text-[#161F55] px-3 ml-3 pt-2">
+                <div className=" text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
-                    LIST OF REJECTED APPOINTMENT
+                    LIST OF APPROVED APPOINTMENT
                   </h2>
-                  <div className="border-b-4 border-[#F3BC62] w-[610px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[630px] my-3"></div>
                 </div>
 
-                <div className="flex justify-between items-center mt-16 ml-4">
+                <div className="flex justify-between items-center mt-16 ml-4 ">
                   <div className="text-[#161F55] font-semibold text-[18px]">
                     <label htmlFor="show" className="mr-2">
                       SHOW
@@ -143,14 +184,14 @@ const Rejected = () => {
                     {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
                         <td className="border p-4">
-                          <span className="bg-[#D52121] px-2 py-2 rounded text-white">
+                          <span className="bg-[#299057] px-2 py-2 rounded text-white">
                             {data.status}
                           </span>
                         </td>
                         <td className="border p-4">
                           <div className="flex flex-col text-center">
                             <span className="text-[#354CCE] font-bold">
-                              {data.transactionNumber[0]}
+                              {data.transactionNumber}
                             </span>{" "}
                           </div>
                         </td>
@@ -161,14 +202,11 @@ const Rejected = () => {
                         <td className="border p-4">{data.dateOfRequest}</td>
                         <td className="border p-4">
                           <div className="flex gap-2 justify-center">
-                            <div className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700">
-                              <FaThumbsUp className="text-white" />
+                            <div className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700">
+                              <LuCircleCheckBig className="text-white" />
                             </div>
                             <div className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700">
-                              <BsTrash3
-                                className="text-white"
-                                onClick={() => openModal(data)}
-                              />
+                              <FaThumbsDown className="text-white transform scale-x-[-1]" />
                             </div>
                           </div>
                         </td>
@@ -179,7 +217,7 @@ const Rejected = () => {
               </div>
               <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
                 <span className="text-[#161F55]">
-                  SHOWING 1 TO 2 OF 1 ENTRIES
+                  SHOWING 1 TO 4 OF 1 ENTRIES
                 </span>
                 <div className="mr-6">
                   <button className="border p-1 text-[#161F55]">
@@ -197,32 +235,8 @@ const Rejected = () => {
           <Footer />
         </main>
       </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
-          <div className="bg-white p-20 rounded-xl shadow-md">
-            <h2 className="text-xl font-bold mb-4">
-              Are you sure you want to delete this appointment?
-            </h2>
-            <div className="flex justify-between gap-4 mt-10">
-              <button
-                className="bg-gray-300 text-black px-8 py-2 rounded-2xl"
-                onClick={closeModal}
-              >
-                No
-              </button>
-              <button
-                className="bg-[#161F55] text-white px-8 py-2 rounded-2xl"
-                onClick={deleteAppointment}
-              >
-                Yes
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default Rejected;
+export default Approved;

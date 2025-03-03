@@ -1,20 +1,22 @@
-import React, { useState } from "react";
-import Footer from "/src/pages/registrar/components/Footer.jsx";
-import Header from "/src/pages/registrar/components/Header.jsx";
+import { useState } from "react";
+import { FaThumbsUp } from "react-icons/fa6";
 import { LuCircleCheckBig } from "react-icons/lu";
 import { FaThumbsDown } from "react-icons/fa6";
+import Header from "/src/features/admin/components/Header";
+import Footer from "/src/features/admin/components/Footer";
 import Sidebar from "/src/components/Sidebar";
 
-const Approved = () => {
+const Pending = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  const [appointments, setAppointments] = useState([
+
+  const appointments = [
     {
-      status: "APPROVED",
-      transactionNumber: ["TR112438-322 "],
+      status: "PENDING",
+      transactionNumber: ["TR102938-123"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -23,8 +25,8 @@ const Approved = () => {
       actions: "",
     },
     {
-      status: "APPROVED",
-      transactionNumber: ["TTR155938-883 "],
+      status: "PENDING",
+      transactionNumber: ["TTR122938-343"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -33,8 +35,8 @@ const Approved = () => {
       actions: "",
     },
     {
-      status: "APPROVED",
-      transactionNumber: ["TR44368-444"],
+      status: "PENDING",
+      transactionNumber: ["TR131238-534"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -43,8 +45,8 @@ const Approved = () => {
       actions: "",
     },
     {
-      status: "APPROVED",
-      transactionNumber: ["TTR26662-599"],
+      status: "PENDING",
+      transactionNumber: ["TR232352-536"],
       request: "",
       emailAddress: "",
       dateOfAppointment: "",
@@ -52,47 +54,47 @@ const Approved = () => {
       dateOfRequest: "",
       actions: "",
     },
-    //   {
-    //     status: "PENDING",
-    //     transactionNumber: ["TR254393-678", "JED DELFIN"],
-    //     request: "",
-    //     emailAddress: "",
-    //     dateOfAppointment: "",
-    //     timeSlot: "",
-    //     dateOfRequest: "",
-    //     actions: "2025-01-01",
-    //   },
-    //   {
-    //     status: "PENDING",
-    //     transactionNumber: ["TR324693-786", "DENISE JULIA"],
-    //     request: "",
-    //     emailAddress: "",
-    //     dateOfAppointment: "",
-    //     timeSlot: "",
-    //     dateOfRequest: "",
-    //     actions: "2025-01-01",
-    //   },
-    //   {
-    //     status: "PENDING",
-    //     transactionNumber: ["TR382793-876", "MIKAELA KUSH"],
-    //     request: "",
-    //     emailAddress: "",
-    //     dateOfAppointment: "",
-    //     timeSlot: "",
-    //     dateOfRequest: "",
-    //     actions: "2025-01-01",
-    //   },
-    //   {
-    //     status: "PENDING",
-    //     transactionNumber: ["TR38883-999", "SHELLA YING"],
-    //     request: "",
-    //     emailAddress: "",
-    //     dateOfAppointment: "",
-    //     timeSlot: "",
-    //     dateOfRequest: "",
-    //     actions: "2025-01-01",
-    //   },
-  ]);
+    {
+      status: "PENDING",
+      transactionNumber: ["TR254393-678"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR324693-786"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR382793-876"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+    {
+      status: "PENDING",
+      transactionNumber: ["TR38883-999"],
+      request: "",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
+      actions: "",
+    },
+  ];
   return (
     <div className="flex h-screen font-LatoRegular">
       {isSidebarOpen && (
@@ -100,6 +102,7 @@ const Approved = () => {
           <Sidebar isSidebarOpen={isSidebarOpen} />
         </div>
       )}
+
       <div className="flex-1 overflow-y-auto">
         <main
           className="h-auto"
@@ -112,7 +115,7 @@ const Approved = () => {
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
-            title="Approved Appointment"
+            title="Pending Appointment"
           />
           <div>
             <section className="h-[1200px] z-10 bg-white max-w-[1100px] mx-auto  p-5 my-5">
@@ -120,9 +123,9 @@ const Approved = () => {
               <div className="bg-[#D9D9D9] h-44 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
-                    LIST OF APPROVED APPOINTMENT
+                    LIST OF PENDING APPOINTMENT
                   </h2>
-                  <div className="border-b-4 border-[#F3BC62] w-[630px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[600px] my-3"></div>
                 </div>
 
                 <div className="flex justify-between items-center mt-16 ml-4 ">
@@ -133,7 +136,7 @@ const Approved = () => {
                     <input
                       type="number"
                       min={"0"}
-                      max={"10"}
+                      max={"6"}
                       defaultValue={"1"}
                       className="text-center always-show-spinner"
                     />
@@ -184,7 +187,7 @@ const Approved = () => {
                     {appointments.map((data, index) => (
                       <tr key={index} className="even:bg-gray-100 text-[18px]">
                         <td className="border p-4">
-                          <span className="bg-[#299057] px-2 py-2 rounded text-white">
+                          <span className="bg-[#F3BC62] px-2 py-2 rounded text-white">
                             {data.status}
                           </span>
                         </td>
@@ -202,6 +205,9 @@ const Approved = () => {
                         <td className="border p-4">{data.dateOfRequest}</td>
                         <td className="border p-4">
                           <div className="flex gap-2 justify-center">
+                            <div className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700">
+                              <FaThumbsUp className="text-white" />
+                            </div>
                             <div className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700">
                               <LuCircleCheckBig className="text-white" />
                             </div>
@@ -217,7 +223,7 @@ const Approved = () => {
               </div>
               <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
                 <span className="text-[#161F55]">
-                  SHOWING 1 TO 4 OF 1 ENTRIES
+                  SHOWING 1 TO 8 OF 6 ENTRIES
                 </span>
                 <div className="mr-6">
                   <button className="border p-1 text-[#161F55]">
@@ -239,4 +245,4 @@ const Approved = () => {
   );
 };
 
-export default Approved;
+export default Pending;
