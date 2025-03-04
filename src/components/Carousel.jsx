@@ -54,13 +54,13 @@ const Carousel = () => {
         <div
           className={`text-[30px] pb-10 ${
             Array.isArray(slides[currentIndex].description)
-              ? "overflow-y-scroll max-h-[200px] scrollbar-thin scrollbar-thumb-[#F3BC62] scrollbar-track-[#2A3064]"
+              ? " max-h-[350px]"
               : ""
           } ${
             slides[currentIndex].title === "Objectives"
-              ? "text-center"
+              ? "text-center "
               : slides[currentIndex].title === "College Program Offered"
-              ? "text-start"
+              ? "text-start leading-tight"
               : ""
           }`}
         >
@@ -74,11 +74,13 @@ const Carousel = () => {
             <p>{slides[currentIndex].description}</p>
           )}
         </div>
-        <Link to={"/home/guidelines"}>
-          <button className="text-[25px] border border-white px-4 py-2 my-4 rounded hover:bg-white hover:text-[#2A3064] transition">
-            See more
-          </button>
-        </Link>
+        {currentIndex === 0 && (
+          <Link to={"/home/guidelines"}>
+            <button className="text-[25px] border border-white px-4 py-2 my-4 rounded hover:bg-white hover:text-[#2A3064] transition">
+              See more
+            </button>
+          </Link>
+        )}
       </div>
 
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl font-bold hover:text-gray-400">

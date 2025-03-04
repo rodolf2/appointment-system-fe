@@ -21,8 +21,8 @@ import RegistrarHome from "./features/admin/Dashboard/RegistrarHome";
 import Events from "./features/admin/Dashboard/Events";
 import Schedule from "./features/admin/status/Schedule";
 import Holidays from "./features/admin/status/Holidays";
-
 import Profile from "./features/admin/components/Profile";
+import Layouts from "./components/Layout";
 
 const App = () => {
   return (
@@ -55,37 +55,39 @@ const Layout = () => {
   return (
     <>
       {showHeaderFooter && <Header />}
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<HomePage />}>
-          <Route index element={<Announcement />} />
-          <Route path="announcement" element={<Announcement />} />
-          <Route path="hta" element={<Hta />} />
-          <Route path="guidelines" element={<Guidelines />} />
-        </Route>
-        <Route path="/about" element={<About />} />
-        <Route path="/faqs" element={<Faqs />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/appointmentForm" element={<AppointmentForm />} />
-        <Route path="/announcement" element={<Announcement />} />
-        <Route path="/hta" element={<Hta />} />
-        <Route path="/guidelines" element={<Guidelines />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/faqs" element={<Faqs />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/students" element={<Students />} />
-        <Route path="/pending" element={<Pending />} />
-        <Route path="/approved" element={<Approved />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/rejected" element={<Rejected />} />
-        <Route path="/completed" element={<Completed />} />
-        <Route path="/registrarHome" element={<RegistrarHome />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/schedule" element={<Schedule />} />
-        <Route path="/holidays" element={<Holidays />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      <Layouts>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<HomePage />}>
+            <Route index element={<Announcement />} />
+            <Route path="announcement" element={<Announcement />} />
+            <Route path="hta" element={<Hta />} />
+            <Route path="guidelines" element={<Guidelines />} />
+          </Route>
+          <Route path="/about" element={<About />} />
+          <Route path="/faqs" element={<Faqs />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/appointmentForm" element={<AppointmentForm />} />
+          <Route path="/announcement" element={<Announcement />} />
+          <Route path="/hta" element={<Hta />} />
+          <Route path="/guidelines" element={<Guidelines />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/faqs" element={<Faqs />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/students" element={<Students />} />
+          <Route path="/pending" element={<Pending />} />
+          <Route path="/approved" element={<Approved />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/rejected" element={<Rejected />} />
+          <Route path="/completed" element={<Completed />} />
+          <Route path="/registrarHome" element={<RegistrarHome />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/holidays" element={<Holidays />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </Layouts>
       {showHeaderFooter && <Footer />}
     </>
   );
