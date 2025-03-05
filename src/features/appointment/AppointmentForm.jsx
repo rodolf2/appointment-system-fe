@@ -4,7 +4,7 @@ import DataPrivacy from "../../components/appointmentForm/DataPrivacy";
 import Attachment from "../../components/appointmentForm/Attachment";
 import AppInfo from "../../components/appointmentForm/AppInfo";
 import AppSchedule from "../../components/appointmentForm/AppSchedule";
-import Claiming from "../../components/Claiming";
+import Claiming from "../../components/appointmentForm/Claiming";
 import ReturnHome from "../../components/appointmentForm/ReturnHome";
 import Feedback from "@/components/appointmentForm/Feedback";
 

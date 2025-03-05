@@ -3,7 +3,6 @@ import { db } from "../../firebase"; // Import Firestore instance
 import { collection, addDoc } from "firebase/firestore"; // Firestore functions
 
 const AppInfo = ({ onNext, onBack }) => {
-  const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [formData, setFormData] = useState({
     surname: "",
     firstName: "",
@@ -22,7 +21,7 @@ const AppInfo = ({ onNext, onBack }) => {
     const { name, value } = e.target;
 
     // Ensure Contact Number only accepts numeric input
-    if (name === "contactNumber" && !/^\d*$/.test(value)) {
+    if (name === "contactNumber" && !/^[0-9]*$/.test(value)) {
       return;
     }
 
@@ -32,7 +31,6 @@ const AppInfo = ({ onNext, onBack }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    // const newErrors = { contactNumber: "This field is required." };
 
     // Check if fields are empty
     for (const key in formData) {
@@ -41,62 +39,42 @@ const AppInfo = ({ onNext, onBack }) => {
       }
     }
 
-    // Ensure Contact Number is numeric
-    if (formData.contactNumber && !/^\d+$/.test(formData.contactNumber)) {
-      newErrors.contactNumber = "Contact Number must contain only numbers.";
+    // Ensure Contact Number is numeric and 11 digits
+    if (formData.contactNumber && !/^\d{11}$/.test(formData.contactNumber)) {
+      newErrors.contactNumber =
+        "Contact Number must be 11 digits and contain only numbers.";
     }
 
-
-    // Ensure a valid date is selected
-    if (!formData.date) {
-      newErrors.date = "Please select a date.";
-    }
-
-    if (selectedDocuments.length === 0) {
-      newErrors.selectedDocuments = "You must select at least one document.";
+    // Email validation
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format.";
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // yung mga walang laman binabalik yun yung dinidisplay niya
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleNext = async (e) => {
-    e.preventDefault(); // Prevent form submission, when reload the page automatically submit the form
+    e.preventDefault();
     if (validateForm()) {
       try {
-        // Save data to Firestore
         const docRef = await addDoc(collection(db, "information"), {
           ...formData,
-          selectedDocuments,
         });
         console.log("Document written with ID: ", docRef.id);
-        onNext(); // Proceed to the next step
+        onNext();
       } catch (error) {
         console.error("Error adding document: ", error);
       }
     }
   };
 
-  const handleRadioClick = (value) => {
-    setSelectedDocuments((prev) =>
-      prev.includes(value) ? prev : [...prev, value]
-    ); // yung value na paramaeter inaidentify niya kung meron siyang laman sa array kung wala siya idadagdag niya yung value
-
-    // Clear error when a document is selected
-    setErrors((prev) => ({ ...prev, selectedDocuments: "" }));
-  };
-
-  const handleRemoveDocument = (value) => {
-    setSelectedDocuments((prev) => prev.filter((doc) => doc !== value));
-  };
-
   return (
     <>
       <div className="h-full flex items-center justify-center bg-[#161f55]">
-        {/* Background Layers */}
         <div className="absolute inset-0 flex flex-col">
           <div
-            className=" h-screen bg-cover bg-bottom "
+            className="h-screen bg-cover bg-bottom"
             style={{
               backgroundImage:
                 "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
@@ -104,108 +82,30 @@ const AppInfo = ({ onNext, onBack }) => {
               backgroundAttachment: "fixed",
             }}
           ></div>
-          <div className=" h-1/2 bg-[#161f55]"></div>
+          <div className="h-1/2 bg-[#161f55]"></div>
         </div>
 
-        {/* INFORMATION */}
         <div className="flex flex-col justify-center text-center m-8">
-          <h2 className="mx-auto relative inset-0 font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-6 mb-8">
+          <h2 className="mx-auto relative font-LatoBold text-[35px] text-Fwhite tracking-widest mt-6 mb-8">
             APPLICATION FOR RECORDS
           </h2>
           <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
             <form className="space-y-4" onSubmit={handleNext}>
+              <h2 className=" uppercase mb-10 flex font-LatoBold text-lg">
+                Personal Details:
+              </h2>
               <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
-                    SURNAME
-                  </label>
-                  <input
-                    type="text"
-                    name="surname"
-                    value={formData.surname}
-                    onChange={handleInputChange}
-                    placeholder="Cruz"
-                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
-                      errors.surname ? "border-red-500" : ""
-                    }`}
-                  />
-                  {errors.surname && (
-                    <p className="text-red-600 text-sm mt-0 relative text-start">
-                      {errors.surname}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
-                    FIRST NAME
-                  </label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    placeholder="Juan"
-                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
-                      errors.firstName ? "border-red-500" : ""
-                    }`}
-                  />
-                  {errors.firstName && (
-                    <p className="text-red-600 text-sm mt-0 relative text-start">
-                      {errors.firstName}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
-                    MIDDLE NAME
-                  </label>
-                  <input
-                    type="text"
-                    name="middleName"
-                    value={formData.middleName}
-                    onChange={handleInputChange}
-                    placeholder="Dela"
-                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
-                      errors.middleName ? "border-red-500" : ""
-                    }`}
-                  />
-                  {errors.middleName && (
-                    <p className="text-red-600 text-sm mt-0 relative text-start">
-                      {errors.middleName}
-                    </p>
-                  )}
-                </div>
-              </div>
-              {/* Additional Fields */}
-              <form
-                onSubmit={(e) => e.preventDefault()}
-                className="flex flex-col gap-4"
-              >
                 {[
+                  { label: "Surname", name: "surname", placeholder: "Cruz" },
                   {
-                    label: "Last School Year Attended",
-                    name: "schoolYear",
-                    placeholder: "ex. 2016 - 2017",
+                    label: "First Name",
+                    name: "firstName",
+                    placeholder: "Juan",
                   },
                   {
-                    label: "Course/Program/Grade/Strand",
-                    name: "course",
-                    placeholder: "ex. Grade 1",
-                  },
-                  {
-                    label: "Present Address",
-                    name: "address",
-                    placeholder: "ex. Sampaloc Apalit Pampanga",
-                  },
-                  {
-                    label: "Contact Number",
-                    name: "contactNumber",
-                    placeholder: "ex. 0981 255 9915",
-                  },
-                  {
-                    label: "Email Address",
-                    name: "email",
-                    placeholder: "ex. juandelacruz@gmail.com",
+                    label: "Middle Name",
+                    name: "middleName",
+                    placeholder: "Dela",
                   },
                 ].map((field) => (
                   <div key={field.name}>
@@ -213,146 +113,54 @@ const AppInfo = ({ onNext, onBack }) => {
                       {field.label}
                     </label>
                     <input
+                      type="text"
                       name={field.name}
-                      type={field.name === "email" ? "email" : "text"}
                       value={formData[field.name]}
                       onChange={handleInputChange}
                       placeholder={field.placeholder}
                       className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
                         errors[field.name] ? "border-red-500" : ""
                       }`}
-                      onKeyPress={(e) => {
-                        if (
-                          field.name === "contactNumber" &&
-                          !/[0-9]/.test(e.key)
-                        ) {
-                          e.preventDefault();
-                        }
-                      }}
                     />
                     {errors[field.name] && (
-                      <p className="text-red-600 text-sm block text-start">
+                      <p className="text-red-600 text-sm text-start">
                         {errors[field.name]}
                       </p>
                     )}
                   </div>
                 ))}
-              </form>
+              </div>
 
-              {/* Documents Selection */}
-              <label className="text-start block font-LatoRegular text-[#000] mb-4">
-                SELECT DOCUMENTS:
-              </label>
-              <div className="border rounded-lg p-4 shadow-md">
-                <div className="cursor-pointer grid grid-cols-2 gap-y-4 gap-x-6 font-LatoRegular text-[#000] text-start">
-                  {[
-                    {
-                      label: "Certificate of Enrollment",
-                      value: "certificate of enrollment",
-                    },
-                    {
-                      label: "Good Moral Certificate",
-                      value: "good moral certificate",
-                    },
-                    { label: "Form 137", value: "form 137" },
-                    {
-                      label: "Certified True Copy of Documents",
-                      value: "certified true copy of Documents",
-                    },
-                    {
-                      label: "Transcript of Records",
-                      value: "transcript of records",
-                    },
-                    {
-                      label: "ESC Certificate",
-                      value: "Education Service Contracting Certificate",
-                    },
-                  ].map((doc) => (
-                    <label
-                      key={doc.value}
-                      className="flex items-center space-x-2"
-                    >
-                      <input
-                        type="radio"
-                        name={doc.value}
-                        value={doc.value}
-                        checked={selectedDocuments.includes(doc.value)}
-                        onChange={() => handleRadioClick(doc.value)}
-                        className="h-5 w-5 text-indigo-600 border-gray-300 rounded-full"
-                      />
-                      <span className="text-gray-800">{doc.label}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.selectedDocuments && (
-                  <p className="text-red-600 text-sm mt-2">
-                    {errors.selectedDocuments}
-                  </p>
-                )}
-                <div className="mt-6">
-                  <strong className="text-start block mb-2">
-                    Selected Documents:
-                  </strong>
-                  {selectedDocuments.length > 0 ? (
-                    <ul className="space-y-2">
-                      {selectedDocuments.map((doc) => (
-                        <li
-                          key={doc}
-                          className="flex items-center justify-between bg-gray-100 p-2 rounded-lg shadow-sm "
-                        >
-                          <span>{doc.toUpperCase()}</span>
-                          <button
-                            onClick={() => handleRemoveDocument(doc)}
-                            className="text-red-600 hover:text-red-800 text-sm font-LatoRegular "
-                          >
-                            Remove
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-start">No documents selected.</p>
+              {[
+                "schoolYear",
+                "course",
+                "address",
+                "contactNumber",
+                "email",
+              ].map((name) => (
+                <div key={name}>
+                  <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
+                    {name.replace(/([A-Z])/g, " $1").toUpperCase()}
+                  </label>
+                  <input
+                    name={name}
+                    type={name === "email" ? "email" : "text"}
+                    value={formData[name]}
+                    onChange={handleInputChange}
+                    placeholder={`Enter ${name}`}
+                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
+                      errors[name] ? "border-red-500" : ""
+                    }`}
+                  />
+                  {errors[name] && (
+                    <p className="text-red-600 text-sm text-start">
+                      {errors[name]}
+                    </p>
                   )}
                 </div>
-              </div>
+              ))}
 
-              {/* Purpose */}
-              <div>
-                <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
-                  State Your Purpose for Applying:
-                </label>
-                <textarea
-                  name="purpose"
-                  value={formData.purpose}
-                  onChange={handleInputChange}
-                  placeholder="Type Here..."
-                  className={`pl-2 pt-1 mt-1 block w-full h-[200px] border-2 rounded-md shadow-sm ${
-                    errors.purpose ? "border-red-500" : "border-gray-300"
-                  }`}
-                ></textarea>
-              </div>
-
-              {/* Date */}
-              <div>
-                <label className="block text-start font-LatoRegular text-[17px] text-[#000] uppercase">
-                  Date of Request
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleInputChange}
-                  className={`mt-1 block w-[200px] h-[30px] pl-2 border-2 rounded-md shadow-sm ${
-                    errors.date ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                {errors.date && (
-                  <p className="text-red-600 text-sm block text-start">
-                    {errors.date}
-                  </p>
-                )}
-              </div>
-              <div className="flex justify-between">
+              <div className="flex float-right space-x-4">
                 <button
                   className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700"
                   onClick={(e) => {
