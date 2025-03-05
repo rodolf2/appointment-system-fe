@@ -7,63 +7,55 @@ import AppSchedule from "../../components/appointmentForm/AppSchedule";
 import Claiming from "../../components/appointmentForm/Claiming";
 import ReturnHome from "../../components/appointmentForm/ReturnHome";
 import Feedback from "@/components/appointmentForm/Feedback";
+import SelectDocuments from "@/components/appointmentForm/SelectDocuments";
+import CustomProgressBar from "./CustomProgressBar";
 
 const AppointmentForm = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState(() => {
-    // Get the step from the URL query parameter or default to 1
     const stepFromParams = searchParams.get("step");
-    return stepFromParams ? parseInt(stepFromParams, 10) : 1; //10 is radix number
+    return stepFromParams ? parseInt(stepFromParams, 10) : 1;
   });
-  const [claimingOption, setClaimingOption] = useState(null); // Track claiming option
 
   const goToNextStep = (selectedOption = null) => {
-    if (selectedOption) {
-      // If claimingOption is "self", skip Attachment step (step 4) and go to step 5
-      if (selectedOption === "self" && currentStep === 3) {
-        setCurrentStep(5); // Skip Attachment and directly move to step 5 (AppSchedule)
-        setSearchParams({ step: 5 });
-        return;
-      }
-    }
-
-    // If no special case (i.e., not "self"), just move to the next step
-    const nextStep = currentStep + 1;
+    const nextStep =
+      selectedOption === "self" && currentStep === 3 ? 5 : currentStep + 1;
     setCurrentStep(nextStep);
     setSearchParams({ step: nextStep });
   };
 
   const goToPreviousStep = () => {
-    const previousStep = currentStep - 1;
-    if (previousStep >= 1) {
-      setCurrentStep(previousStep);
-      setSearchParams({ step: previousStep });
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+      setSearchParams({ step: currentStep - 1 });
     }
   };
 
   return (
     <>
+      <CustomProgressBar currentStep={currentStep} />
       {currentStep === 1 && <DataPrivacy onNext={goToNextStep} />}
       {currentStep === 2 && (
         <AppInfo onNext={goToNextStep} onBack={goToPreviousStep} />
       )}
       {currentStep === 3 && (
-        <Claiming
-          onNext={(selectedOption) => {
-            setClaimingOption(selectedOption); // Set the selected option
-            goToNextStep(selectedOption); // Proceed with the selected option
-          }}
+        <SelectDocuments
+          onNext={goToNextStep}
           onBack={goToPreviousStep}
+          currentStep={3}
         />
       )}
       {currentStep === 4 && (
-        <Attachment onNext={goToNextStep} onBack={goToPreviousStep} />
+        <Claiming onNext={goToNextStep} onBack={goToPreviousStep} />
       )}
       {currentStep === 5 && (
+        <Attachment onNext={goToNextStep} onBack={goToPreviousStep} />
+      )}
+      {currentStep === 6 && (
         <AppSchedule onNext={goToNextStep} onBack={goToPreviousStep} />
       )}
-      {currentStep === 6 && <Feedback onNext={goToNextStep} />}
-      {currentStep === 7 && (
+      {currentStep === 7 && <Feedback onNext={goToNextStep} />}
+      {currentStep === 8 && (
         <ReturnHome onNext={goToNextStep} onBack={goToPreviousStep} />
       )}
     </>

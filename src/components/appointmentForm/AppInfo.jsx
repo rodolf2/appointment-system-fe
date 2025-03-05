@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { db } from "../../firebase"; // Import Firestore instance
 import { collection, addDoc } from "firebase/firestore"; // Firestore functions
+import CustomProgressBar from "/src/features/appointment/CustomProgressBar"; // Import the progress bar
 
-const AppInfo = ({ onNext, onBack }) => {
+const AppInfo = ({ onNext, onBack, currentStep }) => {
   const [formData, setFormData] = useState({
     surname: "",
     firstName: "",
@@ -12,8 +13,6 @@ const AppInfo = ({ onNext, onBack }) => {
     address: "",
     contactNumber: "",
     email: "",
-    purpose: "",
-    date: "",
   });
   const [errors, setErrors] = useState({}); // Object to track errors for each field
 
@@ -40,13 +39,13 @@ const AppInfo = ({ onNext, onBack }) => {
     }
 
     // Ensure Contact Number is numeric and 11 digits
-    if (formData.contactNumber && !/^\d{11}$/.test(formData.contactNumber)) {
+    if (!formData.contactNumber && !/^\d{11}$/.test(formData.contactNumber)) {
       newErrors.contactNumber =
         "Contact Number must be 11 digits and contain only numbers.";
     }
 
     // Email validation
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (!formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format.";
     }
 
@@ -91,6 +90,9 @@ const AppInfo = ({ onNext, onBack }) => {
           </h2>
           <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
             <form className="space-y-4" onSubmit={handleNext}>
+              <div className=" w-full max-w-[60%] ">
+                <CustomProgressBar currentStep={currentStep} />
+              </div>
               <h2 className=" uppercase mb-10 flex font-LatoBold text-lg">
                 Personal Details:
               </h2>

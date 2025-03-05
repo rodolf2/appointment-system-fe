@@ -21,7 +21,6 @@ import RegistrarHome from "./features/admin/Dashboard/RegistrarHome";
 import Events from "./features/admin/Dashboard/Events";
 import Schedule from "./features/admin/status/Schedule";
 import Holidays from "./features/admin/status/Holidays";
-
 import Profile from "./features/admin/components/Profile";
 
 const App = () => {
