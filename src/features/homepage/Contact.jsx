@@ -1,8 +1,3 @@
-import location_icon from "/icons/marker-06.png";
-import phone_icon from "/icons/phone.png";
-import mail_icon from "/icons/mail-03.png";
-import fb_icon from "/icons/fb logo.png";
-
 const Contact = () => {
   return (
     <>
