@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa6";
-import { FaSpinner } from "react-icons/fa6";
-import { FaCheckSquare } from "react-icons/fa";
-import { FaSquareXmark } from "react-icons/fa6";
 import { FaTasks } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
 import { FaCalendar } from "react-icons/fa";
@@ -42,133 +39,112 @@ const Sidebar = ({ isSidebarOpen }) => {
   return (
     <aside
       ref={sidebarRef}
-      className={`bg-custom-gradient_students p-4 text-white transition-all duration-500 ${
-        isSidebarOpen ? "w-[300px]" : ""
+      className={`bg-[#161F55] p-4 text-white transition-all duration-500 ${
+        isSidebarOpen ? "w-[300px]" : "w-full "
       }`}
       style={{ height: "100%", overflowX: "auto" }}
     >
-      {isSidebarOpen && (
-        <div className="font-LatoRegular">
-          <div className="flex items-center mb-6 mt-3">
-            <img
-              src="/assets/image/LV_logo.png"
-              alt="LVCC Logo"
-              className="w-[50%] h-[50%]"
-            />
+      <div className="font-LatoRegular">
+        {/* Logo Section */}
+        <div className="flex items-center mb-6 mt-3">
+          <img
+            src="/assets/image/LV_logo.png"
+            alt="LVCC Logo"
+            className={`w-[50%] h-[50%] ${isSidebarOpen ? "block" : "mx-auto"}`}
+          />
+          {isSidebarOpen && (
             <div className="ml-4">
               <h1 className="text-2xl font-regular">LVCC</h1>
               <p className="text-xl">REGISTRAR</p>
             </div>
-          </div>
-          <div className="border-b-2 border-white w-full mb-6"></div>
-          <h1 className="text-[20px] pl-4 pb-4">DASHBOARD</h1>
-          <nav>
-            <ul className="pl-2 text-[18px] space-y-4">
-              <li>
-                <div
-                  className={
-                    isActive("/registrarHome") ? activeStyle : inactiveStyle
-                  }
-                  onClick={() => handleMenuClick("/registrarHome")}
-                >
-                  <IoMdHome className="text-xl" />
-                  HOME
-                </div>
-              </li>
-              <li>
-                <div
-                  className={isActive("/events") ? activeStyle : inactiveStyle}
-                  onClick={() => handleMenuClick("/events")}
-                >
-                  <FaCalendarAlt className="text-xl" />
-                  EVENTS
-                </div>
-              </li>
-              <li>
-                <div
-                  className={
-                    isActive("/students") ? activeStyle : inactiveStyle
-                  }
-                  onClick={() => handleMenuClick("/students")}
-                >
-                  <FaUsers className="text-xl" />
-                  STUDENTS/ALUMNI
-                </div>
-              </li>
-            </ul>
-            <h1 className="text-[20px] pl-4 pt-6 pb-4">APPOINTMENT</h1>
-            <ul className="pl-2 text-[18px] space-y-4">
-              <li>
-                <div
-                  className={isActive("/pending") ? activeStyle : inactiveStyle}
-                  onClick={() => handleMenuClick("/pending")}
-                >
-                  <FaSpinner className="text-xl" />
-                  PENDING
-                </div>
-              </li>
-              <li>
-                <div
-                  className={
-                    isActive("/approved") ? activeStyle : inactiveStyle
-                  }
-                  onClick={() => handleMenuClick("/approved")}
-                >
-                  <FaCheckSquare className="text-xl" />
-                  APPROVED
-                </div>
-              </li>
-              <li>
-                <div
-                  className={
-                    isActive("/rejected") ? activeStyle : inactiveStyle
-                  }
-                  onClick={() => handleMenuClick("/rejected")}
-                >
-                  <FaSquareXmark className="text-xl" />
-                  REJECTED
-                </div>
-              </li>
-              <li>
-                <div
-                  className={
-                    isActive("/completed") ? activeStyle : inactiveStyle
-                  }
-                  onClick={() => handleMenuClick("/completed")}
-                >
-                  <FaTasks className="text-xl" />
-                  COMPLETED
-                </div>
-              </li>
-            </ul>
-            <h1 className="text-[20px] pl-4 pt-6 pb-4">MAINTENANCE</h1>
-            <ul className="pl-4 text-[18px] space-y-4">
-              <li>
-                <div
-                  className={
-                    isActive("/schedule") ? activeStyle : inactiveStyle
-                  }
-                  onClick={() => handleMenuClick("/schedule")}
-                >
-                  <FaRegClock className="text-xl" />
-                  SCHEDULE
-                </div>
-              </li>
-              <li>
-                <div
-                  className={
-                    isActive("/holidays") ? activeStyle : inactiveStyle
-                  }
-                  onClick={() => handleMenuClick("/holidays")}
-                >
-                  <FaCalendar className="text-xl" />
-                  HOLIDAYS
-                </div>
-              </li>
-            </ul>
-          </nav>
+          )}
         </div>
-      )}
+
+        {/* Divider (only shown when sidebar is open) */}
+        {isSidebarOpen && (
+          <div className="border-b-2 border-white w-full mb-6"></div>
+        )}
+
+        {/* Dashboard Section */}
+        {isSidebarOpen && <h1 className="text-[20px] pl-4 pb-4">DASHBOARD</h1>}
+        <nav>
+          <ul
+            className={`pl-2 text-[18px] space-y-4 ${
+              isSidebarOpen ? "" : "text-center"
+            }`}
+          >
+            <li>
+              <div
+                className={
+                  isActive("/registrarHome") ? activeStyle : inactiveStyle
+                }
+                onClick={() => handleMenuClick("/registrarHome")}
+              >
+                <IoMdHome className="text-xl" />
+                {isSidebarOpen && "HOME"}
+              </div>
+            </li>
+            <li>
+              <div
+                className={isActive("/events") ? activeStyle : inactiveStyle}
+                onClick={() => handleMenuClick("/events")}
+              >
+                <FaCalendarAlt className="text-xl" />
+                {isSidebarOpen && "EVENTS"}
+              </div>
+            </li>
+            <li>
+              <div
+                className={isActive("/students") ? activeStyle : inactiveStyle}
+                onClick={() => handleMenuClick("/students")}
+              >
+                <FaUsers className="text-xl" />
+                {isSidebarOpen && "STUDENTS/ALUMNI"}
+              </div>
+            </li>
+            <li>
+              <div
+                className={
+                  isActive("/appointments") ? activeStyle : inactiveStyle
+                }
+                onClick={() => handleMenuClick("/appointments")}
+              >
+                <FaTasks className="text-xl" />
+                {isSidebarOpen && "APPOINTMENTS"}
+              </div>
+            </li>
+          </ul>
+
+          {/* Maintenance Section */}
+          {isSidebarOpen && (
+            <h1 className="text-[20px] pl-4 pt-6 pb-4">MAINTENANCE</h1>
+          )}
+          <ul
+            className={`pl-4 text-[18px] space-y-4 ${
+              isSidebarOpen ? "" : "text-center"
+            }`}
+          >
+            <li>
+              <div
+                className={isActive("/schedule") ? activeStyle : inactiveStyle}
+                onClick={() => handleMenuClick("/schedule")}
+              >
+                <FaRegClock className="text-xl" />
+                {isSidebarOpen && "SCHEDULE"}
+              </div>
+            </li>
+            <li>
+              <div
+                className={isActive("/holidays") ? activeStyle : inactiveStyle}
+                onClick={() => handleMenuClick("/holidays")}
+              >
+                <FaCalendar className="text-xl" />
+                {isSidebarOpen && "HOLIDAYS"}
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </aside>
   );
 };

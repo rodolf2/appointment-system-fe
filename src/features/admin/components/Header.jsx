@@ -27,7 +27,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, title }) => {
       <div className="flex items-center">
         <button
           onClick={toggleSidebar}
-          className="p-2 text-black rounded text-5xl font-bold"
+          className="p-2 text-black rounded text-4xl font-bold"
         >
           <RxHamburgerMenu />
         </button>

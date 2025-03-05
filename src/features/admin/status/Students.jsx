@@ -8,7 +8,7 @@ import Footer from "/src/features/admin/components/Footer";
 
 const Students = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [appointments, setAppointments] = useState([
+  const appointments = [
     {
       transactionNumber: ["TR13234-322"],
       name: "Alice Smith",
@@ -105,7 +105,7 @@ const Students = () => {
     //   date: "2025-01-08",
     //   claiming: "Email",
     // },
-  ]);
+  ];
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -118,23 +118,16 @@ const Students = () => {
         </div>
       )}
       <div className="flex-1 overflow-y-auto">
-        <main
-          className="h-[1200px]"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(22, 31, 85, 0.7), rgba(22, 31, 85, 0.7)), url(${"/assets/image/BackGround.png"})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
+        <main className="h-[1200px]">
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
             title="Students/Alumni's Records"
           />
           <div>
-            <section className="h-[1050px] z-10 bg-white max-w-[1100px] mx-auto p-5 my-5">
+            <section className="h-[1050px] z-10 bg-white p-5 my-5">
               {" "}
-              <div className="bg-[#D9D9D9] h-44 m-4">
+              <div className="bg-[#D9D9D9] h-48 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                     LIST OF STUDENTS/ALUMNI'S RECORDS REQUEST
@@ -168,40 +161,40 @@ const Students = () => {
                   </div>
                 </div>
               </div>
-              <div className="overflow-y-auto m-4 mt-8">
-                <table className="text-[18px] w-[2000px] border-collapse">
+              <div className="m-4 mt-8">
+                <table className="text-[16px] border-collapse">
                   <thead>
                     <tr className="bg-gray-200 text-center">
-                      <th className="border p-4">TRANSACTION NUMBER</th>
-                      <th className="border p-4 w-[200px]">NAME</th>
-                      <th className="border p-4  w-[200px]">
+                      <th className="">TRANSACTION NUMBER</th>
+                      <th className="">NAME</th>
+                      <th className="">
                         LAST S.Y.
                         <br />
                         ATTENDED
                       </th>
-                      <th className="border p-4  w-[220px]">
+                      <th className="">
                         PROGRAM/
                         <br />
                         GRADE/STRAND
                       </th>
-                      <th className="border p-4  w-[220px]">
+                      <th className="">
                         CONTACT
                         <br />
                         NO.
                       </th>
-                      <th className="border p-4">EMAIL ADDRESS</th>
-                      <th className="border p-4">
+                      <th className="">EMAIL ADDRESS</th>
+                      <th className="">
                         ATTACHMENT
                         <br />
                         PROOF
                       </th>
-                      <th className="border p-4">REQUEST</th>
-                      <th className="border p-4">
+                      <th className="">REQUEST</th>
+                      <th className="">
                         DATE OF
                         <br />
                         REQUEST
                       </th>
-                      <th className="border p-4">
+                      <th className="">
                         CLAIMING
                         <br />
                         METHOD
@@ -210,35 +203,35 @@ const Students = () => {
                   </thead>
                   <tbody>
                     {appointments.map((data, index) => (
-                      <tr key={index} className="even:bg-gray-100 text-[18px]">
-                        <td className="border-2 p-5 border-r-[#989898] border-l-[#989898]  text-[#354CCE] font-bold">
+                      <tr key={index} className="even:bg-gray-100 text-[16px]">
+                        <td className="border-2 p-3 border-r-[#989898] border-l-[#989898]  text-[#354CCE] font-bold">
                           {data.transactionNumber[0]}
                         </td>
-                        <td className="border-2  p-5 w-[200px] border-r-[#989898]">
+                        <td className="border-2  p-3  border-r-[#989898]">
                           {data.name}
                         </td>
-                        <td className="border-2  p-5 border-r-[#989898]">
+                        <td className="border-2  p-3 border-r-[#989898]">
                           {data.lastSY}
                         </td>
-                        <td className="border-2  p-5 border-r-[#989898]">
+                        <td className="border-2  p-3 border-r-[#989898]">
                           {data.program}
                         </td>
-                        <td className="border-2  p-5 w-[200px] border-r-[#989898]">
+                        <td className="border-2  p-3  border-r-[#989898]">
                           {data.contact}
                         </td>
-                        <td className="border-2  p-5 border-r-[#989898]">
+                        <td className="border-2  p-3 border-r-[#989898]">
                           {data.email}
                         </td>
-                        <td className="border-2  p-5 border-r-[#989898]">
+                        <td className="border-2  p-3 border-r-[#989898]">
                           {data.attachment}
                         </td>
-                        <td className="border-2  p-5 w-[300px] border-r-[#989898]">
+                        <td className="border-2  p-3 border-r-[#989898]">
                           {data.request}
                         </td>
-                        <td className="border-2  p-5 border-r-[#989898]">
+                        <td className="border-2  p-3 border-r-[#989898]">
                           {data.date}
                         </td>
-                        <td className="border-2 p-5 border-r-[#989898] ">
+                        <td className="border-2 p-3 border-r-[#989898] ">
                           {data.claiming}
                         </td>
                       </tr>

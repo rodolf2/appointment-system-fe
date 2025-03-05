@@ -23,6 +23,7 @@ import Schedule from "./features/admin/status/Schedule";
 import Holidays from "./features/admin/status/Holidays";
 import Profile from "./features/admin/components/Profile";
 import Layouts from "./components/Layout";
+import Appointments from "./features/admin/status/Appointments";
 
 const App = () => {
   return (
@@ -49,6 +50,7 @@ const Layout = () => {
     "/schedule",
     "/holidays",
     "/profile",
+    "/appointments",
   ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
@@ -86,6 +88,7 @@ const Layout = () => {
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/holidays" element={<Holidays />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/appointments" element={<Appointments />} />
         </Routes>
       </Layouts>
       {showHeaderFooter && <Footer />}
