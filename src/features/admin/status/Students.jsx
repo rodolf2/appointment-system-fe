@@ -122,7 +122,7 @@ const Students = () => {
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
-            title="Students/Alumni's Records"
+            title="Students/Alumni's Records Request"
           />
           <div>
             <section className="h-[1050px] z-10 bg-white p-5 my-5">

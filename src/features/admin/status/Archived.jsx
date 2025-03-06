@@ -223,9 +223,7 @@ const Archived = () => {
                     {appointments.map((data) => (
                       <tr
                         key={data.id}
-                        className={`even:bg-gray-100 text-[18px] ${
-                          selectedRows.includes(data.id) ? "bg-[#E6F4FF]" : ""
-                        }`} // Light blue background for selected rows
+                        className="even:bg-gray-100 text-[18px]"
                       >
                         <td className="border p-4 text-center">
                           <input
