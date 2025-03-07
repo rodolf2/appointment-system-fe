@@ -110,7 +110,7 @@ const Archived = () => {
       {isSidebarOpen && (
         <div
           className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-64" : "w-0"
+            isSidebarOpen ? "w-[300px]" : "w-[100px]"
           }`}
         >
           <Sidebar isSidebarOpen={isSidebarOpen} />
