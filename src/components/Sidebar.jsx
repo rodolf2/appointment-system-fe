@@ -6,8 +6,7 @@ import { FaRegClock } from "react-icons/fa";
 import { FaCalendar } from "react-icons/fa";
 import { IoMdHome } from "react-icons/io";
 import { FaCalendarAlt } from "react-icons/fa";
-import { PiArchiveDuotone } from "react-icons/pi";
-
+import { FaArchive } from "react-icons/fa";
 const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,7 +19,7 @@ const Sidebar = ({ isSidebarOpen }) => {
   }, [location.pathname]);
 
   const handleMenuClick = (path) => {
-    setScrollPosition(sidebarRef.current.scroll(0, 0));
+    setScrollPosition(0);
     navigate(path);
   };
 
@@ -33,19 +32,22 @@ const Sidebar = ({ isSidebarOpen }) => {
   const isActive = (path) => location.pathname === path;
 
   const activeStyle =
-    "bg-[#D9D9D9] text-black rounded-lg px-4 py-2 flex items-center gap-4";
+    "bg-[#D9D9D9] text-black rounded-lg px-4 py-2 flex items-center gap-4 cursor-pointer";
 
-  const inactiveStyle = "flex items-center gap-4 px-4 py-2";
+  const inactiveStyle = "flex items-center gap-4 px-4 py-2 cursor-pointer";
 
   return (
     <aside
       ref={sidebarRef}
-      className={`bg-[#161F55] p-4 text-white h-full ${
-        isSidebarOpen ? "w-[300px]" : "w-[80px] text-center"
-      }`}
+      className={`h-full bg-[#161F55] ${isSidebarOpen ? "w-64" : "w-20"}${
+        isSidebarOpen ? "w-[300px]" : "w-[80px]"
+      } overflow-hidden relative`}
     >
-      <div className="font-LatoRegular">
-        {/* Logo Section */}
+      <div
+        className={`overflow-hidden font-LatoRegular ${
+          isSidebarOpen ? "block" : "hidden"
+        }`}
+      >
         <div className="flex items-center mb-6 mt-3">
           <img
             src="/assets/image/LV_logo.png"
@@ -59,60 +61,52 @@ const Sidebar = ({ isSidebarOpen }) => {
             </div>
           )}
         </div>
+
         {isSidebarOpen && (
           <div className="border-b-2 border-white w-full mb-6"></div>
         )}
-        {/* Dashboard Section */}
+
         {isSidebarOpen && <h1 className="text-[20px] pl-4 pb-4">DASHBOARD</h1>}
-        <nav>
+        <nav className={`${isSidebarOpen ? "hidden" : "block"} text-center`}>
           <ul
             className={`pl-2 text-[18px] space-y-4 ${
               isSidebarOpen ? "" : "text-center"
             }`}
           >
-            <li>
-              <div
-                className={
-                  isActive("/registrarHome") ? activeStyle : inactiveStyle
-                }
-                onClick={() => handleMenuClick("/registrarHome")}
-              >
-                <IoMdHome className="text-xl" />
-                {isSidebarOpen && "HOME"}
-              </div>
-            </li>
-            <li>
-              <div
-                className={isActive("/events") ? activeStyle : inactiveStyle}
-                onClick={() => handleMenuClick("/events")}
-              >
-                <FaCalendarAlt className="text-xl" />
-                {isSidebarOpen && "EVENTS"}
-              </div>
-            </li>
-            <li>
-              <div
-                className={isActive("/students") ? activeStyle : inactiveStyle}
-                onClick={() => handleMenuClick("/students")}
-              >
-                <FaUsers className="text-xl" />
-                {isSidebarOpen && "STUDENTS/ALUMNI"}
-              </div>
-            </li>
-            <li>
-              <div
-                className={
-                  isActive("/appointments") ? activeStyle : inactiveStyle
-                }
-                onClick={() => handleMenuClick("/appointments")}
-              >
-                <FaTasks className="text-xl" />
-                {isSidebarOpen && "APPOINTMENTS"}
-              </div>
-            </li>
+            {[
+              {
+                path: "/registrarHome",
+                icon: <IoMdHome className="text-xl  mx-auto my-4" />,
+                label: "HOME",
+              },
+              {
+                path: "/events",
+                icon: <FaCalendarAlt className="text-xl  mx-auto my-4" />,
+                label: "EVENTS",
+              },
+              {
+                path: "/students",
+                icon: <FaUsers className="text-xl  mx-auto my-4" />,
+                label: "STUDENTS/ALUMNI",
+              },
+              {
+                path: "/appointments",
+                icon: <FaTasks className="text-xl  mx-auto my-4" />,
+                label: "APPOINTMENTS",
+              },
+            ].map(({ path, icon, label }) => (
+              <li key={path}>
+                <div
+                  className={isActive(path) ? activeStyle : inactiveStyle}
+                  onClick={() => handleMenuClick(path)}
+                >
+                  {icon}
+                  {isSidebarOpen && <span>{label}</span>}
+                </div>
+              </li>
+            ))}
           </ul>
 
-          {/* Maintenance Section */}
           {isSidebarOpen && (
             <h1 className="text-[20px] pl-4 pt-6 pb-4">MAINTENANCE</h1>
           )}
@@ -121,33 +115,33 @@ const Sidebar = ({ isSidebarOpen }) => {
               isSidebarOpen ? "" : "text-center"
             }`}
           >
-            <li>
-              <div
-                className={isActive("/schedule") ? activeStyle : inactiveStyle}
-                onClick={() => handleMenuClick("/schedule")}
-              >
-                <FaRegClock className="text-xl" />
-                {isSidebarOpen && "SCHEDULE"}
-              </div>
-            </li>
-            <li>
-              <div
-                className={isActive("/holidays") ? activeStyle : inactiveStyle}
-                onClick={() => handleMenuClick("/holidays")}
-              >
-                <FaCalendar className="text-xl" />
-                {isSidebarOpen && "HOLIDAYS"}
-              </div>
-            </li>
-            <li>
-              <div
-                className={isActive("/archived") ? activeStyle : inactiveStyle}
-                onClick={() => handleMenuClick("/archived")}
-              >
-                <PiArchiveDuotone className="text-xl" />
-                {isSidebarOpen && "ARCHIVED"}
-              </div>
-            </li>
+            {[
+              {
+                path: "/schedule",
+                icon: <FaRegClock className="text-xl  mx-auto my-4" />,
+                label: "SCHEDULE",
+              },
+              {
+                path: "/holidays",
+                icon: <FaCalendar className="text-xl  mx-auto my-4" />,
+                label: "HOLIDAYS",
+              },
+              {
+                path: "/archived",
+                icon: <FaArchive className="text-xl  mx-auto my-4" />,
+                label: "ARCHIVED",
+              },
+            ].map(({ path, icon, label }) => (
+              <li key={path}>
+                <div
+                  className={isActive(path) ? activeStyle : inactiveStyle}
+                  onClick={() => handleMenuClick(path)}
+                >
+                  {icon}
+                  {isSidebarOpen && <span>{label}</span>}
+                </div>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>

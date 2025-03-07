@@ -108,7 +108,11 @@ const Archived = () => {
   return (
     <div className="flex h-screen font-LatoRegular">
       {isSidebarOpen && (
-        <div>
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-64" : "w-0"
+          }`}
+        >
           <Sidebar isSidebarOpen={isSidebarOpen} />
         </div>
       )}
