@@ -113,7 +113,14 @@ const Sidebar = ({ isSidebarOpen }) => {
                         !isSidebarOpen ? "w-full" : ""
                       }`}
                     >
-                      {icon}
+                      {/* Add a class to control icon size */}
+                      <div
+                        className={`${
+                          isSidebarOpen ? "text-[20px]" : "text-[25px]" // Adjust size here
+                        }`}
+                      >
+                        {icon}
+                      </div>
                     </span>
                     {isSidebarOpen && <span className="ml-4">{label}</span>}
                   </div>
