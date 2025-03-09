@@ -108,7 +108,7 @@ const Events = () => {
     <div className="flex h-screen font-LatoRegular">
       {/* Sidebar */}
       <div
-        className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"} z-20`} // Add z-20 to ensure sidebar is above the overlay
+        className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"} z-20`} // Closed width is now 150px
       >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
@@ -123,7 +123,10 @@ const Events = () => {
         <div className="absolute inset-0 bg-[#161f55] bg-opacity-90"></div>
       </div>
 
-      <div className="flex-1 overflow-y-auto relative">
+      {/* Main Content */}
+      <div
+        className={`flex-1 overflow-y-auto z-10 relative  transition-all duration-300`}
+      >
         <Header
           toggleSidebar={toggleSidebar}
           isSidebarOpen={isSidebarOpen}
@@ -131,7 +134,7 @@ const Events = () => {
         />
 
         <div className="p-6">
-          <p className=" font-LatoRegular text-[30px] text-[#fefefe] pb-10 ">
+          <p className="h-auto font-LatoRegular text-[30px] text-[#fefefe] pb-10 ">
             EVENT CALENDAR
           </p>
           <section className="bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg grid grid-cols-3 gap-6">
