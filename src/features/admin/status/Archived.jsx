@@ -14,7 +14,7 @@ const Archived = () => {
     {
       id: 1,
       transactionNumber: "TR102938-123",
-      request: "Request 1",
+      request: "",
       emailAddress: "example1@example.com",
       dateOfAppointment: "2023-10-01",
       timeSlot: "10:00 AM",
@@ -23,7 +23,7 @@ const Archived = () => {
     {
       id: 2,
       transactionNumber: "TR122938-343",
-      request: "Request 2",
+      request: "",
       emailAddress: "example2@example.com",
       dateOfAppointment: "2023-10-02",
       timeSlot: "11:00 AM",
@@ -32,7 +32,7 @@ const Archived = () => {
     {
       id: 3,
       transactionNumber: "TR131238-534",
-      request: "Request 3",
+      request: "",
       emailAddress: "example3@example.com",
       dateOfAppointment: "2023-10-03",
       timeSlot: "12:00 PM",
@@ -130,7 +130,7 @@ const Archived = () => {
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                     LIST OF ARCHIVED APPOINTMENTS
                   </h2>
-                  <div className="border-b-4 border-[#F3BC62] w-[450px] my-3"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[650px] my-3"></div>
                 </div>
 
                 <div className="flex justify-between items-center mt-[78px] ml-4 ">
@@ -172,6 +172,7 @@ const Archived = () => {
                               selectedRows.length === appointments.length
                             }
                             onChange={handleSelectAll}
+                            className="w-5 h-5" // Increased checkbox size
                           />
                           <div className="relative">
                             <button
@@ -199,41 +200,46 @@ const Archived = () => {
                           </div>
                         </div>
                       </th>
-                      <th className="border p-4">
+                      <th className="border p-4 text-center">
                         TRANSACTION
                         <br />
                         NUMBER
                       </th>
-                      <th className="border p-4">REQUEST</th>
-                      <th className="border p-4">
+                      <th className="border p-4 text-center">REQUEST</th>
+                      <th className="border p-4 text-center">
                         EMAIL <br />
                         ADDRESS
                       </th>
-                      <th className="border p-4">
+                      <th className="border p-4 text-center">
                         DATE OF
                         <br />
                         APPOINTMENT
                       </th>
-                      <th className="border p-4">TIME SLOT</th>
-                      <th className="border p-4">
+                      <th className="border p-4 text-center">TIME SLOT</th>
+                      <th className="border p-4 text-center">
                         DATE OF
                         <br />
                         REQUEST
                       </th>
-                      <th className="border p-4">ACTIONS</th>
+                      <th className="border p-4 text-center">ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
                     {appointments.map((data) => (
                       <tr
                         key={data.id}
-                        className="even:bg-gray-100 text-[18px]"
+                        className={`text-[18px] ${
+                          selectedRows.includes(data.id)
+                            ? "bg-[#C2DBFF] !important" // Ensure this takes precedence
+                            : "even:bg-gray-100" // Apply gray background only if the row is not selected
+                        }`} // Apply background color if row is checked
                       >
                         <td className="border p-4 text-center">
                           <input
                             type="checkbox"
                             checked={selectedRows.includes(data.id)}
                             onChange={() => handleCheckboxChange(data.id)}
+                            className="w-5 h-5" // Increased checkbox size
                           />
                         </td>
                         <td className="border p-4">
@@ -243,11 +249,21 @@ const Archived = () => {
                             </span>
                           </div>
                         </td>
-                        <td className="border p-4">{data.request}</td>
-                        <td className="border p-4">{data.emailAddress}</td>
-                        <td className="border p-4">{data.dateOfAppointment}</td>
-                        <td className="border p-4">{data.timeSlot}</td>
-                        <td className="border p-4">{data.dateOfRequest}</td>
+                        <td className="border p-4 text-center">
+                          {data.request}
+                        </td>
+                        <td className="border p-4 text-center">
+                          {data.emailAddress}
+                        </td>
+                        <td className="border p-4 text-center">
+                          {data.dateOfAppointment}
+                        </td>
+                        <td className="border p-4 text-center">
+                          {data.timeSlot}
+                        </td>
+                        <td className="border p-4 text-center">
+                          {data.dateOfRequest}
+                        </td>
                         <td className="border p-4">
                           <div className="flex gap-2 justify-center">
                             {/* Retry Button */}
