@@ -9,7 +9,7 @@ import { BsTrash3 } from "react-icons/bs";
 import { Tooltip } from "react-tooltip"; // For tooltips
 
 const Appointments = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("Filter by");
   const [appointments, setAppointments] = useState([
     {
@@ -194,11 +194,9 @@ const Appointments = () => {
 
   return (
     <div className="flex h-screen font-LatoRegular">
-      {isSidebarOpen && (
-        <div>
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-        </div>
-      )}
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+        <Sidebar isSidebarOpen={isSidebarOpen} />
+      </div>
       <div className="flex-1 overflow-y-auto">
         <main className="h-auto">
           <Header

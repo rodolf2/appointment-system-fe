@@ -22,7 +22,7 @@ const Sidebar = ({ isSidebarOpen }) => {
   }, [location.pathname]);
 
   const handleMenuClick = (path) => {
-    navigate(path);
+    navigate(path); // Navigate to the clicked path
   };
 
   const isActive = (path) => location.pathname === path;
@@ -55,57 +55,74 @@ const Sidebar = ({ isSidebarOpen }) => {
     <aside
       ref={sidebarRef}
       className={`h-full bg-[#161F55] text-white ${
-        isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        isSidebarOpen ? "w-[300px]" : "w-[150px]" // Closed width is now 150px
       } overflow-hidden transition-all duration-300`}
     >
-      <div
-        className={`overflow-hidden font-LatoRegular ${
-          isSidebarOpen ? "block" : "hidden"
-        }`}
-      >
-        <div className="flex items-center mb-6 mt-3">
-          <img
-            src="/assets/image/LV_logo.png"
-            alt="LVCC Logo"
-            className={`w-[50%] h-[50%] ${isSidebarOpen ? "block" : "mx-auto"}`}
-          />
-          {isSidebarOpen && (
-            <div className="ml-4">
-              <h1 className="text-2xl font-regular">LVCC</h1>
-              <p className="text-xl">REGISTRAR</p>
-            </div>
-          )}
-        </div>
-
+      {/* Logo */}
+      <div className="flex items-center justify-center mt-6">
+        <img
+          src="/assets/image/LV_logo.png"
+          alt="LVCC Logo"
+          className={`${
+            isSidebarOpen ? "w-[100px] h-[100px]" : "w-[70px] h-[70px]"
+          } transition-all duration-300`}
+        />
         {isSidebarOpen && (
-          <div className="border-b-2 border-white w-full mb-6"></div>
+          <div className="ml-4">
+            <h1 className="text-2xl font-regular">LVCC</h1>
+            <p className="text-xl">REGISTRAR</p>
+          </div>
         )}
+      </div>
 
-        <nav>
-          {menuSections.map((section) => (
-            <div key={section.title}>
-              {isSidebarOpen && (
-                <h1 className="text-[20px] pl-4 pb-4">{section.title}</h1>
+      {/* Divider */}
+      {isSidebarOpen && (
+        <div className="border-b-2 border-white w-full my-6"></div>
+      )}
+
+      {/* Menu Sections */}
+      <nav>
+        {menuSections.map((section, index) => (
+          <div
+            key={section.title}
+            className={`${index === 0 ? "mt-6" : "mt-4"}`}
+          >
+            {/* Section Title */}
+            <div className="pl-4 pb-4">
+              {isSidebarOpen ? (
+                <h1 className="text-[20px] font-semibold">{section.title}</h1>
+              ) : (
+                <h1 className="text-[16px] text-center text-white opacity-70 pl-1">
+                  {section.title}
+                </h1>
               )}
-              <ul className="pl-2 text-[18px] space-y-4">
-                {section.items.map(({ path, icon, label }) => (
-                  <li key={path}>
-                    <div
-                      className={isActive(path) ? activeStyle : inactiveStyle}
-                      onClick={() => handleMenuClick(path)}
-                      aria-label={label}
-                      tabIndex={0}
+            </div>
+
+            {/* Menu Items */}
+            <ul className="pl-2 text-[18px] space-y-2">
+              {section.items.map(({ path, icon, label }) => (
+                <li key={path}>
+                  <div
+                    className={isActive(path) ? activeStyle : inactiveStyle}
+                    onClick={() => handleMenuClick(path)} // Only navigate, don't toggle sidebar
+                    aria-label={label}
+                    tabIndex={0}
+                  >
+                    <span
+                      className={`flex items-center justify-center ${
+                        !isSidebarOpen ? "w-full" : ""
+                      }`}
                     >
                       {icon}
-                      {isSidebarOpen && <span>{label}</span>}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
-      </div>
+                    </span>
+                    {isSidebarOpen && <span className="ml-4">{label}</span>}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
     </aside>
   );
 };

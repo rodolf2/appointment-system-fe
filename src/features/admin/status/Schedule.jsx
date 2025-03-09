@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Tooltip } from "react-tooltip"; // For tooltips
 
 const Schedule = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
@@ -192,11 +192,9 @@ const Schedule = () => {
   };
   return (
     <div className="flex h-screen font-LatoRegular">
-      {isSidebarOpen && (
-        <div>
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-        </div>
-      )}
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+        <Sidebar isSidebarOpen={isSidebarOpen} />
+      </div>
       <div className="flex-1 overflow-y-auto">
         <main className="h-auto">
           <Header

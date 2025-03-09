@@ -7,7 +7,7 @@ import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 
 const Students = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const appointments = [
     {
       transactionNumber: ["TR13234-322"],
@@ -81,30 +81,6 @@ const Students = () => {
       date: "2025-01-06",
       claiming: "Courier",
     },
-    // {
-    //   transactionNumber: ["TR13234-328"],
-    //   name: "George Wilson",
-    //   lastSY: "2023-2024",
-    //   program: "Grade 8",
-    //   contact: "+1 (789) 012-3456",
-    //   email: "george.wilson@example.com",
-    //   attachment: "Enrollment Form",
-    //   request: "Certificate of Enrollment",
-    //   date: "2025-01-07",
-    //   claiming: "Pick-up",
-    // },
-    // {
-    //   transactionNumber: ["TR13234-329"],
-    //   name: "Hannah Lee",
-    //   lastSY: "2016-2017",
-    //   program: "Grade 7",
-    //   contact: "+1 (890) 123-4567",
-    //   email: "hannah.lee@example.com",
-    //   attachment: "Report Card",
-    //   request: "Diploma",
-    //   date: "2025-01-08",
-    //   claiming: "Email",
-    // },
   ];
 
   const toggleSidebar = () => {
@@ -112,11 +88,9 @@ const Students = () => {
   };
   return (
     <div className="flex h-screen font-LatoRegular">
-      {isSidebarOpen && (
-        <div>
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-        </div>
-      )}
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+        <Sidebar isSidebarOpen={isSidebarOpen} />
+      </div>
       <div className="flex-1 overflow-y-auto">
         <main className="h-[1200px]">
           <Header

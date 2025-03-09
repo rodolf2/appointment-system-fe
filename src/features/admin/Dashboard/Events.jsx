@@ -4,7 +4,7 @@ import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
 
 const Events = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [events, setEvents] = useState({}); // Stores events per month
   const [newEvent, setNewEvent] = useState({
@@ -107,11 +107,11 @@ const Events = () => {
   return (
     <div className="flex h-screen font-LatoRegular">
       {/* Sidebar */}
-      {isSidebarOpen && (
-        <div className="relative z-20">
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-        </div>
-      )}
+      <div
+        className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"} z-20`} // Add z-20 to ensure sidebar is above the overlay
+      >
+        <Sidebar isSidebarOpen={isSidebarOpen} />
+      </div>
 
       {/* Background Image with Dark Overlay */}
       <div

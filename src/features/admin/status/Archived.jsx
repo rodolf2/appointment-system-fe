@@ -9,7 +9,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { Tooltip } from "react-tooltip"; // For tooltips
 
 const Archived = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [appointments, setAppointments] = useState([
     {
       id: 1,
@@ -107,15 +107,9 @@ const Archived = () => {
 
   return (
     <div className="flex h-screen font-LatoRegular">
-      {isSidebarOpen && (
-        <div
-          className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-[300px]" : "w-[100px]"
-          }`}
-        >
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-        </div>
-      )}
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+        <Sidebar isSidebarOpen={isSidebarOpen} />
+      </div>
       <div className="flex-1 overflow-y-auto">
         <main className="h-auto">
           <Header

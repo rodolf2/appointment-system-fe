@@ -5,7 +5,7 @@ import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 
 const RegistrarHome = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(dayjs());
 
   const toggleSidebar = () => {
@@ -39,11 +39,12 @@ const RegistrarHome = () => {
   return (
     <div className="flex h-screen font-LatoRegular">
       {/* Sidebar */}
-      {isSidebarOpen && (
-        <div className="relative z-20">
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-        </div>
-      )}
+      <div
+        className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"} z-20`} // Add z-20 to ensure sidebar is above the overlay
+      >
+        <Sidebar isSidebarOpen={isSidebarOpen} />
+      </div>
+
       {/* Background Image with Dark Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center z-0"
@@ -54,11 +55,12 @@ const RegistrarHome = () => {
         <div className="absolute inset-0 bg-[#161f55] bg-opacity-90"></div>
       </div>
 
-      <div className="flex-1 overflow-y-auto relative">
+      {/* Main Content */}
+      <div className="flex-1 overflow-y-auto z-10 relative">
         <Header
           toggleSidebar={toggleSidebar}
           isSidebarOpen={isSidebarOpen}
-          title=" Registrar Office Dashboard"
+          title="Registrar Office Dashboard"
         />
 
         <div className="p-6">
