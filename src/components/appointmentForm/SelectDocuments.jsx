@@ -20,8 +20,8 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
         </div>
 
         {/* Foreground Content */}
-        <div className="relative flex flex-col justify-center text-center m-8">
-          <h2 className="mx-auto font-LatoBold text-[35px] text-Fwhite w-[450px] tracking-widest mt-6 mb-8">
+        <div className="relative flex flex-col justify-center text-center m-8 overflow-x-hidden">
+          <h2 className="mx-auto font-LatoBold text-[35px] text-Fwhite  tracking-widest mt-6 mb-8">
             APPLICATION FOR RECORDS
           </h2>
 
