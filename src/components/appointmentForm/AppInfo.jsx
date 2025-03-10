@@ -84,15 +84,15 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
           <div className="h-1/2 bg-[#161f55]"></div>
         </div>
 
-        <div className="flex flex-col justify-center text-center m-8">
+        <div className="flex flex-col justify-center text-center m-2">
           <h2 className="mx-auto relative font-LatoBold text-[35px] text-Fwhite tracking-widest mt-6 mb-8">
             APPLICATION FOR RECORDS
           </h2>
           <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
             <form className="space-y-4" onSubmit={handleNext}>
-              {/* <div className=" w-full max-w-[60%] ">
+              <div className=" w-full max-w-[60%] mb-10 ">
                 <CustomProgressBar currentStep={currentStep} />
-              </div> */}
+              </div>
               <h2 className=" uppercase mb-10 flex font-LatoBold text-lg">
                 Personal Details:
               </h2>

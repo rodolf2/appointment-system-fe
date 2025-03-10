@@ -33,7 +33,7 @@ const AppointmentForm = () => {
 
   return (
     <>
-      <CustomProgressBar currentStep={currentStep} />
+      {/* <CustomProgressBar currentStep={currentStep} /> */}
       {currentStep === 1 && <DataPrivacy onNext={goToNextStep} />}
       {currentStep === 2 && (
         <AppInfo onNext={goToNextStep} onBack={goToPreviousStep} />
