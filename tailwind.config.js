@@ -12,6 +12,7 @@ export default {
         LatoItalic: ["Lato-Italic"],
       },
       colors: {
+        Primary: "#161f55",
         Fwhite: "#FEFEFE",
         Bbackground: "#EEF2F7",
         LBackground: "#152F6A",

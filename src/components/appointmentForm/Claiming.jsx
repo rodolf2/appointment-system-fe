@@ -23,7 +23,6 @@ const Claiming = ({ onNext, onBack }) => {
     <>
       {/* Main container with a background color and centering elements */}
       <div className="h-full flex items-center justify-center bg-[#161f55]">
-        
         {/* Background Layers for visual effect */}
         <div className="absolute inset-0 flex flex-col">
           <div
@@ -35,7 +34,8 @@ const Claiming = ({ onNext, onBack }) => {
               backgroundAttachment: "fixed", // Fix background during scrolling.
             }}
           ></div>
-          <div className="h-1/2 bg-[#161f55]"></div> {/* Second layer for solid color background */}
+          <div className="h-1/2 bg-[#161f55]"></div>{" "}
+          {/* Second layer for solid color background */}
         </div>
 
         {/* Information Container */}
@@ -98,11 +98,13 @@ const Claiming = ({ onNext, onBack }) => {
                 </li>
                 <li className="mb-2">
                   Photocopy of Valid ID (front and back) of both the
-                  student/alumnus, with 3 signatures. {/* ID requirement for student */}
+                  student/alumnus, with 3 signatures.{" "}
+                  {/* ID requirement for student */}
                 </li>
                 <li className="mb-2">
                   Photocopy of Valid ID (front and back) of the authorized
-                  person processing the request, with 3 signatures. {/* ID requirement for authorized person */}
+                  person processing the request, with 3 signatures.{" "}
+                  {/* ID requirement for authorized person */}
                 </li>
               </ul>
             </p>
