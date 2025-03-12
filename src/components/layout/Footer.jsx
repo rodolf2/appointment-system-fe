@@ -8,21 +8,23 @@ const Footer = () => {
         <div>
           <p className="flex items-center font-regular ml-8 text-[32px] text-LBackground">
             <img
-              src="/public/assets/image/LV_logo.png"
-              alt="Logo"
+              src="/assets/image/LV_logo.png"
+              alt="LV Logo"
               className="w-20 h-20 mr-2 mb-1"
             />
             LA VERDAD CHRISTIAN COLLEGE
           </p>
           <p className="text-[14px] w-[510px] font-LatoRegular text-LBackground ml-[7.5rem]">
-            Seamless appointment management—stay organized, save time, and
-            never miss an appointment with ease and efficiency.
+            Seamless appointment management—stay organized, save time, and never
+            miss an appointment with ease and efficiency.
           </p>
         </div>
 
         {/* Aligning both "Follow Us" and "Contact Us" in a similar manner */}
         <div className="flex flex-col items-center space-y-3 ml-52">
-          <p className="font-LatoRegular text-[24px] text-LBackground">FOLLOW US</p>
+          <p className="font-LatoRegular text-[24px] text-LBackground">
+            FOLLOW US
+          </p>
           <div className="flex justify-center items-center space-x-3">
             <CiFacebook className="text-Primary w-8 h-8" />
             <TfiEmail className="text-Primary w-8 h-8" />
@@ -30,7 +32,9 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col items-center space-y-3 pr-12 mt-14">
-          <p className="font-LatoRegular text-[24px] text-LBackground">CONTACT US</p>
+          <p className="font-LatoRegular text-[24px] text-LBackground">
+            CONTACT US
+          </p>
           <div className="text-center">
             <p className="text-[14px] font-LatoRegular text-LBackground">
               support@laverdad.edu.ph
@@ -45,7 +49,9 @@ const Footer = () => {
         </div>
       </div>
       <div className="border-b-2 border-Primary opacity-50 w-[90%] m-auto p-4"></div>
-      <p className="text-center py-8">© 2024 . La Verdad Christian College, Inc.</p>
+      <p className="text-center py-8">
+        © 2024 . La Verdad Christian College, Inc.
+      </p>
     </footer>
   );
 };
