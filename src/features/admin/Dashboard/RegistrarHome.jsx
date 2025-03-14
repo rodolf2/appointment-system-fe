@@ -20,9 +20,9 @@ const RegistrarHome = () => {
 
   const events = {
     1: { label: "Holiday", color: "bg-[#AF1EB9]" },
-    3: { label: "Appointment", color: "bg-[#299057]" },
+    3: { label: "Appointment", color: "bg-[#48E14D]" },
     4: { label: "Closed", color: "bg-[#7F8258]" },
-    7: { label: "Fully Booked", color: "bg-[#DB3E3E]" },
+    7: { label: "Fully Booked", color: "bg-[#F63838]" },
     8: { label: "Closed", color: "bg-[#7F8258]" },
     9: { label: "Closed", color: "bg-[#7F8258]" },
   };
@@ -34,6 +34,12 @@ const RegistrarHome = () => {
 
   const handleNextMonth = () => {
     setCurrentDate(currentDate.add(1, "month"));
+  };
+
+  // Function to check if a day is a weekend (Saturday or Sunday)
+  const isWeekend = (day) => {
+    const dayOfWeek = currentDate.date(day).day();
+    return dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
   };
 
   return (
@@ -206,29 +212,37 @@ const RegistrarHome = () => {
                 ))}
 
                 {/* Calendar Days */}
-                {Array.from({ length: daysInMonth }).map((_, index) => (
-                  <div
-                    key={index}
-                    className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
-                      currentDate.date() === index + 1 &&
-                      currentDate.month() === dayjs().month() &&
-                      currentDate.year() === dayjs().year()
-                        ? "bg-blue-300 font-bold"
-                        : ""
-                    }`}
-                  >
-                    {index + 1}
-                    {events[index + 1] && (
-                      <span
-                        className={`flex justify-center mt-4 text-xs text-white px-2 py-1 rounded ${
-                          events[index + 1].color
-                        }`}
-                      >
-                        {events[index + 1].label}
-                      </span>
-                    )}
-                  </div>
-                ))}
+                {Array.from({ length: daysInMonth }).map((_, index) => {
+                  const day = index + 1;
+                  const isWeekendDay = isWeekend(day);
+                  const event =
+                    events[day] ||
+                    (isWeekendDay
+                      ? { label: "Closed", color: "bg-[#7F8258]" }
+                      : null);
+
+                  return (
+                    <div
+                      key={index}
+                      className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
+                        currentDate.date() === day &&
+                        currentDate.month() === dayjs().month() &&
+                        currentDate.year() === dayjs().year()
+                          ? "bg-blue-300 font-bold"
+                          : ""
+                      }`}
+                    >
+                      {day}
+                      {event && (
+                        <span
+                          className={`flex justify-center mt-4 text-xs text-white px-2 py-1 rounded ${event.color}`}
+                        >
+                          {event.label}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -239,7 +253,14 @@ const RegistrarHome = () => {
               </h3>
               <div className="border-b-4 border-[#F3BC62] w-[120px] my-3"></div>
               <ul className="list-disc ml-5 text-lg">
-                <li>Wed 1 - New Year’s Day</li>
+                <li>Jan 01 - New Year’s Day</li>
+                <li>Mar 31 - Eidul-Fitar</li>
+                <li>Apr 09 - The day of Valor</li>
+                <li>May 01 - Labor Day</li>
+                <li>Jun 07 - Eid al-Adha (Feast of the Sacrifice)</li>
+                <li>Jun 08 - Eid al-Adha Day 2</li>
+                <li>Jun 12 - Independence Day</li>
+                <li>Aug 21 - Ninoy Aquino Day</li>
               </ul>
             </div>
           </section>

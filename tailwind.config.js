@@ -69,6 +69,7 @@ export default {
           "linear-gradient(180deg, rgba(37, 47, 106, 0.30) 58%, rgba(243, 188, 98, 0.50) 92%)",
         "custom-gradient_guidelines":
           "linear-gradient(180deg, rgba(37, 47, 106, 0.40) 76%, rgba(243, 188, 98, 0.50) 100%)",
+        "side-bar_bg": "linear-gradient(180deg, #161F55 73%, #6B7BDE 100%);",
       },
       borderRadius: {
         lg: "var(--radius)",

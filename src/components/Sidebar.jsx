@@ -54,7 +54,7 @@ const Sidebar = ({ isSidebarOpen }) => {
   return (
     <aside
       ref={sidebarRef}
-      className={`h-full bg-[#161F55] text-white ${
+      className={`h-full bg-side-bar_bg text-white ${
         isSidebarOpen ? "w-[300px]" : "w-[150px]" // Closed width is now 150px
       } overflow-hidden transition-all duration-300`}
     >
