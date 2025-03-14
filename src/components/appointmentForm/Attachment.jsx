@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
+import { Navigate } from "react-router";
 
-const Attachment = ({ onNext, onBack }) => {
+const Attachment = ({ onNext, onBack, currentStep }) => {
   const [files, setFiles] = useState([]); // To store selected files
   const fileInputRef = useRef(null); // Reference to the hidden file input
   const [error, setError] = useState("");
@@ -47,7 +48,10 @@ const Attachment = ({ onNext, onBack }) => {
           APPLICATION FOR RECORDS
         </h2>
         {/* Content Card */}
-        <div className="bottom-44 relative flex flex-col bg-white p-8 rounded-lg shadow-md w-[90%] max-w-md text-center z-10">
+        <div className="bottom-44 relative flex flex-col bg-white p-8 rounded-lg shadow-md w-[50%] text-center z-10 items-center">
+          <div className="w-full max-w-[50%] mx-auto mb-5">
+            <CustomProgressBar currentStep={currentStep} />
+          </div>
           <p className="text-[#161F55] font-LatoItalic mb-4">
             To proceed with your request, please upload the required
             requirements. Processing will not begin until all necessary
@@ -91,21 +95,24 @@ const Attachment = ({ onNext, onBack }) => {
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
           {/* Add Another File Button */}
-          <button
-            type="button"
-            className="border-2 border-[#161f55] font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[20px] w-[170px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors flex justify-start text-start bg-none"
-            onClick={handleAddFile}
-          >
-            + Add Another File
-          </button>
+          <div className="pr-[210px]">
+            <button
+              type="button"
+              className="border-2 border-[#161f55] font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[20px] w-[170px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors flex justify-start text-start bg-none"
+              onClick={handleAddFile}
+            >
+              + Add Another File
+            </button>
+          </div>
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between">
+          <div className="flex justify-evenly w-full">
             <button
               className="bg-[#161f55] text-white px-6 py-2 rounded-lg hover:bg-blue-800"
               onClick={(e) => {
                 e.preventDefault();
                 onBack();
+                Navigate("/appointmentForm?step=3");
               }}
             >
               Back

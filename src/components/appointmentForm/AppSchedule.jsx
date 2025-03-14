@@ -1,7 +1,8 @@
 import { useState } from "react";
 import dayjs from "dayjs"; // Import Day.js for date manipulation
+import CustomProgressBar from "@/features/appointment/CustomProgressBar";
 
-const AppSchedule = ({ onNext, onBack }) => {
+const AppSchedule = ({ onNext, onBack, currentStep }) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs()); // Tracks the current calendar month
   const [selectedDate, setSelectedDate] = useState(null); // Stores the selected date and booking status
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null); // Tracks the selected time slot
@@ -104,6 +105,9 @@ const AppSchedule = ({ onNext, onBack }) => {
           REGISTRAR APPOINTMENT
         </h1>
         <div className="bg-white rounded-lg shadow-lg p-8 w-[32rem]">
+          <div className="mb-8">
+            <CustomProgressBar currentStep={currentStep} />
+          </div>
           {/* Instructional Text */}
           <p className="text-sm text-center font-LatoItalic text-[#161F55] mb-6">
             Please note that you will receive an email confirmation once your
@@ -228,7 +232,7 @@ const AppSchedule = ({ onNext, onBack }) => {
           {/* Navigation Buttons */}
           <div className="flex justify-between mt-6">
             <button
-              onClick={onBack}
+              onClick={() => onBack(3)} // Go back to step 3
               className="bg-[#161f55] hover:bg-blue-700 text-white px-4 py-2 rounded-md"
             >
               Back

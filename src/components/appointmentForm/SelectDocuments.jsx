@@ -7,6 +7,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
   const [purpose, setPurpose] = useState("");
   const [date, setDate] = useState("");
   const [errors, setErrors] = useState({});
+  const [claimOption, setClaimOption] = useState(null); // Track user's claim choice
 
   const documentsList = [
     { label: "Certificate of Enrollment", value: "certificate_of_enrollment" },
@@ -29,7 +30,6 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
     setErrors((prevErrors) => ({ ...prevErrors, selectedDocuments: "" }));
   };
 
-  // Remove document manually
   const removeDocument = (value) => {
     setSelectedDocuments((prevSelected) =>
       prevSelected.filter((doc) => doc !== value)
@@ -49,15 +49,29 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
 
   const handleNext = () => {
     if (handleValidation()) {
-      setShowModal(true);
+      setShowModal(true); // Show modal for claim options
+    }
+  };
+
+  const handleClaimOption = (option) => {
+    setClaimOption(option); // Set the user's claim choice
+  };
+
+  const handleModalNext = () => {
+    setShowModal(false); // Close the modal
+
+    if (claimOption === "personal") {
+      // Skip to step 5 (number 4 in progress bar)
+      onNext(5); // Pass the step number to the parent component
+    } else if (claimOption === "authorized") {
+      // Go to step 4 (number 3 in progress bar)
+      onNext(4); // Pass the step number to the parent component
     }
   };
 
   return (
     <>
-      <div
-        className={`bg-Primary h-screen relative ${showModal ? "blur-sm" : ""}`}
-      >
+      <div className={`bg-Primary h-screen relative`}>
         {/* Fixed Background */}
         <div className="fixed inset-0 w-full h-full">
           <div
@@ -231,6 +245,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   type="radio"
                   name="claim_option"
                   value="personal"
+                  onChange={() => handleClaimOption("personal")} // Handle personal claim
                   className="h-5 w-5 text-indigo-600 border-gray-300 rounded-full"
                 />
                 <span>I will claim my document personally.</span>
@@ -241,6 +256,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   type="radio"
                   name="claim_option"
                   value="authorized"
+                  onChange={() => handleClaimOption("authorized")} // Handle authorized claim
                   className="h-5 w-5 text-indigo-600 border-gray-300 rounded-full"
                 />
                 <span>
@@ -249,11 +265,11 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
               </label>
 
               {/* Instructions for Authorized Person */}
-              <p className="mt-4 text-sm text-gray-600 italic">
+              <p className="mt-4 text-sm text-[#161f55] italic">
                 Please note that if you authorize someone to claim your
                 documents, the following must be provided:
               </p>
-              <ul className="list-disc pl-5 text-sm text-gray-800">
+              <ul className="list-disc pl-5 text-sm text-[#161f55] ">
                 <li>
                   Authorization Letter indicating the name of the person
                   authorized.
@@ -268,7 +284,19 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 </li>
               </ul>
             </div>
-
+            <h2 className="uppercase text-lg text-left font-LatoBold my-6">
+              For Delivery Transaction
+            </h2>
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="radio"
+                name="claim_option"
+                value="courier"
+                onChange={() => handleClaimOption("courier")} // Handle courier claim
+                className="h-5 w-5 text-indigo-600 border-gray-300 rounded-full"
+              />
+              <span>I will claim my document through courier.</span>
+            </label>
             {/* Modal Buttons */}
             <div className="flex justify-end space-x-2 mt-6">
               <button
@@ -280,10 +308,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
 
               <button
                 className="px-6 py-2 bg-[#161f55] text-white rounded-md hover:bg-[#1b2a6b]"
-                onClick={() => {
-                  setShowModal(false); // Close modal
-                  console.log("Proceeding with selection...");
-                }}
+                onClick={handleModalNext} // Handle modal next
               >
                 Next
               </button>

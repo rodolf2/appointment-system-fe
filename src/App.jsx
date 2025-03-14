@@ -25,6 +25,8 @@ import Profile from "./features/admin/components/Profile";
 import Layouts from "./components/Layout";
 import Appointments from "./features/admin/status/Appointments";
 import Archived from "./features/admin/status/Archived";
+import Attachment from "./components/appointmentForm/Attachment";
+import AppSchedule from "./components/appointmentForm/AppSchedule";
 
 const App = () => {
   return (
@@ -92,6 +94,8 @@ const Layout = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/archived" element={<Archived />} />
+          <Route path="/attachment" element={<Attachment />} />
+          <Route path="/app-schedule" element={<AppSchedule />} />
         </Routes>
       </Layouts>
       {showHeaderFooter && <Footer />}

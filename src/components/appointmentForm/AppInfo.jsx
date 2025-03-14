@@ -90,7 +90,7 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
           </h2>
           <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%]  text-center z-10">
             <form className="space-y-4" onSubmit={handleNext}>
-              <div className=" w-full max-w-[60%] mb-10 ">
+              <div className=" w-full max-w-[60%] mb-10 mx-auto">
                 <CustomProgressBar currentStep={currentStep} />
               </div>
               <h2 className=" uppercase mb-10 flex font-LatoBold text-lg">
