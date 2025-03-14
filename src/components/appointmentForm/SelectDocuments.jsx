@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
 
-const SelectDocuments = ({ onBack, currentStep }) => {
+const SelectDocuments = ({ onNext, onBack, currentStep }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [purpose, setPurpose] = useState("");
@@ -73,7 +73,7 @@ const SelectDocuments = ({ onBack, currentStep }) => {
           <div className="h-1/2 bg-[#161f55]"></div>
         </div>
         <div className="relative flex flex-col justify-center text-center">
-          <h2 className="font-LatoBold text-[35px] text-Fwhite tracking-widest py-4">
+          <h2 className="font-LatoBold text-[30px] text-Fwhite tracking-widest py-3">
             APPLICATION FOR RECORDS
           </h2>
           <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[60%] text-center z-10">
@@ -86,11 +86,17 @@ const SelectDocuments = ({ onBack, currentStep }) => {
               Request:
             </h2>
 
-            <label className="text-start block font-LatoRegular text-[#000] mb-2">
+            <label className="text-start block font-LatoRegular text-[#000]">
               SELECT DOCUMENTS:
             </label>
-            <div className="border rounded-lg p-4 shadow-md border-[#000000] border-opacity-40">
-              <div className="grid grid-cols-2 gap-y-2 gap-x-6">
+            <div
+              className={`border rounded-lg p-4 shadow-md font-LatoRegular ${
+                errors.selectedDocuments
+                  ? "border-red-600 "
+                  : "border-[#000000] border-opacity-40 "
+              }`}
+            >
+              <div className="grid grid-cols-2 gap-y-2 gap-x-2 ml-8">
                 {documentsList.map((doc) => (
                   <label
                     key={doc.value}
@@ -101,18 +107,22 @@ const SelectDocuments = ({ onBack, currentStep }) => {
                       value={doc.value}
                       onChange={() => handleDocumentSelection(doc.value)}
                       checked={selectedDocuments.includes(doc.value)}
-                      className="h-5 w-5"
+                      className="h-5 w-5 "
                     />
                     <span>{doc.label}</span>
                   </label>
                 ))}
               </div>
-              {errors.selectedDocuments && (
-                <p className="text-red-600 mt-2">{errors.selectedDocuments}</p>
-              )}
+              <div>
+                {errors.selectedDocuments ? (
+                  <p className="text-red-600">{errors.selectedDocuments}</p>
+                ) : (
+                  <p className="invisible">Placeholder</p> // Keeps space reserved
+                )}
+              </div>
               {/* Display Selected Documents with Remove Option */}
-              <div className="mt-2 text-start font-LatoRegular">
-                <strong>Selected Documents:</strong>{" "}
+              <div className="mt-2 text-start font-LatoRegular min-h-[135px] ">
+                <strong className="ml-8">Selected Documents:</strong>{" "}
                 {selectedDocuments.length > 0 ? (
                   <ul className="grid grid-cols-2 gap-y-1 gap-x-6 mt-1">
                     {selectedDocuments.map((doc) => {
@@ -122,7 +132,7 @@ const SelectDocuments = ({ onBack, currentStep }) => {
                       return (
                         <li
                           key={doc}
-                          className="flex justify-between items-center bg-gray-200 px-2 py-1 rounded-md"
+                          className="flex justify-between font-LatoRegular text-[16px] items-center bg-gray-200 px-2 py-1 rounded-md"
                         >
                           <span className="text-gray-800">{documentLabel}</span>
                           <button
@@ -136,7 +146,7 @@ const SelectDocuments = ({ onBack, currentStep }) => {
                     })}
                   </ul>
                 ) : (
-                  <span className="text-gray-500 flex">
+                  <span className="text-gray-500 flex ml-8">
                     No documents selected.
                   </span>
                 )}
@@ -154,10 +164,16 @@ const SelectDocuments = ({ onBack, currentStep }) => {
                   setErrors((prev) => ({ ...prev, purpose: "" }));
                 }}
                 placeholder="Type here..."
-                className="w-full border h-20 rounded-md border-[#000000] border-opacity-40 pl-2 shadow-md"
+                className={`w-full border h-20 rounded-md pl-2 pt-2 shadow-md ${
+                  errors.purpose
+                    ? "border-red-600"
+                    : "border-[#000000] border-opacity-40"
+                }`}
               ></textarea>
-              {errors.purpose && (
+              {errors.purpose ? (
                 <p className="text-red-600">{errors.purpose}</p>
+              ) : (
+                <p className="invisible">Placeholder</p> // Keeps space reserved
               )}
             </div>
 
@@ -171,10 +187,16 @@ const SelectDocuments = ({ onBack, currentStep }) => {
                 setDate(e.target.value);
                 setErrors((prev) => ({ ...prev, date: "" }));
               }}
-              className="pl-2 mt-1 mb-2 block w-full max-w-[20%] border-2 h-8 rounded-md"
+              className={`pl-2 mt-1 block w-full max-w-[20%] border h-8 rounded-md ${
+                errors.date
+                  ? "border-red-600"
+                  : "border-[#000000] border-opacity-40"
+              }`}
             />
-            {errors.date && (
+            {errors.date ? (
               <p className="text-red-600 text-start">{errors.date}</p>
+            ) : (
+              <p className="invisible">Placeholder</p> // Keeps space reserved
             )}
 
             <div className="flex justify-end space-x-2  ">

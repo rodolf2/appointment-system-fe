@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
 
 const Attachment = ({ onNext, onBack }) => {
   const [files, setFiles] = useState([]); // To store selected files
@@ -77,7 +78,7 @@ const Attachment = ({ onNext, onBack }) => {
               <p className="text-gray-500">No files added.</p>
             )}
           </div>
-   
+
           {/* Hidden File Input */}
           <input
             type="file"
