@@ -71,161 +71,167 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
 
   return (
     <>
-      <div className={`bg-Primary h-screen relative`}>
-        {/* Fixed Background */}
-        <div className="fixed inset-0 w-full h-full">
-          <div
-            className="h-1/2 bg-cover bg-bottom relative"
-            style={{
-              backgroundImage:
-                "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
-              backgroundAttachment: "fixed",
-            }}
-          >
-            <div className="absolute inset-0 bg-Primary opacity-70"></div>
-          </div>
-          <div className="h-1/2 bg-[#161f55]"></div>
-        </div>
-        <div className="relative flex flex-col justify-center text-center">
-          <h2 className="font-LatoBold text-[30px] text-Fwhite tracking-widest py-3">
-            APPLICATION FOR RECORDS
-          </h2>
-          <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[60%] text-center z-10">
-            {/* Progress Bar */}
-            <div className="w-full max-w-[50%] place-self-center mt-2 ">
-              <CustomProgressBar currentStep={currentStep} />
-            </div>
-
-            <h2 className="uppercase text-lg text-left font-LatoBold my-4">
-              Request:
-            </h2>
-
-            <label className="text-start block font-LatoRegular text-[#000]">
-              SELECT DOCUMENTS:
-            </label>
+      <div
+        className={`bg-Primary h-screen relative ${showModal ? "blur-sm" : ""}`}
+      >
+        <div className={`bg-Primary h-screen relative`}>
+          {/* Fixed Background */}
+          <div className="fixed inset-0 w-full h-full">
             <div
-              className={`border rounded-lg p-4 shadow-md font-LatoRegular ${
-                errors.selectedDocuments
-                  ? "border-red-600 "
-                  : "border-[#000000] border-opacity-40 "
-              }`}
+              className="h-1/2 bg-cover bg-bottom relative"
+              style={{
+                backgroundImage:
+                  "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+                backgroundAttachment: "fixed",
+              }}
             >
-              <div className="grid grid-cols-2 gap-y-2 gap-x-2 ml-8">
-                {documentsList.map((doc) => (
-                  <label
-                    key={doc.value}
-                    className="flex items-center space-x-2"
-                  >
-                    <input
-                      type="radio"
-                      value={doc.value}
-                      onChange={() => handleDocumentSelection(doc.value)}
-                      checked={selectedDocuments.includes(doc.value)}
-                      className="h-5 w-5 "
-                    />
-                    <span>{doc.label}</span>
-                  </label>
-                ))}
+              <div className="absolute inset-0 bg-Primary opacity-70"></div>
+            </div>
+            <div className="h-1/2 bg-[#161f55]"></div>
+          </div>
+          <div className="relative flex flex-col justify-center text-center">
+            <h2 className="font-LatoBold text-[30px] text-Fwhite tracking-widest py-3">
+              APPLICATION FOR RECORDS
+            </h2>
+            <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[60%] text-center z-10">
+              {/* Progress Bar */}
+              <div className="w-full max-w-[50%] place-self-center mt-2 ">
+                <CustomProgressBar currentStep={currentStep} />
               </div>
-              <div>
-                {errors.selectedDocuments ? (
-                  <p className="text-red-600">{errors.selectedDocuments}</p>
+
+              <h2 className="uppercase text-lg text-left font-LatoBold my-4">
+                Request:
+              </h2>
+
+              <label className="text-start block font-LatoRegular text-[#000]">
+                SELECT DOCUMENTS:
+              </label>
+              <div
+                className={`border rounded-lg p-4 shadow-md font-LatoRegular ${
+                  errors.selectedDocuments
+                    ? "border-red-600 "
+                    : "border-[#000000] border-opacity-40 "
+                }`}
+              >
+                <div className="grid grid-cols-2 gap-y-2 gap-x-2 ml-8">
+                  {documentsList.map((doc) => (
+                    <label
+                      key={doc.value}
+                      className="flex items-center space-x-2"
+                    >
+                      <input
+                        type="radio"
+                        value={doc.value}
+                        onChange={() => handleDocumentSelection(doc.value)}
+                        checked={selectedDocuments.includes(doc.value)}
+                        className="h-5 w-5 "
+                      />
+                      <span>{doc.label}</span>
+                    </label>
+                  ))}
+                </div>
+                <div>
+                  {errors.selectedDocuments ? (
+                    <p className="text-red-600">{errors.selectedDocuments}</p>
+                  ) : (
+                    <p className="invisible">Placeholder</p> // Keeps space reserved
+                  )}
+                </div>
+                {/* Display Selected Documents with Remove Option */}
+                <div className="mt-2 text-start font-LatoRegular min-h-[135px] ">
+                  <strong className="ml-8">Selected Documents:</strong>{" "}
+                  {selectedDocuments.length > 0 ? (
+                    <ul className="grid grid-cols-2 gap-y-1 gap-x-6 mt-1">
+                      {selectedDocuments.map((doc) => {
+                        const documentLabel = documentsList.find(
+                          (d) => d.value === doc
+                        )?.label;
+                        return (
+                          <li
+                            key={doc}
+                            className="flex justify-between font-LatoRegular text-[16px] items-center bg-gray-200 px-2 py-1 rounded-md"
+                          >
+                            <span className="text-gray-800">
+                              {documentLabel}
+                            </span>
+                            <button
+                              onClick={() => removeDocument(doc)}
+                              className="text-red-600 font-LatoRegular hover:text-red-800"
+                            >
+                              Remove
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <span className="text-gray-500 flex ml-8">
+                      No documents selected.
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="text-start mt-4">
+                <label className="uppercase font-LatoRegular">
+                  State your purpose for applying:
+                </label>
+                <textarea
+                  value={purpose}
+                  onChange={(e) => {
+                    setPurpose(e.target.value);
+                    setErrors((prev) => ({ ...prev, purpose: "" }));
+                  }}
+                  placeholder="Type here..."
+                  className={`w-full border h-20 rounded-md pl-2 pt-2 shadow-md ${
+                    errors.purpose
+                      ? "border-red-600"
+                      : "border-[#000000] border-opacity-40"
+                  }`}
+                ></textarea>
+                {errors.purpose ? (
+                  <p className="text-red-600">{errors.purpose}</p>
                 ) : (
                   <p className="invisible">Placeholder</p> // Keeps space reserved
                 )}
               </div>
-              {/* Display Selected Documents with Remove Option */}
-              <div className="mt-2 text-start font-LatoRegular min-h-[135px] ">
-                <strong className="ml-8">Selected Documents:</strong>{" "}
-                {selectedDocuments.length > 0 ? (
-                  <ul className="grid grid-cols-2 gap-y-1 gap-x-6 mt-1">
-                    {selectedDocuments.map((doc) => {
-                      const documentLabel = documentsList.find(
-                        (d) => d.value === doc
-                      )?.label;
-                      return (
-                        <li
-                          key={doc}
-                          className="flex justify-between font-LatoRegular text-[16px] items-center bg-gray-200 px-2 py-1 rounded-md"
-                        >
-                          <span className="text-gray-800">{documentLabel}</span>
-                          <button
-                            onClick={() => removeDocument(doc)}
-                            className="text-red-600 font-LatoRegular hover:text-red-800"
-                          >
-                            Remove
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <span className="text-gray-500 flex ml-8">
-                    No documents selected.
-                  </span>
-                )}
-              </div>
-            </div>
 
-            <div className="text-start mt-4">
-              <label className="uppercase font-LatoRegular">
-                State your purpose for applying:
+              <label className="mt-2 block text-start uppercase">
+                Date of Request
               </label>
-              <textarea
-                value={purpose}
+              <input
+                type="date"
+                value={date}
                 onChange={(e) => {
-                  setPurpose(e.target.value);
-                  setErrors((prev) => ({ ...prev, purpose: "" }));
+                  setDate(e.target.value);
+                  setErrors((prev) => ({ ...prev, date: "" }));
                 }}
-                placeholder="Type here..."
-                className={`w-full border h-20 rounded-md pl-2 pt-2 shadow-md ${
-                  errors.purpose
+                className={`pl-2 mt-1 block w-full max-w-[20%] border h-8 rounded-md ${
+                  errors.date
                     ? "border-red-600"
                     : "border-[#000000] border-opacity-40"
                 }`}
-              ></textarea>
-              {errors.purpose ? (
-                <p className="text-red-600">{errors.purpose}</p>
+              />
+              {errors.date ? (
+                <p className="text-red-600 text-start">{errors.date}</p>
               ) : (
                 <p className="invisible">Placeholder</p> // Keeps space reserved
               )}
-            </div>
 
-            <label className="mt-2 block text-start uppercase">
-              Date of Request
-            </label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => {
-                setDate(e.target.value);
-                setErrors((prev) => ({ ...prev, date: "" }));
-              }}
-              className={`pl-2 mt-1 block w-full max-w-[20%] border h-8 rounded-md ${
-                errors.date
-                  ? "border-red-600"
-                  : "border-[#000000] border-opacity-40"
-              }`}
-            />
-            {errors.date ? (
-              <p className="text-red-600 text-start">{errors.date}</p>
-            ) : (
-              <p className="invisible">Placeholder</p> // Keeps space reserved
-            )}
-
-            <div className="flex justify-end space-x-2  ">
-              <button
-                className="px-6 py-2  bg-[#161f55] text-white rounded-md"
-                onClick={onBack}
-              >
-                Back
-              </button>
-              <button
-                className="px-6 py-2 bg-[#161f55] text-white rounded-md"
-                onClick={handleNext}
-              >
-                Next
-              </button>
+              <div className="flex justify-end space-x-2  ">
+                <button
+                  className="px-6 py-2  bg-[#161f55] text-white rounded-md"
+                  onClick={onBack}
+                >
+                  Back
+                </button>
+                <button
+                  className="px-6 py-2 bg-[#161f55] text-white rounded-md"
+                  onClick={handleNext}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>
