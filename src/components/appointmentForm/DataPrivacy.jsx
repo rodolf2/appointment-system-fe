@@ -44,7 +44,7 @@ const DataPrivacy = ({ onNext }) => {
           information in this survey form for Research Subject purposes only,
           keeping them securely and with confidentiality using our
           organizational, technical, and physical security measures, and retain
-          them in accordance with our retention policy. We don’t share them with
+          them in accordance with our retention policy. We don’t share them to
           any external group without your consent, unless otherwise stated in
           our privacy notice. You have the right to be informed, to object, to
           access, to rectify, to erase or to block the processing of your
