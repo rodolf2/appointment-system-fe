@@ -1,4 +1,30 @@
+import { useState } from "react";
 const Contact = () => {
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  // Function to validate email
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
+    return regex.test(email);
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate email
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      return; // Stop form submission if email is invalid
+    }
+
+    // If email is valid, proceed with form submission
+    setEmailError(""); // Clear any previous error
+    alert("Form submitted successfully!");
+    // Add your form submission logic here
+  };
+
   return (
     <>
       {/* CONTENT */}
@@ -38,22 +64,23 @@ const Contact = () => {
           ></iframe>
 
           {/* Contact Form Section */}
-          <div className="w-full h-[610px] lg:w-1/2 bg-[#FEFEFE] p-10  shadow-lg">
+          <div className="w-full h-[610px] lg:w-1/2 bg-[#FEFEFE] p-10 shadow-lg">
             <h2 className="text-[36px] font-LatoBold mb-2 text-[#161F55]">
               GET IN TOUCH
             </h2>
             <span className="block w-[15.5rem] h-1 bg-[#F3BC62] mb-8"></span>
 
-            <form className="space-y-2 ">
+            <form className="space-y-2" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                   <label className="block font-LatoRegular text-[25px] text-[#161F55] mb-2">
                     Name
                   </label>
                   <input
+                    required
                     type="text"
                     placeholder="Name"
-                    className="w-full px-4 py-2 border rounded-lg bg-white text-[#161F55] placeholder:text-[#000] placeholder:opacity-50 border-[#425066] border-opacity-40 "
+                    className="w-full px-4 py-2 border rounded-lg bg-white text-[#161F55] placeholder:text-[#000] placeholder:opacity-50 border-[#425066] border-opacity-40"
                   />
                 </div>
 
@@ -64,8 +91,15 @@ const Contact = () => {
                   <input
                     type="email"
                     placeholder="Email"
-                    className="w-full px-4 py-2 border rounded-lg bg-white text-[#161F55] placeholder:text-[#000] placeholder:opacity-50 border-[#425066] border-opacity-40"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={`w-full px-4 py-2 border rounded-lg bg-white text-[#161F55] placeholder:text-[#000] placeholder:opacity-50 border-[#425066] border-opacity-40 ${
+                      emailError ? "border-red-500" : ""
+                    }`}
                   />
+                  {emailError && (
+                    <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                  )}
                 </div>
               </div>
 
