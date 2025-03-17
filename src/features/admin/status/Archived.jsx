@@ -40,6 +40,7 @@ const Archived = () => {
     },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false); // For bulk delete modal
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]); // For checkbox selection
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // For dropdown visibility
@@ -60,12 +61,35 @@ const Archived = () => {
     setIsModalOpen(false);
   };
 
-  // Delete appointment
+  // Open bulk delete modal
+  const openBulkDeleteModal = () => {
+    if (selectedRows.length > 0) {
+      setIsBulkDeleteModalOpen(true);
+    } else {
+      alert("Please select at least one appointment to delete.");
+    }
+  };
+
+  // Close bulk delete modal
+  const closeBulkDeleteModal = () => {
+    setIsBulkDeleteModalOpen(false);
+  };
+
+  // Delete single appointment
   const deleteAppointment = () => {
     setAppointments(
       appointments.filter((appt) => appt.id !== selectedAppointment.id)
     );
     closeModal();
+  };
+
+  // Delete multiple appointments (bulk delete)
+  const deleteBulkAppointments = () => {
+    setAppointments(
+      appointments.filter((appt) => !selectedRows.includes(appt.id))
+    );
+    setSelectedRows([]); // Clear selected rows after deletion
+    closeBulkDeleteModal();
   };
 
   // Handle checkbox selection
@@ -94,10 +118,7 @@ const Archived = () => {
   // Handle dropdown actions (Delete or Return)
   const handleDropdownAction = (action) => {
     if (action === "delete") {
-      setAppointments(
-        appointments.filter((appt) => !selectedRows.includes(appt.id))
-      );
-      setSelectedRows([]); // Clear selected rows after deletion
+      openBulkDeleteModal(); // Open bulk delete modal
     } else if (action === "return") {
       // Add logic for returning appointments (e.g., change status)
       alert("Return functionality not implemented yet.");
@@ -163,7 +184,8 @@ const Archived = () => {
                           <input
                             type="checkbox"
                             checked={
-                              selectedRows.length === appointments.length
+                              selectedRows.length === appointments.length &&
+                              appointments.length > 0
                             }
                             onChange={handleSelectAll}
                             className="w-5 h-5" // Increased checkbox size
@@ -187,7 +209,7 @@ const Archived = () => {
                                   onClick={() => handleDropdownAction("return")}
                                   className="block w-full text-center px-4 py-2 text-[#161F55] hover:bg-gray-100"
                                 >
-                                  Return
+                                  Undo
                                 </button>
                               </div>
                             )}
@@ -229,12 +251,14 @@ const Archived = () => {
                         }`} // Apply background color if row is checked
                       >
                         <td className="border p-4 text-center">
-                          <input
-                            type="checkbox"
-                            checked={selectedRows.includes(data.id)}
-                            onChange={() => handleCheckboxChange(data.id)}
-                            className="w-5 h-5" // Increased checkbox size
-                          />
+                          <div className="flex items-center justify-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedRows.includes(data.id)}
+                              onChange={() => handleCheckboxChange(data.id)}
+                              className="w-5 h-5" // Increased checkbox size
+                            />
+                          </div>
                         </td>
                         <td className="border p-4">
                           <div className="flex flex-col text-center">
@@ -260,10 +284,10 @@ const Archived = () => {
                         </td>
                         <td className="border p-4">
                           <div className="flex gap-2 justify-center">
-                            {/* Retry Button */}
+                            {/* Undo Button */}
                             <div
-                              data-tooltip-id="retry-tooltip"
-                              data-tooltip-content="Retry"
+                              data-tooltip-id="undo-tooltip"
+                              data-tooltip-content="Undo"
                               className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700 transform scale-x-[-1]"
                               onClick={() => openModal(data)}
                             >
@@ -329,8 +353,33 @@ const Archived = () => {
             </div>
           )}
 
+          {/* Bulk Delete Confirmation Modal */}
+          {isBulkDeleteModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
+              <div className="bg-white p-20 rounded-xl shadow-md">
+                <h2 className="text-xl font-bold mb-4">
+                  Are you sure you want to delete the selected appointments?
+                </h2>
+                <div className="flex justify-center gap-10 mt-10">
+                  <button
+                    className="bg-gray-300 text-[#161F55] px-10 py-2 rounded-2xl"
+                    onClick={closeBulkDeleteModal}
+                  >
+                    No
+                  </button>
+                  <button
+                    className="bg-[#161F55] text-white px-10 py-2 rounded-2xl"
+                    onClick={deleteBulkAppointments}
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Tooltips */}
-          <Tooltip id="retry-tooltip" />
+          <Tooltip id="undo-tooltip" />
           <Tooltip id="delete-tooltip" />
         </main>
       </div>

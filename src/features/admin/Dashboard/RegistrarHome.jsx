@@ -18,13 +18,55 @@ const RegistrarHome = () => {
   const monthName = currentDate.format("MMMM");
   const year = currentDate.year();
 
+  // Define holidays for the year
+  const holidays = [
+    { date: "01-01", name: "New Year’s Day" },
+    { date: "03-31", name: "Eidul-Fitar" },
+    { date: "04-09", name: "The Day of Valor" },
+    { date: "05-01", name: "Labor Day" },
+    { date: "06-07", name: "Eid al-Adha (Feast of the Sacrifice)" },
+    { date: "06-08", name: "Eid al-Adha Day 2" },
+    { date: "06-12", name: "Independence Day" },
+    { date: "08-21", name: "Ninoy Aquino Day" },
+  ];
+
+  // Filter holidays for the current month
+  const currentMonthHolidays = holidays.filter((holiday) => {
+    const [month] = holiday.date.split("-");
+    return month === currentDate.format("MM");
+  });
+
   const events = {
-    1: { label: "Holiday", color: "bg-[#AF1EB9]" },
-    3: { label: "Appointment", color: "bg-[#48E14D]" },
+    2: { label: "Fully Booked", color: "bg-[#F63838]" },
+    3: { label: "Fully Booked", color: "bg-[#F63838]" },
     4: { label: "Closed", color: "bg-[#7F8258]" },
+    5: { label: "Closed", color: "bg-[#7F8258]" },
+    6: { label: "Fully Booked", color: "bg-[#F63838]" },
     7: { label: "Fully Booked", color: "bg-[#F63838]" },
     8: { label: "Closed", color: "bg-[#7F8258]" },
     9: { label: "Closed", color: "bg-[#7F8258]" },
+    10: { label: "Fully Booked", color: "bg-[#F63838]" },
+    11: { label: "Closed", color: "bg-[#7F8258]" },
+    12: { label: "Closed", color: "bg-[#7F8258]" },
+    13: { label: "Appointment", color: "bg-[#48E14D]" },
+    14: { label: "Appointment", color: "bg-[#48E14D]" },
+    15: { label: "Appointment", color: "bg-[#48E14D]" },
+    16: { label: "Appointment", color: "bg-[#48E14D]" },
+    17: { label: "Appointment", color: "bg-[#48E14D]" },
+    18: { label: "Closed", color: "bg-[#7F8258]" },
+    19: { label: "Closed", color: "bg-[#7F8258]" },
+    20: { label: "Event", color: "bg-[#FBBC05]" },
+    21: { label: "Event", color: "bg-[#FBBC05]" },
+    22: { label: "Appointment", color: "bg-[#48E14D]" },
+    23: { label: "Appointment", color: "bg-[#48E14D]" },
+    24: { label: "Appointment", color: "bg-[#48E14D]" },
+    25: { label: "Appointment", color: "bg-[#48E14D]" },
+    26: { label: "Appointment", color: "bg-[#48E14D]" },
+    27: { label: "Appointment", color: "bg-[#48E14D]" },
+    28: { label: "Appointment", color: "bg-[#48E14D]" },
+    29: { label: "Appointment", color: "bg-[#48E14D]" },
+    30: { label: "Appointment", color: "bg-[#48E14D]" },
+    31: { label: "Appointment", color: "bg-[#48E14D]" },
   };
 
   // Handle navigation between months
@@ -215,11 +257,18 @@ const RegistrarHome = () => {
                 {Array.from({ length: daysInMonth }).map((_, index) => {
                   const day = index + 1;
                   const isWeekendDay = isWeekend(day);
-                  const event =
-                    events[day] ||
-                    (isWeekendDay
-                      ? { label: "Closed", color: "bg-[#7F8258]" }
-                      : null);
+
+                  // Check if the day is a holiday
+                  const isHoliday = currentMonthHolidays.some(
+                    (holiday) => parseInt(holiday.date.split("-")[1]) === day
+                  );
+
+                  // Prioritize holidays and weekends
+                  const event = isHoliday
+                    ? { label: "Holiday", color: "bg-[#AF1EB9]" }
+                    : isWeekendDay
+                    ? { label: "Closed", color: "bg-[#7F8258]" }
+                    : events[day];
 
                   return (
                     <div
@@ -253,14 +302,17 @@ const RegistrarHome = () => {
               </h3>
               <div className="border-b-4 border-[#F3BC62] w-[120px] my-3"></div>
               <ul className="list-disc ml-5 text-lg">
-                <li>Jan 01 - New Year’s Day</li>
-                <li>Mar 31 - Eidul-Fitar</li>
-                <li>Apr 09 - The day of Valor</li>
-                <li>May 01 - Labor Day</li>
-                <li>Jun 07 - Eid al-Adha (Feast of the Sacrifice)</li>
-                <li>Jun 08 - Eid al-Adha Day 2</li>
-                <li>Jun 12 - Independence Day</li>
-                <li>Aug 21 - Ninoy Aquino Day</li>
+                {holidays.map((holiday, index) => {
+                  const [month, day] = holiday.date.split("-");
+                  const monthAbbreviation = dayjs()
+                    .month(parseInt(month) - 1)
+                    .format("MMM");
+                  return (
+                    <li key={index}>
+                      {monthAbbreviation} {day} - {holiday.name}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </section>

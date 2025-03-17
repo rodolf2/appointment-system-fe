@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Add useEffect
 import dayjs from "dayjs";
 import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
@@ -14,6 +14,31 @@ const Events = () => {
     endDate: "",
   });
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // Initialize events for dates 20 and 21 in all months
+  useEffect(() => {
+    const initialEvents = {};
+    for (let month = 0; month < 12; month++) {
+      const monthKey = dayjs().month(month).format("YYYY-MM");
+      initialEvents[monthKey] = {
+        20: {
+          label: "Event",
+          description: "Special Event",
+          color: "bg-[#FBBC05]",
+          startDate: dayjs().month(month).date(20).format("YYYY-MM-DD"),
+          endDate: dayjs().month(month).date(20).format("YYYY-MM-DD"),
+        },
+        21: {
+          label: "Event",
+          description: "Special Event",
+          color: "bg-[#FBBC05]",
+          startDate: dayjs().month(month).date(21).format("YYYY-MM-DD"),
+          endDate: dayjs().month(month).date(21).format("YYYY-MM-DD"),
+        },
+      };
+    }
+    setEvents(initialEvents);
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
