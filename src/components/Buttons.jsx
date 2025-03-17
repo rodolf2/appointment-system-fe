@@ -1,10 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-// Import icons
-// import announcementIcon from "icons/announcement_icon.png";
-// import htaIcon from "icons/howtoappoint _icon.png";
-import guidelinesIcon from "../../public/icons/guidelines_icon.png";
 const Buttons = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("");
@@ -32,15 +28,15 @@ const Buttons = () => {
                   : "text-gray-600"
               }`}
             >
-              <img
-                src={announcementIcon}
-                alt="Announcement Icon"
-                className="inline-block mr-2 w-6 h-6"
-              />
               Announcement
               {activeTab === "announcement" && (
                 <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
               )}
+              <img
+                src="/assets/icons/announcement.svg"
+                alt="Announcement Icon"
+                className="inline-block mr-2 w-8 h-8 pl-2"
+              />
             </span>
           </Link>
 
@@ -56,15 +52,15 @@ const Buttons = () => {
                 activeTab === "hta" ? "text-black pb-1" : "text-gray-600"
               }`}
             >
-              <img
-                src={htaIcon}
-                alt="How to Appoint Icon"
-                className="inline-block mr-2 w-6 h-6"
-              />
               How to Appoint
               {activeTab === "hta" && (
                 <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
               )}
+              <img
+                src="/assets/icons/howtoappoint.svg"
+                alt="How to Appoint Icon"
+                className="inline-block mr-2 w-8 h-8 pl-2"
+              />
             </span>
           </Link>
 
@@ -80,15 +76,15 @@ const Buttons = () => {
                 activeTab === "guidelines" ? "text-black pb-1" : "text-gray-600"
               }`}
             >
-              <img
-                src={guidelinesIcon}
-                alt="Guidelines Icon"
-                className="inline-block mr-2 w-6 h-6"
-              />
               Guidelines
               {activeTab === "guidelines" && (
                 <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 border-b-4 border-[#F3BC62] w-[10rem]"></span>
               )}
+              <img
+                src="/assets/icons/guidelines.svg"
+                alt="Guidelines Icon"
+                className="inline-block mr-2 w-8 h-8 pl-2"
+              />
             </span>
           </Link>
         </div>
