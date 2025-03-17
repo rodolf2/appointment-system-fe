@@ -39,7 +39,7 @@ const LandingPage = () => {
             <h1 className="text-white text-4xl md:text-6xl font-LatoBold uppercase w-[783px] tracking-wider">
               LA VERDAD CHRISTIAN COLLEGE
             </h1>
-            <span className="absolute top-36 left-0 w-[770px] h-1 bg-[#EEF2F7] "></span>
+            <span className="absolute top-36 left-0 w-[770px] h-2 bg-[#EEF2F7] "></span>
             <p className="text-Fwhite text-sm md:text-[24px] max-w-2xl leading-relaxed mt-10 font-LatoRegular ">
               La Verdad Christian School provides students a high-quality and
               carefully defined educational program emphasizing Christian
@@ -50,7 +50,7 @@ const LandingPage = () => {
           {/* Get Started Button */}
           <Link
             to="/home/announcement"
-            className="mt-6 bg-LBackground hover:bg-blue-800 text-white font-semibold py-3 px-6 rounded-md shadow-lg"
+            className="mt-6 bg-LBackground hover:bg-blue-800 text-white py-3 px-6 rounded-md shadow-lg"
           >
             Get Started
           </Link>
