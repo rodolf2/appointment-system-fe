@@ -24,6 +24,31 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
       return;
     }
 
+    // Apply character limits
+    if (name === "schoolYear" && value.length > 10) {
+      setErrors((prev) => ({
+        ...prev,
+        schoolYear: "Maximum 10 characters allowed.",
+      }));
+      return;
+    }
+
+    if (name === "course" && value.length > 30) {
+      setErrors((prev) => ({
+        ...prev,
+        course: "Maximum 30 characters allowed.",
+      }));
+      return;
+    }
+
+    if (name === "address" && value.length > 50) {
+      setErrors((prev) => ({
+        ...prev,
+        address: "Maximum 50 characters allowed.",
+      }));
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
@@ -39,13 +64,15 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
     }
 
     // Ensure Contact Number is numeric and 11 digits
-    if (!formData.contactNumber && !/^\d{11}$/.test(formData.contactNumber)) {
+    if (!/^\d{11}$/.test(formData.contactNumber)) {
       newErrors.contactNumber =
         "Contact Number must be 11 digits and contain only numbers.";
     }
 
     // Email validation
-    if (!formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (formData.email.trim() === "") {
+      newErrors.email = "Required Field.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format.";
     }
 
@@ -134,29 +161,53 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
               </div>
 
               {[
-                "schoolYear",
-                "course",
-                "address",
-                "contactNumber",
-                "email",
-              ].map((name) => (
-                <div key={name}>
+                {
+                  name: "schoolYear",
+                  label: "Last School Year Attended",
+                  placeholder: "ex. 2016 - 2017",
+                  maxLength: 10,
+                },
+                {
+                  name: "course",
+                  label: "Course/Program/Grade/Strand",
+                  placeholder: "ex. Grade 1",
+                  maxLength: 30,
+                },
+                {
+                  name: "address",
+                  label: "Present Address",
+                  placeholder: "ex. Sampaloc Apalit Pampanga",
+                  maxLength: 50,
+                },
+                {
+                  name: "contactNumber",
+                  label: "Contact Number",
+                  placeholder: "ex. 0981 255 9915",
+                },
+                {
+                  name: "email",
+                  label: "Email Address",
+                  placeholder: "ex. juandelacruz@gmail.com",
+                },
+              ].map((field) => (
+                <div key={field.name}>
                   <label className="text-start block text-[17px] font-LatoRegular text-[#000] uppercase">
-                    {name.replace(/([A-Z])/g, " $1").toUpperCase()}
+                    {field.label}
                   </label>
                   <input
-                    name={name}
-                    type={name === "email" ? "email" : "text"}
-                    value={formData[name]}
+                    name={field.name}
+                    type={field.name === "email" ? "email" : "text"}
+                    value={formData[field.name]}
                     onChange={handleInputChange}
-                    placeholder={`Enter ${name}`}
+                    placeholder={field.placeholder}
+                    maxLength={field.maxLength} // Apply character limit
                     className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
-                      errors[name] ? "border-red-500" : ""
+                      errors[field.name] ? "border-red-500" : ""
                     }`}
                   />
-                  {errors[name] && (
+                  {errors[field.name] && (
                     <p className="text-red-600 text-sm text-start">
-                      {errors[name]}
+                      {errors[field.name]}
                     </p>
                   )}
                 </div>
