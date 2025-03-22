@@ -1,73 +1,25 @@
-import { useState } from "react";
 import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
+import useSelectDocuments from "./hooks/useSelectDocuments";
 
 const SelectDocuments = ({ onNext, onBack, currentStep }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedDocuments, setSelectedDocuments] = useState([]);
-  const [purpose, setPurpose] = useState("");
-  const [date, setDate] = useState("");
-  const [errors, setErrors] = useState({});
-  const [claimOption, setClaimOption] = useState(null); // Track user's claim choice
-
-  const documentsList = [
-    { label: "Certificate of Enrollment", value: "certificate_of_enrollment" },
-    { label: "Good Moral Certificate", value: "good_moral_certificate" },
-    { label: "Form 137", value: "form_137" },
-    { label: "Certified True Copy of Documents", value: "certified_copy" },
-    { label: "Transcript of Records", value: "transcript_of_records" },
-    {
-      label: "Education Service Contracting Certificate ",
-      value: "Education Service Contracting Certificate ",
-    },
-  ];
-
-  const handleDocumentSelection = (value) => {
-    setSelectedDocuments((prevSelected) =>
-      prevSelected.includes(value)
-        ? prevSelected.filter((doc) => doc !== value)
-        : [...prevSelected, value]
-    );
-    setErrors((prevErrors) => ({ ...prevErrors, selectedDocuments: "" }));
-  };
-
-  const removeDocument = (value) => {
-    setSelectedDocuments((prevSelected) =>
-      prevSelected.filter((doc) => doc !== value)
-    );
-  };
-
-  const handleValidation = () => {
-    let newErrors = {};
-    if (selectedDocuments.length === 0)
-      newErrors.selectedDocuments = "Please select at least one document.";
-    if (!purpose.trim()) newErrors.purpose = "This field is required.";
-    if (!date) newErrors.date = "Please select a date.";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleNext = () => {
-    if (handleValidation()) {
-      setShowModal(true); // Show modal for claim options
-    }
-  };
-
-  const handleClaimOption = (option) => {
-    setClaimOption(option); // Set the user's claim choice
-  };
-
-  const handleModalNext = () => {
-    setShowModal(false); // Close the modal
-
-    if (claimOption === "personal") {
-      // Skip to step 5 (number 4 in progress bar)
-      onNext(5); // Pass the step number to the parent component
-    } else if (claimOption === "authorized") {
-      // Go to step 4 (number 3 in progress bar)
-      onNext(4); // Pass the step number to the parent component
-    }
-  };
+  const {
+    showModal,
+    selectedDocuments,
+    purpose,
+    date,
+    errors,
+    setErrors,
+    claimOption,
+    documentsList,
+    handleDocumentSelection,
+    removeDocument,
+    setPurpose,
+    setDate,
+    handleNext,
+    handleClaimOption,
+    handleModalNext,
+    setShowModal,
+  } = useSelectDocuments(onNext);
 
   return (
     <>
