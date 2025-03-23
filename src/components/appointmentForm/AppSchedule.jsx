@@ -194,25 +194,25 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
           </div>
           {/* Confirmation Modal */}
           {showConfirmation && (
-            <div className="fixed inset-0 bg-[#D2D2D2] bg-opacity-50 flex items-center justify-center">
+            <div className="fixed inset-0 bg-[#161F55] bg-opacity-50 flex items-center justify-center">
               <div className="bg-white p-6 rounded-lg shadow-lg w-96 h-50 flex  justify-center flex-col">
-                <h2 className="text-lg  text-[#161f55] mb-10 text-center">
+                <p className="text-lg font-LatoRegular text-[#000] my-auto py-6 text-center">
                   Are you sure you want to submit now?
-                </h2>
-                <div className="flex justify-end gap-2 mt-4 ">
-                  {/* Cancel Submission */}
-                  <button
-                    onClick={handleCancelSubmit}
-                    className="bg-[#C9C9C9]  hover:bg-gray-400 text-[#161F55] px-10 py-1 rounded-lg"
-                  >
-                    No
-                  </button>
+                </p>
+                <div className=" flex justify-end space-x-4 mt-6 ">
                   {/* Confirm Submission */}
                   <button
                     onClick={handleConfirmSubmit}
-                    className="bg-[#161F55] hover:bg-blue-700 text-white px-10 py-1 rounded-lg"
+                    className=" font-LatoBold text-[#161F55]  py-1 "
                   >
                     Yes
+                  </button>
+                  {/* Cancel Submission */}
+                  <button
+                    onClick={handleCancelSubmit}
+                    className=" text-[#000]py-1 font-LatoRegular"
+                  >
+                    Cancel
                   </button>
                 </div>
               </div>

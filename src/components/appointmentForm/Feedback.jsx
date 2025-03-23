@@ -39,16 +39,9 @@ const Feedback = ({ onNext }) => {
         </p>
 
         {/* Overall Rating */}
-        <div className="mb-6 flex justify-center">
-          <StarRating
-            category="overall"
-            currentRating={ratings.overall}
-            onRate={handleRating}
-          />
-        </div>
 
         {/* Other Ratings */}
-        <div className="space-y-4">
+        <div className="space-y-4 ] font-LatoRegular">
           {[
             { label: "Is easy to use", category: "easyToUse" },
             { label: "Has the features I want", category: "features" },
@@ -56,7 +49,7 @@ const Feedback = ({ onNext }) => {
             { label: "Is reliable", category: "reliability" },
           ].map((item, index) => (
             <div key={index} className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">{item.label}</span>
+              <span className="text-[16px] text-[#161f55">{item.label}</span>
               <StarRating
                 category={item.category}
                 currentRating={ratings[item.category]}
