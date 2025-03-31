@@ -3,7 +3,7 @@ import { Link } from "react-router";
 const LandingPage = () => {
   return (
     <>
-      <main className="relative w-full h-screen over">
+      <main className="relative w-full h-screen flex flex-col items-center justify-center">
         {/* Background Image */}
         <div className="relative w-full h-full">
           <img
@@ -18,11 +18,11 @@ const LandingPage = () => {
         {/* Overlay Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           {/* Header: Logo and AppointEase */}
-          <div className="flex items-center absolute top-6 left-6">
+          <div className="flex items-center absolute top-6 left-6 ">
             <img
               src="/assets/image/LV_logo.png"
               alt="LVCC Logo"
-              className="w-20 h-20 md:w-24 md:h-24 mr-2"
+              className="w-14 h-14 sm:w-14 sm:h-14 md:w-20 md:h-20 mr-2 lg:w-24 lg:h-24 "
             />
             <div className="flex items-baseline">
               <span className="text-Bbackground text-2xl md:text-3xl font-regular">
