@@ -23,37 +23,45 @@ const Header = ({ toggleSidebar, isSidebarOpen, title }) => {
   };
 
   return (
-    <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5">
+    <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md">
       <div className="flex items-center">
         <button
           onClick={toggleSidebar}
-          className="p-2 text-black rounded text-4xl font-bold"
+          className="p-2 text-black rounded text-4xl font-bold hover:bg-gray-200 transition-colors"
         >
           <RxHamburgerMenu />
         </button>
-        <h1 className="text-[20px] font-bold ml-4">{title}</h1>
+        <h1 className="text-xl font-bold ml-4">{title}</h1>
       </div>
-
       <div className="relative flex items-center gap-3">
-        <CgProfile className="text-5xl" />
-        <span className="text-[20px]">Juan Dela Cruz</span>
-        <button onClick={toggleDropdown} className="focus:outline-none">
-          <IoMdArrowDropdown className="text-5xl" />
-        </button>
+        <img
+          src="/public/assets/icons/notification.svg"
+          alt="Notifications"
+          className="inline-block w-8 h-8 cursor-pointer"
+        />
+        <div className="border-r-2 border-gray-300 h-8"></div>
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={toggleDropdown}
+        >
+          <CgProfile className="text-4xl" />
+          <span className="text-base hidden sm:inline">Juan Dela Cruz</span>
+          <IoMdArrowDropdown className="text-4xl" />
+        </div>
         {isDropdownOpen && (
-          <div className="absolute right-0 top-[80px] bg-white border shadow-lg rounded-lg py-2 w-48">
+          <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 shadow-lg rounded-lg py-2 w-48 z-20">
             <button
-              className=" flex px-4 py-2 text-left hover:bg-gray-200 w-full"
+              className="flex items-center px-4 py-2 text-left text-gray-700 hover:bg-gray-100 w-full text-sm"
               onClick={handleProfle}
             >
-              <FaUserEdit className="mr-2 w-[24px] h-[24px]" />
+              <FaUserEdit className="mr-2 w-5 h-5" />
               Edit Profile
             </button>
             <button
-              className=" flex px-4 py-2 text-left hover:bg-gray-200 w-full"
+              className="flex items-center px-4 py-2 text-left text-gray-700 hover:bg-gray-100 w-full text-sm"
               onClick={handleSignOut}
             >
-              <FaSignOutAlt className="mr-2 w-[24px] h-[24px]" />
+              <FaSignOutAlt className="mr-2 w-5 h-5" />
               Sign Out
             </button>
           </div>
