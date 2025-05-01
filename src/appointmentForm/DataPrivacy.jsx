@@ -23,8 +23,8 @@ const DataPrivacy = ({ onNext }) => {
           Republic Act No. 10173 (Data Privacy Act of 2012) and its implementing
           rules and regulations, we within the Organization of La Verdad
           Christian College (LVCC), collect and process your personal
-          information in this survey form for Research Subject purposes only,
-          keeping them securely and with confidentiality using our
+          information in this survey form for the Research Subject purposes
+          only, keeping them securely and with confidentiality using our
           organizational, technical, and physical security measures, and retain
           them in accordance with our retention policy. We don’t share them to
           any external group without your consent, unless otherwise stated in

@@ -2,14 +2,14 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Announcement from "./Pages/Announcement";
-import Guidelines from "./features/homepage/Guidelines";
-import LandingPage from "./features/landing/LandingPage";
-import About from "./features/homepage/About";
-import Faqs from "./features/homepage/Faqs";
-import Contact from "./features/homepage/Contact";
+import Guidelines from "./Pages/Guidelines";
+import LandingPage from "./landing/LandingPage";
+import About from "./Pages/About";
+import Faqs from "./Pages/Faqs";
+import Contact from "./Pages/Contact";
 import AppointmentForm from "./features/appointment/AppointmentForm";
 import Hta from "./features/appointment/Hta";
-import HomePage from "./features/homepage/HomePage";
+import HomePage from "./Pages/HomePage";
 import Students from "./features/admin/status/Students";
 import Pending from "./features/admin/status/Pending";
 import Approved from "./features/admin/status/Approved";
@@ -25,8 +25,8 @@ import Profile from "./features/admin/components/Profile";
 import Layouts from "./components/Layout";
 import Appointments from "./features/admin/status/Appointments";
 import Archived from "./features/admin/status/Archived";
-import Attachment from "./components/appointmentForm/Attachment";
-import AppSchedule from "./components/appointmentForm/AppSchedule";
+import Attachment from "./appointmentForm/Attachment";
+import AppSchedule from "./appointmentForm/AppSchedule";
 
 const App = () => {
   return (

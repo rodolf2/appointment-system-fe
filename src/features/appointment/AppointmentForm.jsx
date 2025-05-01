@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router";
-import DataPrivacy from "../../components/appointmentForm/DataPrivacy";
-import Attachment from "../../components/appointmentForm/Attachment";
-import AppInfo from "../../components/appointmentForm/AppInfo";
-import AppSchedule from "../../components/appointmentForm/AppSchedule";
-import ReturnHome from "../../components/appointmentForm/ReturnHome";
-import Feedback from "@/components/appointmentForm/Feedback";
-import SelectDocuments from "@/components/appointmentForm/SelectDocuments";
+import DataPrivacy from "../../appointmentForm/DataPrivacy";
+import Attachment from "../../appointmentForm/Attachment";
+import AppInfo from "../../appointmentForm/AppInfo";
+import AppSchedule from "../../appointmentForm/AppSchedule";
+import ReturnHome from "../../appointmentForm/ReturnHome";
+import Feedback from "@/appointmentForm/Feedback";
+import SelectDocuments from "@/appointmentForm/SelectDocuments";
 
 const AppointmentForm = () => {
   const [searchParams, setSearchParams] = useSearchParams();
