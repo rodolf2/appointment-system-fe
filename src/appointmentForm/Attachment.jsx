@@ -13,6 +13,26 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
     handleNext,
   } = useAttachment(onNext);
 
+  // Modified handleFileChange to only accept images
+  const handleImageChange = (e) => {
+    const selectedFiles = e.target.files;
+    const imageFiles = Array.from(selectedFiles).filter((file) =>
+      file.type.match("image.*")
+    );
+
+    if (imageFiles.length !== selectedFiles.length) {
+      // Some files were not images
+      alert("Only image files (JPG, PNG, GIF, etc.) are allowed");
+      return;
+    }
+
+    handleFileChange({
+      target: {
+        files: imageFiles.length ? imageFiles : null,
+      },
+    });
+  };
+
   return (
     <>
       <div className="bg-Primary h-screen relative">
@@ -40,11 +60,11 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
               <CustomProgressBar currentStep={currentStep} />
             </div>
 
-            <p className="text-[#161F55] font-LatoItalic mt-20 mb-8 w-[540px] mx-auto">
+            <p className="text-[#161F55] font-LatoItalic mt-20 w-[460px] h-[120px] mx-auto">
               To proceed with your request, please upload the required
               requirements. Processing will not begin until all necessary
-              requirements are submitted and approved by the administrator. The
-              status of your request will be updated accordingly.
+              requirements are submitted and approved by the administrator.
+              <br /> The status of your request will be updated accordingly.
             </p>
             <h2 className="text-gray-800 font-bold text-lg mb-4">ATTACHMENT</h2>
 
@@ -74,12 +94,13 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
             <input
               type="file"
               ref={fileInputRef}
-              onChange={handleFileChange}
+              onChange={handleImageChange}
               className={`my-2 justify-center shadow-md text-[#161f55] border-2 py-2 px-2 w-[380px] rounded-[20px] 
                 ${
                   error ? "border-red-500" : "border-[#000] border-opacity-40"
                 }`}
               multiple
+              accept="image/*"
             />
 
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -88,7 +109,7 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
             <div className="pr-[210px]">
               <button
                 type="button"
-                className="border-2 shadow-md border-[#425066] border-opacity-40 font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[20px] w-[170px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors justify-center text-start bg-none"
+                className="border-2 shadow-md border-[#425066] border-opacity-40 font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[15px] w-[180px] h-[50px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors justify-center text-start bg-none"
                 onClick={handleAddFile}
               >
                 + Add Another File

@@ -24,8 +24,8 @@ const LandingPage = () => {
               alt="LVCC Logo"
               className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 mr-2"
             />
-            <div className="flex items-baseline">
-              <span className="text-Bbackground text-lg sm:text-xl md:text-2xl lg:text-3xl font-regular">
+            <div className="flex items-baseline tracking-widest">
+              <span className="text-Bbackground text-lg sm:text-xl md:text-2xl lg:text-3xl font-regular font-thin">
                 LVCC
               </span>
               <span className="text-Bbackground text-lg sm:text-xl md:text-2xl lg:text-3xl font-LatoBold pl-1 sm:pl-2">
@@ -55,7 +55,7 @@ const LandingPage = () => {
               {/* Button positioned relative to the text */}
               <Link
                 to="/home/announcement"
-                className="mt-6 sm:mt-8 bg-LBackground hover:bg-blue-800 text-white py-2 px-4 sm:py-3 sm:px-6 rounded-md shadow-lg text-sm sm:text-base transition-colors duration-200"
+                className="mt-6 sm:mt-8 bg-LBackground hover:bg-blue-800 text-white py-2 px-4 sm:py-3 sm:px-6 rounded-md shadow-lg text-sm sm:text-base transition-colors duration-200 w-40 h-[50px] "
               >
                 Get Started
               </Link>

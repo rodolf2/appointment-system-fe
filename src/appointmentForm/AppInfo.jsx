@@ -1,14 +1,10 @@
+import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
 import useAppInfo from "./hooks/useAppInfo";
 
-import CustomProgressBar from "/src/features/appointment/CustomProgressBar"; // Import the progress bar
-
 const AppInfo = ({ onNext, onBack, currentStep }) => {
- const {
-  formData,
-  errors,
-  handleInputChange,
-  handleNext
- } = useAppInfo(onNext);
+  // Use the hook which manages all form state and logic
+  const { formData, errors, handleInputChange, handleNext } =
+    useAppInfo(onNext);
 
   return (
     <>
@@ -31,7 +27,13 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
             APPLICATION FOR RECORDS
           </h2>
           <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%]  text-center z-10">
-            <form className="space-y-4" onSubmit={handleNext}>
+            <form
+              className="space-y-4"
+              onSubmit={handleNext}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.preventDefault();
+              }}
+            >
               <div className=" w-full max-w-[60%] mb-10 mx-auto">
                 <CustomProgressBar currentStep={currentStep} />
               </div>
@@ -59,7 +61,7 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                     <input
                       type="text"
                       name={field.name}
-                      value={formData[field.name]}
+                      value={formData[field.name] || ""}
                       onChange={handleInputChange}
                       placeholder={field.placeholder}
                       className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
@@ -92,12 +94,13 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                   name: "address",
                   label: "Present Address",
                   placeholder: "ex. Sampaloc Apalit Pampanga",
-                  maxLength: 50,
+                  maxLength: 100,
                 },
                 {
                   name: "contactNumber",
                   label: "Contact Number",
                   placeholder: "ex. 0981 255 9915",
+                  maxLength: 11,
                 },
                 {
                   name: "email",
@@ -112,10 +115,10 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                   <input
                     name={field.name}
                     type={field.name === "email" ? "email" : "text"}
-                    value={formData[field.name]}
+                    value={formData[field.name] || ""}
                     onChange={handleInputChange}
                     placeholder={field.placeholder}
-                    maxLength={field.maxLength} // Apply character limit
+                    maxLength={field.maxLength}
                     className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
                       errors[field.name] ? "border-red-500" : ""
                     }`}

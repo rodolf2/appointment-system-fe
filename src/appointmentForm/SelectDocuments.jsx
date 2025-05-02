@@ -204,6 +204,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   name="claim_option"
                   value="personal"
                   onChange={() => handleClaimOption("personal")} // Handle personal claim
+                  checked={claimOption === "personal"}
                   className="h-5 w-5 text-indigo-600 border-gray-300 rounded-full"
                 />
                 <span>I will claim my document personally.</span>
@@ -215,6 +216,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   name="claim_option"
                   value="authorized"
                   onChange={() => handleClaimOption("authorized")} // Handle authorized claim
+                  checked={claimOption === "authorized"}
                   className="h-5 w-5 text-indigo-600 border-gray-300 rounded-full"
                 />
                 <span>
@@ -242,19 +244,6 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 </li>
               </ul>
             </div>
-            <h2 className="uppercase text-lg text-left font-LatoBold my-6">
-              For Delivery Transaction
-            </h2>
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                name="claim_option"
-                value="courier"
-                onChange={() => handleClaimOption("courier")} // Handle courier claim
-                className="h-5 w-5 text-indigo-600 border-gray-300 rounded-full"
-              />
-              <span>I will claim my document through courier.</span>
-            </label>
             {/* Modal Buttons */}
             <div className="flex justify-end space-x-2 mt-6">
               <button

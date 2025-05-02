@@ -89,13 +89,13 @@ const DataPrivacy = ({ onNext }) => {
           </p>
         </p>
 
-        <div className="flex justify-between">
-          <button className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700">
+        <div className="flex justify-end gap-5">
+          <button className="px-8 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700">
             <Link to="/home">Back</Link>
           </button>
           <button
             onClick={handleNext}
-            className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700"
+            className="px-8 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700"
           >
             Next
           </button>

@@ -63,7 +63,7 @@ const Hta = () => {
               {/* Step 1 */}
               <div className="flex items-center pb-2 ">
                 <span className="text-5xl font-bold">01.</span>
-                <span className="border-r-[8px] border-[#F3BC62] h-[220px] mx-5"></span>
+                <span className="border-r-[8px] border-[#F3BC62] h-[260px] mx-5"></span>
                 <div className="space-y-4">
                   <h3 className="uppercase text-3xl font-bold ">Step 1:</h3>
                   <p className="text-1xl ">

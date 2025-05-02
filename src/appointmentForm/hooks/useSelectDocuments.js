@@ -1,13 +1,28 @@
-// /src/hooks/useSelectDocuments.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const useSelectDocuments = (onNext) => {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedDocuments, setSelectedDocuments] = useState([]);
-  const [purpose, setPurpose] = useState("");
-  const [date, setDate] = useState("");
+  const LOCAL_STORAGE_KEY = "selectDocumentsFormData";
+
+  // Initialize state from localStorage or with defaults
+  const [state, setState] = useState(() => {
+    const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return savedData
+      ? JSON.parse(savedData)
+      : {
+          showModal: false,
+          selectedDocuments: [],
+          purpose: "",
+          date: "",
+          claimOption: null,
+        };
+  });
+
   const [errors, setErrors] = useState({});
-  const [claimOption, setClaimOption] = useState(null);
+
+  // Persist to localStorage whenever state changes
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+  }, [state]);
 
   const documentsList = [
     { label: "Certificate of Enrollment", value: "certificate_of_enrollment" },
@@ -21,30 +36,35 @@ const useSelectDocuments = (onNext) => {
     },
   ];
 
+  // Helper to update state and automatically persist
+  const updateState = (updates) => {
+    setState((prev) => ({ ...prev, ...updates }));
+  };
+
   // Handle Document Selection
   const handleDocumentSelection = (value) => {
-    setSelectedDocuments((prevSelected) =>
-      prevSelected.includes(value)
-        ? prevSelected.filter((doc) => doc !== value)
-        : [...prevSelected, value]
-    );
-    setErrors((prevErrors) => ({ ...prevErrors, selectedDocuments: "" }));
+    updateState({
+      selectedDocuments: state.selectedDocuments.includes(value)
+        ? state.selectedDocuments.filter((doc) => doc !== value)
+        : [...state.selectedDocuments, value],
+    });
+    setErrors((prev) => ({ ...prev, selectedDocuments: "" }));
   };
 
   // Remove Document
   const removeDocument = (value) => {
-    setSelectedDocuments((prevSelected) =>
-      prevSelected.filter((doc) => doc !== value)
-    );
+    updateState({
+      selectedDocuments: state.selectedDocuments.filter((doc) => doc !== value),
+    });
   };
 
   // Form Validation
   const handleValidation = () => {
     let newErrors = {};
-    if (selectedDocuments.length === 0)
+    if (state.selectedDocuments.length === 0)
       newErrors.selectedDocuments = "Please select at least one document.";
-    if (!purpose.trim()) newErrors.purpose = "This field is required.";
-    if (!date) newErrors.date = "Please select a date.";
+    if (!state.purpose.trim()) newErrors.purpose = "This field is required.";
+    if (!state.date) newErrors.date = "Please select a date.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -53,42 +73,47 @@ const useSelectDocuments = (onNext) => {
   // Handle Next Button
   const handleNext = () => {
     if (handleValidation()) {
-      setShowModal(true);
+      updateState({ showModal: true });
     }
   };
 
   // Handle Claim Option
   const handleClaimOption = (option) => {
-    setClaimOption(option);
+    updateState({ claimOption: option });
   };
 
   // Handle Modal Next Button
   const handleModalNext = () => {
-    setShowModal(false);
-    if (claimOption === "personal") {
+    updateState({ showModal: false });
+    if (state.claimOption === "personal") {
       onNext(5);
-    } else if (claimOption === "authorized") {
+    } else if (state.claimOption === "authorized") {
       onNext(4);
     }
   };
 
+  // Clear saved data when needed (e.g., after successful submission)
+  const clearSavedData = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+  };
+
   return {
-    showModal,
-    setShowModal,
-    selectedDocuments,
-    purpose,
-    date,
+    showModal: state.showModal,
+    selectedDocuments: state.selectedDocuments,
+    purpose: state.purpose,
+    setPurpose: (value) => updateState({ purpose: value }),
+    date: state.date,
+    setDate: (value) => updateState({ date: value }),
     errors,
-    setErrors,
-    claimOption,
+    claimOption: state.claimOption,
     documentsList,
     handleDocumentSelection,
     removeDocument,
-    setPurpose,
-    setDate,
     handleNext,
     handleClaimOption,
     handleModalNext,
+    setShowModal: (value) => updateState({ showModal: value }),
+    clearSavedData,
   };
 };
 
