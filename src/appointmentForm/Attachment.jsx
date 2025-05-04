@@ -13,26 +13,6 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
     handleNext,
   } = useAttachment(onNext);
 
-  // Modified handleFileChange to only accept images
-  const handleImageChange = (e) => {
-    const selectedFiles = e.target.files;
-    const imageFiles = Array.from(selectedFiles).filter((file) =>
-      file.type.match("image.*")
-    );
-
-    if (imageFiles.length !== selectedFiles.length) {
-      // Some files were not images
-      alert("Only image files (JPG, PNG, GIF, etc.) are allowed");
-      return;
-    }
-
-    handleFileChange({
-      target: {
-        files: imageFiles.length ? imageFiles : null,
-      },
-    });
-  };
-
   return (
     <>
       <div className="bg-Primary h-screen relative">
@@ -52,7 +32,8 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
         </div>
         <div className="relative flex flex-col justify-center text-center">
           <h2 className="font-LatoBold text-[35px] text-Fwhite tracking-widest py-8">
-            APPLICATION FOR RECORDS
+            APPLICATION FOR <br />
+            RECORDS
           </h2>
           <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[50%] text-center z-10">
             {/* Progress Bar */}
@@ -62,8 +43,9 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
 
             <p className="text-[#161F55] font-LatoItalic mt-20 w-[460px] h-[120px] mx-auto">
               To proceed with your request, please upload the required
-              requirements. Processing will not begin until all necessary
-              requirements are submitted and approved by the administrator.
+              requirements (maximum 3 files). Processing will not begin until
+              all necessary requirements are submitted and approved by the
+              administrator.
               <br /> The status of your request will be updated accordingly.
             </p>
             <h2 className="text-gray-800 font-bold text-lg mb-4">ATTACHMENT</h2>
@@ -94,13 +76,14 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
             <input
               type="file"
               ref={fileInputRef}
-              onChange={handleImageChange}
+              onChange={handleFileChange}
               className={`my-2 justify-center shadow-md text-[#161f55] border-2 py-2 px-2 w-[380px] rounded-[20px] 
                 ${
                   error ? "border-red-500" : "border-[#000] border-opacity-40"
                 }`}
               multiple
               accept="image/*"
+              disabled={files.length >= 3}
             />
 
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -109,8 +92,11 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
             <div className="pr-[210px]">
               <button
                 type="button"
-                className="border-2 shadow-md border-[#425066] border-opacity-40 font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[15px] w-[180px] h-[50px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors justify-center text-start bg-none"
+                className={`border-2 shadow-md border-[#425066] border-opacity-40 font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[15px] w-[180px] h-[50px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors justify-center text-start bg-none ${
+                  files.length >= 3 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 onClick={handleAddFile}
+                disabled={files.length >= 3}
               >
                 + Add Another File
               </button>

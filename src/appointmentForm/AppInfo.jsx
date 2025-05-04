@@ -24,7 +24,7 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
 
         <div className="flex flex-col justify-center text-center m-2">
           <h2 className="mx-auto relative font-LatoBold text-[35px] text-Fwhite tracking-widest mt-6 mb-8">
-            APPLICATION FOR RECORDS
+            APPLICATION FOR <br /> RECORDS
           </h2>
           <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%]  text-center z-10">
             <form

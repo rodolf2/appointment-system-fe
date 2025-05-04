@@ -10,6 +10,7 @@ export default {
         LatoBold: ["Lato-Bold"],
         LatoSemiBold: ["Lato-Semibold, sans-serif"],
         LatoItalic: ["Lato-Italic"],
+        tolkien: ["Tolkien", "serif"],
       },
       colors: {
         Primary: "#161f55",

@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "Regular";
-  src: local("Tolkien"), url("/src/assets/fonts/Tolkien.ttf") format("truetype");
+  src: local("Tolkien"), url("/assets/fonts/Tolkien.ttf") format("truetype");
 }
 
 @font-face {

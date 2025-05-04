@@ -42,8 +42,8 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
             <div className="h-1/2 bg-[#161f55]"></div>
           </div>
           <div className="relative flex flex-col justify-center text-center">
-            <h2 className="font-LatoBold text-[30px] text-Fwhite tracking-widest py-3">
-              APPLICATION FOR RECORDS
+            <h2 className="font-LatoBold text-[35px] text-Fwhite tracking-widest py-3">
+              APPLICATION FOR <br /> RECORDS
             </h2>
             <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[60%] text-center z-10">
               {/* Progress Bar */}
