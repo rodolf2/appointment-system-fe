@@ -111,7 +111,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, title }) => {
   };
 
   return (
-    <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md">
+    <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md  ">
       {/* Left Side */}
       <div className="flex items-center">
         <button

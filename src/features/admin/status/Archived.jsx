@@ -37,6 +37,8 @@ const Archived = () => {
     setShowSuccessDelete,
     showSuccessRetrieve,
     setShowSuccessRetrieve,
+    closeSuccessDelete,
+    closeSuccessRetrieve,
   } = useArchived();
 
   return (
@@ -285,10 +287,28 @@ const Archived = () => {
           {/* Success Delete Message */}
           {showSuccessDelete && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <p className="text-xl font-semibold">
-                  Appointment has been successfully deleted.
-                </p>
+              <div className="relative">
+                {/* Close Icon - outside the white box */}
+                <img
+                  src="/assets/icons/x_icon.svg"
+                  alt="Close"
+                  onClick={closeSuccessDelete}
+                  className="w-10 h-10 absolute -top-6 -right-6 cursor-pointer"
+                />
+
+                {/* Modal Box */}
+                <div className="bg-white p-8 rounded-lg shadow-lg">
+                  <div className="flex flex-col items-center">
+                    <img
+                      src="/assets/icons/check_icon.svg"
+                      alt="Check icon"
+                      className="w-20 h-20 mb-8"
+                    />
+                    <p className="text-xl font-semibold text-center">
+                      Appointment has been successfully deleted.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -296,13 +316,32 @@ const Archived = () => {
           {/* Success Retrieve Message */}
           {showSuccessRetrieve && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <p className="text-xl font-semibold">
-                  Appointment has been successfully retrieved.
-                </p>
+              <div className="relative">
+                {/* Close Icon - outside the white box */}
+                <img
+                  src="/assets/icons/x_icon.svg"
+                  alt="Close"
+                  onClick={closeSuccessRetrieve}
+                  className="w-10 h-10 absolute -top-6 -right-6 cursor-pointer"
+                />
+
+                {/* Modal Box */}
+                <div className="bg-white p-8 rounded-lg shadow-lg">
+                  <div className="flex flex-col items-center">
+                    <img
+                      src="/assets/icons/check_icon.svg"
+                      alt="Check icon"
+                      className="w-20 h-20 mb-8"
+                    />
+                    <p className="text-xl font-semibold text-center">
+                      Appointment has been successfully retrieved.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           )}
+
           {/* Bulk Delete Modal */}
           {isBulkDeleteModalOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">

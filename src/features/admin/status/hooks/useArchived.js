@@ -46,22 +46,27 @@ const useArchived = () => {
   const [showSuccessDelete, setShowSuccessDelete] = useState(false);
   const [showSuccessRetrieve, setShowSuccessRetrieve] = useState(false);
 
+  const closeSuccessDelete = () => {
+    setShowSuccessDelete(false);
+  };
+
+  const closeSuccessRetrieve = () => {
+    setShowSuccessRetrieve(false);
+  };
+
   const deleteAppointment = () => {
-    // Your existing delete logic
     setAppointments(
       appointments.filter((appt) => appt !== selectedAppointment)
     );
-    setShowSuccessDelete(true);
-    setTimeout(() => setShowSuccessDelete(false), 3000); // Hide after 3 seconds
+    setShowSuccessDelete(true); // stays until manually closed
     closeModal();
   };
 
   const retrieveAppointment = () => {
-    // Your retrieve logic
-    setShowSuccessRetrieve(true);
-    setTimeout(() => setShowSuccessRetrieve(false), 3000); // Hide after 3 seconds
+    setShowSuccessRetrieve(true); // stays until manually closed
     closeRetrieveModal();
   };
+
   const openRetrieveModal = (appointment) => {
     setAppointmentToRetrieve(appointment);
     setIsRetrieveModalOpen(true);
@@ -175,6 +180,8 @@ const useArchived = () => {
     setShowSuccessDelete,
     showSuccessRetrieve,
     setShowSuccessRetrieve,
+    closeSuccessDelete,
+    closeSuccessRetrieve,
   };
 };
 
