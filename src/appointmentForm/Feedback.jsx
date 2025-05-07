@@ -35,7 +35,7 @@ const Feedback = ({ onNext }) => {
           ALMOST DONE!
         </h3>
         <p className="text-[18px] tracking-wide font-normal text-[#161f55] mb-6">
-          How would you rate your experience with our LV AppointEase?
+          How would you rate your experience with our <br /> LV AppointEase?
         </p>
 
         {/* Overall Rating */}
