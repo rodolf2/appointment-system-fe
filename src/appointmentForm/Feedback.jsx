@@ -14,7 +14,7 @@ const Feedback = ({ onNext }) => {
   };
 
   return (
-    <div className="h-full flex items-center justify-center bg-[#161f55]">
+    <div className="min-h-screen flex items-center justify-center bg-[#161f55]">
       {/* Background Layers */}
       <div className="absolute inset-0 flex flex-col">
         <div
@@ -30,7 +30,7 @@ const Feedback = ({ onNext }) => {
       </div>
 
       {/* Feedback Form */}
-      <div className="relative mx-auto flex flex-col mt-20 bg-white p-8 rounded-lg shadow-md w-[500px] max-w-[90%] text-center z-10">
+      <div className="relative mx-auto flex flex-col bg-white p-8 rounded-lg shadow-md w-[500px] max-w-[90%] text-center z-10">
         <h3 className="text-[16px] tracking-widest font-bold text-[#161f55] mb-4">
           ALMOST DONE!
         </h3>

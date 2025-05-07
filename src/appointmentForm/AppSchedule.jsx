@@ -1,6 +1,6 @@
 import CustomProgressBar from "@/features/appointment/CustomProgressBar";
 import useAppSchedule from "./hooks/useAppSchedule";
-import dayjs from "dayjs"; // Import Day.js for date manipulation
+import dayjs from "dayjs";
 
 const AppSchedule = ({ onNext, onBack, currentStep }) => {
   const {

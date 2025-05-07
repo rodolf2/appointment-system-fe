@@ -1,83 +1,155 @@
-import { useState } from "react";
-import dayjs from "dayjs"; // Import Day.js for date manipulation
+import { useState, useEffect } from "react";
+import dayjs from "dayjs";
 
 const useAppSchedule = (onNext) => {
-  const [currentMonth, setCurrentMonth] = useState(dayjs()); // Tracks the current calendar month
-  const [selectedDate, setSelectedDate] = useState(null); // Stores the selected date and booking status
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null); // Tracks the selected time slot
-  const [bookings, setBookings] = useState({
-    "2025-01-07": {
-      status: "available",
-      slots: ["8:00 AM - 12:00 PM", "1:00 PM - 5:00 PM"],
-    },
-    "2025-01-08": { status: "fully booked", slots: [] }, // Example of fully booked date
-    "2025-01-09": {
-      status: "available",
-      slots: ["8:00 AM - 12:00 PM", "1:00 PM - 5:00 PM"],
-    },
-  });
+  const [currentMonth, setCurrentMonth] = useState(dayjs());
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [bookings, setBookings] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState(""); // Stores error messages for invalid submissions
-  const [showConfirmation, setShowConfirmation] = useState(false); // Toggles confirmation modal visibility
+  // Generate dynamic time slots for available dates
+  const generateTimeSlots = () => {
+    return [
+      "8:00 AM - 10:00 AM",
+      "10:00 AM - 12:00 PM",
+      "1:00 PM - 3:00 PM",
+      "3:00 PM - 5:00 PM",
+    ];
+  };
 
-  const startOfMonth = currentMonth.startOf("month"); // Start of the currently displayed month
-  const endOfMonth = currentMonth.endOf("month"); // End of the currently displayed month
-  const startOfCalendar = startOfMonth.startOf("week"); // Start of the visible calendar grid (week aligned)
-  const endOfCalendar = endOfMonth.endOf("week"); // End of the visible calendar grid (week aligned)
+  // Generate bookings data for the current month
+  const generateBookingsForMonth = () => {
+    const newBookings = {};
+    const daysInMonth = currentMonth.daysInMonth();
+    const today = dayjs();
 
-  const daysInCalendar = []; // Array to store all visible days in the calendar
-  let currentDay = startOfCalendar;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = currentMonth.date(day);
+      const formattedDate = date.format("YYYY-MM-DD");
 
-  while (currentDay.isBefore(endOfCalendar)) {
-    daysInCalendar.push(currentDay); // Add each day to the calendar range
-    currentDay = currentDay.add(1, "day"); // Move to the next day
-  }
+      // Skip weekends (Saturday = 6, Sunday = 0)
+      if (date.day() === 0 || date.day() === 6) {
+        newBookings[formattedDate] = {
+          status: "unavailable",
+          slots: [],
+          reason: "Weekend",
+        };
+        continue;
+      }
 
-  const isSameDay = (day1, day2) => day1.isSame(day2, "day"); // Helper to compare two days
+      // Past dates are unavailable
+      if (date.isBefore(today, "day")) {
+        newBookings[formattedDate] = {
+          status: "unavailable",
+          slots: [],
+          reason: "Past date",
+        };
+        continue;
+      }
+
+      // Randomly make some dates unavailable (20% chance)
+      if (Math.random() < 0.2) {
+        newBookings[formattedDate] = {
+          status: "unavailable",
+          slots: [],
+          reason: "Fully booked",
+        };
+      } else {
+        newBookings[formattedDate] = {
+          status: "available",
+          slots: generateTimeSlots(),
+        };
+      }
+    }
+
+    return newBookings;
+  };
+
+  // Update bookings when month changes
+  useEffect(() => {
+    setBookings(generateBookingsForMonth());
+    setSelectedDate(null);
+    setSelectedTimeSlot(null);
+  }, [currentMonth]);
+
+  // Generate calendar days array
+  const generateDaysInCalendar = () => {
+    const startOfMonth = currentMonth.startOf("month");
+    const endOfMonth = currentMonth.endOf("month");
+    const startOfCalendar = startOfMonth.startOf("week");
+    const endOfCalendar = endOfMonth.endOf("week");
+
+    const days = [];
+    let currentDay = startOfCalendar;
+
+    while (currentDay.isBefore(endOfCalendar)) {
+      days.push(currentDay);
+      currentDay = currentDay.add(1, "day");
+    }
+
+    return days;
+  };
+
+  const daysInCalendar = generateDaysInCalendar();
+
+  const isSameDay = (day1, day2) => day1.isSame(day2, "day");
 
   const handlePrevMonth = () => {
-    setCurrentMonth(currentMonth.subtract(1, "month")); // Navigate to the previous month
+    setCurrentMonth(currentMonth.subtract(1, "month"));
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(currentMonth.add(1, "month")); // Navigate to the next month
+    setCurrentMonth(currentMonth.add(1, "month"));
   };
 
   const handleDateClick = (day) => {
     const formattedDate = day.format("YYYY-MM-DD");
-    if (bookings[formattedDate]) {
-      setSelectedDate({ date: formattedDate, ...bookings[formattedDate] }); // Set selected date with booking info
-      setSelectedTimeSlot(null); // Reset the time slot when selecting a new date
+    const booking = bookings[formattedDate];
+
+    if (booking && booking.status === "available") {
+      setSelectedDate({
+        date: formattedDate,
+        ...bookings[formattedDate],
+      });
+      setSelectedTimeSlot(null);
+      setErrorMessage("");
     } else {
-      setSelectedDate(null); // Clear selected date if no bookings exist
+      setSelectedDate(null);
+      setSelectedTimeSlot(null);
+      setErrorMessage(
+        booking?.reason === "Weekend"
+          ? "Weekends are not available for booking"
+          : booking?.reason === "Past date"
+          ? "Cannot book past dates"
+          : "This date is fully booked"
+      );
     }
-    setErrorMessage(""); // Clear any error messages
   };
 
   const handleTimeSlotClick = (slot) => {
-    setSelectedTimeSlot(slot); // Update selected time slot
-    setErrorMessage(""); // Clear any error messages
+    setSelectedTimeSlot(slot);
+    setErrorMessage("");
   };
 
   const handleSubmit = () => {
     if (!selectedDate?.date || !selectedTimeSlot) {
-      setErrorMessage(
-        "Please select both a date and a time slot before submitting."
-      ); // Validate inputs
-    } else {
-      setErrorMessage(""); // Clear error if valid inputs are provided
-      setShowConfirmation(true); // Show confirmation modal
+      setErrorMessage("Please select both a date and time slot");
+      return;
     }
+    setShowConfirmation(true);
   };
 
   const handleConfirmSubmit = () => {
-    setShowConfirmation(false); // Hide the confirmation modal
-    onNext(); // Trigger the `onNext` callback to proceed
+    setShowConfirmation(false);
+    onNext();
   };
 
   const handleCancelSubmit = () => {
-    setShowConfirmation(false); // Close the confirmation modal without proceeding
+    setShowConfirmation(false);
   };
+
   return {
     currentMonth,
     selectedDate,
