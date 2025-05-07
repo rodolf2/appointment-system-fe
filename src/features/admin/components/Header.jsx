@@ -1,117 +1,35 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { CgProfile } from "react-icons/cg";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaUserEdit, FaSignOutAlt, FaSpinner } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import useHeader from "./hooks/useHeader";
 
-const Header = ({ toggleSidebar, isSidebarOpen, title }) => {
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
-  const [notificationError, setNotificationError] = useState(null);
-  const [activeTab, setActiveTab] = useState("unread");
-
-  const navigate = useNavigate();
-  const profileDropdownRef = useRef(null);
-  const notificationDropdownRef = useRef(null);
-  const profileToggleRef = useRef(null);
-  const notificationToggleRef = useRef(null);
-
-  // Mock data matching your image
-  useEffect(() => {
-    setIsLoadingNotifications(true);
-    setTimeout(() => {
-      setNotifications([
-        {
-          id: 1,
-          initials: "AB",
-          text: "UserName updated the status appointment of TR102938-123 into APPROVED.",
-          read: false,
-          time: "22 minutes ago",
-        },
-        {
-          id: 2,
-          initials: "AB",
-          text: "UserName updated the status appointment of TR104095-567 into APPROVED.",
-          read: false,
-          time: "35 minutes ago",
-        },
-        {
-          id: 3,
-          text: "New Appointment has been submitted.",
-          read: false,
-        },
-        {
-          id: 4,
-          initials: "AB",
-          text: "UserName updated the status appointment of TR23132-122 into COMPLETED.",
-          read: false,
-          time: "43 minutes ago",
-        },
-      ]);
-      setIsLoadingNotifications(false);
-    }, 1000);
-  }, []);
-
-  // Click outside handler
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        profileDropdownRef.current &&
-        !profileDropdownRef.current.contains(event.target) &&
-        profileToggleRef.current &&
-        !profileToggleRef.current.contains(event.target)
-      ) {
-        setIsProfileDropdownOpen(false);
-      }
-      if (
-        notificationDropdownRef.current &&
-        !notificationDropdownRef.current.contains(event.target) &&
-        notificationToggleRef.current &&
-        !notificationToggleRef.current.contains(event.target)
-      ) {
-        setIsNotificationOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const filteredNotifications = notifications.filter((notif) => {
-    if (activeTab === "unread") return !notif.read;
-    return true;
-  });
-
-  const unreadCount = notifications.filter((n) => !n.read).length;
-
-  const toggleProfileDropdown = () => {
-    setIsProfileDropdownOpen((prev) => !prev);
-    setIsNotificationOpen(false);
-  };
-
-  const toggleNotificationDropdown = () => {
-    setIsNotificationOpen((prev) => !prev);
-    setIsProfileDropdownOpen(false);
-  };
-
-  const handleSignOut = () => {
-    setIsProfileDropdownOpen(false);
-    navigate("/signin");
-  };
-
-  const handleProfile = () => {
-    setIsProfileDropdownOpen(false);
-    navigate("/profile");
-  };
-
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
+const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
+  const {
+    isProfileDropdownOpen,
+    isNotificationOpen,
+    isLoadingNotifications,
+    notificationError,
+    activeTab,
+    title,
+    setTitle,
+    filteredNotifications,
+    unreadCount,
+    profileDropdownRef,
+    notificationDropdownRef,
+    profileToggleRef,
+    notificationToggleRef,
+    toggleProfileDropdown,
+    toggleNotificationDropdown,
+    handleSignOut,
+    handleProfile,
+    markAllAsRead,
+    setActiveTab,
+  } = useHeader(initialTitle);
 
   return (
-    <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md  ">
+    <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md">
       {/* Left Side */}
       <div className="flex items-center">
         <button
@@ -149,7 +67,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, title }) => {
               />
             </svg>
             {unreadCount > 0 && (
-              <span className="absolute top-0 right-0 block h-4 w-4 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center ring-2 ring-white">
+              <span className="absolute top-0 right-0 h-4 w-4 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center ring-2 ring-white">
                 {unreadCount}
               </span>
             )}
