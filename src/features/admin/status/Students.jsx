@@ -1,6 +1,3 @@
-// import { RxHamburgerMenu } from "react-icons/rx";
-// import { CgProfile } from "react-icons/cg";
-// import { IoMdArrowDropdown } from "react-icons/io";
 import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
@@ -10,11 +7,11 @@ const Students = () => {
   const { appointments, isSidebarOpen, toggleSidebar } = useStudents();
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">
-        <main className="h-[1200px]">
+        <main className="h-[1050px]">
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}

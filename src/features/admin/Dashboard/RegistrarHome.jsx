@@ -25,7 +25,9 @@ const RegistrarHome = () => {
     <div className="flex h-screen font-LatoRegular">
       {/* Sidebar */}
       <div
-        className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"} z-20`} // Add z-20 to ensure sidebar is above the overlay
+        className={`sidebar-container ${
+          isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        } z-20`}
       >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>

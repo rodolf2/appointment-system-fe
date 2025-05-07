@@ -6,18 +6,20 @@ const Header = () => {
   return (
     <header className="bg-Bbackground py-4 sticky top-0 z-50">
       <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
-        {/* Logo and Title */}
-        <p className="flex items-center">
+        <Link
+          to="/home/announcement"
+          className="flex items-center group hover:opacity-80 transition-opacity"
+        >
           <img
             src="/assets/image/LV_logo.png"
             alt="LV logo"
             className="w-20 h-20 mr-2 mb-1"
           />
           <span className="font-regular text-2xl text-LBackground">LVCC</span>
-          <span className=" font-LatoRegular text-[26px]  text-[#252F6A] pl-2 mb-1">
+          <span className="font-LatoRegular text-[26px] text-[#252F6A] pl-2 mb-1 ">
             AppointEase
           </span>
-        </p>
+        </Link>
 
         {/* Navigation */}
         <nav>

@@ -34,7 +34,7 @@ const Schedule = () => {
   } = useSchedule();
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">

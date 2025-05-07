@@ -2,6 +2,7 @@ import useEvents from "./hooks/useEvents";
 import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
 import dayjs from "dayjs";
+import Footer from "/src/features/admin/components/Footer";
 
 const Events = () => {
   const {
@@ -27,218 +28,214 @@ const Events = () => {
   } = useEvents();
 
   return (
-    <div className="flex h-screen font-LatoRegular">
-      {/* Sidebar */}
-      <div
-        className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"} z-20`} // Closed width is now 150px
-      >
-        <Sidebar isSidebarOpen={isSidebarOpen} />
-      </div>
-
-      {/* Background Image with Dark Overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center z-0"
-        style={{
-          backgroundImage: `url("/assets/image/BackGround.png")`,
-        }}
-      >
-        <div className="absolute inset-0 bg-[#161f55] bg-opacity-90"></div>
-      </div>
-
-      {/* Main Content */}
-      <div
-        className={`flex-1 overflow-y-auto z-10 relative  transition-all duration-300`}
-      >
-        <Header
-          toggleSidebar={toggleSidebar}
-          isSidebarOpen={isSidebarOpen}
-          title="Upcoming Events"
-        />
-
-        <div className="p-6">
-          <p className="h-auto font-LatoRegular text-[30px] text-[#fefefe] pb-10 ">
-            EVENT CALENDAR
-          </p>
-          <section className="bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg grid grid-cols-3 gap-6">
-            {/* Calendar Section */}
-            <div className="col-span-2 p-5 border-2 border-[#161f55] rounded-lg">
-              <div className="flex justify-between items-center mb-5">
-                <h2 className="text-3xl font-bold tracking-[5px] text-[#161F55]">
-                  {monthName} {year}
-                  <div className="border-b-4 border-[#F3BC62]  my-3"></div>
-                </h2>
-                <div>
-                  <button
-                    onClick={handlePrevMonth}
-                    className="px-4 py-2 mr-2 bg-[#161f55] text-white rounded hover:bg-blue-600"
-                  >
-                    &lt;
-                  </button>
-                  <button
-                    onClick={handleNextMonth}
-                    className="px-4 py-2 bg-[#161f55] text-white rounded hover:bg-blue-600"
-                  >
-                    &gt;
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-7 gap-[1px] bg-[#161f55] text-center mt-6">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-                  (day, index) => (
-                    <div
-                      key={index}
-                      className="font-bold text-[#161F55] text-lg bg-white"
-                    >
-                      {day}
-                    </div>
-                  )
-                )}
-
-                {Array.from({ length: startOfMonth }).map((_, index) => (
-                  <div key={index} className="bg-white"></div>
-                ))}
-
-                {Array.from({ length: daysInMonth }).map((_, index) => {
-                  const day = index + 1;
-                  const event = events[monthKey]?.[day];
-
-                  return (
-                    <div
-                      key={index}
-                      className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
-                        currentDate.date() === day &&
-                        currentDate.month() === dayjs().month() &&
-                        currentDate.year() === dayjs().year()
-                          ? "bg-blue-300 font-bold"
-                          : ""
-                      }`}
-                      onClick={() => handleDayClick(day)}
-                    >
-                      {day}
-                      {event && (
-                        <span
-                          className={`flex justify-center mt-4 text-xs text-white px-2 py-1 rounded ${event.color}`}
-                        >
-                          {event.label}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Add New Event Section */}
-            <div className="p-5 border-2 border-[#161f55] rounded-lg">
-              <h3 className="text-2xl font-LatoSemiBold tracking-[3px] text-[#161F55]">
-                Add New Event
-              </h3>
-              <div className="border-b-4 border-[#F3BC62] w-[200px] my-3"></div>
-              <form>
-                <div className="mb-4">
-                  <label className="block font-LatoSemiBold text-[#161f55] text-[18px]  mb-2">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={newEvent.title}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded"
-                    placeholder="Event Title"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    value={newEvent.description}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded"
-                    placeholder="Event Description"
-                  ></textarea>
-                </div>
-                <div className="mb-4">
-                  <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    name="startDate"
-                    value={newEvent.startDate}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    name="endDate"
-                    value={newEvent.endDate}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-                <div className="flex gap-4">
-                  <button
-                    type="button"
-                    onClick={handleSaveEvent}
-                    className="w-full px-4 py-2 bg-[#3A993D] text-white font-LatoSemiBold uppercase rounded hover:bg-green-600"
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancelEvent}
-                    className="w-full px-4 py-2 bg-[#9CA3AF] text-white font-LatoSemiBold uppercase rounded hover:bg-gray-500"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </section>
+    <div className="flex h-screen font-LatoRegular flex-col">
+      <div className="flex flex-1 overflow-hidden">
+        <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"} z-20`}>
+          <Sidebar isSidebarOpen={isSidebarOpen} />
         </div>
 
-        {/* Modal for Selected Event */}
-        {selectedEvent && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
-              <h2 className="text-2xl font-bold mb-4">{selectedEvent.label}</h2>
-              <p className="mb-4">{selectedEvent.description}</p>
-              <p className="mb-2 text-gray-600">
-                <strong>Start Date:</strong> {selectedEvent.startDate}
-              </p>
-              <p className="mb-4 text-gray-600">
-                <strong>End Date:</strong> {selectedEvent.endDate}
-              </p>
-              <div className="flex gap-4">
-                <button
-                  onClick={handleDeleteEvent}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={handleCloseModal}
-                  className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
-                >
-                  Close
-                </button>
+        <div
+          className="absolute inset-0 bg-cover bg-center z-0"
+          style={{
+            backgroundImage: `url("/assets/image/BackGround.png")`,
+          }}
+        >
+          <div className="absolute inset-0 bg-[#161f55] bg-opacity-90"></div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto z-10 relative flex flex-col">
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            title="Upcoming Events"
+          />
+
+          <div className="p-6 flex-1">
+            <p className="h-auto font-LatoRegular text-[30px] text-[#fefefe] pb-10">
+              EVENT CALENDAR
+            </p>
+            <section className="bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg grid grid-cols-3 gap-6">
+              {/* Calendar Section */}
+              <div className="col-span-2 p-5 border-2 border-[#161f55] rounded-lg">
+                <div className="flex justify-between items-center mb-5">
+                  <h2 className="text-3xl font-bold tracking-[5px] text-[#161F55]">
+                    {monthName} {year}
+                    <div className="border-b-4 border-[#F3BC62] my-3"></div>
+                  </h2>
+                  <div>
+                    <button
+                      onClick={handlePrevMonth}
+                      className="px-4 py-2 mr-2 bg-[#161f55] text-white rounded hover:bg-blue-600"
+                    >
+                      &lt;
+                    </button>
+                    <button
+                      onClick={handleNextMonth}
+                      className="px-4 py-2 bg-[#161f55] text-white rounded hover:bg-blue-600"
+                    >
+                      &gt;
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-7 gap-[1px] bg-[#161f55] text-center mt-6">
+                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                    (day, index) => (
+                      <div
+                        key={index}
+                        className="font-bold text-[#161F55] text-lg bg-white"
+                      >
+                        {day}
+                      </div>
+                    )
+                  )}
+
+                  {Array.from({ length: startOfMonth }).map((_, index) => (
+                    <div key={index} className="bg-white"></div>
+                  ))}
+
+                  {Array.from({ length: daysInMonth }).map((_, index) => {
+                    const day = index + 1;
+                    const event = events[monthKey]?.[day];
+
+                    return (
+                      <div
+                        key={index}
+                        className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
+                          currentDate.date() === day &&
+                          currentDate.month() === dayjs().month() &&
+                          currentDate.year() === dayjs().year()
+                            ? "bg-blue-300 font-bold"
+                            : ""
+                        }`}
+                        onClick={() => handleDayClick(day)}
+                      >
+                        {day}
+                        {event && (
+                          <span
+                            className={`flex justify-center mt-4 text-xs text-white px-2 py-1 rounded ${event.color}`}
+                          >
+                            {event.label}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Add New Event Section */}
+              <div className="p-5 border-2 border-[#161f55] rounded-lg">
+                <h3 className="text-2xl font-LatoSemiBold tracking-[3px] text-[#161F55]">
+                  Add New Event
+                </h3>
+                <div className="border-b-4 border-[#F3BC62] w-[200px] my-3"></div>
+                <form>
+                  <div className="mb-4">
+                    <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={newEvent.title}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border rounded"
+                      placeholder="Event Title"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      value={newEvent.description}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border rounded"
+                      placeholder="Event Description"
+                    ></textarea>
+                  </div>
+                  <div className="mb-4">
+                    <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
+                      Start Date
+                    </label>
+                    <input
+                      type="date"
+                      name="startDate"
+                      value={newEvent.startDate}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
+                      End Date
+                    </label>
+                    <input
+                      type="date"
+                      name="endDate"
+                      value={newEvent.endDate}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
+                  <div className="flex gap-4">
+                    <button
+                      type="button"
+                      onClick={handleSaveEvent}
+                      className="w-full px-4 py-2 bg-[#3A993D] text-white font-LatoSemiBold uppercase rounded hover:bg-green-600"
+                    >
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCancelEvent}
+                      className="w-full px-4 py-2 bg-[#9CA3AF] text-white font-LatoSemiBold uppercase rounded hover:bg-gray-500"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </section>
+          </div>
+
+          {/* Modal for Selected Event */}
+          {selectedEvent && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+                <h2 className="text-2xl font-bold mb-4">
+                  {selectedEvent.label}
+                </h2>
+                <p className="mb-4">{selectedEvent.description}</p>
+                <p className="mb-2 text-gray-600">
+                  <strong>Start Date:</strong> {selectedEvent.startDate}
+                </p>
+                <p className="mb-4 text-gray-600">
+                  <strong>End Date:</strong> {selectedEvent.endDate}
+                </p>
+                <div className="flex gap-4">
+                  <button
+                    onClick={handleDeleteEvent}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={handleCloseModal}
+                    className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <footer className="bg-Bbackground h-[70px] flex items-center justify-end pr-9 w-full">
-          <p className="font-regular">LA VERDAD CHRISTIAN COLLEGE, INC.</p>
-        </footer>
+          <Footer />
+        </div>
       </div>
     </div>
   );

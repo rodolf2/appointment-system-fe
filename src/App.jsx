@@ -11,12 +11,8 @@ import AppointmentForm from "./features/appointment/AppointmentForm";
 import Hta from "./features/appointment/Hta";
 import HomePage from "./Pages/HomePage";
 import Students from "./features/admin/status/Students";
-import Pending from "./features/admin/status/Pending";
-import Approved from "./features/admin/status/Approved";
 import SignIn from "./features/admin/Login/SignIn";
 import SignUp from "./features/admin/Login/SignUp";
-import Rejected from "./features/admin/status/Rejected";
-import Completed from "./features/admin/status/Completed";
 import RegistrarHome from "./features/admin/Dashboard/RegistrarHome";
 import Events from "./features/admin/Dashboard/Events";
 import Schedule from "./features/admin/status/Schedule";
@@ -42,12 +38,8 @@ const Layout = () => {
     "/",
     "/appointmentForm",
     "/students",
-    "/pending",
-    "/approved",
     "/signin",
     "/signup",
-    "/rejected",
-    "/completed",
     "/registrarHome",
     "/events",
     "/schedule",
@@ -81,12 +73,8 @@ const Layout = () => {
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/students" element={<Students />} />
-          <Route path="/pending" element={<Pending />} />
-          <Route path="/approved" element={<Approved />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/rejected" element={<Rejected />} />
-          <Route path="/completed" element={<Completed />} />
           <Route path="/registrarHome" element={<RegistrarHome />} />
           <Route path="/events" element={<Events />} />
           <Route path="/schedule" element={<Schedule />} />

@@ -28,7 +28,7 @@ const LandingPage = () => {
               <span className="text-Bbackground text-lg sm:text-xl md:text-2xl lg:text-3xl font-regular font-thin">
                 LVCC
               </span>
-              <span className="text-Bbackground text-lg sm:text-xl md:text-2xl lg:text-3xl font-LatoBold pl-1 sm:pl-2">
+              <span className="text-Bbackground text-lg sm:text-xl md:text-2xl lg:text-3xl font-LatoSemiBold pl-1 sm:pl-2">
                 AppointEase
               </span>
             </div>
@@ -37,13 +37,13 @@ const LandingPage = () => {
           {/* Main Content - Using flex-grow to take available space and center content */}
           <div className="flex-grow flex flex-col items-center justify-center text-center px-4">
             <div className="relative flex flex-col items-center max-w-7xl mx-auto">
-              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-LatoBold uppercase  tracking-wider">
-                LA VERDAD CHRISTIAN COLLEGE
+              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-LatoBold uppercase  tracking-wider leading-loose">
+                LA VERDAD CHRISTIAN <br /> COLLEGE
               </h1>
 
               {/* Line that scales with text width instead of fixed position */}
               <div className="relative w-full flex justify-center my-4">
-                <span className="w-3/4 sm:w-4/5 md:w-5/6 max-w-3xl h-1 sm:h-2 bg-[#EEF2F7]"></span>
+                <span className="w-11/12 sm:w-full max-w-5xl h-1 sm:h-2 bg-[#EEF2F7]"></span>
               </div>
 
               <p className="text-Fwhite text-xs sm:text-sm md:text-base lg:text-xl xl:text-2xl max-w-xs sm:max-w-lg md:max-w-xl lg:max-w-2xl leading-relaxed  font-LatoRegular">

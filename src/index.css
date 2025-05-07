@@ -147,3 +147,25 @@ input[type="number"].always-show-spinner::-moz-inner-spin-button {
   -moz-appearance: inner-spin-button;
   opacity: 1;
 }
+
+.react-tooltip-arrow {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+}
+
+.custom-tooltip {
+  background-color: #2d3748 !important;
+  color: white !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3) !important;
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+@media (prefers-color-scheme: light) {
+  .custom-tooltip {
+    background-color: #4a5568 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  }
+}

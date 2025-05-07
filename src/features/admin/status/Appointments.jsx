@@ -5,7 +5,7 @@ import { FaThumbsDown, FaThumbsUp } from "react-icons/fa6";
 import Sidebar from "/src/components/Sidebar";
 import { FaSearch } from "react-icons/fa";
 import { BsTrash3 } from "react-icons/bs";
-import { Tooltip } from "react-tooltip"; // For tooltips
+import { Tooltip } from "react-tooltip";
 import useAppointment from "./hooks/useAppointment";
 
 const Appointments = () => {
@@ -28,7 +28,7 @@ const Appointments = () => {
   } = useAppointment();
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">
@@ -36,7 +36,7 @@ const Appointments = () => {
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
-            title="Approved Appointment"
+            title="Appointments"
           />
           <div>
             <section className="h-[1200px] z-10 bg-white p-5 my-5">
@@ -148,34 +148,65 @@ const Appointments = () => {
                         <td className="border p-4">{data.dateOfRequest}</td>
                         <td className="border p-4">
                           <div className="flex gap-2 justify-center">
-                            {/* Approve Button */}
-                            <div
-                              data-tooltip-id="approve-tooltip"
-                              data-tooltip-content="Approve"
-                              className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
-                              onClick={() => approveAppointment(data)}
-                            >
-                              <FaThumbsUp className="text-white" />
-                            </div>
-                            {/* Complete Button */}
-                            <div
-                              data-tooltip-id="complete-tooltip"
-                              data-tooltip-content="Complete"
-                              className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
-                              onClick={() => completeAppointment(data)}
-                            >
-                              <LuCircleCheckBig className="text-white" />
-                            </div>
-                            {/* Reject Button */}
-                            <div
-                              data-tooltip-id="reject-tooltip"
-                              data-tooltip-content="Reject"
-                              className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
-                              onClick={() => rejectAppointment(data)}
-                            >
-                              <FaThumbsDown className="text-white transform scale-x-[-1]" />
-                            </div>
-                            {/* Delete Button */}
+                            {/* Approve Button - show for Pending and Rejected statuses */}
+                            {(data.status === "PENDING" ||
+                              data.status === "REJECTED") && (
+                              <div
+                                data-tooltip-id="approve-tooltip"
+                                data-tooltip-content={
+                                  data.status === "REJECTED"
+                                    ? "Approve"
+                                    : "Approve"
+                                }
+                                className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
+                                onClick={() => approveAppointment(data)}
+                              >
+                                <FaThumbsUp className="text-white" />
+                              </div>
+                            )}
+
+                            {/* Complete Button - show for Pending and Approved statuses */}
+                            {(data.status === "PENDING" ||
+                              data.status === "APPROVED") && (
+                              <div
+                                data-tooltip-id="complete-tooltip"
+                                data-tooltip-content="Complete"
+                                className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
+                                onClick={() => completeAppointment(data)}
+                              >
+                                <LuCircleCheckBig className="text-white" />
+                              </div>
+                            )}
+
+                            {/* Reject Button - show for Pending and Approved statuses */}
+                            {(data.status === "PENDING" ||
+                              data.status === "APPROVED") && (
+                              <div
+                                data-tooltip-id="reject-tooltip"
+                                data-tooltip-content={
+                                  data.status === "APPROVED"
+                                    ? "Reject"
+                                    : "Reject"
+                                }
+                                className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
+                                onClick={() => rejectAppointment(data)}
+                              >
+                                <FaThumbsDown className="text-white transform scale-x-[-1]" />
+                              </div>
+                            )}
+
+                            {/* Like Button - show for Completed status */}
+                            {data.status === "COMPLETED" && (
+                              <div
+                                data-tooltip-id="approve-tooltip"
+                                data-tooltip-content="Approve"
+                                className="bg-[#3A993D] p-2 rounded cursor-pointer"
+                              >
+                                <FaThumbsUp className="text-white" />
+                              </div>
+                            )}
+
+                            {/* Delete Button - show for all statuses */}
                             <div
                               data-tooltip-id="delete-tooltip"
                               data-tooltip-content="Delete"

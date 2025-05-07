@@ -6,179 +6,32 @@ import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
+import useHolidays from "./hooks/useHolidays";
 
 const Holidays = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteIndex, setDeleteIndex] = useState(null);
+  const {
+    isSidebarOpen,
+    isAddModalOpen,
+    isEditModalOpen,
+    isDeleteModalOpen,
+    newHoliday,
+    holidays,
+    toggleSidebar,
+    openAddModal,
+    closeAddModal,
+    openEditModal,
+    closeEditModal,
+    handleInputChange,
+    addHolidays,
+    updateHolidays,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmDelete,
+  } = useHolidays();
 
-  const [newHoliday, setNewHoliday] = useState({
-    no: "",
-    date: "",
-    description: "",
-    actions: "",
-  });
-  const [holidays, setHolidays] = useState([
-    {
-      no: "1",
-      date: "2025/01/01",
-      description: "New Year's Day",
-      actions: "",
-    },
-    {
-      no: "2",
-      date: "2025/03/31",
-      description: "Eidul-Fitar",
-      actions: "",
-    },
-    {
-      no: "3",
-      date: "2025/04/09",
-      description: "The Day of Valor",
-      actions: "",
-    },
-    {
-      no: "4",
-      date: "2025/05/01",
-      description: "Labor Day",
-      actions: "",
-    },
-    {
-      no: "5",
-      date: "2025/06/07",
-      description: "Eid al-Adha (Feast of Sacrifice)",
-      actions: "",
-    },
-    {
-      no: "6",
-      date: "2025/06/08",
-      description: "Eid al-Adha Day 2",
-      actions: "",
-    },
-    {
-      no: "7",
-      date: "2025/06/12",
-      description: "Independence Day",
-      actions: "",
-    },
-    {
-      no: "8",
-      date: "2025/08/21",
-      description: "Ninoy Aquino Day",
-      actions: "",
-    },
-  ]);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const openAddModal = () => {
-    setIsAddModalOpen(true);
-  };
-
-  const closeAddModal = () => {
-    setNewHoliday({
-      no: "",
-      date: "",
-      description: "",
-      actions: "",
-    });
-    setIsAddModalOpen(false);
-  };
-
-  const openEditModal = (index) => {
-    setEditIndex(index);
-    setNewHoliday(holidays[index]);
-    setIsEditModalOpen(true);
-  };
-
-  const closeEditModal = () => {
-    setNewHoliday({
-      no: "",
-      date: "",
-      description: "",
-      actions: "",
-    });
-    setIsEditModalOpen(false);
-  };
-
-  const formatDate = (date) => {
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}/${month}/${day}`;
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewHoliday((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const addHolidays = () => {
-    if (!newHoliday.date || !newHoliday.description) {
-      alert("Please fill out all fields.");
-      return;
-    }
-
-    const formattedDate = formatDate(newHoliday.date);
-    const newNo = holidays.length + 1;
-
-    setHolidays((prev) => [
-      ...prev,
-      { ...newHoliday, no: newNo.toString(), date: formattedDate },
-    ]);
-
-    closeAddModal();
-  };
-
-  const updateHolidays = () => {
-    if (!newHoliday.date || !newHoliday.description) {
-      alert("Please fill out all fields.");
-      return;
-    }
-
-    const formattedDate = formatDate(newHoliday.date);
-    const updatedHolidays = holidays.map((holiday, index) =>
-      index === editIndex
-        ? { ...holiday, ...newHoliday, date: formattedDate }
-        : holiday
-    );
-
-    setHolidays(updatedHolidays);
-    closeEditModal();
-  };
-
-  const openDeleteModal = (index) => {
-    setDeleteIndex(index);
-    setIsDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setDeleteIndex(null);
-    setIsDeleteModalOpen(false);
-  };
-
-  const confirmDelete = () => {
-    setHolidays((prevHolidays) => {
-      const updatedHolidays = prevHolidays.filter((_, i) => i !== deleteIndex);
-      return updatedHolidays.map((holiday, index) => ({
-        ...holiday,
-        no: (index + 1).toString(),
-      }));
-    });
-    closeDeleteModal();
-  };
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
 

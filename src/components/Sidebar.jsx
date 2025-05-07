@@ -9,6 +9,7 @@ import {
   FaArchive,
 } from "react-icons/fa";
 import { IoMdHome } from "react-icons/io";
+import { Tooltip } from "react-tooltip";
 
 const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
@@ -21,15 +22,20 @@ const Sidebar = ({ isSidebarOpen }) => {
     }
   }, [location.pathname]);
 
-  const handleMenuClick = (path) => {
-    navigate(path); // Navigate to the clicked path
+  const handleMenuClick = (path, e) => {
+    e.stopPropagation();
+    navigate(path);
   };
 
   const isActive = (path) => location.pathname === path;
 
-  const activeStyle =
-    "bg-[#D9D9D9] text-black rounded-lg px-4 py-2 flex items-center gap-4 cursor-pointer";
-  const inactiveStyle = "flex items-center gap-4 px-4 py-2 cursor-pointer";
+  const activeStyle = isSidebarOpen
+    ? "bg-[#D9D9D9] text-black rounded-xl pl-4 py-2 flex items-center gap-4 cursor-pointer w-full"
+    : "bg-[#D9D9D9] text-black rounded-xl w-[50px] h-[50px] flex items-center justify-center cursor-pointer mx-auto";
+
+  const inactiveStyle = isSidebarOpen
+    ? "flex items-center gap-4 pl-4 py-2 cursor-pointer hover:bg-white/10 rounded-lg transition-colors w-full"
+    : "w-[50px] h-[50px] flex items-center justify-center cursor-pointer hover:bg-white/10 rounded-full transition-colors mx-auto";
 
   const menuSections = [
     {
@@ -55,16 +61,22 @@ const Sidebar = ({ isSidebarOpen }) => {
     <aside
       ref={sidebarRef}
       className={`h-full bg-side-bar_bg text-white ${
-        isSidebarOpen ? "w-[300px]" : "w-[150px]" // Closed width is now 150px
+        isSidebarOpen ? "w-[300px]" : "w-[100px]"
       } overflow-hidden transition-all duration-300`}
     >
       {/* Logo */}
-      <div className="flex items-center justify-center mt-6">
+      <div
+        className={`flex ${
+          isSidebarOpen
+            ? "items-center justify-start pl-4"
+            : "items-center justify-center"
+        } mt-6`}
+      >
         <img
           src="/assets/image/LV_logo.png"
           alt="LVCC Logo"
           className={`${
-            isSidebarOpen ? "w-[100px] h-[100px]" : "w-[70px] h-[70px]"
+            isSidebarOpen ? "w-[100px] h-[100px]" : "w-[60px] h-[60px]"
           } transition-all duration-300`}
         />
         {isSidebarOpen && (
@@ -77,53 +89,70 @@ const Sidebar = ({ isSidebarOpen }) => {
 
       {/* Divider */}
       {isSidebarOpen && (
-        <div className="border-b-2 border-white w-full my-6"></div>
+        <div className="border-b-2 border-white w-full my-6 mx-4"></div>
       )}
 
       {/* Menu Sections */}
-      <nav>
+      <nav className={isSidebarOpen ? "px-4" : ""}>
         {menuSections.map((section, index) => (
           <div
-            key={section.title}
-            className={`${index === 0 ? "mt-6" : "mt-4"}`}
+            key={index}
+            className={`${
+              index === 0 ? (isSidebarOpen ? "mt-6" : "mt-4") : "mt-10"
+            }`}
           >
             {/* Section Title */}
-            <div className="pl-4 pb-4">
-              {isSidebarOpen ? (
+            {isSidebarOpen && (
+              <div className="pl-4 pb-4">
                 <h1 className="text-[20px] font-semibold">{section.title}</h1>
-              ) : (
-                <h1 className="text-[16px] text-center text-white opacity-70 pl-1">
-                  {section.title}
-                </h1>
-              )}
-            </div>
+              </div>
+            )}
 
-            {/* Menu Items */}
-            <ul className="pl-2 text-[18px] space-y-2">
+            <ul className="space-y-2">
               {section.items.map(({ path, icon, label }) => (
-                <li key={path}>
+                <li key={path} className="flex justify-center">
                   <div
                     className={isActive(path) ? activeStyle : inactiveStyle}
-                    onClick={() => handleMenuClick(path)} // Only navigate, don't toggle sidebar
-                    aria-label={label}
-                    tabIndex={0}
+                    onClick={(e) => handleMenuClick(path, e)}
+                    data-tooltip-id={`tooltip-${path}`}
+                    data-tooltip-content={label}
+                    data-tooltip-place="right"
                   >
-                    <span
-                      className={`flex items-center justify-center ${
-                        !isSidebarOpen ? "w-full" : ""
+                    <div
+                      className={`${
+                        isSidebarOpen
+                          ? "text-[20px] w-6 flex justify-center"
+                          : "text-[25px]"
                       }`}
                     >
-                      {/* Add a class to control icon size */}
-                      <div
-                        className={`${
-                          isSidebarOpen ? "text-[20px]" : "text-[25px]" // Adjust size here
-                        }`}
-                      >
-                        {icon}
-                      </div>
-                    </span>
-                    {isSidebarOpen && <span className="ml-4">{label}</span>}
+                      {icon}
+                    </div>
+                    {isSidebarOpen && (
+                      <span className="ml-4 text-lg">{label}</span>
+                    )}
                   </div>
+                  {!isSidebarOpen && (
+                    <Tooltip
+                      id={`tooltip-${path}`}
+                      className="custom-tooltip"
+                      style={{
+                        backgroundColor: "#2D3748",
+                        color: "white",
+                        borderRadius: "6px",
+                        padding: "8px 12px",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                        zIndex: 9999,
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        textShadow: "0 1px 1px rgba(0,0,0,0.3)",
+                      }}
+                      opacity={1}
+                      noArrow={false}
+                      delayShow={50}
+                      place="right"
+                    />
+                  )}
                 </li>
               ))}
             </ul>

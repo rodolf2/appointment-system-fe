@@ -7,53 +7,86 @@ const useArchived = () => {
       id: 1,
       transactionNumber: "TR102938-123",
       request: "",
-      emailAddress: "example1@example.com",
-      dateOfAppointment: "2023-10-01",
-      timeSlot: "10:00 AM",
-      dateOfRequest: "2023-09-25",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
     },
     {
       id: 2,
       transactionNumber: "TR122938-343",
       request: "",
-      emailAddress: "example2@example.com",
-      dateOfAppointment: "2023-10-02",
-      timeSlot: "11:00 AM",
-      dateOfRequest: "2023-09-26",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
     },
     {
       id: 3,
       transactionNumber: "TR131238-534",
       request: "",
-      emailAddress: "example3@example.com",
-      dateOfAppointment: "2023-10-03",
-      timeSlot: "12:00 PM",
-      dateOfRequest: "2023-09-27",
+      emailAddress: "",
+      dateOfAppointment: "",
+      timeSlot: "",
+      dateOfRequest: "",
     },
   ]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false); // For bulk delete modal
+  const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
+
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [selectedRows, setSelectedRows] = useState([]); // For checkbox selection
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // For dropdown visibility
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const [isRetrieveModalOpen, setIsRetrieveModalOpen] = useState(false);
+  const [appointmentToRetrieve, setAppointmentToRetrieve] = useState(null);
+
+  // Add these states to your hook
+  const [showSuccessDelete, setShowSuccessDelete] = useState(false);
+  const [showSuccessRetrieve, setShowSuccessRetrieve] = useState(false);
+
+  const deleteAppointment = () => {
+    // Your existing delete logic
+    setAppointments(
+      appointments.filter((appt) => appt !== selectedAppointment)
+    );
+    setShowSuccessDelete(true);
+    setTimeout(() => setShowSuccessDelete(false), 3000); // Hide after 3 seconds
+    closeModal();
+  };
+
+  const retrieveAppointment = () => {
+    // Your retrieve logic
+    setShowSuccessRetrieve(true);
+    setTimeout(() => setShowSuccessRetrieve(false), 3000); // Hide after 3 seconds
+    closeRetrieveModal();
+  };
+  const openRetrieveModal = (appointment) => {
+    setAppointmentToRetrieve(appointment);
+    setIsRetrieveModalOpen(true);
+  };
+
+  const closeRetrieveModal = () => {
+    setAppointmentToRetrieve(null);
+    setIsRetrieveModalOpen(false);
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Open modal for delete confirmation
+  // Delete modals
   const openModal = (appointment) => {
     setSelectedAppointment(appointment);
     setIsModalOpen(true);
   };
 
-  // Close modal
   const closeModal = () => {
     setSelectedAppointment(null);
     setIsModalOpen(false);
   };
 
-  // Open bulk delete modal
   const openBulkDeleteModal = () => {
     if (selectedRows.length > 0) {
       setIsBulkDeleteModalOpen(true);
@@ -62,29 +95,29 @@ const useArchived = () => {
     }
   };
 
-  // Close bulk delete modal
   const closeBulkDeleteModal = () => {
     setIsBulkDeleteModalOpen(false);
   };
 
-  // Delete single appointment
-  const deleteAppointment = () => {
-    setAppointments(
-      appointments.filter((appt) => appt.id !== selectedAppointment.id)
-    );
-    closeModal();
+  const retrieveAppointments = () => {
+    // Add logic here to move the selected appointments back to active state
+    alert(`Retrieved ${selectedRows.length} appointments.`);
+    setSelectedRows([]);
+    closeRetrieveModal();
   };
 
-  // Delete multiple appointments (bulk delete)
   const deleteBulkAppointments = () => {
     setAppointments(
       appointments.filter((appt) => !selectedRows.includes(appt.id))
     );
-    setSelectedRows([]); // Clear selected rows after deletion
+    setSelectedRows([]);
     closeBulkDeleteModal();
   };
+  const handleIconClick = (appointment) => {
+    setSelectedAppointment(appointment);
+    setShowModal(true);
+  };
 
-  // Handle checkbox selection
   const handleCheckboxChange = (id) => {
     if (selectedRows.includes(id)) {
       setSelectedRows(selectedRows.filter((rowId) => rowId !== id));
@@ -93,7 +126,6 @@ const useArchived = () => {
     }
   };
 
-  // Handle select all checkboxes
   const handleSelectAll = () => {
     if (selectedRows.length === appointments.length) {
       setSelectedRows([]);
@@ -102,20 +134,17 @@ const useArchived = () => {
     }
   };
 
-  // Handle dropdown toggle
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // Handle dropdown actions (Delete or Return)
   const handleDropdownAction = (action) => {
     if (action === "delete") {
-      openBulkDeleteModal(); // Open bulk delete modal
-    } else if (action === "return") {
-      // Add logic for returning appointments (e.g., change status)
-      alert("Return functionality not implemented yet.");
+      openBulkDeleteModal();
+    } else if (action === "retrieve") {
+      openRetrieveModal(); // Updated for retrieve
     }
-    setIsDropdownOpen(false); // Close dropdown after action
+    setIsDropdownOpen(false);
   };
 
   return {
@@ -123,6 +152,7 @@ const useArchived = () => {
     appointments,
     isModalOpen,
     isBulkDeleteModalOpen,
+    isRetrieveModalOpen,
     selectedAppointment,
     selectedRows,
     isDropdownOpen,
@@ -131,12 +161,20 @@ const useArchived = () => {
     closeModal,
     openBulkDeleteModal,
     closeBulkDeleteModal,
+    openRetrieveModal,
+    closeRetrieveModal,
     deleteAppointment,
     deleteBulkAppointments,
+    retrieveAppointments,
     handleCheckboxChange,
     handleSelectAll,
     toggleDropdown,
     handleDropdownAction,
+    retrieveAppointment,
+    showSuccessDelete,
+    setShowSuccessDelete,
+    showSuccessRetrieve,
+    setShowSuccessRetrieve,
   };
 };
 

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 import Sidebar from "/src/components/Sidebar";
@@ -15,6 +14,7 @@ const Archived = () => {
     appointments,
     isModalOpen,
     isBulkDeleteModalOpen,
+    isRetrieveModalOpen,
     selectedAppointment,
     selectedRows,
     isDropdownOpen,
@@ -23,17 +23,25 @@ const Archived = () => {
     closeModal,
     openBulkDeleteModal,
     closeBulkDeleteModal,
+    openRetrieveModal,
+    closeRetrieveModal,
     deleteAppointment,
     deleteBulkAppointments,
+    retrieveAppointments,
     handleCheckboxChange,
     handleSelectAll,
     toggleDropdown,
     handleDropdownAction,
+    retrieveAppointment,
+    showSuccessDelete,
+    setShowSuccessDelete,
+    showSuccessRetrieve,
+    setShowSuccessRetrieve,
   } = useArchived();
 
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[150px]"}`}>
+      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">
@@ -45,6 +53,7 @@ const Archived = () => {
           />
           <div>
             <section className="h-[1200px] z-10 bg-white p-5 my-5">
+              {/* Top section */}
               <div className="bg-[#D9D9D9] h-48 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
@@ -52,7 +61,6 @@ const Archived = () => {
                   </h2>
                   <div className="border-b-4 border-[#F3BC62] w-[650px] my-3"></div>
                 </div>
-
                 <div className="flex justify-between items-center mt-[78px] ml-4 ">
                   <div className="text-[#161F55] font-semibold text-[18px]">
                     <label htmlFor="show" className="mr-2">
@@ -80,6 +88,8 @@ const Archived = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Table */}
               <div className="overflow-y-auto m-4 mt-8">
                 <table className="text-[18px] w-full">
                   <thead>
@@ -93,14 +103,14 @@ const Archived = () => {
                               appointments.length > 0
                             }
                             onChange={handleSelectAll}
-                            className="w-5 h-5" // Increased checkbox size
+                            className="w-5 h-5"
                           />
                           <div className="relative">
                             <button
                               onClick={toggleDropdown}
                               className="flex items-center justify-center"
                             >
-                              <RiArrowDropDownLine className="text-[#161F55] text-2xl " />{" "}
+                              <RiArrowDropDownLine className="text-[#161F55] text-2xl" />
                             </button>
                             {isDropdownOpen && (
                               <div className="absolute top-10 left-0 bg-white border border-gray-200 rounded-lg shadow-lg w-32 z-50">
@@ -114,7 +124,7 @@ const Archived = () => {
                                   onClick={() => handleDropdownAction("return")}
                                   className="block w-full text-center px-4 py-2 text-[#161F55] hover:bg-gray-100"
                                 >
-                                  Undo
+                                  Retrieve
                                 </button>
                               </div>
                             )}
@@ -122,25 +132,18 @@ const Archived = () => {
                         </div>
                       </th>
                       <th className="border p-4 text-center">
-                        TRANSACTION
-                        <br />
-                        NUMBER
+                        TRANSACTION <br /> NUMBER
                       </th>
                       <th className="border p-4 text-center">REQUEST</th>
                       <th className="border p-4 text-center">
-                        EMAIL <br />
-                        ADDRESS
+                        EMAIL <br /> ADDRESS
                       </th>
                       <th className="border p-4 text-center">
-                        DATE OF
-                        <br />
-                        APPOINTMENT
+                        DATE OF <br /> APPOINTMENT
                       </th>
                       <th className="border p-4 text-center">TIME SLOT</th>
                       <th className="border p-4 text-center">
-                        DATE OF
-                        <br />
-                        REQUEST
+                        DATE OF <br /> REQUEST
                       </th>
                       <th className="border p-4 text-center">ACTIONS</th>
                     </tr>
@@ -151,9 +154,9 @@ const Archived = () => {
                         key={data.id}
                         className={`text-[18px] ${
                           selectedRows.includes(data.id)
-                            ? "bg-[#C2DBFF] !important" // Ensure this takes precedence
-                            : "even:bg-gray-100" // Apply gray background only if the row is not selected
-                        }`} // Apply background color if row is checked
+                            ? "bg-[#C2DBFF] !important"
+                            : "even:bg-gray-100"
+                        }`}
                       >
                         <td className="border p-4 text-center">
                           <div className="flex items-center justify-center">
@@ -161,16 +164,12 @@ const Archived = () => {
                               type="checkbox"
                               checked={selectedRows.includes(data.id)}
                               onChange={() => handleCheckboxChange(data.id)}
-                              className="w-5 h-5" // Increased checkbox size
+                              className="w-5 h-5"
                             />
                           </div>
                         </td>
-                        <td className="border p-4">
-                          <div className="flex flex-col text-center">
-                            <span className="font-bold">
-                              {data.transactionNumber}
-                            </span>
-                          </div>
+                        <td className="border p-4 text-center font-bold">
+                          {data.transactionNumber}
                         </td>
                         <td className="border p-4 text-center">
                           {data.request}
@@ -187,18 +186,16 @@ const Archived = () => {
                         <td className="border p-4 text-center">
                           {data.dateOfRequest}
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-4 text-center">
                           <div className="flex gap-2 justify-center">
-                            {/* Undo Button */}
                             <div
-                              data-tooltip-id="undo-tooltip"
-                              data-tooltip-content="Undo"
+                              data-tooltip-id="retrieve-tooltip"
+                              data-tooltip-content="Retrieve"
                               className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700 transform scale-x-[-1]"
-                              onClick={() => openModal(data)}
+                              onClick={() => openRetrieveModal(data)}
                             >
                               <TbReload className="text-white" />
                             </div>
-                            {/* Delete Button */}
                             <div
                               data-tooltip-id="delete-tooltip"
                               data-tooltip-content="Delete"
@@ -214,6 +211,8 @@ const Archived = () => {
                   </tbody>
                 </table>
               </div>
+
+              {/* Pagination */}
               <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
                 <span className="text-[#161F55]">
                   SHOWING {appointments.length} OF {appointments.length} ENTRIES
@@ -233,12 +232,12 @@ const Archived = () => {
 
           <Footer />
 
-          {/* Delete Confirmation Modal */}
+          {/* Single Delete Modal */}
           {isModalOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
               <div className="bg-white p-20 rounded-xl shadow-md">
                 <h2 className="text-xl font-bold mb-4">
-                  Are you sure you want to delete this appointment?
+                  Are you sure you want to permanently delete this appointment?
                 </h2>
                 <div className="flex justify-center gap-10 mt-10">
                   <button
@@ -258,7 +257,53 @@ const Archived = () => {
             </div>
           )}
 
-          {/* Bulk Delete Confirmation Modal */}
+          {/* Retrieve Confirmation Modal */}
+          {isRetrieveModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
+              <div className="bg-white p-20 rounded-xl shadow-md">
+                <h2 className="text-xl font-bold mb-4">
+                  Are you sure you want to retrieve this appointment?
+                </h2>
+                <div className="flex justify-center gap-10 mt-10">
+                  <button
+                    className="bg-gray-300 text-[#161F55] px-10 py-2 rounded-2xl"
+                    onClick={closeRetrieveModal}
+                  >
+                    No
+                  </button>
+                  <button
+                    className="bg-[#161F55] text-white px-10 py-2 rounded-2xl"
+                    onClick={retrieveAppointment}
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Success Delete Message */}
+          {showSuccessDelete && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-8 rounded-lg shadow-lg">
+                <p className="text-xl font-semibold">
+                  Appointment has been successfully deleted.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Success Retrieve Message */}
+          {showSuccessRetrieve && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-8 rounded-lg shadow-lg">
+                <p className="text-xl font-semibold">
+                  Appointment has been successfully retrieved.
+                </p>
+              </div>
+            </div>
+          )}
+          {/* Bulk Delete Modal */}
           {isBulkDeleteModalOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
               <div className="bg-white p-20 rounded-xl shadow-md">
@@ -284,7 +329,7 @@ const Archived = () => {
           )}
 
           {/* Tooltips */}
-          <Tooltip id="undo-tooltip" />
+          <Tooltip id="retrieve-tooltip" />
           <Tooltip id="delete-tooltip" />
         </main>
       </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 const useRegistrarHome = () => {
@@ -80,6 +80,26 @@ const useRegistrarHome = () => {
     const dayOfWeek = currentDate.date(day).day();
     return dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
   };
+
+  // In useRegistrarHome.js
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      const sidebar = document.querySelector(".sidebar-container");
+      const toggleButton = document.querySelector(".sidebar-toggle-button");
+
+      if (
+        sidebar &&
+        !sidebar.contains(e.target) &&
+        !toggleButton?.contains(e.target)
+      ) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return {
     isSidebarOpen,
     currentDate,
