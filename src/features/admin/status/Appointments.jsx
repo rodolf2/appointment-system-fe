@@ -55,6 +55,8 @@ const Appointments = () => {
                       SHOW
                     </label>
                     <input
+                      name="show"
+                      id="show"
                       type="number"
                       min={"0"}
                       max={"10"}
@@ -151,49 +153,49 @@ const Appointments = () => {
                             {/* Approve Button - show for Pending and Rejected statuses */}
                             {(data.status === "PENDING" ||
                               data.status === "REJECTED") && (
-                              <div
-                                data-tooltip-id="approve-tooltip"
-                                data-tooltip-content={
-                                  data.status === "REJECTED"
-                                    ? "Approve"
-                                    : "Approve"
-                                }
-                                className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
-                                onClick={() => approveAppointment(data)}
-                              >
-                                <FaThumbsUp className="text-white" />
-                              </div>
-                            )}
+                                <div
+                                  data-tooltip-id="approve-tooltip"
+                                  data-tooltip-content={
+                                    data.status === "REJECTED"
+                                      ? "Approve"
+                                      : "Approve"
+                                  }
+                                  className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
+                                  onClick={() => approveAppointment(data)}
+                                >
+                                  <FaThumbsUp className="text-white" />
+                                </div>
+                              )}
 
                             {/* Complete Button - show for Pending and Approved statuses */}
                             {(data.status === "PENDING" ||
                               data.status === "APPROVED") && (
-                              <div
-                                data-tooltip-id="complete-tooltip"
-                                data-tooltip-content="Complete"
-                                className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
-                                onClick={() => completeAppointment(data)}
-                              >
-                                <LuCircleCheckBig className="text-white" />
-                              </div>
-                            )}
+                                <div
+                                  data-tooltip-id="complete-tooltip"
+                                  data-tooltip-content="Complete"
+                                  className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
+                                  onClick={() => completeAppointment(data)}
+                                >
+                                  <LuCircleCheckBig className="text-white" />
+                                </div>
+                              )}
 
                             {/* Reject Button - show for Pending and Approved statuses */}
                             {(data.status === "PENDING" ||
                               data.status === "APPROVED") && (
-                              <div
-                                data-tooltip-id="reject-tooltip"
-                                data-tooltip-content={
-                                  data.status === "APPROVED"
-                                    ? "Reject"
-                                    : "Reject"
-                                }
-                                className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
-                                onClick={() => rejectAppointment(data)}
-                              >
-                                <FaThumbsDown className="text-white transform scale-x-[-1]" />
-                              </div>
-                            )}
+                                <div
+                                  data-tooltip-id="reject-tooltip"
+                                  data-tooltip-content={
+                                    data.status === "APPROVED"
+                                      ? "Reject"
+                                      : "Reject"
+                                  }
+                                  className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
+                                  onClick={() => rejectAppointment(data)}
+                                >
+                                  <FaThumbsDown className="text-white transform scale-x-[-1]" />
+                                </div>
+                              )}
 
                             {/* Like Button - show for Completed status */}
                             {data.status === "COMPLETED" && (

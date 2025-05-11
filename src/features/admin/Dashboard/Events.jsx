@@ -132,11 +132,15 @@ const Events = () => {
                 <div className="border-b-4 border-[#F3BC62] w-[200px] my-3"></div>
                 <form>
                   <div className="mb-4">
-                    <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
+                    <label
+                      htmlFor="title"
+                      className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2"
+                    >
                       Title
                     </label>
                     <input
                       type="text"
+                      id="title"
                       name="title"
                       value={newEvent.title}
                       onChange={handleInputChange}
@@ -144,11 +148,16 @@ const Events = () => {
                       placeholder="Event Title"
                     />
                   </div>
+
                   <div className="mb-4">
-                    <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
+                    <label
+                      htmlFor="description"
+                      className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2"
+                    >
                       Description
                     </label>
                     <textarea
+                      id="description"
                       name="description"
                       value={newEvent.description}
                       onChange={handleInputChange}
@@ -156,30 +165,41 @@ const Events = () => {
                       placeholder="Event Description"
                     ></textarea>
                   </div>
+
                   <div className="mb-4">
-                    <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
+                    <label
+                      htmlFor="startDate"
+                      className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2"
+                    >
                       Start Date
                     </label>
                     <input
                       type="date"
+                      id="startDate"
                       name="startDate"
                       value={newEvent.startDate}
                       onChange={handleInputChange}
                       className="w-full p-2 border rounded"
                     />
                   </div>
+
                   <div className="mb-4">
-                    <label className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2">
+                    <label
+                      htmlFor="endDate"
+                      className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2"
+                    >
                       End Date
                     </label>
                     <input
                       type="date"
+                      id="endDate"
                       name="endDate"
                       value={newEvent.endDate}
                       onChange={handleInputChange}
                       className="w-full p-2 border rounded"
                     />
                   </div>
+
                   <div className="flex gap-4">
                     <button
                       type="button"

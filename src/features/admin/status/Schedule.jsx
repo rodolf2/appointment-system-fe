@@ -14,7 +14,6 @@ const Schedule = () => {
     isEditModalOpen,
     editIndex,
     isDeleteModalOpen,
-    deleteIndex,
     newSchedule,
     schedules,
     toggleSidebar,
@@ -23,7 +22,6 @@ const Schedule = () => {
     openEditModal,
     closeEditModal,
     handleInputChange,
-    saveScheduleChanges,
     setSchedules,
     formatDate,
     formatTime,
@@ -67,6 +65,8 @@ const Schedule = () => {
                     SHOW
                   </label>
                   <input
+                    id="show"
+                    name="show"
                     type="number"
                     min="1"
                     max="10"
@@ -80,6 +80,7 @@ const Schedule = () => {
                     SEARCH:
                   </label>
                   <input
+                    name="search"
                     id="search"
                     type="text"
                     className="border p-1 bg-white text-[#161F55] mr-5"
@@ -104,9 +105,8 @@ const Schedule = () => {
                   return (
                     <tr
                       key={rowIndex}
-                      className={`${
-                        rowIndex % 2 === 0 ? "bg-gray-100" : ""
-                      } text-center`}
+                      className={`${rowIndex % 2 === 0 ? "bg-gray-100" : ""
+                        } text-center`}
                     >
                       <td className="border p-5">{schedule?.no || ""}</td>
                       <td className="border p-5">{schedule?.slots || ""}</td>
@@ -303,7 +303,7 @@ const Schedule = () => {
                     formattedSchedule.slots === originalSchedule.slots &&
                     formattedSchedule.date === originalSchedule.date &&
                     formattedSchedule.startTime ===
-                      originalSchedule.startTime &&
+                    originalSchedule.startTime &&
                     formattedSchedule.endTime === originalSchedule.endTime;
 
                   if (isUnchanged) {

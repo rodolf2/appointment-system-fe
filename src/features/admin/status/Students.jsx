@@ -23,7 +23,7 @@ const Students = () => {
               <div className="bg-[#D9D9D9] h-48 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
-                    LIST OF STUDENTS/ALUMNI'S RECORDS REQUEST
+                    LIST OF STUDENTS/ALUMNI&#39;S RECORDS REQUEST
                   </h2>
                   <div className="border-b-4 border-[#F3BC62] w-[900px] my-3"></div>
                 </div>
@@ -34,6 +34,8 @@ const Students = () => {
                       SHOW
                     </label>
                     <input
+                      id="show"
+                      name="show"
                       type="number"
                       min={"0"}
                       max={"10"}
@@ -56,7 +58,7 @@ const Students = () => {
               </div>
               <div className="m-4 mt-8">
                 <table className="text-[16px] w-full border-collapse border border-[#989898] h-[500px]">
-                  <thead cla >
+                  <thead>
                     <tr className="bg-gray-200 text-center">
                       <th className="">TRANSACTION NUMBER</th>
                       <th className="">NAME</th>

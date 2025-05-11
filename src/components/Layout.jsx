@@ -1,6 +1,5 @@
-// Layout.jsx
-import React from "react";
 import BackToTopButton from "./BackToTopButton";
+import PropTypes from "prop-types";
 
 const Layout = ({ children }) => {
   return (
@@ -9,6 +8,10 @@ const Layout = ({ children }) => {
       <BackToTopButton />
     </div>
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default Layout;

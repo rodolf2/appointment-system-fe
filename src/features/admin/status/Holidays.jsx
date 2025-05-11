@@ -1,10 +1,8 @@
-import { IoMdArrowDropdown } from "react-icons/io";
 import { BsTrash3 } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
-import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import useHolidays from "./hooks/useHolidays";
 
@@ -65,6 +63,8 @@ const Holidays = () => {
                     SHOW
                   </label>
                   <input
+                    id="show"
+                    name="show"
                     type="number"
                     min="1"
                     max="10"
@@ -78,6 +78,7 @@ const Holidays = () => {
                     SEARCH:
                   </label>
                   <input
+                    name="search"
                     id="search"
                     type="text"
                     className="border p-1 bg-white text-[#161F55] mr-5"
@@ -101,9 +102,8 @@ const Holidays = () => {
                 {holidays.map((holiday, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className={`${
-                      rowIndex % 2 === 0 ? "bg-gray-100" : ""
-                    } text-center`}
+                    className={`${rowIndex % 2 === 0 ? "bg-gray-100" : ""
+                      } text-center`}
                   >
                     <td className="border p-5">{holiday.no}</td>
                     <td className="border p-5">{holiday.date}</td>

@@ -67,7 +67,6 @@ const useEvents = () => {
   const handleSaveEvent = () => {
     const { title, startDate, endDate } = newEvent;
     if (!title || !startDate) {
-      alert("Please provide a title and a valid start date.");
       return;
     }
 
@@ -78,7 +77,6 @@ const useEvents = () => {
       eventDate.month() !== currentDate.month() ||
       eventDate.year() !== currentDate.year()
     ) {
-      alert("The event must be within the currently displayed month.");
       return;
     }
 

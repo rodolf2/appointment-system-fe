@@ -53,7 +53,7 @@ const useArchived = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [isRetrieveModalOpen, setIsRetrieveModalOpen] = useState(false);
-  const [appointmentToRetrieve, setAppointmentToRetrieve] = useState(null);
+  const [setAppointmentToRetrieve] = useState(null);
 
   // Add these states to your hook
   const [showSuccessDelete, setShowSuccessDelete] = useState(false);
@@ -89,6 +89,7 @@ const useArchived = () => {
     setAppointmentToRetrieve(null);
     setIsRetrieveModalOpen(false);
   };
+
   // Delete modals
   const openModal = (appointment) => {
     setSelectedAppointment(appointment);
@@ -125,10 +126,6 @@ const useArchived = () => {
     );
     setSelectedRows([]);
     closeBulkDeleteModal();
-  };
-  const handleIconClick = (appointment) => {
-    setSelectedAppointment(appointment);
-    setShowModal(true);
   };
 
   const handleCheckboxChange = (id) => {

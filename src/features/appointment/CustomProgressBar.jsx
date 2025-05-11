@@ -1,5 +1,6 @@
 import { ProgressBar, Step } from "react-step-progress-bar";
 import "react-step-progress-bar/styles.css";
+import PropTypes from "prop-types";
 
 const CustomProgressBar = ({ currentStep }) => {
   // Adjust the step percentage calculation based on the total number of steps
@@ -15,11 +16,10 @@ const CustomProgressBar = ({ currentStep }) => {
         <Step key={index}>
           {({ accomplished }) => (
             <div
-              className={`w-10 h-10 flex items-center justify-center rounded-full text-white font-bold ${
-                accomplished || currentStep === step
-                  ? "bg-[#161f55]"
-                  : "bg-gray-300"
-              }`}
+              className={`w-10 h-10 flex items-center justify-center rounded-full text-white font-bold ${accomplished || currentStep === step
+                ? "bg-[#161f55]"
+                : "bg-gray-300"
+                }`}
             >
               {step}
             </div>
@@ -28,6 +28,11 @@ const CustomProgressBar = ({ currentStep }) => {
       ))}
     </ProgressBar>
   );
+};
+console.trace('CustomProgressBar trace');
+
+CustomProgressBar.propTypes = {
+  currentStep: PropTypes.number.isRequired,
 };
 
 export default CustomProgressBar;

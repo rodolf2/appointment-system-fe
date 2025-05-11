@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
+import PropTypes from "prop-types";
 
 const VideoCard = ({ videoSrc, title }) => {
   const videoRef = useRef(null);
@@ -55,6 +56,10 @@ const VideoCard = ({ videoSrc, title }) => {
       </div>
     </div>
   );
+};
+VideoCard.propTypes = {
+  videoSrc: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default VideoCard;

@@ -1,12 +1,11 @@
-import React from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { CgProfile } from "react-icons/cg";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaUserEdit, FaSignOutAlt, FaSpinner } from "react-icons/fa";
 import useHeader from "./hooks/useHeader";
-import { GrSystem } from "react-icons/gr";
+import PropTypes from "prop-types";
 
-const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
+const Header = ({ toggleSidebar, title: initialTitle }) => {
   const {
     isProfileDropdownOpen,
     isNotificationOpen,
@@ -14,7 +13,6 @@ const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
     notificationError,
     activeTab,
     title,
-    setTitle,
     filteredNotifications,
     unreadCount,
     profileDropdownRef,
@@ -247,6 +245,10 @@ const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
       </div>
     </header>
   );
+};
+Header.propTypes = {
+  toggleSidebar: PropTypes.func.isRequired,
+  title: PropTypes.string,
 };
 
 export default Header;

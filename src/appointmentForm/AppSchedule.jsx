@@ -1,6 +1,7 @@
 import CustomProgressBar from "@/features/appointment/CustomProgressBar";
 import useAppSchedule from "./hooks/useAppSchedule";
 import dayjs from "dayjs";
+import PropTypes from "prop-types";
 
 const AppSchedule = ({ onNext, onBack, currentStep }) => {
   const {
@@ -102,21 +103,18 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                   return (
                     <div
                       key={formattedDate}
-                      className={`p-2 border cursor-pointer ${
-                        day.isSame(currentMonth, "month")
-                          ? "text-[#161f55] font-LatoSemiBold"
-                          : "text-gray-400"
-                      } ${
-                        booking
+                      className={`p-2 border cursor-pointer ${day.isSame(currentMonth, "month")
+                        ? "text-[#161f55] font-LatoSemiBold"
+                        : "text-gray-400"
+                        } ${booking
                           ? booking.status === "available"
                             ? "bg-[#3A993D] hover:bg-green-300 focus:bg-green-300 rounded"
                             : "bg-[#D52121] hover:bg-red-300 rounded focus:bg-red-300 "
                           : ""
-                      } ${
-                        isSameDay(day, dayjs())
+                        } ${isSameDay(day, dayjs())
                           ? "bg-[#161f55] text-white rounded"
                           : ""
-                      }`}
+                        }`}
                       onClick={() => handleDateClick(day)}
                     >
                       {day.date()}
@@ -134,11 +132,10 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                     {dayjs(selectedDate.date).format("MMMM D, YYYY")}
                   </h3>
                   <p
-                    className={`mt-2 font-bold ${
-                      selectedDate.status === "available"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
+                    className={`mt-2 font-bold ${selectedDate.status === "available"
+                      ? "text-green-500"
+                      : "text-red-500"
+                      }`}
                   >
                     {selectedDate.status === "available"
                       ? "Available Slots"
@@ -149,11 +146,10 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                       {selectedDate.slots.map((slot) => (
                         <button
                           key={slot}
-                          className={`px-2 py-1 rounded ${
-                            selectedTimeSlot === slot
-                              ? "bg-[#161f55] text-white"
-                              : "bg-gray-200 text-black hover:bg-gray-300"
-                          }`}
+                          className={`px-2 py-1 rounded ${selectedTimeSlot === slot
+                            ? "bg-[#161f55] text-white"
+                            : "bg-gray-200 text-black hover:bg-gray-300"
+                            }`}
                           onClick={() => handleTimeSlotClick(slot)}
                         >
                           {slot}
@@ -182,11 +178,10 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
               </button>
               <button
                 onClick={handleSubmit}
-                className={`px-4 py-2 rounded-md ${
-                  selectedTimeSlot
-                    ? "bg-[#161f55] hover:bg-blue-700 text-[#fff]"
-                    : "bg-[#161f55] hover:bg-blue-700 text-[#fff]"
-                }`}
+                className={`px-4 py-2 rounded-md ${selectedTimeSlot
+                  ? "bg-[#161f55] hover:bg-blue-700 text-[#fff]"
+                  : "bg-[#161f55] hover:bg-blue-700 text-[#fff]"
+                  }`}
               >
                 Submit
               </button>
@@ -222,6 +217,11 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
       </div>
     </>
   );
+};
+AppSchedule.propTypes = {
+  onNext: PropTypes.func,
+  onBack: PropTypes.func,
+  currentStep: PropTypes.number,
 };
 
 export default AppSchedule;

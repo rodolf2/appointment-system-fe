@@ -10,8 +10,9 @@ import {
 } from "react-icons/fa";
 import { IoMdHome } from "react-icons/io";
 import { Tooltip } from "react-tooltip";
+import PropTypes from "prop-types";
 
-const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
   const sidebarRef = useRef();
 
@@ -134,9 +135,10 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                         fontWeight: "500",
                         boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
                         zIndex: 9999,
-                        border: "1px solid rgba(255,255,255,0.1)",
+
                         textShadow: "0 1px 1px rgba(0,0,0,0.3)",
                       }}
+                      border="1px solid rgba(255,255,255,0.1)"
                       opacity={1}
                       noArrow={false}
                       delayShow={50}
@@ -151,6 +153,10 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       </nav>
     </aside>
   );
+};
+Sidebar.propTypes = {
+  isSidebarOpen: PropTypes.bool.isRequired,
+  setIsSidebarOpen: PropTypes.func,
 };
 
 export default Sidebar;

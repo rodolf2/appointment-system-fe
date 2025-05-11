@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const Feedback = ({ onNext }) => {
   const [ratings, setRatings] = useState({
@@ -82,9 +83,8 @@ const StarRating = ({ category, currentRating, onRate }) => {
       {[1, 2, 3, 4, 5].map((value) => (
         <button
           key={value}
-          className={`w-6 h-6 ${
-            value <= currentRating ? "text-blue-500" : "text-gray-300"
-          }`}
+          className={`w-6 h-6 ${value <= currentRating ? "text-blue-500" : "text-gray-300"
+            }`}
           onClick={() => onRate(category, value)}
         >
           <svg
@@ -98,6 +98,15 @@ const StarRating = ({ category, currentRating, onRate }) => {
       ))}
     </div>
   );
+};
+StarRating.propTypes = {
+  category: PropTypes.string,
+  currentRating: PropTypes.number,
+  onRate: PropTypes.func,
+};
+
+Feedback.propTypes = {
+  onNext: PropTypes.func,
 };
 
 export default Feedback;

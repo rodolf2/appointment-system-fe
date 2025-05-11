@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import PropTypes from "prop-types";
 import useDataPrivacy from "./hooks/useDataPrivacy";
 
 const DataPrivacy = ({ onNext }) => {
@@ -56,18 +57,16 @@ const DataPrivacy = ({ onNext }) => {
               type="checkbox"
               id="agree"
               onChange={handleCheckBox}
-              className={`w-4 h-4 mt-1 border-2 ${
-                highlight && !isChecked
-                  ? "border-[#B50A0A] border-8"
-                  : "border-[#161F55]"
-              }`}
+              className={`w-4 h-4 mt-1 border-2 ${highlight && !isChecked
+                ? "border-[#B50A0A] border-8"
+                : "border-[#161F55]"
+                }`}
               aria-label="Agree to the terms and conditions"
             />
             <label
               htmlFor="agree"
-              className={`text-[16px] text-justify text-[#161F55] font-LatoRegular ${
-                highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
-              }`}
+              className={`text-[16px] text-justify text-[#161F55] font-LatoRegular ${highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
+                }`}
             >
               I have read and agree to the{" "}
               <span className="font-LatoBold">Data Privacy Notice</span> of LVCC
@@ -77,9 +76,8 @@ const DataPrivacy = ({ onNext }) => {
         </form>
         <p
           ref={textRef} // Reference to the important text
-          className={`text-[16px] text-justify mb-6 font-LatoRegular ${
-            highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
-          }`}
+          className={`text-[16px] text-justify mb-6 font-LatoRegular ${highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
+            }`}
         >
           <p className="font-LatoRegular w-[450px] mx-auto">
             By ticking “I Agree,” I voluntarily give my consent to LVCC in
@@ -103,6 +101,9 @@ const DataPrivacy = ({ onNext }) => {
       </div>
     </div>
   );
+};
+DataPrivacy.propTypes = {
+  onNext: PropTypes.func,
 };
 
 export default DataPrivacy;

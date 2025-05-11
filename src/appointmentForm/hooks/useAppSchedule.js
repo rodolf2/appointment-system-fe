@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
 
 const useAppSchedule = (onNext) => {
@@ -20,7 +20,7 @@ const useAppSchedule = (onNext) => {
   };
 
   // Generate bookings data for the current month
-  const generateBookingsForMonth = () => {
+  const generateBookingsForMonth = useCallback(() => {
     const newBookings = {};
     const daysInMonth = currentMonth.daysInMonth();
     const today = dayjs();
@@ -65,14 +65,14 @@ const useAppSchedule = (onNext) => {
     }
 
     return newBookings;
-  };
+  }, [currentMonth]);
 
   // Update bookings when month changes
   useEffect(() => {
     setBookings(generateBookingsForMonth());
     setSelectedDate(null);
     setSelectedTimeSlot(null);
-  }, [currentMonth]);
+  }, [currentMonth, generateBookingsForMonth]);
 
   // Generate calendar days array
   const generateDaysInCalendar = () => {
@@ -122,8 +122,8 @@ const useAppSchedule = (onNext) => {
         booking?.reason === "Weekend"
           ? "Weekends are not available for booking"
           : booking?.reason === "Past date"
-          ? "Cannot book past dates"
-          : "This date is fully booked"
+            ? "Cannot book past dates"
+            : "This date is fully booked"
       );
     }
   };

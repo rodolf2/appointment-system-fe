@@ -1,5 +1,6 @@
 import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
 import useAppInfo from "./hooks/useAppInfo";
+import PropTypes from "prop-types";
 
 const AppInfo = ({ onNext, onBack, currentStep }) => {
   // Use the hook which manages all form state and logic
@@ -64,14 +65,13 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                       value={formData[field.name] || ""}
                       onChange={handleInputChange}
                       placeholder={field.placeholder}
-                      className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
-                        errors[field.name] ? "border-red-500" : ""
-                      }`}
+                      className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${errors[field.name] ? "border-red-500" : ""
+                        }`}
                     />
                     {errors[field.name] && (
-                      <p className="text-red-600 text-sm text-start">
+                      <div className="text-red-600 text-sm text-start">
                         {errors[field.name]}
-                      </p>
+                      </div>
                     )}
                   </div>
                 ))}
@@ -119,9 +119,8 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                     onChange={handleInputChange}
                     placeholder={field.placeholder}
                     maxLength={field.maxLength}
-                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
-                      errors[field.name] ? "border-red-500" : ""
-                    }`}
+                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${errors[field.name] ? "border-red-500" : ""
+                      }`}
                   />
                   {errors[field.name] && (
                     <p className="text-red-600 text-sm text-start">
@@ -154,6 +153,11 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
       </div>
     </>
   );
+};
+AppInfo.propTypes = {
+  onNext: PropTypes.func,
+  onBack: PropTypes.func,
+  currentStep: PropTypes.number,
 };
 
 export default AppInfo;

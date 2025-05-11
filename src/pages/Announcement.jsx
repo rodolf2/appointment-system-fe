@@ -83,7 +83,7 @@ const Announcement = () => {
             </div>
 
             <p className="text-[#161F55] italic text-[25px] pt-20 text-start">
-              Note: The registrar's office hours of operation may be subject to
+              Note: The registrar&#39;s office hours of operation may be subject to
               change due to unforeseen circumstances or institutional events.
               Please check the announcement board for updates.
             </p>
@@ -108,7 +108,7 @@ const Announcement = () => {
               </h1>
               <p className="text-[30px] text-start mt-4">
                 For a more secure and efficient process of requesting and
-                claiming student's credentials for everyone
+                claiming student&#39;s credentials for everyone
               </p>
             </div>
           </div>

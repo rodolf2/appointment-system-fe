@@ -1,6 +1,7 @@
 import useAttachment from "./hooks/useAttachment";
 import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
 import { Navigate } from "react-router";
+import PropTypes from "prop-types";
 
 const Attachment = ({ onNext, onBack, currentStep }) => {
   const {
@@ -78,8 +79,7 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
               ref={fileInputRef}
               onChange={handleFileChange}
               className={`my-2 justify-center shadow-md text-[#161f55] border-2 py-2 px-2 w-[380px] rounded-[20px] 
-                ${
-                  error ? "border-red-500" : "border-[#000] border-opacity-40"
+                ${error ? "border-red-500" : "border-[#000] border-opacity-40"
                 }`}
               multiple
               accept="image/*"
@@ -92,9 +92,8 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
             <div className="pr-[210px]">
               <button
                 type="button"
-                className={`border-2 shadow-md border-[#425066] border-opacity-40 font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[15px] w-[180px] h-[50px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors justify-center text-start bg-none ${
-                  files.length >= 3 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`border-2 shadow-md border-[#425066] border-opacity-40 font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[15px] w-[180px] h-[50px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors justify-center text-start bg-none ${files.length >= 3 ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 onClick={handleAddFile}
                 disabled={files.length >= 3}
               >
@@ -126,6 +125,11 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
       </div>
     </>
   );
+};
+Attachment.propTypes = {
+  onNext: PropTypes.func,
+  onBack: PropTypes.func,
+  currentStep: PropTypes.number,
 };
 
 export default Attachment;

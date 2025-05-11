@@ -15,28 +15,23 @@ const Archived = () => {
     isModalOpen,
     isBulkDeleteModalOpen,
     isRetrieveModalOpen,
-    selectedAppointment,
     selectedRows,
     isDropdownOpen,
     toggleSidebar,
     openModal,
     closeModal,
-    openBulkDeleteModal,
     closeBulkDeleteModal,
     openRetrieveModal,
     closeRetrieveModal,
     deleteAppointment,
     deleteBulkAppointments,
-    retrieveAppointments,
     handleCheckboxChange,
     handleSelectAll,
     toggleDropdown,
     handleDropdownAction,
     retrieveAppointment,
     showSuccessDelete,
-    setShowSuccessDelete,
     showSuccessRetrieve,
-    setShowSuccessRetrieve,
     closeSuccessDelete,
     closeSuccessRetrieve,
   } = useArchived();
@@ -69,6 +64,8 @@ const Archived = () => {
                       SHOW
                     </label>
                     <input
+                      id="show"
+                      name="show"
                       type="number"
                       min={"0"}
                       max={"10"}
@@ -81,6 +78,7 @@ const Archived = () => {
                     <div className="relative">
                       <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <input
+                        name="search"
                         id="search"
                         type="search"
                         className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8"
@@ -154,11 +152,10 @@ const Archived = () => {
                     {appointments.map((data) => (
                       <tr
                         key={data.id}
-                        className={`text-[18px] ${
-                          selectedRows.includes(data.id)
-                            ? "bg-[#C2DBFF] !important"
-                            : "even:bg-gray-100"
-                        }`}
+                        className={`text-[18px] ${selectedRows.includes(data.id)
+                          ? "bg-[#C2DBFF] !important"
+                          : "even:bg-gray-100"
+                          }`}
                       >
                         <td className="border p-4 text-center">
                           <div className="flex items-center justify-center">
