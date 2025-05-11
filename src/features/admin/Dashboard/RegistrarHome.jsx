@@ -25,9 +25,8 @@ const RegistrarHome = () => {
     <div className="flex h-screen font-LatoRegular">
       {/* Sidebar */}
       <div
-        className={`sidebar-container ${
-          isSidebarOpen ? "w-[300px]" : "w-[100px]"
-        } z-20`}
+        className={`sidebar-container ${isSidebarOpen ? "w-[300px]" : "w-[100px]"
+          } z-20`}
       >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
@@ -193,32 +192,30 @@ const RegistrarHome = () => {
                 ))}
 
                 {/* Calendar Days */}
+                {/* Calendar Days */}
                 {Array.from({ length: daysInMonth }).map((_, index) => {
                   const day = index + 1;
                   const isWeekendDay = isWeekend(day);
-
-                  // Check if the day is a holiday
                   const isHoliday = currentMonthHolidays.some(
                     (holiday) => parseInt(holiday.date.split("-")[1]) === day
                   );
 
-                  // Prioritize holidays and weekends
+                  // Only show status if it's a weekday and not a holiday
                   const event = isHoliday
                     ? { label: "Holiday", color: "bg-[#AF1EB9]" }
                     : isWeekendDay
-                    ? { label: "Closed", color: "bg-[#7F8258]" }
-                    : events[day];
+                      ? null // No status for weekends
+                      : events[day]; // Only show weekday events
 
                   return (
                     <div
                       key={index}
-                      className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
-                        currentDate.date() === day &&
+                      className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${currentDate.date() === day &&
                         currentDate.month() === dayjs().month() &&
                         currentDate.year() === dayjs().year()
-                          ? "bg-blue-300 font-bold"
-                          : ""
-                      }`}
+                        ? "bg-blue-300 font-bold"
+                        : ""
+                        } ${isWeekendDay ? "bg-gray-100" : ""}`} // Optional: light gray background for weekends
                     >
                       {day}
                       {event && (

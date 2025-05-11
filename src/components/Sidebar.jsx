@@ -60,24 +60,21 @@ const Sidebar = ({ isSidebarOpen }) => {
   return (
     <aside
       ref={sidebarRef}
-      className={`h-full bg-side-bar_bg text-white ${
-        isSidebarOpen ? "w-[300px]" : "w-[100px]"
-      } overflow-hidden transition-all duration-300`}
+      className={`h-full bg-side-bar_bg text-white ${isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        } overflow-hidden transition-all duration-300`}
     >
       {/* Logo */}
       <div
-        className={`flex ${
-          isSidebarOpen
-            ? "items-center justify-start pl-4"
-            : "items-center justify-center"
-        } mt-6`}
+        className={`flex ${isSidebarOpen
+          ? "items-center justify-start pl-4"
+          : "items-center justify-center"
+          } mt-6`}
       >
         <img
           src="/assets/image/LV_logo.png"
           alt="LVCC Logo"
-          className={`${
-            isSidebarOpen ? "w-[100px] h-[100px]" : "w-[60px] h-[60px]"
-          } transition-all duration-300`}
+          className={`${isSidebarOpen ? "w-[100px] h-[100px]" : "w-[60px] h-[60px]"
+            } transition-all duration-300`}
         />
         {isSidebarOpen && (
           <div className="ml-4">
@@ -88,18 +85,19 @@ const Sidebar = ({ isSidebarOpen }) => {
       </div>
 
       {/* Divider */}
-      {isSidebarOpen && (
-        <div className="border-b-2 border-white w-full my-6 mx-4"></div>
-      )}
+      <div
+        className={`border-b-2 border-white w-full ${isSidebarOpen ? "my-6 mx-4" : "my-4 w-[60%] mx-auto mb-10"
+          }`}
+      ></div>
+
 
       {/* Menu Sections */}
       <nav className={isSidebarOpen ? "px-4" : ""}>
         {menuSections.map((section, index) => (
           <div
             key={index}
-            className={`${
-              index === 0 ? (isSidebarOpen ? "mt-6" : "mt-4") : "mt-10"
-            }`}
+            className={`${index === 0 ? (isSidebarOpen ? "mt-6" : "mt-4") : "mt-10"
+              }`}
           >
             {/* Section Title */}
             {isSidebarOpen && (
@@ -119,11 +117,10 @@ const Sidebar = ({ isSidebarOpen }) => {
                     data-tooltip-place="right"
                   >
                     <div
-                      className={`${
-                        isSidebarOpen
-                          ? "text-[20px] w-6 flex justify-center"
-                          : "text-[25px]"
-                      }`}
+                      className={`${isSidebarOpen
+                        ? "text-[20px] w-6 flex justify-center"
+                        : "text-[25px]"
+                        }`}
                     >
                       {icon}
                     </div>

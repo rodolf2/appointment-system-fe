@@ -37,7 +37,7 @@ const LandingPage = () => {
           {/* Main Content - Using flex-grow to take available space and center content */}
           <div className="flex-grow flex flex-col items-center justify-center text-center px-4">
             <div className="relative flex flex-col items-center max-w-7xl mx-auto">
-              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-LatoBold uppercase  tracking-wider leading-loose">
+              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-LatoBold uppercase  tracking-[5px] leading-loose">
                 LA VERDAD CHRISTIAN <br /> COLLEGE
               </h1>
 
@@ -55,7 +55,7 @@ const LandingPage = () => {
               {/* Button positioned relative to the text */}
               <Link
                 to="/home/announcement"
-                className="mt-6 sm:mt-8 bg-LBackground hover:bg-blue-800 text-white py-2 px-4 sm:py-3 sm:px-6 rounded-md shadow-lg text-sm sm:text-base transition-colors duration-200 w-40 h-[50px] "
+                className="mt-6 sm:mt-8 bg-LBackground hover:bg-blue-800 text-white py-2 px-4 sm:py-3 sm:px-6 rounded-md shadow-lg text-sm sm:text-base transition-colors duration-200 w-40 h-[50px] tracking-[2px]"
               >
                 Get Started
               </Link>

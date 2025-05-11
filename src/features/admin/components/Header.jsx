@@ -4,6 +4,7 @@ import { CgProfile } from "react-icons/cg";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaUserEdit, FaSignOutAlt, FaSpinner } from "react-icons/fa";
 import useHeader from "./hooks/useHeader";
+import { GrSystem } from "react-icons/gr";
 
 const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
   const {
@@ -26,6 +27,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
     handleProfile,
     markAllAsRead,
     setActiveTab,
+    markAsRead,
   } = useHeader(initialTitle);
 
   return (
@@ -44,7 +46,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
 
       {/* Right Side */}
       <div className="relative flex items-center gap-3">
-        {/* Notification Area */}
+        {/* Notification Arsea */}
         <div className="relative" ref={notificationToggleRef}>
           <button
             onClick={toggleNotificationDropdown}
@@ -52,20 +54,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
             aria-label={`Notifications (${unreadCount} unread)`}
             disabled={isLoadingNotifications}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-700"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
+            <img src="/assets/icons/notification.svg" alt="Notification Icon" className="w-8 h-8" />
             {unreadCount > 0 && (
               <span className="absolute top-0 right-0 h-4 w-4 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center ring-2 ring-white">
                 {unreadCount}
@@ -76,44 +65,41 @@ const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
           {isNotificationOpen && (
             <div
               ref={notificationDropdownRef}
-              className="absolute right-0 top-full mt-2 bg-white border border-gray-200 shadow-lg rounded-lg w-80 z-20 max-h-96 overflow-y-auto"
+              className="absolute right-0 top-full mt-2 bg-white border border-gray-200 shadow-lg rounded-lg w-[500px] z-20 max-h-[32rem] overflow-y-auto"
             >
               {/* Header */}
-              <div className="px-4 py-3 border-b">
-                <h3 className="font-semibold text-gray-800 pb-3 relative inline-block text-xl">
-                  Notification
-                  <span className="absolute bottom-1 left-0 w-full h-0.5 bg-[#F3BC62]"></span>
+              <div className="px-6 py-4 border-b">
+                <h3 className="font-semibold text-gray-800 pb-3 relative inline-block text-2xl">
+                  Notifications
+                  <span className="absolute bottom-1 left-0 w-full h-1 bg-[#F3BC62]"></span>
                 </h3>
               </div>
 
               {/* Tabs */}
-              <div className="flex border-b">
+              <div className="flex border-b bg-[#D9D9D9] align-middle rounded-lg p-1 mb-5">
                 <button
-                  className={`flex-1 py-2 text-sm font-medium ${
-                    activeTab === "unread"
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500"
-                  }`}
+                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${activeTab === "unread"
+                    ? "text-[#161F55] bg-white rounded-lg shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
                   onClick={() => setActiveTab("unread")}
                 >
                   Unread
                 </button>
                 <button
-                  className={`flex-1 py-2 text-sm font-medium ${
-                    activeTab === "all"
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500"
-                  }`}
+                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${activeTab === "all"
+                    ? "text-[#161F55] bg-white rounded-lg shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
                   onClick={() => setActiveTab("all")}
                 >
                   All
                 </button>
                 <button
-                  className={`flex-1 py-2 text-sm font-medium ${
-                    activeTab === "archive"
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500"
-                  }`}
+                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${activeTab === "archive"
+                    ? "text-[#161F55] bg-white rounded-lg shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
                   onClick={() => setActiveTab("archive")}
                 >
                   Archive
@@ -123,86 +109,95 @@ const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
               {/* Content */}
               <div className="divide-y">
                 {isLoadingNotifications ? (
-                  <div className="flex justify-center items-center p-6 text-gray-500">
-                    <FaSpinner className="animate-spin mr-2" /> Loading...
+                  <div className="flex justify-center items-center p-8 text-gray-500">
+                    <FaSpinner className="animate-spin mr-3 text-xl" /> Loading...
                   </div>
                 ) : notificationError ? (
-                  <div className="px-4 py-4 text-red-600 text-sm text-center">
+                  <div className="px-6 py-5 text-red-600 text-base text-center">
                     {notificationError}
                   </div>
                 ) : filteredNotifications.length > 0 ? (
                   filteredNotifications.map((notif) => (
                     <div
                       key={notif.id}
-                      className={`px-4 py-3 hover:bg-gray-50 ${
-                        !notif.read ? "bg-gray-100" : "bg-white"
-                      }`}
+                      className={`px-6 py-6 cursor-pointer hover:bg-gray-50 mb-3 ${!notif.read ? "bg-gray-100" : "bg-white"}
+        shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05)] 
+        transition-shadow relative rounded-lg`}
+                      onClick={() => markAsRead(notif.id)}
                     >
-                      <div className="flex items-start">
-                        {notif.initials ? (
-                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                            <span className="text-blue-600 font-medium">
+                      {/* Shorter vertical blue line */}
+                      <div className="absolute left-1 top-4 bottom-4 w-1 bg-blue-500 rounded-r"></div>
+
+                      <div className="flex items-start gap-4">
+                        {/* Only show avatar/icon for user actions */}
+                        {notif.type === "user-action" && (
+                          <div className="flex-shrink-0 h-12 w-12 rounded-full bg-[#34A853] flex items-center justify-center ml-2">
+                            <span className="text-white font-medium text-lg">
                               {notif.initials}
                             </span>
                           </div>
-                        ) : (
-                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center mr-3">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-gray-500"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
                         )}
 
-                        <div className="flex-1 min-w-0">
-                          <p
-                            className={`text-sm ${
-                              !notif.read
-                                ? "font-semibold text-gray-900"
-                                : "text-gray-600"
-                            }`}
-                          >
-                            {notif.text}
-                          </p>
-                          {notif.time && (
-                            <p
-                              className={`text-xs mt-1 ${
-                                !notif.read ? "text-gray-700" : "text-gray-500"
-                              }`}
-                            >
-                              {notif.time}
-                            </p>
-                          )}
+                        <div className={`flex-1 min-w-0 ${notif.type !== "user-action" ? "pl-4" : ""}`}>
+                          <div className="flex justify-between items-start gap-2">
+                            <div>
+                              <p className={`text-base ${!notif.read ? "text-gray-900" : "text-gray-600"}`}>
+                                {notif.type === "user-action" ? (
+                                  <>
+                                    <span className="font-bold">{notif.userName}</span>{" "}
+                                    {notif.action} {notif.reference && (
+                                      <span className="font-mono text-blue-600">#{notif.reference}</span>
+                                    )} {notif.status && (
+                                      <span className={`${notif.status.toLowerCase() === 'completed'
+                                        ? 'text-blue-600'
+                                        : notif.status.toLowerCase() === 'approved'
+                                          ? 'text-green-600'
+                                          : ''
+                                        } uppercase`}>
+                                        {notif.status}
+                                      </span>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    {notif.event} {notif.action}
+                                  </>
+                                )}
+                              </p>
+                              {notif.details && (
+                                <p className="text-sm text-gray-500 mt-1">
+                                  {notif.details}
+                                </p>
+                              )}
+                            </div>
+                            {notif.time && (
+                              <p className={`text-sm ${!notif.read ? "text-gray-700" : "text-gray-500"} whitespace-nowrap`}>
+                                {notif.time}
+                              </p>
+                            )}
+                          </div>
                         </div>
 
                         {!notif.read && (
-                          <div className="ml-2 flex-shrink-0">
-                            <span className="h-2 w-2 rounded-full bg-blue-600 block"></span>
+                          <div className="ml-2 flex-shrink-0 mt-1">
+                            <span className="h-3 w-3 rounded-full bg-blue-600 block"></span>
                           </div>
                         )}
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="px-4 py-4 text-sm text-gray-500 text-center">
-                    No notifications
+                  <div className="px-6 py-5 text-base text-gray-500 text-center">
+                    No notifications available
                   </div>
                 )}
               </div>
 
               {/* Footer */}
-              <div className="px-4 py-2 border-t text-right">
+              <div className="px-6 py-3 border-t text-right">
                 <button
                   onClick={markAllAsRead}
-                  className="text-sm text-blue-600 hover:underline"
+                  className="text-base text-blue-600 hover:underline font-medium"
                 >
                   Mark all as read
                 </button>

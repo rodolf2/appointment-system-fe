@@ -26,8 +26,23 @@ const Footer = () => {
             FOLLOW US
           </p>
           <div className="flex justify-center items-center space-x-3">
-            <CiFacebook className="text-Primary w-8 h-8" />
-            <TfiEmail className="text-Primary w-8 h-8" />
+            {/* Facebook Link */}
+            <a
+              href="https://www.facebook.com/lvcc.apalit"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit our Facebook page"
+            >
+              <CiFacebook className="text-Primary w-10 h-10 hover:text-PrimaryDark transition-colors" />
+            </a>
+
+            {/* Email Link */}
+            <a
+              href="mailto:support@laverdad.edu.ph"
+              aria-label="Send us an email"
+            >
+              <TfiEmail className="text-Primary w-8 h-8 hover:text-PrimaryDark transition-colors" />
+            </a>
           </div>
         </div>
 

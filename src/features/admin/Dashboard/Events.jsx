@@ -44,7 +44,7 @@ const Events = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto z-10 relative flex flex-col">
+        <div className="flex-1 overflow-y-auto z-10 relative">
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
@@ -102,13 +102,12 @@ const Events = () => {
                     return (
                       <div
                         key={index}
-                        className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
-                          currentDate.date() === day &&
+                        className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${currentDate.date() === day &&
                           currentDate.month() === dayjs().month() &&
                           currentDate.year() === dayjs().year()
-                            ? "bg-blue-300 font-bold"
-                            : ""
-                        }`}
+                          ? "bg-blue-300 font-bold"
+                          : ""
+                          }`}
                         onClick={() => handleDayClick(day)}
                       >
                         {day}

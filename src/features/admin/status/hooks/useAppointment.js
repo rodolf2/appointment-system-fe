@@ -62,7 +62,7 @@ const useAppointment = () => {
       dateOfAppointment: "",
       timeSlot: "",
       dateOfRequest: "",
-      actions: "2025-01-01",
+      actions: "",
     },
     {
       status: "REJECTED",
@@ -72,7 +72,7 @@ const useAppointment = () => {
       dateOfAppointment: "",
       timeSlot: "",
       dateOfRequest: "",
-      actions: "2025-01-01",
+      actions: "",
     },
     {
       status: "PENDING",
@@ -82,7 +82,7 @@ const useAppointment = () => {
       dateOfAppointment: "",
       timeSlot: "",
       dateOfRequest: "",
-      actions: "2025-01-01",
+      actions: "",
     },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -96,15 +96,15 @@ const useAppointment = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case "PENDING":
-        return "bg-[#F3BC62]"; // Orange
+        return "bg-[#F3BC62]";
       case "APPROVED":
-        return "bg-[#299057]"; // Green
+        return "bg-[#299057]";
       case "REJECTED":
-        return "bg-[#D52121]"; // Red
+        return "bg-[#D52121]";
       case "COMPLETED":
-        return "bg-[#354CCE]"; // Blue
+        return "bg-[#354CCE]";
       default:
-        return "bg-gray-500"; // Default color
+        return "bg-gray-500";
     }
   };
 
@@ -112,15 +112,15 @@ const useAppointment = () => {
   const getTransactionNumberColor = (status) => {
     switch (status) {
       case "PENDING":
-        return "text-[#F3BC62]"; // Orange
+        return "text-[#F3BC62]";
       case "APPROVED":
-        return "text-[#299057]"; // Green
+        return "text-[#299057]";
       case "REJECTED":
-        return "text-[#D52121]"; // Red
+        return "text-[#D52121]";
       case "COMPLETED":
-        return "text-[#354CCE]"; // Blue
+        return "text-[#354CCE]";
       default:
-        return "text-gray-500"; // Default color
+        return "text-gray-500";
     }
   };
 
@@ -134,8 +134,8 @@ const useAppointment = () => {
     selectedFilter === "Filter by"
       ? appointments
       : appointments.filter(
-          (appointment) => appointment.status === selectedFilter.toUpperCase()
-        );
+        (appointment) => appointment.status === selectedFilter.toUpperCase()
+      );
 
   // Open modal for delete confirmation
   const openModal = (appointment) => {

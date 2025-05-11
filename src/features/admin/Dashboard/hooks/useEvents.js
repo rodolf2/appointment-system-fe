@@ -83,7 +83,7 @@ const useEvents = () => {
         [day]: {
           label: title,
           description: newEvent.description,
-          color: "bg-[#299057]",
+          color: "bg-[#FBBC05]",
           startDate,
           endDate,
         },

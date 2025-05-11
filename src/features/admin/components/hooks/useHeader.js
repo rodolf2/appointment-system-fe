@@ -16,34 +16,49 @@ const useHeader = (initialTitle = "") => {
   const profileToggleRef = useRef(null);
   const notificationToggleRef = useRef(null);
 
-  // Mock data for notifications
+  // Mock data for notifications with different types
   useEffect(() => {
     setIsLoadingNotifications(true);
     setTimeout(() => {
       setNotifications([
         {
           id: 1,
+          type: "user-action",
           initials: "AB",
-          text: "UserName updated the status appointment of TR102938-123 into APPROVED.",
+          userName: "UserName",
+          action: "updated the status appointment of",
+          reference: "TR102938-123",
+          status: "APPROVED",
           read: false,
           time: "22 minutes ago",
         },
         {
           id: 2,
+          type: "user-action",
           initials: "AB",
-          text: "UserName updated the status appointment of TR104095-567 into APPROVED.",
+          userName: "UserName",
+          action: "updated the status appointment of",
+          reference: "TR104095-567",
+          status: "APPROVED",
           read: false,
           time: "35 minutes ago",
         },
         {
           id: 3,
-          text: "New Appointment has been submitted.",
+          type: "system",
+          event: "New Appointment",
+          action: "has been submitted!",
           read: false,
+          time: "5 minutes ago",
         },
         {
           id: 4,
+          type: "user-action",
           initials: "AB",
-          text: "UserName updated the status appointment of TR23132-122 into COMPLETED.",
+          userName: "UserName",
+          action: "updated the status appointment of",
+          reference: "TR23132-122",
+          status: "COMPLETED",
           read: false,
           time: "43 minutes ago",
         },
@@ -107,6 +122,12 @@ const useHeader = (initialTitle = "") => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
+  const markAsRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+    );
+  };
+
   return {
     isProfileDropdownOpen,
     isNotificationOpen,
@@ -126,6 +147,7 @@ const useHeader = (initialTitle = "") => {
     handleSignOut,
     handleProfile,
     markAllAsRead,
+    markAsRead,
     setActiveTab,
   };
 };

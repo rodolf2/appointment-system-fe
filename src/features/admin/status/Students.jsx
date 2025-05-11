@@ -55,8 +55,8 @@ const Students = () => {
                 </div>
               </div>
               <div className="m-4 mt-8">
-                <table className="text-[16px] border-collapse">
-                  <thead>
+                <table className="text-[16px] w-full border-collapse border border-[#989898] h-[500px]">
+                  <thead cla >
                     <tr className="bg-gray-200 text-center">
                       <th className="">TRANSACTION NUMBER</th>
                       <th className="">NAME</th>
@@ -86,11 +86,6 @@ const Students = () => {
                         DATE OF
                         <br />
                         REQUEST
-                      </th>
-                      <th className="">
-                        CLAIMING
-                        <br />
-                        METHOD
                       </th>
                     </tr>
                   </thead>
@@ -124,9 +119,6 @@ const Students = () => {
                         <td className="border-2  p-3 border-r-[#989898]">
                           {data.date}
                         </td>
-                        <td className="border-2 p-3 border-r-[#989898] ">
-                          {data.claiming}
-                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -148,11 +140,10 @@ const Students = () => {
               </div>
             </section>
           </div>
-
           <Footer />
         </main>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
