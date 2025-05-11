@@ -46,8 +46,8 @@ const Header = ({ toggleSidebar, isSidebarOpen, title: initialTitle }) => {
 
       {/* Right Side */}
       <div className="relative flex items-center gap-3">
-        {/* Notification Arsea */}
-        <div className="relative" ref={notificationToggleRef}>
+        {/* Notification Area */}
+        <div className="relative " ref={notificationToggleRef}>
           <button
             onClick={toggleNotificationDropdown}
             className="relative p-1 rounded-full hover:bg-gray-200 transition-colors"

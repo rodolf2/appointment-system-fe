@@ -86,7 +86,7 @@ const Sidebar = ({ isSidebarOpen }) => {
 
       {/* Divider */}
       <div
-        className={`border-b-2 border-white w-full ${isSidebarOpen ? "my-6 mx-4" : "my-4 w-[60%] mx-auto mb-10"
+        className={`border-b-2 border-white w-full ${isSidebarOpen ? "my-6" : "my-4 w-[60%] mx-auto  mb-10"
           }`}
       ></div>
 

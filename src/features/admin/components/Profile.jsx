@@ -66,7 +66,11 @@ const Profile = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-gray-400 text-5xl">👤</span>
+                    <img
+                      src="/assets/icons/UploadIcon.svg"
+                      alt="Default Profile"
+                      className="w-8 h-8 object-cover"
+                    />
                   )}
                 </div>
                 <div className="flex items-center space-x-2">
