@@ -15,7 +15,6 @@
     "@fullcalendar/list": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
-    "@headlessui/react": "^2.2.2",
     "@radix-ui/react-slot": "^1.1.1",
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",
