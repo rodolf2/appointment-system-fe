@@ -24,7 +24,7 @@ const Hta = () => {
             <div className="border-b-8 border-white my-4"></div>
             <p className="text-[30px] ">
               Well-known for offering quality education with a focus on
-              Christian values, moral development, and academic excellence
+              Christian values, moral development, and academic excellence.
             </p>
           </div>
         </div>

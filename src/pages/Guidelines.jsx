@@ -19,7 +19,7 @@ const Guidelines = () => {
           <p className="text-[30px] ">
             Promotes a holistic approach to education, emphasizing the
             development of the intellectual, emotional, social, and spiritual
-            aspects of students
+            aspects of students.
           </p>
         </div>
       </div>

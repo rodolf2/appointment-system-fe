@@ -55,7 +55,7 @@ const Announcement = () => {
             <p className="text-[30px] ">
               Simplifying appointment scheduling. <br />
               Stay organized, save time, and never miss an appointment. <br />
-              Easy, fast, and hassle-free
+              Easy, fast, and hassle-free.
             </p>
           </div>
         </div>
