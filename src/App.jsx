@@ -23,6 +23,7 @@ import Appointments from "./features/admin/status/Appointments";
 import Archived from "./features/admin/status/Archived";
 import Attachment from "./appointmentForm/Attachment";
 import AppSchedule from "./appointmentForm/AppSchedule";
+import TransitionWrapper from "./components/TransitionWrapper";
 
 const App = () => {
   return (
@@ -52,41 +53,45 @@ const Layout = () => {
 
   return (
     <>
-      {showHeaderFooter && <Header />}
+
       <Layouts>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/home" element={<HomePage />}>
-            <Route index element={<Announcement />} />
-            <Route path="announcement" element={<Announcement />} />
-            <Route path="hta" element={<Hta />} />
-            <Route path="guidelines" element={<Guidelines />} />
-          </Route>
-          <Route path="/about" element={<About />} />
-          <Route path="/faqs" element={<Faqs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/appointmentForm" element={<AppointmentForm />} />
-          <Route path="/announcement" element={<Announcement />} />
-          <Route path="/hta" element={<Hta />} />
-          <Route path="/guidelines" element={<Guidelines />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/faqs" element={<Faqs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/students" element={<Students />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/registrarHome" element={<RegistrarHome />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/holidays" element={<Holidays />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/appointments" element={<Appointments />} />
-          <Route path="/archived" element={<Archived />} />
-          <Route path="/attachment" element={<Attachment />} />
-          <Route path="/app-schedule" element={<AppSchedule />} />
-        </Routes>
+        <TransitionWrapper delay={200}>
+          {showHeaderFooter && <Header />}
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/home" element={<HomePage />}>
+              <Route index element={<Announcement />} />
+              <Route path="announcement" element={<Announcement />} />
+              <Route path="hta" element={<Hta />} />
+              <Route path="guidelines" element={<Guidelines />} />
+            </Route>
+            <Route path="/about" element={<About />} />
+            <Route path="/faqs" element={<Faqs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/appointmentForm" element={<AppointmentForm />} />
+            <Route path="/announcement" element={<Announcement />} />
+            <Route path="/hta" element={<Hta />} />
+            <Route path="/guidelines" element={<Guidelines />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/faqs" element={<Faqs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/students" element={<Students />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/registrarHome" element={<RegistrarHome />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/holidays" element={<Holidays />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/appointments" element={<Appointments />} />
+            <Route path="/archived" element={<Archived />} />
+            <Route path="/attachment" element={<Attachment />} />
+            <Route path="/app-schedule" element={<AppSchedule />} />
+          </Routes>
+          {showHeaderFooter && <Footer />}
+        </TransitionWrapper>
       </Layouts>
-      {showHeaderFooter && <Footer />}
+
     </>
   );
 };
