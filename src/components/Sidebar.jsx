@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom"; // Changed import
 import {
   FaUsers,
   FaTasks,
@@ -11,9 +11,8 @@ import {
 import { IoMdHome } from "react-icons/io";
 import { Tooltip } from "react-tooltip";
 
-const Sidebar = ({ isSidebarOpen }) => {
+const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const sidebarRef = useRef();
 
   useEffect(() => {
@@ -22,13 +21,7 @@ const Sidebar = ({ isSidebarOpen }) => {
     }
   }, [location.pathname]);
 
-  const handleMenuClick = (path, e) => {
-    e.stopPropagation();
-    navigate(path);
-  };
-
   const isActive = (path) => location.pathname === path;
-
   const activeStyle = isSidebarOpen
     ? "bg-[#D9D9D9] text-black rounded-xl pl-4 py-2 flex items-center gap-4 cursor-pointer w-full"
     : "bg-[#D9D9D9] text-black rounded-xl w-[50px] h-[50px] flex items-center justify-center cursor-pointer mx-auto";
@@ -86,10 +79,9 @@ const Sidebar = ({ isSidebarOpen }) => {
 
       {/* Divider */}
       <div
-        className={`border-b-2 border-white w-full ${isSidebarOpen ? "my-6" : "my-4 w-[60%] mx-auto  mb-10"
+        className={`border-b-2 border-white w-full ${isSidebarOpen ? "my-6" : "my-4 w-[60%] mx-auto mb-10"
           }`}
       ></div>
-
 
       {/* Menu Sections */}
       <nav className={isSidebarOpen ? "px-4" : ""}>
@@ -109,12 +101,13 @@ const Sidebar = ({ isSidebarOpen }) => {
             <ul className="space-y-2">
               {section.items.map(({ path, icon, label }) => (
                 <li key={path} className="flex justify-center">
-                  <div
+                  <Link
+                    to={path}
                     className={isActive(path) ? activeStyle : inactiveStyle}
-                    onClick={(e) => handleMenuClick(path, e)}
                     data-tooltip-id={`tooltip-${path}`}
                     data-tooltip-content={label}
                     data-tooltip-place="right"
+                    onClick={(e) => e.stopPropagation()} // Still keep this to prevent bubbling
                   >
                     <div
                       className={`${isSidebarOpen
@@ -127,7 +120,7 @@ const Sidebar = ({ isSidebarOpen }) => {
                     {isSidebarOpen && (
                       <span className="ml-4 text-lg">{label}</span>
                     )}
-                  </div>
+                  </Link>
                   {!isSidebarOpen && (
                     <Tooltip
                       id={`tooltip-${path}`}

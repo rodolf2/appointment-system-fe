@@ -7,6 +7,7 @@ import useRegistrarHome from "./hooks/useRegistrarHome";
 const RegistrarHome = () => {
   const {
     isSidebarOpen,
+    setIsSidebarOpen,
     currentDate,
     toggleSidebar,
     daysInMonth,
@@ -20,7 +21,6 @@ const RegistrarHome = () => {
     handleNextMonth,
     isWeekend,
   } = useRegistrarHome();
-
   return (
     <div className="flex h-screen font-LatoRegular">
       {/* Sidebar */}
@@ -28,7 +28,7 @@ const RegistrarHome = () => {
         className={`sidebar-container ${isSidebarOpen ? "w-[300px]" : "w-[100px]"
           } z-20`}
       >
-        <Sidebar isSidebarOpen={isSidebarOpen} />
+        <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       </div>
 
       {/* Background Image with Dark Overlay */}

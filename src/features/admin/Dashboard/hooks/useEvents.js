@@ -2,7 +2,20 @@ import { useState, useEffect } from "react"; // Add useEffect
 import dayjs from "dayjs";
 
 const useEvents = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    // Optional: Load from localStorage if you want persistence across page refreshes
+    const saved = localStorage.getItem('sidebarOpen');
+    return saved !== null ? JSON.parse(saved) : true; // Default to open
+  });
+
+  // Add this useEffect if you want persistence across refreshes
+  useEffect(() => {
+    localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
+  }, [isSidebarOpen]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(prev => !prev);
+  };
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [events, setEvents] = useState({}); // Stores events per month
   const [newEvent, setNewEvent] = useState({
@@ -37,10 +50,6 @@ const useEvents = () => {
     }
     setEvents(initialEvents);
   }, []);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
 
   const handlePrevMonth = () => {
     setCurrentDate(currentDate.subtract(1, "month"));

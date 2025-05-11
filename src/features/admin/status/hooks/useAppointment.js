@@ -1,7 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const useAppointment = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    // Optional: Load from localStorage if you want persistence across page refreshes
+    const saved = localStorage.getItem('sidebarOpen');
+    return saved !== null ? JSON.parse(saved) : true; // Default to open
+  });
+
+  // Add this useEffect if you want persistence across refreshes
+  useEffect(() => {
+    localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
+  }, [isSidebarOpen]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(prev => !prev);
+  };
   const [selectedFilter, setSelectedFilter] = useState("Filter by");
   const [appointments, setAppointments] = useState([
     {
@@ -88,9 +101,6 @@ const useAppointment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
 
   // Function to determine status color
   const getStatusColor = (status) => {

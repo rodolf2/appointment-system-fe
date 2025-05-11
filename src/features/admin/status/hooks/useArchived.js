@@ -1,7 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const useArchived = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    // Optional: Load from localStorage if you want persistence across page refreshes
+    const saved = localStorage.getItem('sidebarOpen');
+    return saved !== null ? JSON.parse(saved) : true; // Default to open
+  });
+
+  // Add this useEffect if you want persistence across refreshes
+  useEffect(() => {
+    localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
+  }, [isSidebarOpen]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(prev => !prev);
+  };
   const [appointments, setAppointments] = useState([
     {
       id: 1,
@@ -76,11 +89,6 @@ const useArchived = () => {
     setAppointmentToRetrieve(null);
     setIsRetrieveModalOpen(false);
   };
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   // Delete modals
   const openModal = (appointment) => {
     setSelectedAppointment(appointment);
