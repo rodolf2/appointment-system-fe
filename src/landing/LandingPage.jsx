@@ -12,7 +12,7 @@ const LandingPage = () => {
             className="w-full h-full object-cover opacity-90 drop-shadow-2xl"
           />
           {/* Linear Shadow Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/40 to-[#252F6A]/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/30 to-[#252F6A]/80"></div>
         </div>
 
         {/* Content Container - Using flex layout to ensure content stays proportional */}
@@ -37,13 +37,13 @@ const LandingPage = () => {
           {/* Main Content - Using flex-grow to take available space and center content */}
           <div className="flex-grow flex flex-col items-center justify-center text-center px-4">
             <div className="relative flex flex-col items-center max-w-7xl mx-auto">
-              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-LatoBold uppercase  tracking-[5px] leading-loose">
+              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[45px] font-LatoBold uppercase  tracking-[10px] leading-loose">
                 LA VERDAD CHRISTIAN <br /> COLLEGE
               </h1>
 
               {/* Line that scales with text width instead of fixed position */}
               <div className="relative w-full flex justify-center my-4">
-                <span className="w-11/12 sm:w-full max-w-5xl h-1 sm:h-2 bg-[#EEF2F7]"></span>
+                <span className="w-11/12 sm:w-full max-w-5xl h-2 sm:h-2 bg-[#EEF2F7]"></span>
               </div>
 
               <p className="text-Fwhite text-xs sm:text-sm md:text-base lg:text-xl xl:text-2xl max-w-xs sm:max-w-lg md:max-w-xl lg:max-w-2xl leading-relaxed  font-LatoRegular">

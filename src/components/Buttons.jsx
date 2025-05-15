@@ -17,16 +17,23 @@ const Buttons = () => {
           {/* Announcement Button */}
           <Link
             to="/home/announcement"
-            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${activeTab === "announcement" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
-              }`}
+            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
+              activeTab === "announcement" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
+            }`}
           >
-            <div className="flex items-center">
+            <div className="flex items-center ">
               <img
                 src="/assets/icons/announcement.svg"
                 alt="Announcement Icon"
                 className="mr-2 w-10 h-10"
               />
-              <span className={`relative ${activeTab === "announcement" ? "text-black" : "text-gray-600"}`}>
+              <span
+                className={`relative ${
+                  activeTab === "announcement"
+                    ? "text-[#161F55]"
+                    : "text-gray-600"
+                }`}
+              >
                 Announcement
                 {activeTab === "announcement" && (
                   <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
@@ -38,8 +45,9 @@ const Buttons = () => {
           {/* How to Appoint Button */}
           <Link
             to="/home/hta"
-            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${activeTab === "hta" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
-              }`}
+            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
+              activeTab === "hta" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
+            }`}
           >
             <div className="flex items-center">
               <img
@@ -47,7 +55,11 @@ const Buttons = () => {
                 alt="How to Appoint Icon"
                 className="mr-2 w-10 h-10"
               />
-              <span className={`relative ${activeTab === "hta" ? "text-black" : "text-gray-600"}`}>
+              <span
+                className={`relative ${
+                  activeTab === "hta" ? "text-[#161F55]" : "text-gray-600"
+                }`}
+              >
                 How to Appoint
                 {activeTab === "hta" && (
                   <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
@@ -59,8 +71,9 @@ const Buttons = () => {
           {/* Guidelines Button */}
           <Link
             to="/home/guidelines"
-            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${activeTab === "guidelines" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
-              }`}
+            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
+              activeTab === "guidelines" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
+            }`}
           >
             <div className="flex items-center">
               <img
@@ -68,7 +81,13 @@ const Buttons = () => {
                 alt="Guidelines Icon"
                 className="mr-2 w-10 h-10"
               />
-              <span className={`relative ${activeTab === "guidelines" ? "text-black" : "text-gray-600"}`}>
+              <span
+                className={`relative ${
+                  activeTab === "guidelines"
+                    ? "text-[#161F55]"
+                    : "text-gray-600"
+                }`}
+              >
                 Guidelines
                 {activeTab === "guidelines" && (
                   <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>

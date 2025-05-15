@@ -17,8 +17,7 @@ const Hta = () => {
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative z-10 px-4 max-w-[800px] ">
             <h1 className="text-[50px] font-LatoSemiBold uppercase tracking-widest">
-              WISDOM BASED ON
-              THE  <br /> TRUTH IS PRICELESS
+              WISDOM BASED ON THE <br /> TRUTH IS PRICELESS
             </h1>
             <div className="border-b-8 border-white my-4"></div>
             <p className="text-[30px] ">
