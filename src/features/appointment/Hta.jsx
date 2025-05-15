@@ -18,8 +18,7 @@ const Hta = () => {
           <div className="relative z-10 px-4 max-w-[800px] ">
             <h1 className="text-[50px] font-LatoSemiBold uppercase tracking-widest">
               WISDOM BASED ON
-              <br />
-              THE TRUTH IS PRICELESS
+              THE  <br /> TRUTH IS PRICELESS
             </h1>
             <div className="border-b-8 border-white my-4"></div>
             <p className="text-[30px] ">
