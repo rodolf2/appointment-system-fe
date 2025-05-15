@@ -87,7 +87,7 @@ const Contact = () => {
       <section className="bg-[#161F55] text-Fwhite w-full h-auto py-10">
         <div className="flex flex-col lg:flex-row w-full min-h-screen bg-[#121B52] lg:px-20 py-10 ">
           {/* Map Section */}
-          <div className="w-full lg:w-1/2  overflow-hidden">
+          <div className="w-full lg:w-1/2 overflow-hidden">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123347.40710675181!2d120.61418624335936!3d14.959002300000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33965634a341dc6f%3A0x17091aa8b0043f89!2sLa%20Verdad%20Christian%20College!5e0!3m2!1sen!2sph!4v1737910779201!5m2!1sen!2sph"
               className="w-full h-full min-h-[500px]"
