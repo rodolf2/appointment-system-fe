@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { submitContactForm } from "../services/contactServices";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -16,7 +17,7 @@ const Contact = () => {
     return regex.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let isValid = true;
@@ -54,8 +55,19 @@ const Contact = () => {
 
     if (!isValid) return;
 
-    alert("Form submitted successfully!");
-    // You can add logic here to send the form data
+    try {
+      const formData = { name, email, subject, message };
+      const result = await submitContactForm(formData);
+      alert(result.message || "Form submitted successfully!");
+
+      // Reset fields
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
+    } catch (error) {
+      alert(error.error || "Failed to submit the form.");
+    }
   };
 
   return (
@@ -98,7 +110,7 @@ const Contact = () => {
             ></iframe>
           </div>
 
-          {/* Form */}
+          {/* Form Section */}
           <div className="w-full lg:w-1/2 bg-[#FEFEFE] p-10 shadow-lg">
             <h2 className="text-[36px] font-LatoBold mb-2 text-[#161F55]">
               GET IN TOUCH
