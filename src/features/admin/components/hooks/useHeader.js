@@ -6,7 +6,7 @@ const useHeader = (initialTitle = "") => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
-  const [notificationError, setNotificationError] = useState(null);
+  const [notificationError] = useState(null);
   const [activeTab, setActiveTab] = useState("unread");
   const [title, setTitle] = useState(initialTitle);
 

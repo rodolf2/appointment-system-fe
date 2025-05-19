@@ -2,6 +2,7 @@ import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 import useStudents from "./hooks/useStudents";
+import { FaSearch } from "react-icons/fa";
 
 const Students = () => {
   const { appointments, isSidebarOpen, toggleSidebar } = useStudents();
@@ -44,47 +45,46 @@ const Students = () => {
                     />
                     <span className="ml-2">ENTRIES</span>
                   </div>
-                  <div className="text-[#161F55] font-semibold text-[18px]">
-                    <label htmlFor="search" className="mr-2">
-                      SEARCH:
-                    </label>
+                  <div className="relative">
+                    <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
                     <input
                       id="search"
-                      type="text"
-                      className="border p-1 bg-white text-[#161F55] mr-5"
+                      type="search"
+                      className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8" // Add padding-left (pl-8) to make space for the icon
+                      placeholder="Search"
                     />
                   </div>
                 </div>
               </div>
               <div className="m-4 mt-8">
-                <table className="text-[16px] w-full border-collapse border border-[#989898] h-[500px]">
+                <table className="text-[14px] w-full border-collapse border border-[#989898] h-[500px]">
                   <thead>
                     <tr className="bg-gray-200 text-center">
-                      <th className="">TRANSACTION NUMBER</th>
-                      <th className="">NAME</th>
-                      <th className="">
+                      <th className="p-3">TRANSACTION <br />NO.</th>
+                      <th className="p-3">NAME</th>
+                      <th className="p-3">
                         LAST S.Y.
                         <br />
                         ATTENDED
                       </th>
-                      <th className="">
+                      <th className="p-3">
                         PROGRAM/
                         <br />
                         GRADE/STRAND
                       </th>
-                      <th className="">
+                      <th className="p-3">
                         CONTACT
                         <br />
                         NO.
                       </th>
-                      <th className="">EMAIL ADDRESS</th>
-                      <th className="">
+                      <th className="p-3">EMAIL ADDRESS</th>
+                      <th className="p-3">
                         ATTACHMENT
                         <br />
                         PROOF
                       </th>
-                      <th className="">REQUEST</th>
-                      <th className="">
+                      <th className="p-3">REQUEST</th>
+                      <th className="p-3">
                         DATE OF
                         <br />
                         REQUEST

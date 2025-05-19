@@ -1,18 +1,17 @@
-// import { IoMdArrowDropdown } from "react-icons/io";
 import { BsTrash3 } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
-import { Tooltip } from "react-tooltip"; // For tooltips
+import { Tooltip } from "react-tooltip";
 import useSchedule from "./hooks/useSchedule";
+import { FaSearch } from "react-icons/fa";
 
 const Schedule = () => {
   const {
     isSidebarOpen,
     isAddModalOpen,
     isEditModalOpen,
-    editIndex,
     isDeleteModalOpen,
     newSchedule,
     schedules,
@@ -22,14 +21,15 @@ const Schedule = () => {
     openEditModal,
     closeEditModal,
     handleInputChange,
-    setSchedules,
-    formatDate,
-    formatTime,
     addSchedule,
     openDeleteModal,
     closeDeleteModal,
     confirmDelete,
+    handleUpdateSchedule,
+    editModalError,
+    addModalError
   } = useSchedule();
+
   return (
     <div className="flex h-screen font-LatoRegular">
       <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
@@ -43,6 +43,7 @@ const Schedule = () => {
             title="Schedule Records"
           />
           <section className="h-[1200px] z-10 bg-white p-5 my-5">
+            {/* ... (rest of your table and other UI) ... */}
             <div className="bg-[#D9D9D9] h-52 m-4 pt-2">
               <div className="text-[#161F55] flex justify-between px-3 pt-2 ml-3">
                 <h2 className="text-3xl font-bold tracking-[5px] pt-1">
@@ -75,15 +76,13 @@ const Schedule = () => {
                   />
                   <span className="ml-2">ENTRIES</span>
                 </div>
-                <div className="text-[#161F55] font-semibold text-[18px]">
-                  <label htmlFor="search" className="mr-2">
-                    SEARCH:
-                  </label>
+                <div className="relative">
+                  <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
-                    name="search"
                     id="search"
-                    type="text"
-                    className="border p-1 bg-white text-[#161F55] mr-5"
+                    type="search"
+                    className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8"
+                    placeholder="Search"
                   />
                 </div>
               </div>
@@ -100,15 +99,15 @@ const Schedule = () => {
                 </tr>
               </thead>
               <tbody>
-                {Array.from({ length: 9 }).map((_, rowIndex) => {
-                  const schedule = schedules[rowIndex]; // Check if there's a schedule for the current rowIndex
-                  return (
+                {/* Ensure schedules is populated before mapping, or handle empty/loading state */}
+                {schedules && schedules.length > 0 ? (
+                  schedules.slice(0, 9).map((schedule, rowIndex) => (
                     <tr
-                      key={rowIndex}
+                      key={schedule?.id || rowIndex}
                       className={`${rowIndex % 2 === 0 ? "bg-gray-100" : ""
                         } text-center`}
                     >
-                      <td className="border p-5">{schedule?.no || ""}</td>
+                      <td className="border p-5">{schedule?.no || rowIndex + 1}</td> {/* Display row number or actual 'no' */}
                       <td className="border p-5">{schedule?.slots || ""}</td>
                       <td className="border p-5">{schedule?.date || ""}</td>
                       <td className="border p-5">
@@ -116,37 +115,42 @@ const Schedule = () => {
                       </td>
                       <td className="border p-5">{schedule?.endTime || ""}</td>
                       <td className="border p-5">
-                        {schedule ? (
-                          <div className="flex gap-2 justify-center">
-                            <div
-                              data-tooltip-id="edit-tooltip"
-                              data-tooltip-content="Edit"
-                              className="bg-[#CF5824] p-2 rounded cursor-pointer hover:bg-orange-700"
-                              onClick={() => openEditModal(rowIndex)}
-                            >
-                              <FaEdit className="text-white" />
-                            </div>
-                            <div
-                              data-tooltip-id="delete-tooltip"
-                              data-tooltip-content="Delete"
-                              className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
-                              onClick={() => openDeleteModal(rowIndex)}
-                            >
-                              <BsTrash3 className="text-white" />
-                            </div>
+                        <div className="flex gap-2 justify-center">
+                          <div
+                            data-tooltip-id="edit-tooltip"
+                            data-tooltip-content="Edit"
+                            className="bg-[#CF5824] p-2 rounded cursor-pointer hover:bg-orange-700"
+                            onClick={() => openEditModal(rowIndex)}
+                          >
+                            <FaEdit className="text-white" />
                           </div>
-                        ) : (
-                          <div className="h-9"></div>
-                        )}
+                          <div
+                            data-tooltip-id="delete-tooltip"
+                            data-tooltip-content="Delete"
+                            className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
+                            onClick={() => openDeleteModal(rowIndex)}
+                          >
+                            <BsTrash3 className="text-white" />
+                          </div>
+                        </div>
                       </td>
                     </tr>
-                  );
-                })}
+                  ))
+                ) : (
+
+                  Array.from({ length: 9 }).map((_, rowIndex) => (
+                    <tr key={rowIndex} className={`${rowIndex % 2 === 0 ? "bg-gray-100" : ""} text-center`}>
+                      <td className="border p-5 h-[69px]" colSpan={6}> {/* Adjust height and colSpan as needed */}
+                        {rowIndex === 0 && (!schedules || schedules.length === 0) ? "No schedules available" : ""}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
             <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
               <span className="text-[#161F55]">
-                SHOWING 1 TO 10 OF 10 ENTRIES
+                SHOWING 1 TO {schedules ? Math.min(schedules.length, 10) : 0} OF {schedules ? schedules.length : 0} ENTRIES {/* Dynamic counts */}
               </span>
               <div className="mr-6">
                 <button className="border p-1 text-[#161F55]">Previous</button>
@@ -160,6 +164,8 @@ const Schedule = () => {
           <Footer />
         </main>
       </div>
+
+      {/* ADD MODAL (no changes needed here for this specific request) */}
       {isAddModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
           <div className="bg-white p-20 rounded-xl shadow-md">
@@ -205,6 +211,12 @@ const Schedule = () => {
                 className="border w-full p-2 mb-2"
               />
             </div>
+            {addModalError && (
+              <p className="mt-4 text-center text-red-500 text-sm">
+                {addModalError}
+              </p>
+            )}
+
             <div className="flex justify-center gap-10 mt-6">
               <button
                 className="bg-gray-300 text-black px-8 py-2 rounded-2xl"
@@ -222,10 +234,12 @@ const Schedule = () => {
           </div>
         </div>
       )}
+
+      {/* EDIT MODAL */}
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
           <div className="bg-white p-20 rounded-xl shadow-md">
-            <h2 className="text-xl font-bold mb-4">Update Schedule</h2>
+            <h2 className="text-xl font-bold mb-4 uppercase">Update Schedule</h2> {/* Consider consistent styling with ADD SCHEDULE */}
             <div className="border-b-2 border-[#F3BC62] w-60 my-2"></div>
             <div className="w-96">
               <p>Edit Slots</p>
@@ -265,7 +279,13 @@ const Schedule = () => {
                 className="border w-full p-2 mb-2"
               />
             </div>
-            <div className="flex justify-center gap-10 mt-6">
+            {/* Display the error message here */}
+            {editModalError && (
+              <p className="mt-4 text-center text-red-500 text-sm">
+                {editModalError}
+              </p>
+            )}
+            <div className="flex justify-center gap-10 mt-6"> {/* Ensure editModalError doesn't push buttons too far if it appears */}
               <button
                 className="bg-gray-300 text-black px-8 py-2 rounded-2xl"
                 onClick={closeEditModal}
@@ -274,52 +294,7 @@ const Schedule = () => {
               </button>
               <button
                 className="bg-[#161f55] text-white px-8 py-2 rounded-2xl"
-                onClick={() => {
-                  const originalSchedule = schedules[editIndex];
-
-                  // Determine the updated fields and only apply changes
-                  const formattedSchedule = {
-                    ...originalSchedule, // Keep all original values
-                    slots:
-                      newSchedule.slots !== originalSchedule.slots
-                        ? newSchedule.slots
-                        : originalSchedule.slots,
-                    date:
-                      newSchedule.date !== originalSchedule.date
-                        ? formatDate(newSchedule.date)
-                        : originalSchedule.date,
-                    startTime:
-                      newSchedule.startTime !== originalSchedule.startTime
-                        ? formatTime(newSchedule.startTime)
-                        : originalSchedule.startTime,
-                    endTime:
-                      newSchedule.endTime !== originalSchedule.endTime
-                        ? formatTime(newSchedule.endTime)
-                        : originalSchedule.endTime,
-                  };
-
-                  // Check if any field has been changed
-                  const isUnchanged =
-                    formattedSchedule.slots === originalSchedule.slots &&
-                    formattedSchedule.date === originalSchedule.date &&
-                    formattedSchedule.startTime ===
-                    originalSchedule.startTime &&
-                    formattedSchedule.endTime === originalSchedule.endTime;
-
-                  if (isUnchanged) {
-                    alert("No changes made to the schedule.");
-                    return; // Do not close the modal, allow user to continue editing
-                  }
-
-                  // Update the schedule in state
-                  setSchedules((prevSchedules) =>
-                    prevSchedules.map((schedule, index) =>
-                      index === editIndex ? formattedSchedule : schedule
-                    )
-                  );
-
-                  closeEditModal(); // Close the modal if there are changes
-                }}
+                onClick={handleUpdateSchedule}
               >
                 Save
               </button>
@@ -327,6 +302,8 @@ const Schedule = () => {
           </div>
         </div>
       )}
+
+      {/* DELETE MODAL (no changes needed here for this specific request) */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
           <div className="bg-white p-12 rounded-md shadow-md text-center">

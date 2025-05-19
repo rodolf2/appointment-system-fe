@@ -34,7 +34,7 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
       <div className="flex items-center">
         <button
           onClick={toggleSidebar}
-          className="p-2 text-black rounded text-3xl font-bold hover:bg-gray-200 transition-colors"
+          className="p-2 text-black rounded text-2xl font-bold hover:bg-gray-200 transition-colors"
           aria-label="Toggle Sidebar"
         >
           <RxHamburgerMenu />

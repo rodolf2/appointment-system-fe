@@ -39,7 +39,7 @@ const useSignUp = () => {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate("/signin");
     } catch (error) {
-      setError(`Error: ${error.message}`);
+      setError(`Invalid Format: ${error.message}`);
     }
   };
 

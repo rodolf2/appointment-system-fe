@@ -2,28 +2,28 @@ import { useState } from "react";
 import Header from "/src/features/admin/components/Header";
 import Sidebar from "/src/components/Sidebar";
 import Footer from "/src/features/admin/components/Footer";
+import useProfileForm from "./hooks/useProfileForm"; // Import the custom hook
 
 const Profile = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState(null); // State for profile image
+
+  // Use the custom hook
+  const {
+    formData,
+    profileImage,
+    handleInputChange,
+    handleImageUpload,
+    handleImageRemove,
+  } = useProfileForm();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfileImage(reader.result); // Set the uploaded image's data URL
-      };
-      reader.readAsDataURL(file); // Convert image to data URL
-    }
-  };
-
-  const handleImageRemove = () => {
-    setProfileImage(null); // Remove the uploaded image
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would typically send the data to your backend
+    console.log("Form submitted:", formData);
   };
 
   return (
@@ -98,7 +98,7 @@ const Profile = () => {
                 <h2 className="text-[32px] font-LatoSemiBold text-[#161f55] mb-6">
                   Edit Profile
                 </h2>
-                <form className="flex flex-col ">
+                <form className="flex flex-col" onSubmit={handleSubmit}>
                   {/* Input Fields */}
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
@@ -106,6 +106,9 @@ const Profile = () => {
                     </label>
                     <input
                       type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
                     />
                   </div>
@@ -115,6 +118,9 @@ const Profile = () => {
                     </label>
                     <input
                       type="text"
+                      name="middleName"
+                      value={formData.middleName}
+                      onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
                     />
                   </div>
@@ -124,6 +130,9 @@ const Profile = () => {
                     </label>
                     <input
                       type="text"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
                     />
                   </div>
@@ -133,6 +142,9 @@ const Profile = () => {
                     </label>
                     <input
                       type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 placeholder:text-[#000] placeholder:opacity-70 bg-[#D9D9D9] p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -142,6 +154,9 @@ const Profile = () => {
                     </label>
                     <input
                       type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
                     />
                   </div>

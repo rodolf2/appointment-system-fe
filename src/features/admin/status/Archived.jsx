@@ -74,17 +74,16 @@ const Archived = () => {
                     />
                     <span className="ml-2">ENTRIES</span>
                   </div>
-                  <div className="text-[#161F55] font-semibold text-[18px] flex gap-4">
-                    <div className="relative">
-                      <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <input
-                        name="search"
-                        id="search"
-                        type="search"
-                        className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8"
-                        placeholder="Search"
-                      />
-                    </div>
+
+                  <div className="relative">
+                    <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      name="search"
+                      id="search"
+                      type="search"
+                      className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8"
+                      placeholder="Search"
+                    />
                   </div>
                 </div>
               </div>

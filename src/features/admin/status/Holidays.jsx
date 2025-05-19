@@ -5,6 +5,7 @@ import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 import { Tooltip } from "react-tooltip";
 import useHolidays from "./hooks/useHolidays";
+import { FaSearch } from "react-icons/fa";
 
 const Holidays = () => {
   const {
@@ -73,15 +74,13 @@ const Holidays = () => {
                   />
                   <span className="ml-2">ENTRIES</span>
                 </div>
-                <div className="text-[#161F55] font-semibold text-[18px]">
-                  <label htmlFor="search" className="mr-2">
-                    SEARCH:
-                  </label>
+                <div className="relative">
+                  <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
-                    name="search"
                     id="search"
-                    type="text"
-                    className="border p-1 bg-white text-[#161F55] mr-5"
+                    type="search"
+                    className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8" // Add padding-left (pl-8) to make space for the icon
+                    placeholder="Search"
                   />
                 </div>
               </div>
