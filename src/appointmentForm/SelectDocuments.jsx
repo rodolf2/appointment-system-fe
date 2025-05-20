@@ -52,6 +52,16 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 <CustomProgressBar currentStep={currentStep} />
               </div>
 
+              {/* Add error message display */}
+              {errors.submit && (
+                <div
+                  className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                  role="alert"
+                >
+                  <span className="block sm:inline">{errors.submit}</span>
+                </div>
+              )}
+
               <h2 className="uppercase text-lg text-left font-LatoBold my-4">
                 Request:
               </h2>
@@ -60,10 +70,11 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 SELECT DOCUMENTS:
               </label>
               <div
-                className={`border rounded-lg p-4 shadow-md font-LatoRegular ${errors.selectedDocuments
-                  ? "border-red-600 "
-                  : "border-[#000000] border-opacity-40 "
-                  }`}
+                className={`border rounded-lg p-4 shadow-md font-LatoRegular ${
+                  errors.selectedDocuments
+                    ? "border-red-600 "
+                    : "border-[#000000] border-opacity-40 "
+                }`}
               >
                 <div className="grid grid-cols-2 gap-y-2 gap-x-2 ml-8">
                   {documentsList.map((doc) => (
@@ -135,10 +146,11 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                     setErrors((prev) => ({ ...prev, purpose: "" }));
                   }}
                   placeholder="Type here..."
-                  className={`w-full border h-20 rounded-md pl-2 pt-2 shadow-md ${errors.purpose
-                    ? "border-red-600"
-                    : "border-[#000000] border-opacity-40"
-                    }`}
+                  className={`w-full border h-20 rounded-md pl-2 pt-2 shadow-md ${
+                    errors.purpose
+                      ? "border-red-600"
+                      : "border-[#000000] border-opacity-40"
+                  }`}
                 ></textarea>
                 {errors.purpose ? (
                   <p className="text-red-600">{errors.purpose}</p>
@@ -157,10 +169,11 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   setDate(e.target.value);
                   setErrors((prev) => ({ ...prev, date: "" }));
                 }}
-                className={`pl-2 mt-1 block w-full max-w-[20%] border h-8 rounded-md ${errors.date
-                  ? "border-red-600"
-                  : "border-[#000000] border-opacity-40"
-                  }`}
+                className={`pl-2 mt-1 block w-full max-w-[20%] border h-8 rounded-md ${
+                  errors.date
+                    ? "border-red-600"
+                    : "border-[#000000] border-opacity-40"
+                }`}
               />
               {errors.date ? (
                 <p className="text-red-600 text-start">{errors.date}</p>
@@ -265,9 +278,9 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
   );
 };
 SelectDocuments.propTypes = {
-  onNext: PropTypes.func,
-  onBack: PropTypes.func,
-  currentStep: PropTypes.number,
+  onNext: PropTypes.func.isRequired,
+  onBack: PropTypes.func.isRequired,
+  currentStep: PropTypes.number.isRequired,
 };
 
 export default SelectDocuments;
