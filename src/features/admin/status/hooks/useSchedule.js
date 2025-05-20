@@ -1,4 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { 
+  getAllSchedules, 
+  createSchedule, 
+  updateSchedule, 
+  deleteSchedule 
+} from "../../../../services/scheduleServices";
 
 const useSchedule = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
@@ -17,75 +23,60 @@ const useSchedule = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // State for error messages in modals
-  const [addModalError, setAddModalError] = useState(null); // New state for add modal error
+  const [addModalError, setAddModalError] = useState(null);
   const [editModalError, setEditModalError] = useState(null);
 
   const [originalScheduleForForm, setOriginalScheduleForForm] = useState(null);
 
   const initialScheduleState = {
-    no: "",
     slots: "",
-    date: "", // Will be YYYY-MM-DD for input
-    startTime: "", // Will be HH:MM for input
+    date: "",
+    startTime: "",
     endTime: "",
   };
   const [newSchedule, setNewSchedule] = useState(initialScheduleState);
+  const [schedules, setSchedules] = useState([]);
 
-  const [schedules, setSchedules] = useState([
-    {
-      no: "1",
-      slots: "80",
-      date: "12/27/2024",
-      startTime: "08:00 AM",
-      endTime: "04:00 PM",
-    },
-  ]);
-
-  // --- Helper functions for date/time conversion ---
-  const convertDisplayDateToInputFormat = (displayDate) => {
-    if (!displayDate) return "";
-    const parts = displayDate.split('/');
-    if (parts.length !== 3) return "";
-    let [month, day, year] = parts;
-    month = month.padStart(2, '0');
-    day = day.padStart(2, '0');
-    if (year.length === 2) {
-      const currentYear = new Date().getFullYear();
-      const currentCentury = Math.floor(currentYear / 100) * 100;
-      year = currentCentury + parseInt(year, 10);
-      if (year > currentYear + 20) {
-        year -= 100;
-      }
-    } else if (year.length !== 4) {
-      return "";
+  // Fetch all schedules from the API
+  const fetchSchedules = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getAllSchedules();
+      const formattedSchedules = data.map((schedule, index) => ({
+        no: (index + 1).toString(),
+        slots: schedule.slots.toString(),
+        date: formatDateForStorage(schedule.date.split('T')[0]),
+        startTime: schedule.startTime,
+        endTime: schedule.endTime,
+        _id: schedule._id
+      }));
+      setSchedules(formattedSchedules);
+    } catch (error) {
+      console.error('Error fetching schedules:', error);
+      setAddModalError('Failed to fetch schedules');
+    } finally {
+      setLoading(false);
     }
-    return `${year}-${month}-${day}`;
-  };
+  }, []);
 
-  const convertDisplayTimeToInputFormat = (displayTime) => {
-    if (!displayTime) return "";
-    const [time, modifier] = displayTime.split(' ');
-    if (!time || !modifier) return "";
-    let [hours, minutes] = time.split(':');
-    if (!hours || !minutes) return "";
-    hours = parseInt(hours, 10);
-    if (modifier.toUpperCase() === "PM" && hours < 12) hours += 12;
-    if (modifier.toUpperCase() === "AM" && hours === 12) hours = 0;
-    return `${String(hours).padStart(2, '0')}:${minutes}`;
-  };
+  // Fetch schedules on component mount
+  useEffect(() => {
+    fetchSchedules();
+  }, [fetchSchedules]);
 
   // --- Modal Open/Close ---
   const openAddModal = () => {
     setNewSchedule(initialScheduleState);
-    setAddModalError(null); // Clear previous add modal errors
+    setAddModalError(null);
     setIsAddModalOpen(true);
   };
 
   const closeAddModal = () => {
     setNewSchedule(initialScheduleState);
-    setAddModalError(null); // Clear error when modal closes
+    setAddModalError(null);
     setIsAddModalOpen(false);
   };
 
@@ -94,9 +85,9 @@ const useSchedule = () => {
     if (!scheduleToEdit) return;
     const formReadySchedule = {
       ...scheduleToEdit,
-      date: convertDisplayDateToInputFormat(scheduleToEdit.date),
-      startTime: convertDisplayTimeToInputFormat(scheduleToEdit.startTime),
-      endTime: convertDisplayTimeToInputFormat(scheduleToEdit.endTime),
+      date: formatDate(scheduleToEdit.date),
+      startTime: scheduleToEdit.startTime,
+      endTime: scheduleToEdit.endTime,
     };
     setEditIndex(index);
     setNewSchedule(formReadySchedule);
@@ -116,28 +107,37 @@ const useSchedule = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewSchedule((prev) => ({ ...prev, [name]: value }));
-    if (addModalError) setAddModalError(null); // Clear error if user starts typing in add modal
-    if (editModalError) setEditModalError(null); // Clear error if user starts typing in edit modal
+    if (addModalError) setAddModalError(null);
+    if (editModalError) setEditModalError(null);
   };
 
   // --- Formatting for display/storage ---
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const formatDateForStorage = (dateString) => {
     if (!dateString) return "";
-    const [year, month, day] = dateString.split('-');
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
     return `${month}/${day}/${year}`;
   };
 
-  const formatTimeForStorage = (timeString) => {
-    if (!timeString) return "";
-    const [hour, minute] = timeString.split(":");
-    const h = parseInt(hour, 10);
-    const period = h >= 12 ? "PM" : "AM";
-    const formattedHour = h % 12 || 12;
-    return `${String(formattedHour)}:${minute} ${period.toUpperCase()}`;
-  };
-
-  const handleUpdateSchedule = () => {
+  const handleUpdateSchedule = async () => {
     if (editIndex === null || !originalScheduleForForm) return;
+    
+    if (!newSchedule.slots || !newSchedule.date || !newSchedule.startTime || !newSchedule.endTime) {
+      setEditModalError("All fields are required");
+      return;
+    }
+
     const hasChanges =
       newSchedule.slots !== originalScheduleForForm.slots ||
       newSchedule.date !== originalScheduleForForm.date ||
@@ -149,43 +149,37 @@ const useSchedule = () => {
       return;
     }
 
-    const updatedScheduleForStorage = {
-      ...schedules[editIndex],
-      slots: newSchedule.slots,
-      date: formatDateForStorage(newSchedule.date),
-      startTime: formatTimeForStorage(newSchedule.startTime),
-      endTime: formatTimeForStorage(newSchedule.endTime),
-    };
-    setSchedules((prevSchedules) =>
-      prevSchedules.map((schedule, index) =>
-        index === editIndex ? updatedScheduleForStorage : schedule
-      )
-    );
-    closeEditModal();
+    try {
+      const scheduleToUpdate = schedules[editIndex];
+      const response = await updateSchedule(scheduleToUpdate._id, newSchedule);
+      if (response) {
+        await fetchSchedules();
+        closeEditModal();
+      }
+    } catch (error) {
+      console.error('Error updating schedule:', error);
+      setEditModalError("Failed to update schedule");
+    }
   };
 
-  const addSchedule = () => {
-    // Check if all fields are filled
-    if (!newSchedule.slots.trim() || !newSchedule.date || !newSchedule.startTime || !newSchedule.endTime) {
-      setAddModalError("All fields (Slots, Date, Start Time, End Time) are required."); // Set error message
-      return; // Exit the function if validation fails
+  const addSchedule = async () => {
+    if (!newSchedule.slots || !newSchedule.date || !newSchedule.startTime || !newSchedule.endTime) {
+      setAddModalError("All fields are required");
+      return;
     }
 
-    const formattedSchedule = {
-      no: (schedules.length + 1).toString(),
-      slots: newSchedule.slots,
-      date: formatDateForStorage(newSchedule.date),
-      startTime: formatTimeForStorage(newSchedule.startTime),
-      endTime: formatTimeForStorage(newSchedule.endTime),
-    };
-
-    setSchedules((prev) => [...prev, formattedSchedule]);
-    setAddModalError(null); // Clear error on successful add
-    closeAddModal(); // This will also clear newSchedule and addModalError
-    // No success alert needed, UI change is feedback
+    try {
+      const response = await createSchedule(newSchedule);
+      if (response) {
+        await fetchSchedules();
+        closeAddModal();
+      }
+    } catch (error) {
+      console.error('Error adding schedule:', error);
+      setAddModalError("Failed to add schedule");
+    }
   };
 
-  // --- Delete Functionality ---
   const openDeleteModal = (index) => {
     setDeleteIndex(index);
     setIsDeleteModalOpen(true);
@@ -196,16 +190,17 @@ const useSchedule = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deleteIndex === null) return;
-    setSchedules((prevSchedules) => {
-      const updatedSchedules = prevSchedules.filter((_, i) => i !== deleteIndex);
-      return updatedSchedules.map((sched, index) => ({
-        ...sched,
-        no: (index + 1).toString(),
-      }));
-    });
-    closeDeleteModal();
+    
+    try {
+      const scheduleToDelete = schedules[deleteIndex];
+      await deleteSchedule(scheduleToDelete._id);
+      await fetchSchedules();
+      closeDeleteModal();
+    } catch (error) {
+      console.error('Error deleting schedule:', error);
+    }
   };
 
   return {
@@ -217,7 +212,8 @@ const useSchedule = () => {
     deleteIndex,
     newSchedule,
     schedules,
-    addModalError, // Export add modal error state
+    loading,
+    addModalError,
     editModalError,
 
     toggleSidebar,
