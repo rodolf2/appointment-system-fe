@@ -140,7 +140,7 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                     <button
                       className={`px-2 py-1 rounded text-md ${selectedTimeSlot === "8:00 am - 12:00 pm"
                         ? "bg-[#161f55] text-white"
-                        : "bg-white text-[#161f55] border border-[#161f55] hover:bg-gray-100"
+                        : "bg-gray-300"
                         }`}
                       onClick={() => handleTimeSlotClick("8:00 am - 12:00 pm")}
                     >
@@ -149,7 +149,7 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                     <button
                       className={`px-2 py-1 rounded text-md ${selectedTimeSlot === "1:00 pm - 5:00 pm"
                         ? "bg-[#161f55] text-white"
-                        : "bg-white text-[#161f55] border border-[#161f55] hover:bg-gray-100"
+                        : "bg-gray-300"
                         }`}
                       onClick={() => handleTimeSlotClick("1:00 pm - 5:00 pm")}
                     >
