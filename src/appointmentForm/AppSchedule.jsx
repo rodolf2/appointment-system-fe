@@ -93,9 +93,6 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                     </div>
                   ))}
                 </div>
-
-
-                {/* Calendar Days - Tight spacing */}
                 <div className="grid grid-cols-7 text-center gap-0">
                   {daysInCalendar.map((day) => {
                     const formattedDate = day.format("YYYY-MM-DD");
@@ -106,16 +103,16 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                     return (
                       <div
                         key={formattedDate}
-                        className={`p-2 sm:p-3 text-xs sm:text-lg cursor-pointer border border-gray-300
-                          ${isCurrentMonth ? "text-[#161f55]" : "text-gray-400"}
-                          ${isToday ? "font-bold border-2 border-[#161f55] rounded" : ""}
-                          ${booking ?
-                            (booking.status === "available"
-                              ? "bg-[#3A993D] hover:bg-green-100"
-                              : "bg-red-400 hover:bg-red-100")
-                            : ""}
-                        `}
-
+                        className={`p-2 sm:p-3 text-xs sm:text-lg cursor-pointer border border-gray-300 transition-all duration-200
+          ${isCurrentMonth ? "text-black" : "text-gray-400"}
+          ${isToday ? "text-white bg-[#161f55] border-2 border-[#161f55] rounded" : ""}
+          ${booking
+                            ? booking.status === "available"
+                              ? "bg-[#3A993D] hover:bg-[#86EFAC] hover:text-white hover:scale-105 hover:shadow-md hover:z-10 relative"
+                              : "bg-[#D52121] hover:bg-[#FCA5A5] hover:text-white hover:scale-105 hover:shadow-md hover:z-10 relative"
+                            : "hover:bg-gray-w00 hover:text-[#161f55] hover:scale-105 hover:shadow-md hover:z-10 relative"
+                          }
+        `}
                         onClick={() => handleDateClick(day)}
                       >
                         {day.date()}
@@ -168,19 +165,19 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex justify-end gap-2 mt-6">
+            <div className="flex justify-end gap-2 mt-6 pr-[55px]">
               <button
                 onClick={() => onBack(2)}
-                className="bg-white text-[#161f55] border border-[#161f55] px-4 py-1 rounded hover:bg-gray-100 text-sm"
+                className="bg-[#161f55] text-white border border-[#161f55] px-6 py-2 rounded text-sm hover:bg-blue-700"
               >
                 Back
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={!selectedTimeSlot}
-                className={`px-4 py-1 rounded text-sm ${selectedTimeSlot
+                className={`px-6 py-2 rounded text-sm ${selectedTimeSlot
                   ? "bg-[#161f55] hover:bg-blue-700 text-white"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-300 text-white cursor-not-allowed"
                   }`}
               >
                 Submit
