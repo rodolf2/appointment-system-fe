@@ -84,7 +84,7 @@ const useAppSchedule = (onNext) => {
     const days = [];
     let currentDay = startOfCalendar;
 
-    while (currentDay.isBefore(endOfCalendar)) {
+    while (currentDay.isBefore(endOfCalendar) || currentDay.isSame(endOfCalendar, "day")) {
       days.push(currentDay);
       currentDay = currentDay.add(1, "day");
     }
