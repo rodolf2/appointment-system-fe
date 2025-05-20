@@ -14,7 +14,7 @@ const DataPrivacy = ({ onNext }) => {
           "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
       }}
     >
-      <div className="bg-[#EEF2F7] p-10 rounded-lg shadow-lg max-w-xl w-full relative my-20">
+      <div className="bg-[#EEF2F7] p-10 rounded-lg shadow-lg max-w-xl w-full relative">
         <h2 className="text-[35px] font-LatoBold text-[#161F55] mb-5 text-center">
           DATA PRIVACY NOTICE
         </h2>
