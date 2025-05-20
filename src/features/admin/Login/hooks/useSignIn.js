@@ -51,23 +51,25 @@ const useSignIn = () => {
     e.preventDefault();
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      // After Google sign in, authenticate with our backend
+      const user = result.user;
+
       const response = await emailService.signin({
-        email: result.user.email,
+        email: user.email,
         googleAuth: true,
+        name: user.displayName,
+        googleId: user.uid,
+        picture: user.photoURL,
       });
 
-      // Store the token
       if (response.token) {
         localStorage.setItem("token", response.token);
       }
 
       navigate("/registrarHome");
     } catch (error) {
-      setError(error.message);
+      setError(error.message || "Google sign-in failed");
     }
   };
-
   return {
     email,
     password,
