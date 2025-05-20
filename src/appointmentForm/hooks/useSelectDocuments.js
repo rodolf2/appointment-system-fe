@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createDocumentRequest } from "../../services/documentRequestServices";
 
 const useSelectDocuments = (onNext) => {
   const LOCAL_STORAGE_KEY = "selectDocumentsFormData";
@@ -82,13 +83,44 @@ const useSelectDocuments = (onNext) => {
     updateState({ claimOption: option });
   };
 
-  // Handle Modal Next Button
-  const handleModalNext = () => {
-    updateState({ showModal: false });
-    if (state.claimOption === "personal") {
-      onNext(5);
-    } else if (state.claimOption === "authorized") {
-      onNext(4);
+  // Convert selected documents from values to proper format
+  const convertSelectedDocuments = () => {
+    return state.selectedDocuments.map((value) => {
+      const doc = documentsList.find((d) => d.value === value);
+      return doc.label;
+    });
+  };
+
+  // Handle Modal Next Button with API integration
+  const handleModalNext = async () => {
+    try {
+      // Prepare the document request data
+      const requestData = {
+        selectedDocuments: convertSelectedDocuments(),
+        purpose: state.purpose,
+        dateOfRequest: state.date,
+        studentId: localStorage.getItem("studentId"), // Make sure you have this from previous steps
+      };
+
+      // Create the document request
+      await createDocumentRequest(requestData);
+
+      // Clear the form data after successful submission
+      clearSavedData();
+
+      // Update UI and navigate
+      updateState({ showModal: false });
+      if (state.claimOption === "personal") {
+        onNext(5);
+      } else if (state.claimOption === "authorized") {
+        onNext(4);
+      }
+    } catch (error) {
+      setErrors((prev) => ({
+        ...prev,
+        submit: error.message || "Failed to submit document request",
+      }));
+      updateState({ showModal: false });
     }
   };
 

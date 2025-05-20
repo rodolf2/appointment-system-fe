@@ -3,9 +3,7 @@ import useAppInfo from "./hooks/useAppInfo";
 import PropTypes from "prop-types";
 
 const AppInfo = ({ onNext, onBack, currentStep }) => {
-  // Use the hook which manages all form state and logic
-  const { formData, errors, handleInputChange, handleNext } =
-    useAppInfo(onNext);
+  const { formData, errors, isSubmitting, handleInputChange, handleNext } = useAppInfo(onNext);
 
   return (
     <>
@@ -27,18 +25,26 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
           <h2 className="mx-auto relative font-LatoBold text-[35px] text-Fwhite tracking-widest mt-6 mb-8">
             APPLICATION FOR <br /> RECORDS
           </h2>
-          <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%]  text-center z-10">
+          <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
             <form
-              className="space-y-4"
+              className="space-y-4 w-full"
               onSubmit={handleNext}
               onKeyDown={(e) => {
                 if (e.key === "Enter") e.preventDefault();
               }}
             >
-              <div className=" w-full max-w-[60%] mb-10 mx-auto">
+              <div className="w-full max-w-[60%] mb-10 mx-auto">
                 <CustomProgressBar currentStep={currentStep} />
               </div>
-              <h2 className=" uppercase mb-10 flex font-LatoBold text-lg">
+
+              {/* Show submission error if any */}
+              {errors.submit && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                  <span className="block sm:inline">{errors.submit}</span>
+                </div>
+              )}
+
+              <h2 className="uppercase mb-10 flex font-LatoBold text-lg">
                 Personal Details:
               </h2>
               <div className="grid grid-cols-3 gap-4">
@@ -130,21 +136,15 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                 </div>
               ))}
 
-              <div className="flex float-right space-x-4">
-                <button
-                  className="px-4 py-2 text-white bg-[#161f55] rounded hover:bg-blue-700"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onBack();
-                  }}
-                >
-                  Back
-                </button>
+              <div className="mt-6 flex justify-end">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#161f55] text-white rounded-md shadow hover:bg-indigo-700"
+                  disabled={isSubmitting}
+                  className={`bg-[#1E2772] text-white px-6 py-2 rounded-md hover:bg-[#161f55] transition-colors ${
+                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                 >
-                  Next
+                  {isSubmitting ? 'Submitting...' : 'Next'}
                 </button>
               </div>
             </form>
@@ -154,10 +154,11 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
     </>
   );
 };
+
 AppInfo.propTypes = {
-  onNext: PropTypes.func,
-  onBack: PropTypes.func,
-  currentStep: PropTypes.number,
+  onNext: PropTypes.func.isRequired,
+  onBack: PropTypes.func.isRequired,
+  currentStep: PropTypes.number.isRequired,
 };
 
 export default AppInfo;

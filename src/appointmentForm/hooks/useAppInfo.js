@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { createStudent } from "../../services/studentServices";
 
 const useAppInfo = (onNext) => {
   const LOCAL_STORAGE_KEY = "appInfoFormData";
 
-  // Initialize state with default values or from localStorage
   const [formData, setFormData] = useState(() => {
     const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
     return storedData
@@ -21,8 +21,8 @@ const useAppInfo = (onNext) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Save to localStorage whenever formData changes
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formData));
   }, [formData]);
@@ -31,7 +31,6 @@ const useAppInfo = (onNext) => {
     const { name, value } = e.target;
     let processedValue = value;
 
-    // Special handling for contact number
     if (name === "contactNumber") {
       processedValue = value.replace(/\D/g, ""); // Remove non-digits
       processedValue = processedValue.slice(0, 11); // Limit to 11 digits
@@ -56,15 +55,19 @@ const useAppInfo = (onNext) => {
         newErrors[key] = "Invalid email format.";
       }
 
-      if (key === "contactNumber" && !/^\d{11}$/.test(trimmedValue)) {
-        newErrors[key] = "Contact number must be exactly 11 digits.";
+      if (key === "contactNumber" && !/^09\d{9}$/.test(trimmedValue)) {
+        newErrors[key] = "Contact number must start with 09 and be 11 digits.";
+      }
+
+      if (key === "schoolYear" && !/^\d{4}\s*[-–]\s*\d{4}$/.test(trimmedValue)) {
+        newErrors[key] = "School year format should be YYYY-YYYY";
       }
     }
 
     return newErrors;
   };
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
 
@@ -73,10 +76,41 @@ const useAppInfo = (onNext) => {
       return;
     }
 
-    onNext();
+    setIsSubmitting(true);
+
+    try {
+      // Create student record
+      const studentData = {
+        surname: formData.surname.trim(),
+        firstName: formData.firstName.trim(),
+        middleName: formData.middleName.trim(),
+        lastSchoolYearAttended: formData.schoolYear.trim(),
+        courseOrStrand: formData.course.trim(),
+        presentAddress: formData.address.trim(),
+        contactNumber: formData.contactNumber.trim(),
+        emailAddress: formData.email.trim().toLowerCase(),
+      };
+
+      const response = await createStudent(studentData);
+      
+      // Store the student ID for later use
+      localStorage.setItem('studentId', response.studentId);
+      
+      // Clear form data after successful submission
+      clearSavedData();
+      
+      // Move to next step
+      onNext();
+    } catch (error) {
+      setErrors(prev => ({
+        ...prev,
+        submit: error.message || 'Failed to create student record'
+      }));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  // Add a function to clear saved data when needed
   const clearSavedData = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setFormData({
@@ -94,6 +128,7 @@ const useAppInfo = (onNext) => {
   return {
     formData,
     errors,
+    isSubmitting,
     handleInputChange,
     handleNext,
     clearSavedData,
