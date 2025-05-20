@@ -5,10 +5,12 @@ import { FcGoogle } from "react-icons/fc";
 
 const SignUp = () => {
   const {
+    name,
     email,
     password,
     confirmPassword,
     error,
+    handleName,
     handleEmail,
     handlePassword,
     handleConfirmPassword,
@@ -40,38 +42,47 @@ const SignUp = () => {
             </h2>
             <div className="w-[200px] h-1 bg-[#F3BC62] mb-6"></div>
             <div className="bg-[#FEFEFE] bg-opacity-70 p-10 rounded-lg shadow-lg max-w-md h-[500px] w-full">
-              <form>
+              <form onSubmit={handleSignUp}>
                 <div className="grid grid-cols-1 gap-4">
                   <div>
                     <input
                       placeholder="Name"
                       type="text"
-                      className="w-full px-4 py-2 border-[#6F6F6F]  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
+                      value={name}
+                      onChange={handleName}
+                      className="w-full px-4 py-2 border-[#6F6F6F] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
+                      required
                     />
                   </div>
 
                   <div>
                     <input
                       placeholder="Email"
+                      value={email}
                       onChange={handleEmail}
                       type="email"
-                      className="w-full px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
+                      className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
+                      required
                     />
                   </div>
                   <div>
                     <input
+                      value={password}
                       onChange={handlePassword}
                       type="password"
                       placeholder="Password"
                       className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
+                      required
                     />
                   </div>
                   <div>
                     <input
                       placeholder="Confirm Password"
                       type="password"
+                      value={confirmPassword}
                       onChange={handleConfirmPassword}
-                      className="w-full px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
+                      className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
+                      required
                     />
                   </div>
                 </div>
@@ -83,8 +94,7 @@ const SignUp = () => {
                 )}
 
                 <button
-                  type="button"
-                  onClick={handleSignUp}
+                  type="submit"
                   className="w-full flex justify-center py-2 mt-6 bg-[#161F55] text-[20px] text-[#fefefe] font-LatoRegular rounded-md hover:bg-blue-700 focus:outline-none"
                 >
                   Sign Up

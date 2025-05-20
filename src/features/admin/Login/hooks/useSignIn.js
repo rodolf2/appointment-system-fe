@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 import { googleProvider, auth } from "@/firebase";
+import emailService from "../../../../services/emailServices";
 
 const useSignIn = () => {
   const [email, setEmail] = useState("");
@@ -26,15 +27,8 @@ const useSignIn = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
 
-    const errorMessages = {
-      "auth/invalid-email": "Invalid email format. Please enter a valid email.",
-      "auth/user-not-found":
-        "User does not exist. Please check your email or sign up.",
-      "auth/invalid-password": "Password is incorrect. Please try again.",
-    };
-
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const response = await emailService.signin({ email, password });
 
       if (remember) {
         localStorage.setItem("savedEmail", email);
@@ -42,24 +36,38 @@ const useSignIn = () => {
         localStorage.removeItem("savedEmail");
       }
 
+      // Store the token in localStorage
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+      }
+
       navigate("/registrarHome");
     } catch (error) {
-      setError(
-        errorMessages[error.code] ||
-          "An unexpected error occurred. Please try again."
-      );
+      setError(error.message || "Invalid email or password");
     }
   };
 
   const handleGmail = async (e) => {
     e.preventDefault();
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      // After Google sign in, authenticate with our backend
+      const response = await emailService.signin({
+        email: result.user.email,
+        googleAuth: true,
+      });
+
+      // Store the token
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+      }
+
       navigate("/registrarHome");
     } catch (error) {
       setError(error.message);
     }
   };
+
   return {
     email,
     password,
