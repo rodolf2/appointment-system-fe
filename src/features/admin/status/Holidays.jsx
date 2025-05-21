@@ -7,13 +7,11 @@ import { Tooltip } from "react-tooltip";
 import useHolidays from "./hooks/useHolidays";
 import { FaSearch } from "react-icons/fa";
 
-// Helper function to format date to YYYY/MM/DD
 const formatDateToYyyyMmDd = (dateString) => {
   if (!dateString || typeof dateString !== 'string') {
     return "";
   }
   try {
-    // Assuming dateString is 'YYYY-MM-DD' from the hook
     const parts = dateString.split('-');
     if (parts.length === 3) {
       const [year, month, day] = parts;
@@ -21,7 +19,6 @@ const formatDateToYyyyMmDd = (dateString) => {
         return `${year}/${month}/${day}`;
       }
     }
-    // Fallback for other potential valid date strings that new Date() can parse
     const dateObj = new Date(dateString.includes('T') ? dateString : dateString + 'T00:00:00');
     if (isNaN(dateObj.getTime())) {
       return "Invalid Date";
@@ -67,11 +64,9 @@ const Holidays = () => {
     handleEntriesPerPageChange,
   } = useHolidays();
 
-  // Calculate start and end entry numbers for display
   const startEntry = totalFilteredEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
   const endEntry = Math.min(currentPage * entriesPerPage, totalFilteredEntries);
 
-  // Generate page numbers for pagination buttons
   const pageNumbers = [];
   if (calculatedTotalPages > 0) {
     for (let i = 1; i <= calculatedTotalPages; i++) {
@@ -94,7 +89,7 @@ const Holidays = () => {
             title="Holidays Record"
           />
           <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
-            <div className="bg-[#D9D9D9] h-52 m-4 pt-2 rounded-md"> {/* Added rounded-md */}
+            <div className="bg-[#D9D9D9] h-52 m-4 pt-2 rounded-md">
               <div className="text-[#161F55] flex justify-between px-3 pt-2 ml-3">
                 <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                   LIST OF HOLIDAYS
@@ -110,9 +105,9 @@ const Holidays = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center mt-16 ml-4 mr-5"> {/* Added mr-5 for spacing */}
+              <div className="flex justify-between items-center mt-16 ml-4 mr-5">
                 <div className="text-[#161F55] font-semibold text-[18px] flex items-center">
-                  <label htmlFor="show-entries" className="mr-2"> {/* Changed id */}
+                  <label htmlFor="show-entries" className="mr-2">
                     SHOW
                   </label>
                   <select
@@ -158,12 +153,11 @@ const Holidays = () => {
               </thead>
               <tbody>
                 {holidays.length > 0 ? (
-                  holidays.map((holiday, index) => ( // index here is 0-based for current page's items
+                  holidays.map((holiday, index) => (
                     <tr
                       key={holiday.id}
                       className={`${index % 2 === 0 ? "bg-gray-100" : ""} text-center`}
                     >
-                      {/* Calculate overall number based on page and entriesPerPage */}
                       <td className="border p-5">{(currentPage - 1) * entriesPerPage + index + 1}</td>
                       <td className="border p-5">{formatDateToYyyyMmDd(holiday.date)}</td>
                       <td className="border p-5 text-center">{holiday.description}</td>
@@ -199,13 +193,12 @@ const Holidays = () => {
               </tbody>
             </table>
 
-            {/* --- Updated Pagination Controls --- */}
-            {calculatedTotalPages > 0 && ( // Only show pagination if there are entries
-              <div className="flex justify-between items-center mt-10 text-[18px] px-4 mx-auto w-[97%]"> {/* Centered pagination */}
+            {calculatedTotalPages > 0 && (
+              <div className="flex justify-between items-center mt-10 text-[18px] px-4 mx-auto w-[97%]">
                 <span className="text-[#161F55]">
                   SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries} ENTRIES
                 </span>
-                {calculatedTotalPages > 1 && ( // Only show page numbers if more than one page
+                {calculatedTotalPages > 1 && (
                   <div className="flex items-center">
                     <button
                       onClick={handlePreviousPage}
@@ -242,7 +235,6 @@ const Holidays = () => {
         </main>
       </div>
 
-      {/* Add Modal, Edit Modal, Delete Modal (these remain unchanged from your previous correct version) */}
       {isAddModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
           <div className="bg-white p-10 sm:p-20 rounded-xl shadow-md w-11/12 max-w-lg">

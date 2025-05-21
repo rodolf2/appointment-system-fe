@@ -5,34 +5,27 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api"; // Ensure this matches your backend port
 
 const useHolidays = () => {
-  // Sidebar and Modal States
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     const saved = localStorage.getItem('sidebarOpen');
     return saved !== null ? JSON.parse(saved) : true;
   });
-  useEffect(() => { // Persist sidebar state
+  useEffect(() => {
     localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
   }, [isSidebarOpen]);
-
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  // Holiday Form State
   const initialHolidayState = { date: "", description: "" };
   const [newHoliday, setNewHoliday] = useState(initialHolidayState);
   const [editingHolidayId, setEditingHolidayId] = useState(null);
-
-  // --- MODIFIED/NEW STATE FOR HOLIDAY LIST, SEARCH, AND PAGINATION ---
-  const [allHolidays, setAllHolidays] = useState([]); // Stores ALL holidays from API
-  const [displayedHolidays, setDisplayedHolidays] = useState([]); // For table display
-
+  const [allHolidays, setAllHolidays] = useState([]);
+  const [displayedHolidays, setDisplayedHolidays] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [entriesPerPage, setEntriesPerPage] = useState(10); // Default
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
 
   // Fetching all holidays
-  const fetchAllHolidaysFromAPI = useCallback(async () => { // Renamed for clarity
+  const fetchAllHolidaysFromAPI = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/holidays`);
       const formattedHolidays = response.data.map(holiday => {
@@ -56,10 +49,10 @@ const useHolidays = () => {
           date: localDateString,
         };
       });
-      setAllHolidays(formattedHolidays); // Store all fetched holidays
+      setAllHolidays(formattedHolidays);
     } catch (error) {
       console.error("Error fetching holidays:", error);
-      setAllHolidays([]); // Reset on error
+      setAllHolidays([]);
     }
   }, []);
 
@@ -75,7 +68,7 @@ const useHolidays = () => {
       filtered = allHolidays.filter(
         (holiday) =>
           holiday.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          holiday.date.includes(searchTerm) // Search by date string (YYYY-MM-DD)
+          holiday.date.includes(searchTerm)
       );
     }
 
@@ -83,7 +76,6 @@ const useHolidays = () => {
     const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
     setDisplayedHolidays(filtered.slice(indexOfFirstEntry, indexOfLastEntry));
 
-    // Adjust current page if it becomes invalid after filtering or changing entriesPerPage
     const totalFiltered = filtered.length;
     const maxPage = Math.max(1, Math.ceil(totalFiltered / entriesPerPage));
     if (currentPage > maxPage) {
@@ -110,14 +102,14 @@ const useHolidays = () => {
   // Handlers for Search and Pagination
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    setCurrentPage(1); // Reset to first page on new search
+    setCurrentPage(1);
   };
 
   const handleEntriesPerPageChange = (event) => {
     const newEntries = parseInt(event.target.value, 10);
     if (newEntries > 0) {
       setEntriesPerPage(newEntries);
-      setCurrentPage(1); // Reset to first page
+      setCurrentPage(1);
     }
   };
 
@@ -152,7 +144,7 @@ const useHolidays = () => {
 
   const openEditModal = (holidayToEdit) => {
     setNewHoliday({
-      date: holidayToEdit.date, // Assumes date is already YYYY-MM-DD
+      date: holidayToEdit.date,
       description: holidayToEdit.description,
     });
     setEditingHolidayId(holidayToEdit.id);
@@ -186,7 +178,7 @@ const useHolidays = () => {
     }
     try {
       await axios.post(`${API_URL}/holidays`, newHoliday);
-      fetchAllHolidaysFromAPI(); // Refresh the list
+      fetchAllHolidaysFromAPI();
       closeAddModal();
     } catch (error) {
       console.error("Error adding holiday:", error);
@@ -209,7 +201,7 @@ const useHolidays = () => {
     }
     try {
       await axios.put(`${API_URL}/holidays/${editingHolidayId}`, newHoliday);
-      fetchAllHolidaysFromAPI(); // Refresh the list
+      fetchAllHolidaysFromAPI();
       closeEditModal();
     } catch (error) {
       console.error("Error updating holiday:", error);
@@ -229,8 +221,7 @@ const useHolidays = () => {
     if (!editingHolidayId) return;
     try {
       await axios.delete(`${API_URL}/holidays/${editingHolidayId}`);
-      fetchAllHolidaysFromAPI(); // Refresh the list
-      // If deleting the last item on a page beyond page 1, you might want to go to previous page
+      fetchAllHolidaysFromAPI();
       if (displayedHolidays.length === 1 && currentPage > 1) {
         setCurrentPage(currentPage - 1);
       }
@@ -251,15 +242,12 @@ const useHolidays = () => {
 
 
   return {
-    // Existing returns
     isSidebarOpen,
     isAddModalOpen,
     isEditModalOpen,
     isDeleteModalOpen,
     newHoliday,
-    // --- KEY CHANGE FOR WHAT THE COMPONENT USES IN THE TABLE ---
-    holidays: displayedHolidays, // The component will map over this
-    // --- END KEY CHANGE ---
+    holidays: displayedHolidays,
     toggleSidebar,
     openAddModal,
     closeAddModal,
@@ -271,10 +259,8 @@ const useHolidays = () => {
     openDeleteModal,
     closeDeleteModal,
     confirmDelete,
-
-    // New returns for search and pagination
-    allHolidaysCount: allHolidays.length, // Original total count
-    totalFilteredEntries, // Count after search filter
+    allHolidaysCount: allHolidays.length,
+    totalFilteredEntries,
     searchTerm,
     handleSearchChange,
     currentPage,

@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import dayjs from "dayjs";
 import axios from "axios";
 
-// Ensure this API_URL matches your backend's running port and API prefix
-const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"; // Corrected port based on your server.js default (5000)
+const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 const useRegistrarHome = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -12,9 +11,7 @@ const useRegistrarHome = () => {
     return saved !== null ? JSON.parse(saved) : true;
   });
 
-  // State for all holidays fetched from backend
   const [allFetchedHolidays, setAllFetchedHolidays] = useState([]);
-  // State for holidays filtered for the currently displayed month on the calendar
   const [currentMonthCalendarHolidays, setCurrentMonthCalendarHolidays] = useState([]);
 
   useEffect(() => {
@@ -26,7 +23,7 @@ const useRegistrarHome = () => {
   };
 
   const daysInMonth = currentDate.daysInMonth();
-  const startOfMonth = currentDate.startOf("month").day(); // 0 for Sunday
+  const startOfMonth = currentDate.startOf("month").day();
   const monthName = currentDate.format("MMMM");
   const year = currentDate.year();
 
@@ -38,11 +35,9 @@ const useRegistrarHome = () => {
         let localDateStr = "";
         if (h.date) {
           try {
-            // THIS IS THE CRUCIAL PART FOR THE DATE STRING
             const dateInput = h.date.includes('T') ? h.date : `${h.date}T00:00:00`;
             const dateObj = new Date(dateInput);
             const y = dateObj.getFullYear();
-            // MONTH PARSING: getMonth() is 0-indexed (0 for Jan, 1 for Feb, ..., 8 for Sep)
             const m = String(dateObj.getMonth() + 1).padStart(2, '0'); // Correct: Add 1
             const d = String(dateObj.getDate()).padStart(2, '0');
             localDateStr = `${y}-${m}-${d}`;
@@ -52,7 +47,7 @@ const useRegistrarHome = () => {
         }
         return {
           id: h._id,
-          date: localDateStr, // Should be YYYY-MM-DD
+          date: localDateStr,
           name: h.description,
         };
       });
@@ -63,12 +58,10 @@ const useRegistrarHome = () => {
     }
   }, []);
 
-  // Fetch holidays when the hook initializes
   useEffect(() => {
     fetchAllHolidaysFromAPI();
-  }, [fetchAllHolidaysFromAPI]); // Depend on the memoized fetch function
+  }, [fetchAllHolidaysFromAPI]);
 
-  // Filter holidays for the current calendar month whenever currentDate or allFetchedHolidays change
   useEffect(() => {
     if (allFetchedHolidays.length > 0) {
       const currentYearMonth = currentDate.format("YYYY-MM"); // e.g., "2023-12"
@@ -83,7 +76,6 @@ const useRegistrarHome = () => {
   }, [currentDate, allFetchedHolidays]);
 
 
-  // Dummy events - you might want to fetch these or manage them differently
   const events = {
     2: { label: "Fully Booked", color: "bg-[#F63838]" },
     3: { label: "Fully Booked", color: "bg-[#F63838]" },
@@ -116,45 +108,44 @@ const useRegistrarHome = () => {
     setCurrentDate(currentDate.add(1, "month"));
   };
 
-  const isWeekend = (dayOfMonth) => { // Parameter is day of the month (1-31)
+  const isWeekend = (dayOfMonth) => {
     const dateToCheck = currentDate.date(dayOfMonth);
-    const dayOfWeek = dateToCheck.day(); // 0 for Sunday, 6 for Saturday
+    const dayOfWeek = dateToCheck.day();
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
 
-  // Click outside sidebar logic (seems okay, ensure class names match)
   useEffect(() => {
     const handleClickOutside = (e) => {
-      const sidebar = document.querySelector(".sidebar-container"); // Make sure this class exists on your sidebar
-      const toggleButton = document.querySelector(".sidebar-toggle-button"); // And this one on your toggle button in Header
+      const sidebar = document.querySelector(".sidebar-container");
+      const toggleButton = document.querySelector(".sidebar-toggle-button");
 
       if (
         sidebar &&
         !sidebar.contains(e.target) &&
-        !toggleButton?.contains(e.target) && // Only if toggleButton exists
-        isSidebarOpen // Only close if it's already open
+        !toggleButton?.contains(e.target) &&
+        isSidebarOpen
       ) {
         setIsSidebarOpen(false);
       }
     };
 
-    if (isSidebarOpen) { // Only add listener if sidebar is open to potentially close it
+    if (isSidebarOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isSidebarOpen]); // Re-run if isSidebarOpen changes
+  }, [isSidebarOpen]);
 
   return {
     isSidebarOpen,
-    setIsSidebarOpen, // Expose setter if needed by parent for direct control
+    setIsSidebarOpen,
     currentDate,
     toggleSidebar,
     daysInMonth,
     startOfMonth,
     monthName,
     year,
-    holidays: allFetchedHolidays, // Provide the full list of fetched holidays for the "Holidays Section"
-    currentMonthHolidays: currentMonthCalendarHolidays, // Provide filtered holidays for the calendar view
+    holidays: allFetchedHolidays,
+    currentMonthHolidays: currentMonthCalendarHolidays,
     events,
     handlePrevMonth,
     handleNextMonth,

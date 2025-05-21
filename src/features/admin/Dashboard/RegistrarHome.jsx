@@ -90,14 +90,12 @@ const RegistrarHome = () => {
                   </div>
                 </div>
 
-                {/* Pendings */}
                 <div className="bg-[#FFFFFF] border-2 border-[#DCE0E5] p-6 rounded-lg shadow-md">
                   <div className="flex items-center justify-center">
                     {/* Circle */}
                     <div className="w-32 h-32 rounded-full flex items-center justify-center bg-[#E5E68B] bg-opacity-60 text-[#A0A112] text-[30px] font-LatoBold">
                       20
                     </div>
-                    {/* Pendings */}
                     <div className="ml-4 text-left">
                       <h3 className="text-[#A0A112] text-xl font-semibold">
                         Pendings
@@ -202,9 +200,8 @@ const RegistrarHome = () => {
                   const event = isHoliday
                     ? { label: "Holiday", color: "bg-[#AF1EB9]" }
                     : isWeekendDay
-                      ? null // No status for weekends
-                      : events[day]; // Only show weekday events
-
+                      ? null
+                      : events[day];
                   return (
                     <div
                       key={index}
@@ -213,7 +210,7 @@ const RegistrarHome = () => {
                         currentDate.year() === dayjs().year()
                         ? "bg-blue-300 font-bold"
                         : ""
-                        } ${isWeekendDay ? "bg-gray-100" : ""}`} // Optional: light gray background for weekends
+                        } ${isWeekendDay ? "bg-gray-100" : ""}`}
                     >
                       {day}
                       {event && (
@@ -236,15 +233,15 @@ const RegistrarHome = () => {
               </h3>
               <div className="border-b-4 border-[#F3BC62] w-[120px] my-3"></div>
               {holidays.length > 0 ? (
-                <ul className="space-y-2 text-lg max-h-[500px] overflow-y-auto pr-2"> {/* Added pr-2 for scrollbar space */}
+                <ul className="space-y-2 text-lg max-h-[500px] overflow-y-auto pr-2">
                   {holidays
-                    .slice() // Create a shallow copy for sorting, to not mutate the original state array
-                    .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort holidays by date
+                    .slice()
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
                     .map((holiday) => {
-                      const displayDate = dayjs(holiday.date).format("MMM DD"); // e.g., "Jan 01", "Mar 31"
+                      const displayDate = dayjs(holiday.date).format("MMM DD");
 
                       return (
-                        <li key={holiday.id} className="text-[#161F55] text-base"> {/* Used unique holiday.id, adjusted text size */}
+                        <li key={holiday.id} className="text-[#161F55] text-base">
                           <span className="font-semibold">{displayDate}:</span> {holiday.name}
                         </li>
                       );
