@@ -1,31 +1,29 @@
 import { BsTrash3 } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
-import Sidebar from "/src/components/Sidebar"; // Make sure this path is correct
-import Header from "/src/features/admin/components/Header"; // Make sure this path is correct
-import Footer from "/src/features/admin/components/Footer"; // Make sure this path is correct
+import Sidebar from "/src/components/Sidebar";
+import Header from "/src/features/admin/components/Header";
+import Footer from "/src/features/admin/components/Footer";
 import { Tooltip } from "react-tooltip";
-import useHolidays from "./hooks/useHolidays"; // Adjust path if necessary
+import useHolidays from "./hooks/useHolidays";
 import { FaSearch } from "react-icons/fa";
 
+// Helper function to format date to YYYY/MM/DD
 const formatDateToYyyyMmDd = (dateString) => {
-  if (!dateString || typeof dateString !== 'string') { // Added type check
-    // console.warn("formatDateToYyyyMmDd: Invalid dateString input:", dateString);
-    return ""; // Or "Invalid Date" or handle as preferred
+  if (!dateString || typeof dateString !== 'string') {
+    return "";
   }
-  // Assumes dateString is already in 'YYYY-MM-DD' format from the hook
   try {
+    // Assuming dateString is 'YYYY-MM-DD' from the hook
     const parts = dateString.split('-');
     if (parts.length === 3) {
       const [year, month, day] = parts;
-      // Basic validation for parts
       if (year.length === 4 && month.length === 2 && day.length === 2 && !isNaN(parseInt(year)) && !isNaN(parseInt(month)) && !isNaN(parseInt(day))) {
         return `${year}/${month}/${day}`;
       }
     }
-    // Fallback or if direct parsing from YYYY-MM-DD fails or isn't what's coming
+    // Fallback for other potential valid date strings that new Date() can parse
     const dateObj = new Date(dateString.includes('T') ? dateString : dateString + 'T00:00:00');
     if (isNaN(dateObj.getTime())) {
-      // console.warn("formatDateToYyyyMmDd: Could not parse dateString:", dateString);
       return "Invalid Date";
     }
     const year = dateObj.getFullYear();
@@ -37,6 +35,7 @@ const formatDateToYyyyMmDd = (dateString) => {
     return "Invalid Date";
   }
 };
+
 const Holidays = () => {
   const {
     isSidebarOpen,
@@ -56,7 +55,30 @@ const Holidays = () => {
     openDeleteModal,
     closeDeleteModal,
     confirmDelete,
+    totalFilteredEntries,
+    searchTerm,
+    handleSearchChange,
+    currentPage,
+    entriesPerPage,
+    calculatedTotalPages,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+    handleEntriesPerPageChange,
   } = useHolidays();
+
+  // Calculate start and end entry numbers for display
+  const startEntry = totalFilteredEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
+  const endEntry = Math.min(currentPage * entriesPerPage, totalFilteredEntries);
+
+  // Generate page numbers for pagination buttons
+  const pageNumbers = [];
+  if (calculatedTotalPages > 0) {
+    for (let i = 1; i <= calculatedTotalPages; i++) {
+      pageNumbers.push(i);
+    }
+  }
+
 
   return (
     <div className="flex h-screen font-LatoRegular">
@@ -71,8 +93,8 @@ const Holidays = () => {
             isSidebarOpen={isSidebarOpen}
             title="Holidays Record"
           />
-          <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5"> {/* Adjusted min-height */}
-            <div className="bg-[#D9D9D9] h-52 m-4 pt-2">
+          <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
+            <div className="bg-[#D9D9D9] h-52 m-4 pt-2 rounded-md"> {/* Added rounded-md */}
               <div className="text-[#161F55] flex justify-between px-3 pt-2 ml-3">
                 <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                   LIST OF HOLIDAYS
@@ -88,41 +110,47 @@ const Holidays = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center mt-16 ml-4">
-                <div className="text-[#161F55] font-semibold text-[18px]">
-                  <label htmlFor="show" className="mr-2">
+              <div className="flex justify-between items-center mt-16 ml-4 mr-5"> {/* Added mr-5 for spacing */}
+                <div className="text-[#161F55] font-semibold text-[18px] flex items-center">
+                  <label htmlFor="show-entries" className="mr-2"> {/* Changed id */}
                     SHOW
                   </label>
-                  <input
-                    id="show"
-                    name="show"
-                    type="number"
-                    min="1"
-                    max="10" // This is for display, actual data length depends on API
-                    defaultValue="10" // Show more by default
-                    className="text-center always-show-spinner w-16" // Added w-16
-                  />
+                  <select
+                    id="show-entries"
+                    name="show-entries"
+                    value={entriesPerPage}
+                    onChange={handleEntriesPerPageChange}
+                    className="text-center w-20 p-2 border border-gray-400 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#161F55]"
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                  </select>
                   <span className="ml-2">ENTRIES</span>
                 </div>
                 <div className="relative">
-                  <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
-                    id="search"
+                    id="search-holidays"
                     type="search"
-                    className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="border-[#989898] py-2 bg-white text-[#161F55] pl-10 pr-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#161F55]"
                     placeholder="Search"
-                  // Add onChange handler for search functionality later
                   />
                 </div>
               </div>
             </div>
+
             <table
               className="text-[18px] w-[97%] border-collapse text-[#161F55] mt-8 mx-auto"
               style={{ tableLayout: "fixed" }}
             >
               <thead>
                 <tr className="bg-gray-200 text-center">
-                  <th className="border p-5 w-[10%]">NO.</th> {/* Added w- for column width */}
+                  <th className="border p-5 w-[10%]">NO.</th>
                   <th className="border p-5 w-[25%]">DATE</th>
                   <th className="border p-5 w-[45%]">DESCRIPTION</th>
                   <th className="border p-5 w-[20%]">ACTIONS</th>
@@ -130,13 +158,13 @@ const Holidays = () => {
               </thead>
               <tbody>
                 {holidays.length > 0 ? (
-                  holidays.map((holiday, rowIndex) => (
+                  holidays.map((holiday, index) => ( // index here is 0-based for current page's items
                     <tr
-                      key={holiday.id} // Use unique holiday.id (which is _id from MongoDB)
-                      className={`${rowIndex % 2 === 0 ? "bg-gray-100" : ""
-                        } text-center`}
+                      key={holiday.id}
+                      className={`${index % 2 === 0 ? "bg-gray-100" : ""} text-center`}
                     >
-                      <td className="border p-5">{rowIndex + 1}</td> {/* Display number */}
+                      {/* Calculate overall number based on page and entriesPerPage */}
+                      <td className="border p-5">{(currentPage - 1) * entriesPerPage + index + 1}</td>
                       <td className="border p-5">{formatDateToYyyyMmDd(holiday.date)}</td>
                       <td className="border p-5 text-center">{holiday.description}</td>
                       <td className="border p-5">
@@ -145,7 +173,7 @@ const Holidays = () => {
                             data-tooltip-id="edit-tooltip"
                             data-tooltip-content="Edit"
                             className="bg-[#CF5824] p-2 rounded cursor-pointer hover:bg-orange-700"
-                            onClick={() => openEditModal(holiday)} // Pass the whole holiday object
+                            onClick={() => openEditModal(holiday)}
                           >
                             <FaEdit className="text-white" />
                           </div>
@@ -153,7 +181,7 @@ const Holidays = () => {
                             data-tooltip-id="delete-tooltip"
                             data-tooltip-content="Delete"
                             className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
-                            onClick={() => openDeleteModal(holiday.id)} // Pass holiday.id
+                            onClick={() => openDeleteModal(holiday.id)}
                           >
                             <BsTrash3 className="text-white" />
                           </div>
@@ -163,36 +191,63 @@ const Holidays = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" className="text-center p-10">No holidays found.</td>
+                    <td colSpan="4" className="text-center p-10 text-gray-500">
+                      {searchTerm ? "No holidays match your search." : "No holidays to display."}
+                    </td>
                   </tr>
                 )}
               </tbody>
             </table>
-            <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
-              <span className="text-[#161F55]">
-                {/* Update this based on actual pagination logic if implemented */}
-                SHOWING 1 TO {holidays.length} OF {holidays.length} ENTRIES
-              </span>
-              <div className="mr-6">
-                {/* Basic pagination, can be expanded */}
-                <button className="border p-1 text-[#161F55]" disabled>Previous</button>
-                <button className="border bg-[#161F55] text-[#D9D9D9] w-[40px] h-[35px]">
-                  1
-                </button>
-                <button className="border p-1 text-[#161F55]" disabled>Next</button>
+
+            {/* --- Updated Pagination Controls --- */}
+            {calculatedTotalPages > 0 && ( // Only show pagination if there are entries
+              <div className="flex justify-between items-center mt-10 text-[18px] px-4 mx-auto w-[97%]"> {/* Centered pagination */}
+                <span className="text-[#161F55]">
+                  SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries} ENTRIES
+                </span>
+                {calculatedTotalPages > 1 && ( // Only show page numbers if more than one page
+                  <div className="flex items-center">
+                    <button
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                      className="border px-3 py-1 text-[#161F55] rounded-l-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Previous
+                    </button>
+                    {pageNumbers.map((number) => (
+                      <button
+                        key={number}
+                        onClick={() => handlePageChange(number)}
+                        className={`border-t border-b px-3 py-1 ${currentPage === number
+                          ? "bg-[#161F55] text-white"
+                          : "text-[#161F55] hover:bg-gray-100"
+                          }`}
+                      >
+                        {number}
+                      </button>
+                    ))}
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage === calculatedTotalPages}
+                      className="border px-3 py-1 text-[#161F55] rounded-r-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
           </section>
           <Footer />
         </main>
       </div>
 
-      {/* Add Modal */}
+      {/* Add Modal, Edit Modal, Delete Modal (these remain unchanged from your previous correct version) */}
       {isAddModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-50 z-50">
-          <div className="bg-white p-10 sm:p-20 rounded-xl shadow-md w-11/12 max-w-lg"> {/* Responsive width */}
+          <div className="bg-white p-10 sm:p-20 rounded-xl shadow-md w-11/12 max-w-lg">
             <h2 className="text-xl font-bold mb-4 uppercase">Add Holiday</h2>
-            <div className="border-b-2 border-[#F3BC62] w-full max-w-xs my-2"></div> {/* Responsive width */}
+            <div className="border-b-2 border-[#F3BC62] w-full max-w-xs my-2"></div>
             <div className="w-full">
               <label htmlFor="add-date" className="block mb-1">DATE</label>
               <input
@@ -231,8 +286,6 @@ const Holidays = () => {
           </div>
         </div>
       )}
-
-      {/* Edit Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
           <div className="bg-white p-10 sm:p-20 rounded-xl shadow-md w-11/12 max-w-lg">
@@ -244,7 +297,7 @@ const Holidays = () => {
                 id="edit-date"
                 name="date"
                 type="date"
-                value={newHoliday.date} // This is pre-filled by openEditModal
+                value={newHoliday.date}
                 onChange={handleInputChange}
                 className="border w-full p-2 mb-2"
               />
@@ -253,7 +306,7 @@ const Holidays = () => {
                 id="edit-description"
                 name="description"
                 type="text"
-                value={newHoliday.description} // This is pre-filled
+                value={newHoliday.description}
                 onChange={handleInputChange}
                 placeholder="Description"
                 className="border w-full p-2 mb-4"
@@ -276,8 +329,6 @@ const Holidays = () => {
           </div>
         </div>
       )}
-
-      {/* Delete Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
           <div className="bg-white p-10 rounded-md shadow-md text-center w-11/12 max-w-md">
@@ -301,6 +352,7 @@ const Holidays = () => {
           </div>
         </div>
       )}
+
       <Tooltip id="edit-tooltip" />
       <Tooltip id="delete-tooltip" />
     </div>

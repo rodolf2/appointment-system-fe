@@ -192,7 +192,6 @@ const RegistrarHome = () => {
                 ))}
 
                 {/* Calendar Days */}
-                {/* Calendar Days */}
                 {Array.from({ length: daysInMonth }).map((_, index) => {
                   const day = index + 1;
                   const isWeekendDay = isWeekend(day);
@@ -200,7 +199,6 @@ const RegistrarHome = () => {
                     (holiday) => parseInt(holiday.date.split("-")[1]) === day
                   );
 
-                  // Only show status if it's a weekday and not a holiday
                   const event = isHoliday
                     ? { label: "Holiday", color: "bg-[#AF1EB9]" }
                     : isWeekendDay
@@ -237,19 +235,26 @@ const RegistrarHome = () => {
                 Holidays
               </h3>
               <div className="border-b-4 border-[#F3BC62] w-[120px] my-3"></div>
-              <ul className="list-disc ml-5 text-lg">
-                {holidays.map((holiday, index) => {
-                  const [month, day] = holiday.date.split("-");
-                  const monthAbbreviation = dayjs()
-                    .month(parseInt(month) - 1)
-                    .format("MMM");
-                  return (
-                    <li key={index}>
-                      {monthAbbreviation} {day} - {holiday.name}
-                    </li>
-                  );
-                })}
-              </ul>
+              {holidays.length > 0 ? (
+                <ul className="space-y-2 text-lg max-h-[500px] overflow-y-auto pr-2"> {/* Added pr-2 for scrollbar space */}
+                  {holidays
+                    .slice() // Create a shallow copy for sorting, to not mutate the original state array
+                    .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort holidays by date
+                    .map((holiday) => {
+                      const displayDate = dayjs(holiday.date).format("MMM DD"); // e.g., "Jan 01", "Mar 31"
+
+                      return (
+                        <li key={holiday.id} className="text-[#161F55] text-base"> {/* Used unique holiday.id, adjusted text size */}
+                          <span className="font-semibold">{displayDate}:</span> {holiday.name}
+                        </li>
+                      );
+                    })}
+                </ul>
+              ) : (
+                <p className="text-gray-500 mt-2 text-base">
+                  No holidays scheduled or fetched.
+                </p>
+              )}
             </div>
           </section>
         </div>

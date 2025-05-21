@@ -38,11 +38,12 @@ const useRegistrarHome = () => {
         let localDateStr = "";
         if (h.date) {
           try {
-            // Ensure date is parsed correctly as local date and formatted to YYYY-MM-DD
+            // THIS IS THE CRUCIAL PART FOR THE DATE STRING
             const dateInput = h.date.includes('T') ? h.date : `${h.date}T00:00:00`;
             const dateObj = new Date(dateInput);
             const y = dateObj.getFullYear();
-            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            // MONTH PARSING: getMonth() is 0-indexed (0 for Jan, 1 for Feb, ..., 8 for Sep)
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0'); // Correct: Add 1
             const d = String(dateObj.getDate()).padStart(2, '0');
             localDateStr = `${y}-${m}-${d}`;
           } catch (e) {
@@ -50,17 +51,17 @@ const useRegistrarHome = () => {
           }
         }
         return {
-          id: h._id, // Use the actual ID from backend
-          date: localDateStr, // Store as YYYY-MM-DD
-          name: h.description, // Assuming 'description' from backend is the holiday 'name'
+          id: h._id,
+          date: localDateStr, // Should be YYYY-MM-DD
+          name: h.description,
         };
       });
       setAllFetchedHolidays(formattedBackendHolidays);
     } catch (error) {
       console.error("Error fetching holidays for registrar home:", error);
-      setAllFetchedHolidays([]); // Set to empty array on error
+      setAllFetchedHolidays([]);
     }
-  }, []); // Empty dependency array means this function itself doesn't change
+  }, []);
 
   // Fetch holidays when the hook initializes
   useEffect(() => {
