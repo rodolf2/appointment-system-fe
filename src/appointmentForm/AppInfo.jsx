@@ -138,6 +138,17 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
 
               <div className="mt-6 flex justify-end">
                 <button
+                className="bg-[#1E2772] text-white px-6 py-2 rounded-lg hover:bg-[#161f55] transition-colors mr-2"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onBack();
+                  Navigate("/appointmentForm?step=2");
+                }}
+              >
+                Back
+              </button>
+
+                <button
                   type="submit"
                   disabled={isSubmitting}
                   className={`bg-[#1E2772] text-white px-6 py-2 rounded-md hover:bg-[#161f55] transition-colors ${

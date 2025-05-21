@@ -66,7 +66,6 @@ const useAppInfo = (onNext) => {
 
     return newErrors;
   };
-
   const handleNext = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
@@ -96,8 +95,8 @@ const useAppInfo = (onNext) => {
       // Store the student ID for later use
       localStorage.setItem('studentId', response.studentId);
       
-      // Clear form data after successful submission
-      clearSavedData();
+      // Only clear form data after successful submission AND moving forward
+      // This way, data is preserved when going back
       
       // Move to next step
       onNext();
