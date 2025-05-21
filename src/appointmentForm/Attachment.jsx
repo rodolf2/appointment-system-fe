@@ -3,11 +3,11 @@ import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
 import { Navigate } from "react-router";
 import PropTypes from "prop-types";
 
-const Attachment = ({ onNext, onBack, currentStep }) => {
-  const {
+const Attachment = ({ onNext, onBack, currentStep }) => {  const {
     files,
     fileInputRef,
     error,
+    isUploading,
     handleFileChange,
     handleAddFile,
     handleRemoveFile,
@@ -112,12 +112,14 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
                 }}
               >
                 Back
-              </button>
-              <button
-                className="bg-[#161f55] text-white px-6 py-2 rounded-lg hover:bg-blue-800"
+              </button>              <button
+                className={`bg-[#161f55] text-white px-6 py-2 rounded-lg hover:bg-blue-800 ${
+                  isUploading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
                 onClick={handleNext}
+                disabled={isUploading}
               >
-                Next
+                {isUploading ? 'Uploading...' : 'Next'}
               </button>
             </div>
           </div>

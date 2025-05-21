@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { FiHome } from "react-icons/fi";
+import { clearAllFormData } from "../lib/clearFormData";
 
 const ReturnHome = () => {
   const navigate = useNavigate();
 
   const handleReturnToHome = () => {
-    navigate("/home/announcement"); // Replace "/" with the path of your home page if it's different
+    // Clear all form data when returning home
+    clearAllFormData();
+    navigate("/home/announcement");
   };
 
   return (

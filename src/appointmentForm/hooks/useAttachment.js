@@ -1,9 +1,11 @@
 import { useRef, useState, useEffect } from "react";
+import { uploadAttachments } from "../../services/attachmentServices";
 
 const useAttachment = (onNext) => {
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
   const [error, setError] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   // Load files from localStorage on mount
   useEffect(() => {
@@ -66,12 +68,34 @@ const useAttachment = (onNext) => {
     setError("");
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (files.length === 0) {
       setError("You need to upload at least one file to proceed");
-    } else {
+      return;
+    }
+
+    try {
+      setIsUploading(true);
       setError("");
+      
+      // Get student ID from localStorage (set during AppInfo step)
+      const studentId = localStorage.getItem("studentId");
+      if (!studentId) {
+        throw new Error("Student ID not found. Please complete the previous steps first.");
+      }
+
+      // Upload files to server
+      await uploadAttachments(files, studentId);
+
+      // Clear the files from localStorage after successful upload
+      localStorage.removeItem("uploadedFiles");
+      
+      // Move to next step
       onNext();
+    } catch (err) {
+      setError(err.message || "Failed to upload files. Please try again.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -79,6 +103,7 @@ const useAttachment = (onNext) => {
     files,
     fileInputRef,
     error,
+    isUploading,
     handleFileChange,
     handleAddFile,
     handleRemoveFile,
