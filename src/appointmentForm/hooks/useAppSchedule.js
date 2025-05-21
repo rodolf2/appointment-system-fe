@@ -74,20 +74,23 @@ const useAppSchedule = (onNext) => {
       const schedule = sortedSchedules.find(s => {
         const scheduleDate = dayjs(s.date).format("YYYY-MM-DD");
         return scheduleDate === formattedDate;
-      });
-
-      if (schedule) {
-        // Convert slots to number if it's a string
-        const slotsAvailable = typeof schedule.slots === 'string' 
+      });      if (schedule) {
+        // Convert slots to number if it's a string and calculate available slots
+        const totalSlots = typeof schedule.slots === 'string' 
           ? parseInt(schedule.slots, 10) 
           : schedule.slots;
+        const bookedSlots = schedule.bookedSlots || 0;
+        const slotsAvailable = totalSlots - bookedSlots;
 
         if (slotsAvailable > 0) {
           newBookings[formattedDate] = {
             status: "available",
             schedule: {
               ...schedule,
-              slots: slotsAvailable,
+              totalSlots,
+              bookedSlots,
+              availableSlots: slotsAvailable,
+              slots: slotsAvailable, // Keep this for backward compatibility
               startTime: schedule.startTime || "No time specified",
               endTime: schedule.endTime || "No time specified"
             }
@@ -96,7 +99,12 @@ const useAppSchedule = (onNext) => {
           newBookings[formattedDate] = {
             status: "unavailable",
             reason: "Fully booked",
-            schedule
+            schedule: {
+              ...schedule,
+              totalSlots,
+              bookedSlots,
+              availableSlots: 0
+            }
           };
         }
       } else {
@@ -180,7 +188,6 @@ const useAppSchedule = (onNext) => {
     
     setShowConfirmation(true);
   };
-
   const handleConfirmSubmit = async () => {
     try {
       const appointmentData = {
@@ -191,6 +198,30 @@ const useAppSchedule = (onNext) => {
       
       console.log('Submitting appointment:', appointmentData);
       await bookAppointment(appointmentData);
+
+      // Update the local state to reflect the booked slot
+      setBookings(prevBookings => {
+        const updatedBookings = { ...prevBookings };
+        const booking = updatedBookings[selectedDate.date];
+        
+        if (booking?.status === "available") {
+          const newAvailableSlots = booking.schedule.availableSlots - 1;
+          
+          if (newAvailableSlots > 0) {
+            booking.schedule.availableSlots = newAvailableSlots;
+            booking.schedule.slots = newAvailableSlots;
+            booking.schedule.bookedSlots = (booking.schedule.bookedSlots || 0) + 1;
+          } else {
+            booking.status = "unavailable";
+            booking.reason = "Fully booked";
+            booking.schedule.availableSlots = 0;
+            booking.schedule.slots = 0;
+            booking.schedule.bookedSlots = booking.schedule.totalSlots;
+          }
+        }
+        
+        return updatedBookings;
+      });
       
       setShowConfirmation(false);
       onNext();
