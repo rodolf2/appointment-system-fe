@@ -42,13 +42,46 @@ const handleApiError = (error) => {
   }
 };
 
-// Get all schedules
+// // Get all schedules
+// export const getAllSchedules = async () => {
+//   try {
+//     const response = await axios.get(BASE_URL);
+//     return response.data;
+//   } catch (error) {
+//     handleApiError(error);
+//   }
+// };
 export const getAllSchedules = async () => {
   try {
+    console.log('Fetching schedules from:', BASE_URL);
     const response = await axios.get(BASE_URL);
+    console.log('Schedule response:', response.data);
     return response.data;
   } catch (error) {
-    handleApiError(error);
+    console.error('Error details:', error.response || error);
+    throw new Error(error.response?.data?.message || 'Failed to fetch schedules');
+  }
+};
+
+export const getAvailableSlots = async (date) => {
+  try {
+    const url = `${BASE_URL}/available/${date}`;
+    console.log('Fetching slots from:', url);
+    const response = await axios.get(url);
+    console.log('Slots response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error details:', error.response || error);
+    throw new Error(error.response?.data?.message || 'Failed to fetch available slots');
+  }
+};
+
+export const bookAppointment = async (appointmentData) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/book`, appointmentData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to book appointment');
   }
 };
 
