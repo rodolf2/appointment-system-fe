@@ -109,11 +109,11 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                               : "hover:bg-gray-200"}`}                        onClick={() => handleDateClick(day)}
                       >
                         <span>{day.date()}</span>
-                        {booking?.status === "available" && (
+                        {/* {booking?.status === "available" && (
                           <span className="text-xs font-semibold">
                             {booking.schedule.availableSlots} slot{booking.schedule.availableSlots !== 1 ? 's' : ''}
                           </span>
-                        )}
+                        )} */}
                       </div>
                     );
                   })}

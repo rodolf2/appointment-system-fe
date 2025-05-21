@@ -1,11 +1,21 @@
 import { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
-import { getAllSchedules, getAvailableSlots, bookAppointment } from "../../services/scheduleServices";
+import { getAllSchedules, getAvailableSlots } from "../../services/scheduleServices";
+import { createBooking } from "../../services/bookingServices";
+import { auth } from "../../firebase";
 
 const useAppSchedule = (onNext) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
   const [bookings, setBookings] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -187,17 +197,41 @@ const useAppSchedule = (onNext) => {
     }
     
     setShowConfirmation(true);
-  };
-  const handleConfirmSubmit = async () => {
+  };  const handleConfirmSubmit = async () => {
+    if (!selectedDate?.date || !selectedTimeSlot || !selectedDate.schedule?._id) {
+      setErrorMessage("Missing required booking information");
+      setShowConfirmation(false);
+      return;
+    }
+
     try {
-      const appointmentData = {
+      setLoading(true);
+      // Get student information and ID from localStorage
+      const studentId = localStorage.getItem('studentId');
+      const formData = JSON.parse(localStorage.getItem('appInfoFormData'));
+      
+      if (!studentId || !formData) {
+        throw new Error('Please complete your personal information first');
+      }      const appointmentData = {
         date: selectedDate.date,
         timeSlot: selectedTimeSlot,
-        scheduleId: selectedDate.schedule._id
+        scheduleId: selectedDate.schedule._id,
+        studentId: studentId,
+        studentInfo: {
+          name: `${formData.firstName} ${formData.middleName} ${formData.surname}`.trim(),
+          email: formData.email,
+          contactNumber: formData.contactNumber,
+          schoolYear: formData.schoolYear,
+          course: formData.course
+        }
       };
       
       console.log('Submitting appointment:', appointmentData);
-      await bookAppointment(appointmentData);
+      const response = await createBooking(appointmentData);
+      
+      if (!response) {
+        throw new Error("No response from booking service");
+      }
 
       // Update the local state to reflect the booked slot
       setBookings(prevBookings => {
@@ -222,12 +256,20 @@ const useAppSchedule = (onNext) => {
         
         return updatedBookings;
       });
-      
+        console.log('Booking successful, proceeding to next step');
       setShowConfirmation(false);
-      onNext();
+      setErrorMessage("");
+      
+      // Force state updates to complete before navigating
+      setTimeout(() => {
+        onNext(5); // Explicitly go to step 6 (index 5)
+      }, 0);
     } catch (error) {
       console.error('Booking error:', error);
       setErrorMessage(error.message || "Failed to book appointment");
+      setShowConfirmation(false);
+    } finally {
+      setLoading(false);
     }
   };
 

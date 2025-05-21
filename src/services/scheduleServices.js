@@ -78,9 +78,33 @@ export const getAvailableSlots = async (date) => {
 
 export const bookAppointment = async (appointmentData) => {
   try {
+    console.log('Booking appointment with data:', appointmentData);
+    console.log('Sending request to:', `${BASE_URL}/book`);
+    
+    // Validate appointment data
+    if (!appointmentData.date || !appointmentData.timeSlot || !appointmentData.scheduleId) {
+      throw new Error('Invalid appointment data: Missing required fields');
+    }
+
     const response = await axios.post(`${BASE_URL}/book`, appointmentData);
+    console.log('Booking response:', response.data);
     return response.data;
   } catch (error) {
+    console.error('Booking error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      config: error.config
+    });
+    
+    if (error.response?.status === 404) {
+      throw new Error('Booking endpoint not found. Please check if the server is running.');
+    } else if (error.response?.status === 400) {
+      throw new Error(error.response.data.message || 'Invalid booking data');
+    } else if (!error.response) {
+      throw new Error('Unable to connect to the booking service. Please check if the server is running.');
+    }
+    
     throw new Error(error.response?.data?.message || 'Failed to book appointment');
   }
 };
