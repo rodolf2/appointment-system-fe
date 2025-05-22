@@ -106,14 +106,15 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                             ? "bg-[#3A993D] hover:bg-[#86EFAC] hover:text-white space-y-0.5"
                             : booking?.status === "unavailable" && booking?.reason === "Fully booked"
                               ? "bg-[#D52121] hover:bg-[#FCA5A5] hover:text-white"
-                              : "hover:bg-gray-200"}`}                        onClick={() => handleDateClick(day)}
-                      >
+                              : "hover:bg-gray-200"}`}                        onClick={() => handleDateClick(day)}                      >
                         <span>{day.date()}</span>
-                        {/* {booking?.status === "available" && (
-                          <span className="text-xs font-semibold">
+                        {booking?.status === "available" ? (
+                          <span className="text-xs font-semibold text-white">
                             {booking.schedule.availableSlots} slot{booking.schedule.availableSlots !== 1 ? 's' : ''}
                           </span>
-                        )} */}
+                        ) : booking?.status === "unavailable" && booking?.reason === "Fully booked" ? (
+                          <span className="text-xs font-semibold text-white">Full</span>
+                        ) : null}
                       </div>
                     );
                   })}
@@ -183,9 +184,8 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
               Submit
             </button>
           </div>
-        </div>
-
-        {/* Confirmation Modal */}
+        </div>       
+         {/* Confirmation Modal */}
           {showConfirmation && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
               <div className="bg-white p-4 rounded-lg shadow-lg w-80">

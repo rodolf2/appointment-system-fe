@@ -10,6 +10,12 @@ const validateBookingData = (data) => {
   if (!data.studentId) {
     throw new Error('Student ID is required');
   }
+  if (!data.date) {
+    throw new Error('Appointment date is required');
+  }
+  if (!data.timeSlot) {
+    throw new Error('Time slot is required');
+  }
 };
 
 export const createBooking = async (bookingData) => {
@@ -20,6 +26,8 @@ export const createBooking = async (bookingData) => {
     const requestData = {
       studentId: bookingData.studentId,
       scheduleId: bookingData.scheduleId,
+      date: bookingData.date,
+      timeSlot: bookingData.timeSlot,
       purpose: bookingData.purpose || "General Appointment"
     };
 
@@ -33,37 +41,25 @@ export const createBooking = async (bookingData) => {
     }
 
     console.log('Booking successful! Response:', JSON.stringify(response.data, null, 2));
-    return response.data;  } catch (error) {
+    return response.data;
+  } catch (error) {
     console.error('Booking error details:', {
       message: error.message,
       response: error.response?.data,
       status: error.response?.status,
-      url: error.config?.url,
-      method: error.config?.method,
-      data: error.config?.data
+      config: error.config
     });
     
-    // Specific error handling
-    if (error.response) {
-      // Server responded with an error status
-      switch (error.response.status) {
-        case 404:
-          throw new Error('Booking endpoint not found. Please verify the API route.');
-        case 400:
-          throw new Error(error.response.data.message || 'Invalid booking data');
-        case 401:
-          throw new Error('Unauthorized. Please check your authentication.');
-        case 500:
-          throw new Error('Internal server error. Please try again later.');
-        default:
-          throw new Error(`Server error: ${error.response.data.message || 'Unknown error'}`);
-      }
-    } else if (error.request) {
-      // Request was made but no response received
-      throw new Error('Unable to connect to the booking service. Please check if the server is running.');
-    } else {
-      // Error in request setup
-      throw new Error(`Request failed: ${error.message}`);
+    if (error.response?.status === 409) {
+      throw new Error('This slot is no longer available. Please choose another time slot.');
+    } else if (error.response?.status === 404) {
+      throw new Error('Booking service not found. Please try again later.');
+    } else if (error.response?.status === 400) {
+      throw new Error(error.response.data.message || 'Invalid booking data');
+    } else if (!error.response) {
+      throw new Error('Unable to connect to the booking service. Please try again later.');
     }
+    
+    throw new Error(error.response?.data?.message || 'Failed to create booking');
   }
 };

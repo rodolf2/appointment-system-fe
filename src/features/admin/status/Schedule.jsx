@@ -91,7 +91,7 @@ const Schedule = () => {
               <thead>
                 <tr className="bg-gray-200 text-center">
                   <th className="border p-4">NO.</th>
-                  <th className="border p-4">SLOTS</th>
+                  <th className="border p-4">SLOTS<br/>(Available / Total)</th>
                   <th className="border p-4">DATE</th>
                   <th className="border p-4">START TIME</th>
                   <th className="border p-4">END TIME</th>
@@ -108,7 +108,18 @@ const Schedule = () => {
                         } text-center`}
                     >
                       <td className="border p-5">{schedule?.no || rowIndex + 1}</td> {/* Display row number or actual 'no' */}
-                      <td className="border p-5">{schedule?.slots || ""}</td>
+                      <td className={`border p-5 ${
+                        parseInt(schedule?.availableSlots || 0) === 0 
+                          ? "bg-red-100 text-red-700 font-semibold"
+                          : parseInt(schedule?.availableSlots || 0) <= 2
+                          ? "bg-yellow-100 text-yellow-700 font-semibold"
+                          : ""
+                      }`}>
+                        {schedule?.availableSlots || "0"} / {schedule?.slots || "0"}
+                        {parseInt(schedule?.availableSlots || 0) === 0 && 
+                          <span className="block text-xs text-red-600">Fully Booked</span>
+                        }
+                      </td>
                       <td className="border p-5">{schedule?.date || ""}</td>
                       <td className="border p-5">
                         {schedule?.startTime || ""}

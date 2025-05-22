@@ -151,30 +151,37 @@ const useAppSchedule = (onNext) => {
       setSelectedTimeSlot(null);
       setErrorMessage(booking?.reason || "Date not available");
     }
-  }, [bookings]);
-  const handleConfirmSubmit = async () => {
+  }, [bookings]);  const handleConfirmSubmit = async () => {
     if (!selectedDate?.date || !selectedTimeSlot || !selectedDate.schedule?._id) {
       setErrorMessage("Missing required booking information");
       setShowConfirmation(false);
       return;
     }
 
+    // Double-check slot availability before booking
     try {
-      setIsSubmitting(true);      const studentId = localStorage.getItem('studentId');
+      setIsSubmitting(true);
+      
+      // Verify current slot availability
+      const currentSchedule = await getAllSchedules();
+      const targetSchedule = currentSchedule.find(s => s._id === selectedDate.schedule._id);
+      
+      if (!targetSchedule || targetSchedule.availableSlots <= 0) {
+        throw new Error("This slot is no longer available");
+      }
+
+      const studentId = localStorage.getItem('studentId');
       const formData = JSON.parse(localStorage.getItem('appInfoFormData'));
       
       if (!studentId || !formData) {
         throw new Error('Please complete your personal information first');
       }
 
-      // Make sure we have valid IDs
-      if (!selectedDate.schedule._id) {
-        throw new Error('Invalid schedule selected');
-      }
-
       const appointmentData = {
+        date: selectedDate.date,
+        timeSlot: selectedTimeSlot,
         scheduleId: selectedDate.schedule._id,
-        studentId: studentId, // Changed from userId to studentId to match backend
+        studentId: studentId,
         purpose: localStorage.getItem('appointmentPurpose') || "General Appointment"
       };
       
@@ -184,31 +191,55 @@ const useAppSchedule = (onNext) => {
       
       if (!response) {
         throw new Error("No response from booking service");
-      }      console.log('Booking successful:', response);
-
-      // Store the booking response for later use
-      localStorage.setItem('lastBookingResponse', JSON.stringify(response));
-      
-      // Update booked slots in the UI immediately
-      if (selectedDate && selectedDate.schedule) {
-        const updatedBookings = { ...bookings };
-        const dateKey = selectedDate.date;
-        if (updatedBookings[dateKey]) {
-          updatedBookings[dateKey].schedule.bookedSlots += 1;
-          updatedBookings[dateKey].schedule.availableSlots -= 1;
-          setBookings(updatedBookings);
-        }
       }
 
-      // Clean up state
+      console.log('Booking successful:', response);
+      localStorage.setItem('lastBookingResponse', JSON.stringify(response));
+
+      // Update bookings state with new slot count
+      const updatedBookings = { ...bookings };
+      const dateKey = selectedDate.date;
+      
+      if (updatedBookings[dateKey]) {
+        const currentBooking = updatedBookings[dateKey];
+        const newAvailableSlots = currentBooking.schedule.availableSlots - 1;
+        const newBookedSlots = currentBooking.schedule.bookedSlots + 1;
+        
+        if (newAvailableSlots <= 0) {
+          updatedBookings[dateKey] = {
+            status: "unavailable",
+            reason: "Fully booked",
+            schedule: {
+              ...currentBooking.schedule,
+              availableSlots: 0,
+              bookedSlots: currentBooking.schedule.totalSlots
+            }
+          };
+        } else {
+          updatedBookings[dateKey] = {
+            ...currentBooking,
+            schedule: {
+              ...currentBooking.schedule,
+              availableSlots: newAvailableSlots,
+              bookedSlots: newBookedSlots
+            }
+          };
+        }
+
+        // Immediately update UI
+        setBookings(updatedBookings);
+        
+        // Refresh calendar to ensure sync with backend
+        await fetchAndGenerateCalendar();
+      }
+
+      // Reset state
       setShowConfirmation(false);
       setErrorMessage("");
       setSelectedTimeSlot(null);
       setSelectedDate(null);
       setAvailableSlots([]);
       
-      // Ensure we navigate to the next step
-      console.log('Navigating to next step...');
       if (typeof onNext === 'function') {
         onNext();
       } else {
@@ -266,6 +297,48 @@ const useAppSchedule = (onNext) => {
 
     return days;
   }, [currentMonth]);
+
+  // Auto-save booking state
+  useEffect(() => {
+    if (selectedDate && selectedTimeSlot) {
+      localStorage.setItem('currentBooking', JSON.stringify({
+        date: selectedDate,
+        timeSlot: selectedTimeSlot,
+        lastUpdated: new Date().toISOString()
+      }));
+    }
+  }, [selectedDate, selectedTimeSlot]);
+
+  // Recover from auto-save if needed
+  useEffect(() => {
+    const savedBooking = localStorage.getItem('currentBooking');
+    if (savedBooking) {
+      try {
+        const { date, timeSlot, lastUpdated } = JSON.parse(savedBooking);
+        const lastUpdateTime = new Date(lastUpdated);
+        const now = new Date();
+        const timeDiff = now - lastUpdateTime;
+        
+        // Only recover if the saved state is less than 30 minutes old
+        if (timeDiff < 30 * 60 * 1000) {
+          setSelectedDate(date);
+          setSelectedTimeSlot(timeSlot);
+        } else {
+          localStorage.removeItem('currentBooking');
+        }
+      } catch (error) {
+        console.error('Error recovering saved booking:', error);
+        localStorage.removeItem('currentBooking');
+      }
+    }
+  }, []);
+
+  // Clear saved state after successful booking
+  useEffect(() => {
+    if (!showConfirmation && !selectedDate && !selectedTimeSlot) {
+      localStorage.removeItem('currentBooking');
+    }
+  }, [showConfirmation, selectedDate, selectedTimeSlot]);
 
   return {
     currentMonth,

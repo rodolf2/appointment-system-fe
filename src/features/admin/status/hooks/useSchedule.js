@@ -40,19 +40,28 @@ const useSchedule = () => {
   const [newSchedule, setNewSchedule] = useState(initialScheduleState);
   const [schedules, setSchedules] = useState([]);
 
+  // Format schedule data for display
+  const formatScheduleForDisplay = useCallback((schedule, index) => {
+    return {
+      no: (index + 1).toString(),
+      slots: schedule.slots.toString(),
+      availableSlots: (schedule.slots - (schedule.bookedSlots || 0)).toString(),
+      bookedSlots: (schedule.bookedSlots || 0).toString(),
+      date: formatDateForStorage(schedule.date.split('T')[0]),
+      startTime: schedule.startTime,
+      endTime: schedule.endTime,
+      _id: schedule._id
+    };
+  }, []);
+
   // Fetch all schedules from the API
   const fetchSchedules = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getAllSchedules();
-      const formattedSchedules = data.map((schedule, index) => ({
-        no: (index + 1).toString(),
-        slots: schedule.slots.toString(),
-        date: formatDateForStorage(schedule.date.split('T')[0]),
-        startTime: schedule.startTime,
-        endTime: schedule.endTime,
-        _id: schedule._id
-      }));
+      const formattedSchedules = data.map((schedule, index) => 
+        formatScheduleForDisplay(schedule, index)
+      );
       setSchedules(formattedSchedules);
     } catch (error) {
       console.error('Error fetching schedules:', error);
@@ -60,11 +69,13 @@ const useSchedule = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [formatScheduleForDisplay]);
 
-  // Fetch schedules on component mount
+  // Set up auto-refresh of schedules
   useEffect(() => {
     fetchSchedules();
+    const refreshInterval = setInterval(fetchSchedules, 30000); // Refresh every 30 seconds
+    return () => clearInterval(refreshInterval);
   }, [fetchSchedules]);
 
   // --- Modal Open/Close ---
@@ -138,8 +149,19 @@ const useSchedule = () => {
       return;
     }
 
+    // Parse slots as numbers
+    const newSlots = parseInt(newSchedule.slots);
+    const originalSlots = parseInt(originalScheduleForForm.slots);
+    const bookedSlots = parseInt(originalScheduleForForm.bookedSlots) || 0;
+
+    // Validate that new slot count isn't less than booked slots
+    if (newSlots < bookedSlots) {
+      setEditModalError(`Cannot reduce slots below booked amount (${bookedSlots} slots already booked)`);
+      return;
+    }
+
     const hasChanges =
-      newSchedule.slots !== originalScheduleForForm.slots ||
+      newSlots !== originalSlots ||
       newSchedule.date !== originalScheduleForForm.date ||
       newSchedule.startTime !== originalScheduleForForm.startTime ||
       newSchedule.endTime !== originalScheduleForForm.endTime;
@@ -151,14 +173,23 @@ const useSchedule = () => {
 
     try {
       const scheduleToUpdate = schedules[editIndex];
-      const response = await updateSchedule(scheduleToUpdate._id, newSchedule);
+      
+      // Prepare update data with slot calculations
+      const updateData = {
+        ...newSchedule,
+        slots: newSlots,
+        bookedSlots: bookedSlots,
+        availableSlots: newSlots - bookedSlots
+      };
+
+      const response = await updateSchedule(scheduleToUpdate._id, updateData);
       if (response) {
         await fetchSchedules();
         closeEditModal();
       }
     } catch (error) {
       console.error('Error updating schedule:', error);
-      setEditModalError("Failed to update schedule");
+      setEditModalError(error.message || "Failed to update schedule");
     }
   };
 

@@ -4,9 +4,17 @@ const BASE_URL = "http://localhost:5000/api/schedules";
 
 // Validate schedule data
 const validateScheduleData = (data) => {
-  if (!data.slots || isNaN(Number(data.slots)) || Number(data.slots) <= 0) {
-    throw new Error("Invalid slots value");
+  const slots = Number(data.slots);
+  const bookedSlots = Number(data.bookedSlots || 0);
+
+  if (isNaN(slots) || slots <= 0) {
+    throw new Error("Invalid slots value - must be greater than 0");
   }
+
+  if (slots < bookedSlots) {
+    throw new Error(`Cannot set slots less than booked slots (${bookedSlots} already booked)`);
+  }
+
   if (!data.date) {
     throw new Error("Date is required");
   }
@@ -20,11 +28,18 @@ const validateScheduleData = (data) => {
 
 // Format schedule data for API
 const formatScheduleData = (data) => {
+  // Ensure numerical values
+  const slots = Number(data.slots);
+  const bookedSlots = Number(data.bookedSlots || 0);
+  const availableSlots = slots - bookedSlots;
+
   return {
-    slots: Number(data.slots),
+    slots: slots,
     date: new Date(data.date).toISOString(),
     startTime: data.startTime,
-    endTime: data.endTime
+    endTime: data.endTime,
+    bookedSlots: bookedSlots,
+    availableSlots: availableSlots
   };
 };
 
@@ -42,21 +57,20 @@ const handleApiError = (error) => {
   }
 };
 
-// // Get all schedules
-// export const getAllSchedules = async () => {
-//   try {
-//     const response = await axios.get(BASE_URL);
-//     return response.data;
-//   } catch (error) {
-//     handleApiError(error);
-//   }
-// };
 export const getAllSchedules = async () => {
   try {
     console.log('Fetching schedules from:', BASE_URL);
     const response = await axios.get(BASE_URL);
-    console.log('Schedule response:', response.data);
-    return response.data;
+    
+    // Transform the response to include calculated available slots
+    const schedules = response.data.map(schedule => ({
+      ...schedule,
+      availableSlots: schedule.slots - (schedule.bookedSlots || 0),
+      bookedSlots: schedule.bookedSlots || 0
+    }));
+    
+    console.log('Processed schedules:', schedules);
+    return schedules;
   } catch (error) {
     console.error('Error details:', error.response || error);
     throw new Error(error.response?.data?.message || 'Failed to fetch schedules');
@@ -68,8 +82,16 @@ export const getAvailableSlots = async (date) => {
     const url = `${BASE_URL}/available/${date}`;
     console.log('Fetching slots from:', url);
     const response = await axios.get(url);
-    console.log('Slots response:', response.data);
-    return response.data;
+    
+    // Transform response to include availability status
+    const slots = response.data.map(slot => ({
+      ...slot,
+      isAvailable: slot.availableSlots > 0,
+      status: slot.availableSlots > 0 ? 'available' : 'fully booked'
+    }));
+    
+    console.log('Processed slots:', slots);
+    return slots;
   } catch (error) {
     console.error('Error details:', error.response || error);
     throw new Error(error.response?.data?.message || 'Failed to fetch available slots');
@@ -131,7 +153,10 @@ export const updateSchedule = async (id, scheduleData) => {
       throw new Error("Schedule ID is required");
     }
     validateScheduleData(scheduleData);
+    
     const formattedData = formatScheduleData(scheduleData);
+    console.log('Updating schedule with data:', formattedData);
+    
     const response = await axios.put(`${BASE_URL}/${id}`, formattedData);
     return response.data;
   } catch (error) {
