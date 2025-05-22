@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const API_URL_EVENTS = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"
 
 const useRegistrarHome = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -13,6 +14,8 @@ const useRegistrarHome = () => {
 
   const [allFetchedHolidays, setAllFetchedHolidays] = useState([]);
   const [currentMonthCalendarHolidays, setCurrentMonthCalendarHolidays] = useState([]);
+  const [allDashboardEvents, setAllDashboardEvents] = useState([]); // Raw events for this dashboard
+  const [calendarDashboardEvents, setCalendarDashboardEvents] = useState({}); // Formatted for calendar
 
   useEffect(() => {
     localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
@@ -27,6 +30,43 @@ const useRegistrarHome = () => {
   const monthName = currentDate.format("MMMM");
   const year = currentDate.year();
 
+  const fetchEventsForDashboard = useCallback(async () => {
+    try {
+      const response = await axios.get(`${API_URL_EVENTS}/events`); // Fetch events
+      setAllDashboardEvents(response.data);
+    } catch (error) {
+      console.error("Error fetching events for dashboard:", error);
+      setAllDashboardEvents([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchEventsForDashboard();
+  }, [fetchEventsForDashboard]);
+
+  useEffect(() => {
+    const formatted = {};
+    allDashboardEvents.forEach(event => {
+      const startDate = dayjs(event.startDate);
+      const endDate = dayjs(event.endDate);
+      let currentDateIter = startDate;
+      while (currentDateIter.isBefore(endDate) || currentDateIter.isSame(endDate, 'day')) {
+        const monthKey = currentDateIter.format("YYYY-MM");
+        const day = currentDateIter.date();
+        if (!formatted[monthKey]) {
+          formatted[monthKey] = {};
+        }
+        // Event structure for RegistrarHome calendar
+        // This might be simpler than the Events page if it's just a label
+        formatted[monthKey][day] = {
+          label: "Event", // Or event.title if you want more detail
+          color: event.color || "bg-yellow-500", // Different default color for dashboard
+        };
+        currentDateIter = currentDateIter.add(1, 'day');
+      }
+    });
+    setCalendarDashboardEvents(formatted);
+  }, [allDashboardEvents]);
   // Function to fetch all holidays from the backend
   const fetchAllHolidaysFromAPI = useCallback(async () => {
     try {
@@ -76,30 +116,30 @@ const useRegistrarHome = () => {
   }, [currentDate, allFetchedHolidays]);
 
 
-  const events = {
-    2: { label: "Fully Booked", color: "bg-[#F63838]" },
-    3: { label: "Fully Booked", color: "bg-[#F63838]" },
-    6: { label: "Fully Booked", color: "bg-[#F63838]" },
-    7: { label: "Fully Booked", color: "bg-[#F63838]" },
-    10: { label: "Fully Booked", color: "bg-[#F63838]" },
-    13: { label: "Available", color: "bg-[#48E14D]" },
-    14: { label: "Available", color: "bg-[#48E14D]" },
-    15: { label: "Available", color: "bg-[#48E14D]" },
-    16: { label: "Available", color: "bg-[#48E14D]" },
-    17: { label: "Available", color: "bg-[#48E14D]" },
-    20: { label: "Special Event", color: "bg-[#FBBC05]" },
-    21: { label: "Special Event", color: "bg-[#FBBC05]" },
-    22: { label: "Available", color: "bg-[#48E14D]" },
-    23: { label: "Available", color: "bg-[#48E14D]" },
-    24: { label: "Available", color: "bg-[#48E14D]" },
-    25: { label: "Available", color: "bg-[#48E14D]" },
-    26: { label: "Available", color: "bg-[#48E14D]" },
-    27: { label: "Available", color: "bg-[#48E14D]" },
-    28: { label: "Available", color: "bg-[#48E14D]" },
-    29: { label: "Available", color: "bg-[#48E14D]" },
-    30: { label: "Available", color: "bg-[#48E14D]" },
-    31: { label: "Available", color: "bg-[#48E14D]" },
-  };
+  // const events = {
+  //   2: { label: "Fully Booked", color: "bg-[#F63838]" },
+  //   3: { label: "Fully Booked", color: "bg-[#F63838]" },
+  //   6: { label: "Fully Booked", color: "bg-[#F63838]" },
+  //   7: { label: "Fully Booked", color: "bg-[#F63838]" },
+  //   10: { label: "Fully Booked", color: "bg-[#F63838]" },
+  //   13: { label: "Available", color: "bg-[#48E14D]" },
+  //   14: { label: "Available", color: "bg-[#48E14D]" },
+  //   15: { label: "Available", color: "bg-[#48E14D]" },
+  //   16: { label: "Available", color: "bg-[#48E14D]" },
+  //   17: { label: "Available", color: "bg-[#48E14D]" },
+  //   20: { label: "Special Event", color: "bg-[#FBBC05]" },
+  //   21: { label: "Special Event", color: "bg-[#FBBC05]" },
+  //   22: { label: "Available", color: "bg-[#48E14D]" },
+  //   23: { label: "Available", color: "bg-[#48E14D]" },
+  //   24: { label: "Available", color: "bg-[#48E14D]" },
+  //   25: { label: "Available", color: "bg-[#48E14D]" },
+  //   26: { label: "Available", color: "bg-[#48E14D]" },
+  //   27: { label: "Available", color: "bg-[#48E14D]" },
+  //   28: { label: "Available", color: "bg-[#48E14D]" },
+  //   29: { label: "Available", color: "bg-[#48E14D]" },
+  //   30: { label: "Available", color: "bg-[#48E14D]" },
+  //   31: { label: "Available", color: "bg-[#48E14D]" },
+  // };
   const handlePrevMonth = () => {
     setCurrentDate(currentDate.subtract(1, "month"));
   };
@@ -145,11 +185,12 @@ const useRegistrarHome = () => {
     monthName,
     year,
     holidays: allFetchedHolidays,
-    currentMonthHolidays: currentMonthCalendarHolidays,
-    events,
+    // events,
     handlePrevMonth,
     handleNextMonth,
     isWeekend,
+    currentMonthHolidays: currentMonthCalendarHolidays,
+    events: calendarDashboardEvents,
   };
 };
 

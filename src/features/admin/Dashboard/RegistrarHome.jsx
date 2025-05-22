@@ -191,33 +191,48 @@ const RegistrarHome = () => {
 
                 {/* Calendar Days */}
                 {Array.from({ length: daysInMonth }).map((_, index) => {
-                  const day = index + 1;
-                  const isWeekendDay = isWeekend(day);
-                  const isHoliday = currentMonthHolidays.some(
-                    (holiday) => parseInt(holiday.date.split("-")[1]) === day
+                  const dayOfMonth = index + 1;
+                  const dateStringForComparison = `${year}-${currentDate.format('MM')}-${String(dayOfMonth).padStart(2, '0')}`;
+                  const isDayWeekend = isWeekend(dayOfMonth);
+
+                  const holidayInfo = currentMonthHolidays.find( // currentMonthHolidays is from useRegistrarHome
+                    (h) => h.date === dateStringForComparison
                   );
 
-                  const event = isHoliday
-                    ? { label: "Holiday", color: "bg-[#AF1EB9]" }
-                    : isWeekendDay
-                      ? null
-                      : events[day];
+                  // 'events' here is calendarDashboardEvents from useRegistrarHome
+                  const eventInfo = events[currentDate.format("YYYY-MM")]?.[dayOfMonth];
+
+                  let displayItem = null;
+                  let itemColor = "";
+                  let itemLabel = "";
+
+                  if (holidayInfo) {
+                    displayItem = "Holiday";
+                    itemLabel = "Holiday"; // Or holidayInfo.name for more detail
+                    itemColor = "bg-purple-500"; // Holiday color
+                  } else if (eventInfo) {
+                    displayItem = "Event";
+                    itemLabel = eventInfo.label; // Label from dashboard event processing
+                    itemColor = eventInfo.color;   // Event color
+                  }
+                  // You could add more complex logic here if a day can be both a holiday AND an event
+
                   return (
                     <div
-                      key={index}
-                      className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${currentDate.date() === day &&
-                        currentDate.month() === dayjs().month() &&
-                        currentDate.year() === dayjs().year()
-                        ? "bg-blue-300 font-bold"
-                        : ""
-                        } ${isWeekendDay ? "bg-gray-100" : ""}`}
+                      key={`day-${dayOfMonth}`}
+                      className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 
+                        ${/* ... current day highlighting ... */ ''}
+                        ${isDayWeekend && !holidayInfo && !eventInfo ? "bg-gray-100" : ""}
+                        ${holidayInfo ? "bg-purple-100" : ""}
+                        ${eventInfo && !holidayInfo ? (eventInfo.color.replace('bg-', 'bg-') + ' bg-opacity-30') : ""} // Lighter bg for event if not holiday
+                      `}
                     >
-                      {day}
-                      {event && (
+                      {dayOfMonth}
+                      {displayItem && (
                         <span
-                          className={`flex justify-center mt-4 text-xs text-white px-2 py-1 rounded ${event.color}`}
+                          className={`absolute bottom-1 left-1 right-1 text-center text-xs text-white px-1 py-0.5 rounded ${itemColor}`}
                         >
-                          {event.label}
+                          {itemLabel}
                         </span>
                       )}
                     </div>

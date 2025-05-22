@@ -1,7 +1,7 @@
 import useEvents from "./hooks/useEvents";
 import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import Footer from "/src/features/admin/components/Footer";
 
 const Events = () => {
@@ -97,25 +97,26 @@ const Events = () => {
 
                   {Array.from({ length: daysInMonth }).map((_, index) => {
                     const day = index + 1;
-                    const event = events[monthKey]?.[day];
+                    // 'events' now comes structured from useEvents hook
+                    const eventForDay = events[monthKey]?.[day];
 
                     return (
                       <div
-                        key={index}
+                        key={`day-${day}`} // Use a more unique key
                         className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${currentDate.date() === day &&
-                          currentDate.month() === dayjs().month() &&
-                          currentDate.year() === dayjs().year()
-                          ? "bg-blue-300 font-bold"
+                          currentDate.month() === currentDate.get('month') && // Check against current month of 'currentDate' state
+                          currentDate.year() === currentDate.get('year') // Check against current year of 'currentDate' state
+                          ? "bg-blue-300 font-bold ring-2 ring-blue-500"
                           : ""
                           }`}
                         onClick={() => handleDayClick(day)}
                       >
                         {day}
-                        {event && (
+                        {eventForDay && ( // Check if eventForDay exists
                           <span
-                            className={`flex justify-center mt-4 text-xs text-white px-2 py-1 rounded ${event.color}`}
+                            className={`absolute bottom-1 left-1 right-1 text-center text-xs text-white px-1 py-0.5 rounded ${eventForDay.color}`}
                           >
-                            {event.label}
+                            {eventForDay.label}
                           </span>
                         )}
                       </div>
