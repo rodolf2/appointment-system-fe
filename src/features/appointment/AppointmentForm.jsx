@@ -14,58 +14,63 @@ const AppointmentForm = () => {
     const stepFromParams = searchParams.get("step");
     return stepFromParams ? parseInt(stepFromParams, 10) : 1;
   });
-
   const goToNextStep = (step) => {
-    setCurrentStep(step); // Set the step directly
-    setSearchParams({ step }); // Update the URL with the new step
+    const nextStep = step || currentStep + 1;
+    console.log('Moving to step:', nextStep);
+    setCurrentStep(nextStep);
+    setSearchParams({ step: nextStep.toString() });
   };
 
   const goToPreviousStep = (step) => {
-    setCurrentStep(step); // Set the step directly
-    setSearchParams({ step }); // Update the URL with the new step
+    const prevStep = step || currentStep - 1;
+    console.log('Moving back to step:', prevStep);
+    setCurrentStep(prevStep);
+    setSearchParams({ step: prevStep.toString() });
   };
 
   return (
     <>
-      {currentStep === 1 && <DataPrivacy onNext={() => goToNextStep(2)} />}
+      {currentStep === 1 && <DataPrivacy onNext={goToNextStep} />}
       {currentStep === 2 && (
         <AppInfo
-          onNext={() => goToNextStep(3)}
-          onBack={() => goToPreviousStep(1)}
+          onNext={goToNextStep}
+          onBack={goToPreviousStep}
           currentStep={1}
         />
       )}
       {currentStep === 3 && (
         <SelectDocuments
           onNext={goToNextStep}
-          onBack={() => goToPreviousStep(2)}
+          onBack={goToPreviousStep}
           currentStep={2}
         />
       )}
       {currentStep === 4 && (
         <Attachment
-          onNext={() => goToNextStep(5)}
-          onBack={() => goToPreviousStep(3)}
+          onNext={goToNextStep}
+          onBack={goToPreviousStep}
           currentStep={3}
         />
       )}
       {currentStep === 5 && (
         <AppSchedule
-          onNext={() => goToNextStep(6)}
-          onBack={() => goToPreviousStep(3)}
+          onNext={goToNextStep}
+          onBack={goToPreviousStep}
           currentStep={4}
         />
       )}
       {currentStep === 6 && (
         <Feedback
-          onNext={() => goToNextStep(7)}
-          onBack={() => goToPreviousStep(5)}
+          onNext={goToNextStep}
+          onBack={goToPreviousStep}
+          currentStep={5}
         />
       )}
       {currentStep === 7 && (
         <ReturnHome
-          onNext={() => goToNextStep(8)}
-          onBack={() => goToPreviousStep(6)}
+          onNext={goToNextStep}
+          onBack={goToPreviousStep}
+          currentStep={6}
         />
       )}
     </>

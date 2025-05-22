@@ -9,46 +9,15 @@ const useAppSchedule = (onNext) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setCurrentUser(user);
-    });
-    return () => unsubscribe();
-  }, []);
   const [bookings, setBookings] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [availableSlots, setAvailableSlots] = useState([]);
-  const fetchAndGenerateCalendar = useCallback(async () => {
-    try {
-      setLoading(true);
-      const schedules = await getAllSchedules();
-      console.log('Fetched schedules:', schedules);
-      
-      if (Array.isArray(schedules)) {
-        const newBookings = generateBookingsFromSchedules(schedules);
-        console.log('Generated bookings:', newBookings);
-        setBookings(newBookings);
-      } else {
-        console.error('Invalid schedules data:', schedules);
-        setErrorMessage("Error loading schedules");
-      }
-    } catch (error) {
-      console.error('Failed to load schedules:', error);
-      setErrorMessage("Failed to load schedules");
-    } finally {
-      setLoading(false);
-    }
-  }, [currentMonth]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetchAndGenerateCalendar();
-  }, [fetchAndGenerateCalendar]);
-  const generateBookingsFromSchedules = (schedules) => {
+  const generateBookingsFromSchedules = useCallback((schedules) => {
     const newBookings = {};
-    const daysInMonth = currentMonth.daysInMonth();
     const today = dayjs();
 
     // Sort schedules by date
@@ -56,9 +25,7 @@ const useAppSchedule = (onNext) => {
       dayjs(a.date).valueOf() - dayjs(b.date).valueOf()
     );
 
-    console.log('Processing sorted schedules:', sortedSchedules);
-
-    for (let day = 1; day <= daysInMonth; day++) {
+    for (let day = 1; day <= currentMonth.daysInMonth(); day++) {
       const date = currentMonth.date(day);
       const formattedDate = date.format("YYYY-MM-DD");
 
@@ -84,8 +51,9 @@ const useAppSchedule = (onNext) => {
       const schedule = sortedSchedules.find(s => {
         const scheduleDate = dayjs(s.date).format("YYYY-MM-DD");
         return scheduleDate === formattedDate;
-      });      if (schedule) {
-        // Convert slots to number if it's a string and calculate available slots
+      });
+
+      if (schedule) {
         const totalSlots = typeof schedule.slots === 'string' 
           ? parseInt(schedule.slots, 10) 
           : schedule.slots;
@@ -100,7 +68,7 @@ const useAppSchedule = (onNext) => {
               totalSlots,
               bookedSlots,
               availableSlots: slotsAvailable,
-              slots: slotsAvailable, // Keep this for backward compatibility
+              slots: slotsAvailable,
               startTime: schedule.startTime || "No time specified",
               endTime: schedule.endTime || "No time specified"
             }
@@ -125,41 +93,46 @@ const useAppSchedule = (onNext) => {
       }
     }
 
-    console.log('Generated bookings:', newBookings);
     return newBookings;
-  };
+  }, [currentMonth]);
 
-  const generateDaysInCalendar = () => {
-    const startOfMonth = currentMonth.startOf("month");
-    const endOfMonth = currentMonth.endOf("month");
-    const startOfCalendar = startOfMonth.startOf("week");
-    const endOfCalendar = endOfMonth.endOf("week");
-
-    const days = [];
-    let currentDay = startOfCalendar;
-
-    while (currentDay.isBefore(endOfCalendar) || currentDay.isSame(endOfCalendar, "day")) {
-      days.push(currentDay);
-      currentDay = currentDay.add(1, "day");
+  const fetchAndGenerateCalendar = useCallback(async () => {
+    try {
+      setLoading(true);
+      const schedules = await getAllSchedules();
+      
+      if (Array.isArray(schedules)) {
+        const newBookings = generateBookingsFromSchedules(schedules);
+        setBookings(newBookings);
+      } else {
+        setErrorMessage("Error loading schedules");
+      }
+    } catch (error) {
+      console.error('Failed to load schedules:', error);
+      setErrorMessage("Failed to load schedules");
+    } finally {
+      setLoading(false);
     }
+  }, [generateBookingsFromSchedules]);
 
-    return days;
-  };
-  const handleDateClick = async (date) => {
+  useEffect(() => {
+    fetchAndGenerateCalendar();
+  }, [fetchAndGenerateCalendar]);
+
+  const handleTimeSlotClick = useCallback((slot) => {
+    setSelectedTimeSlot(slot);
+    setErrorMessage("");
+  }, []);
+
+  const handleDateClick = useCallback(async (date) => {
     const formattedDate = date.format("YYYY-MM-DD");
     const booking = bookings[formattedDate];
     
-    console.log('Clicked date:', formattedDate);
-    console.log('Booking data:', booking);
-
     if (booking?.status === "available" && booking.schedule) {
       try {
         const schedule = booking.schedule;
         const formattedSlot = `${schedule.startTime} - ${schedule.endTime}`;
         
-        console.log('Schedule found:', schedule);
-        console.log('Creating time slot:', formattedSlot);
-
         setAvailableSlots([formattedSlot]);
         setSelectedDate({ 
           date: formattedDate,
@@ -178,14 +151,80 @@ const useAppSchedule = (onNext) => {
       setSelectedTimeSlot(null);
       setErrorMessage(booking?.reason || "Date not available");
     }
+  }, [bookings]);
+  const handleConfirmSubmit = async () => {
+    if (!selectedDate?.date || !selectedTimeSlot || !selectedDate.schedule?._id) {
+      setErrorMessage("Missing required booking information");
+      setShowConfirmation(false);
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);      const studentId = localStorage.getItem('studentId');
+      const formData = JSON.parse(localStorage.getItem('appInfoFormData'));
+      
+      if (!studentId || !formData) {
+        throw new Error('Please complete your personal information first');
+      }
+
+      // Make sure we have valid IDs
+      if (!selectedDate.schedule._id) {
+        throw new Error('Invalid schedule selected');
+      }
+
+      const appointmentData = {
+        scheduleId: selectedDate.schedule._id,
+        studentId: studentId, // Changed from userId to studentId to match backend
+        purpose: localStorage.getItem('appointmentPurpose') || "General Appointment"
+      };
+      
+      console.log('Submitting appointment data:', appointmentData);
+      
+      const response = await createBooking(appointmentData);
+      
+      if (!response) {
+        throw new Error("No response from booking service");
+      }      console.log('Booking successful:', response);
+
+      // Store the booking response for later use
+      localStorage.setItem('lastBookingResponse', JSON.stringify(response));
+      
+      // Update booked slots in the UI immediately
+      if (selectedDate && selectedDate.schedule) {
+        const updatedBookings = { ...bookings };
+        const dateKey = selectedDate.date;
+        if (updatedBookings[dateKey]) {
+          updatedBookings[dateKey].schedule.bookedSlots += 1;
+          updatedBookings[dateKey].schedule.availableSlots -= 1;
+          setBookings(updatedBookings);
+        }
+      }
+
+      // Clean up state
+      setShowConfirmation(false);
+      setErrorMessage("");
+      setSelectedTimeSlot(null);
+      setSelectedDate(null);
+      setAvailableSlots([]);
+      
+      // Ensure we navigate to the next step
+      console.log('Navigating to next step...');
+      if (typeof onNext === 'function') {
+        onNext();
+      } else {
+        console.error('onNext is not a function');
+      }
+
+    } catch (error) {
+      console.error('Booking error:', error);
+      setErrorMessage(error.message || "Failed to book appointment");
+      setShowConfirmation(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleTimeSlotClick = (slot) => {
-    setSelectedTimeSlot(slot);
-    setErrorMessage("");
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (!selectedDate?.date || !selectedTimeSlot) {
       setErrorMessage("Please select both date and time");
       return;
@@ -197,95 +236,36 @@ const useAppSchedule = (onNext) => {
     }
     
     setShowConfirmation(true);
-  };  const handleConfirmSubmit = async () => {
-    if (!selectedDate?.date || !selectedTimeSlot || !selectedDate.schedule?._id) {
-      setErrorMessage("Missing required booking information");
-      setShowConfirmation(false);
-      return;
-    }
+  }, [selectedDate, selectedTimeSlot]);
 
-    try {
-      setLoading(true);
-      // Get student information and ID from localStorage
-      const studentId = localStorage.getItem('studentId');
-      const formData = JSON.parse(localStorage.getItem('appInfoFormData'));
-      
-      if (!studentId || !formData) {
-        throw new Error('Please complete your personal information first');
-      }      const appointmentData = {
-        date: selectedDate.date,
-        timeSlot: selectedTimeSlot,
-        scheduleId: selectedDate.schedule._id,
-        studentId: studentId,
-        studentInfo: {
-          name: `${formData.firstName} ${formData.middleName} ${formData.surname}`.trim(),
-          email: formData.email,
-          contactNumber: formData.contactNumber,
-          schoolYear: formData.schoolYear,
-          course: formData.course
-        }
-      };
-      
-      console.log('Submitting appointment:', appointmentData);
-      const response = await createBooking(appointmentData);
-      
-      if (!response) {
-        throw new Error("No response from booking service");
-      }
-
-      // Update the local state to reflect the booked slot
-      setBookings(prevBookings => {
-        const updatedBookings = { ...prevBookings };
-        const booking = updatedBookings[selectedDate.date];
-        
-        if (booking?.status === "available") {
-          const newAvailableSlots = booking.schedule.availableSlots - 1;
-          
-          if (newAvailableSlots > 0) {
-            booking.schedule.availableSlots = newAvailableSlots;
-            booking.schedule.slots = newAvailableSlots;
-            booking.schedule.bookedSlots = (booking.schedule.bookedSlots || 0) + 1;
-          } else {
-            booking.status = "unavailable";
-            booking.reason = "Fully booked";
-            booking.schedule.availableSlots = 0;
-            booking.schedule.slots = 0;
-            booking.schedule.bookedSlots = booking.schedule.totalSlots;
-          }
-        }
-        
-        return updatedBookings;
-      });
-        console.log('Booking successful, proceeding to next step');
-      setShowConfirmation(false);
-      setErrorMessage("");
-      
-      // Force state updates to complete before navigating
-      setTimeout(() => {
-        onNext(5); // Explicitly go to step 6 (index 5)
-      }, 0);
-    } catch (error) {
-      console.error('Booking error:', error);
-      setErrorMessage(error.message || "Failed to book appointment");
-      setShowConfirmation(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCancelSubmit = () => {
+  const handleCancelSubmit = useCallback(() => {
     setShowConfirmation(false);
-  };
+  }, []);
 
-  const handlePrevMonth = () => {
-    setCurrentMonth(currentMonth.subtract(1, "month"));
-  };
+  const handlePrevMonth = useCallback(() => {
+    setCurrentMonth(prev => prev.subtract(1, "month"));
+  }, []);
 
-  const handleNextMonth = () => {
-    setCurrentMonth(currentMonth.add(1, "month"));
-  };
+  const handleNextMonth = useCallback(() => {
+    setCurrentMonth(prev => prev.add(1, "month"));
+  }, []);
 
-  const isSameDay = (day1, day2) => day1.isSame(day2, "day");
+  const generateDaysInCalendar = useCallback(() => {
+    const startOfMonth = currentMonth.startOf("month");
+    const endOfMonth = currentMonth.endOf("month");
+    const startOfCalendar = startOfMonth.startOf("week");
+    const endOfCalendar = endOfMonth.endOf("week");
+
+    const days = [];
+    let currentDay = startOfCalendar;
+
+    while (currentDay.isBefore(endOfCalendar) || currentDay.isSame(endOfCalendar, "day")) {
+      days.push(currentDay);
+      currentDay = currentDay.add(1, "day");
+    }
+
+    return days;
+  }, [currentMonth]);
 
   return {
     currentMonth,
@@ -296,6 +276,7 @@ const useAppSchedule = (onNext) => {
     showConfirmation,
     loading,
     availableSlots,
+    isSubmitting,
     daysInCalendar: generateDaysInCalendar(),
     handleDateClick,
     handleTimeSlotClick,
@@ -304,7 +285,7 @@ const useAppSchedule = (onNext) => {
     handleCancelSubmit,
     handlePrevMonth,
     handleNextMonth,
-    isSameDay
+    isSameDay: (day1, day2) => day1.isSame(day2, "day")
   };
 };
 
