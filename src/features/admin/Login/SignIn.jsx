@@ -2,6 +2,7 @@ import { FcGoogle } from "react-icons/fc";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import useSignIn from "./hooks/useSignIn";
+import Header from "./Header";
 
 const SignIn = () => {
   const {
@@ -31,6 +32,9 @@ const SignIn = () => {
     >
       <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/50 to-[#252F6A]/50"></div>
 
+      {/* Logo and Title */}
+      <Header />
+
       <section className="relative flex items-center justify-center pt-20 pb-10 px-4">
         <div className="bg-[#FEFEFE] bg-opacity-30 p-8 rounded-lg shadow-lg max-w-lg w-full">
           <h2 className="text-3xl font-bold text-white mb-2 tracking-wider">
@@ -41,7 +45,10 @@ const SignIn = () => {
           <div className="bg-white bg-opacity-70 p-8 rounded-lg shadow-lg">
             <form onSubmit={handleSignIn}>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-semibold text-[#161f55] uppercase mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-[#161f55] uppercase mb-2"
+                >
                   Email
                 </label>
                 <input
@@ -56,7 +63,10 @@ const SignIn = () => {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="password" className="block text-sm font-semibold text-[#161f55] uppercase mb-2">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-semibold text-[#161f55] uppercase mb-2"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -73,10 +83,16 @@ const SignIn = () => {
                     type="button"
                     onClick={handleTogglePasswordVisibility}
                     className="absolute inset-y-0 right-0 px-3 flex items-center"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                     aria-pressed={showPassword}
                   >
-                    {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                    {showPassword ? (
+                      <AiOutlineEyeInvisible />
+                    ) : (
+                      <AiOutlineEye />
+                    )}
                   </button>
                 </div>
               </div>
@@ -89,9 +105,14 @@ const SignIn = () => {
                     onChange={handleRemember}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <span className="ml-2 text-sm text-gray-600">Remember me</span>
+                  <span className="ml-2 text-sm text-gray-600">
+                    Remember me
+                  </span>
                 </label>
-                <Link to="/forgot-password" className="text-sm text-blue-500 hover:underline">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-blue-500 hover:underline"
+                >
                   Forgot Password?
                 </Link>
               </div>
@@ -119,7 +140,10 @@ const SignIn = () => {
 
             <p className="mt-4 text-center text-[16px] font-semibold text-[#161f55]">
               Don&#39;t have an account?{" "}
-              <Link to="/signup" className="text-[#F3BC62] hover:text-[#161f55]">
+              <Link
+                to="/signup"
+                className="text-[#F3BC62] hover:text-[#161f55]"
+              >
                 Sign Up
               </Link>
             </p>
