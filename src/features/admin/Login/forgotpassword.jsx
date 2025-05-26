@@ -1,109 +1,5 @@
-// import { useState } from "react";
-// import { Link } from "react-router-dom";
-// import axios from "axios";
-// import Header from "./Header";
-// import Otp from "./Otp";
-
-// const ForgotPassword = () => {
-//   const [email, setEmail] = useState("");
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-//   const [message, setMessage] = useState(null);
-//   const [error, setError] = useState(null);
-//   const [showOtpVerification, setShowOtpVerification] = useState(false);
-
-//   const handleSendOtp = async (e) => {
-//     e.preventDefault();
-//     setIsSubmitting(true);
-//     setError(null);
-//     setMessage(null);
-
-//     try {
-//       const response = await axios.post(
-//         "http://localhost:5000/api/forgot-password/request-otp",
-//         {
-//           email,
-//         }
-//       );
-
-//       setMessage(`OTP has been sent to ${email}`);
-//       setShowOtpVerification(true);
-//     } catch (err) {
-//       setError(
-//         err.response?.data?.message || "Failed to send OTP. Please try again."
-//       );
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-
-//   if (showOtpVerification) {
-//     return <Otp email={email} />;
-//   }
-
-//   return (
-//     <div
-//       className="w-full min-h-screen bg-cover bg-center relative"
-//       style={{
-//         backgroundImage: 'url("/assets/image/SignIn.png")',
-//         backgroundSize: "cover",
-//         backgroundPosition: "bottom",
-//       }}
-//     >
-//       <div
-//         className="absolute inset-0"
-//         style={{
-//           background: `linear-gradient(to top, rgba(2, 17, 74, 0.5), rgba(3, 21, 125, 0.5), rgba(107, 123, 222, 0.4))`,
-//         }}
-//       />
-//       <Header />
-//       <section className="relative flex items-center justify-center pt-40 px-4">
-//         <div className="bg-white bg-opacity-30 p-12 rounded-[20px] shadow-lg max-w-xl w-full">
-//           <h2 className="text-3xl text-white text-center mb-6">
-//             Reset your password
-//           </h2>
-//           <p className="text-white text-center mb-6">
-//             We'll send you an OTP to verify your email.
-//           </p>
-//           <form
-//             onSubmit={handleSendOtp}
-//             className="bg-white p-6 rounded-lg space-y-6"
-//           >
-//             <input
-//               type="email"
-//               value={email}
-//               onChange={(e) => setEmail(e.target.value)}
-//               required
-//               className="w-full px-4 py-2 border border-gray-300 rounded-md"
-//               placeholder="Enter your email"
-//             />
-//             <button
-//               type="submit"
-//               disabled={isSubmitting}
-//               className="w-full py-2 bg-blue-700 text-white rounded-md"
-//             >
-//               {isSubmitting ? "Sending OTP..." : "Send OTP"}
-//             </button>
-//             {message && <p className="text-green-600 text-center">{message}</p>}
-//             {error && <p className="text-red-600 text-center">{error}</p>}
-//             <div className="text-center pt-4">
-//               <Link
-//                 to="/signin"
-//                 className="text-blue-900 hover:text-yellow-600 transition"
-//               >
-//                 Back to Sign In
-//               </Link>
-//             </div>
-//           </form>
-//         </div>
-//       </section>
-//     </div>
-//   );
-// };
-
-// export default ForgotPassword;
-
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "./Header";
 import Otp from "./Otp";
@@ -114,6 +10,8 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
   const [showOtpVerification, setShowOtpVerification] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
@@ -169,20 +67,24 @@ const ForgotPassword = () => {
       />
       <Header />
       <section className="relative flex items-center justify-center pt-40 px-4">
-        <div className="bg-white bg-opacity-30 p-12 rounded-[20px] shadow-lg max-w-xl w-full">
-          <h2 className="text-3xl text-white text-center mb-6">
-            Reset your password
+        <div className="bg-[#FEFEFE] bg-opacity-30 p-12 rounded-[20px] shadow-lg max-w-xl w-full">
+          <h2 className="text-3xl font-LatoBold tracking-wider text-white text-center mb-2">
+            Forgot password?
           </h2>
-          <p className="text-white text-center mb-6">
-            We'll send you a verification code to reset your password.
+          <div className="w-[260px] h-1 bg-[#F3BC62] mb-4 mx-auto"></div>
+          <p className="text-white text-[16px] font-LatoRegular text-center mb-6">
+            We’ll send you reset instructions.{" "}
           </p>
           <form
             onSubmit={handleSendOtp}
             className="bg-white p-6 rounded-lg space-y-6"
           >
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-gray-700">
-                Email Address
+              <label
+                htmlFor="email"
+                className="block text-[#161F55] font-LatoSemiBold text-[16px] tracking-wider"
+              >
+                Email
               </label>
               <input
                 id="email"
@@ -211,13 +113,27 @@ const ForgotPassword = () => {
                 {error}
               </div>
             )}
-            <div className="text-center pt-4">
-              <Link
-                to="/signin"
-                className="text-[#161F55] hover:text-[#F3BC62] transition-colors"
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => navigate("/signin")}
+                className="inline-flex items-center text-[#161f55] hover:text-[#F3BC62] transition-all duration-200"
               >
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
                 Back to Sign In
-              </Link>
+              </button>
             </div>
           </form>
         </div>
@@ -226,4 +142,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;  
+export default ForgotPassword;

@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
+import Header from "./Header";
 
 // API endpoints configuration
 const API_BASE_URL = "http://localhost:5000/api/forgot-password";
@@ -133,6 +134,14 @@ const Otp = ({ email, onVerifyOtp }) => {
         backgroundPosition: "bottom",
       }}
     >
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `linear-gradient(to top, rgba(2, 17, 74, 0.5), rgba(3, 21, 125, 0.5), rgba(107, 123, 222, 0.4))`,
+        }}
+      />
+      <Header />
+
       <section className="relative flex items-center justify-center pt-40 px-4">
         <div className="bg-[#FEFEFE] bg-opacity-30 p-12 rounded-[20px] shadow-lg max-w-xl w-full">
           <h2 className="flex justify-center text-3xl font-LatoBold text-white mb-2 tracking-wider">
