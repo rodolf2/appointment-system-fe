@@ -3,7 +3,7 @@ import { signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import emailService from "../../../../services/emailServices";
-import { useUser } from "../../../../context/UserContext";
+import { useUser } from "../../../../context/UserContext.jsx";
 
 const useSignUp = () => {
   const [name, setName] = useState("");
@@ -58,8 +58,12 @@ const useSignUp = () => {
         const userData = {
           email: email.trim(),
           name: name.trim(),
-          picture: null,
+          picture:
+            response.user?.picture || response.user?.profilePicture || null,
+          profilePicture:
+            response.user?.profilePicture || response.user?.picture || null,
           id: response.userId,
+          role: response.user?.role,
         };
 
         // Store the token if provided
@@ -90,12 +94,22 @@ const useSignUp = () => {
         googleAuth: true,
       });
 
-      // Store user data
+      // Store user data with consistent picture handling
       const userData = {
         email: result.user.email,
         name: result.user.displayName,
-        picture: result.user.photoURL,
+        picture:
+          response.user?.picture ||
+          response.user?.profilePicture ||
+          result.user.photoURL ||
+          null,
+        profilePicture:
+          response.user?.profilePicture ||
+          response.user?.picture ||
+          result.user.photoURL ||
+          null,
         id: response.userId || result.user.uid,
+        role: response.user?.role,
       };
       updateUser(userData);
       navigate("/registrarHome");

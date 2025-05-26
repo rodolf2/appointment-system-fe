@@ -31,10 +31,20 @@ const Profile = () => {
     setIsSubmitting(true);
 
     try {
+      console.log("Starting profile update...");
       await handleSubmit();
-      setSuccessMessage("Profile updated successfully!");
+      setSuccessMessage("Profile updated successfully!.");
+
+      // Reset form submission state after a brief delay
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000); // Clear success message after 5 seconds
     } catch (err) {
-      setError(err.message || "Failed to update profile");
+      console.error("Profile submission error:", err);
+      setError(
+        err.message ||
+          "Failed to update profile. Please try signing out and back in."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -94,13 +104,43 @@ const Profile = () => {
                       type="file"
                       accept="image/*"
                       className="hidden"
-                      onChange={handleImageUpload}
+                      onChange={async (e) => {
+                        try {
+                          setError(null);
+                          await handleImageUpload(e);
+                          setSuccessMessage(
+                            "Profile picture updated successfully!"
+                          );
+                          setTimeout(() => {
+                            setSuccessMessage(null);
+                          }, 3000);
+                        } catch (err) {
+                          setError(
+                            err.message || "Failed to upload profile picture"
+                          );
+                        }
+                      }}
                     />
                   </label>
                   <button
                     type="button"
                     className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md text-sm"
-                    onClick={handleImageRemove}
+                    onClick={async () => {
+                      try {
+                        setError(null);
+                        await handleImageRemove();
+                        setSuccessMessage(
+                          "Profile picture removed successfully!"
+                        );
+                        setTimeout(() => {
+                          setSuccessMessage(null);
+                        }, 3000);
+                      } catch (err) {
+                        setError(
+                          err.message || "Failed to remove profile picture"
+                        );
+                      }
+                    }}
                   >
                     Remove
                   </button>

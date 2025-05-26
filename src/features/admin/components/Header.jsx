@@ -4,7 +4,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { FaUserEdit, FaSignOutAlt, FaSpinner } from "react-icons/fa";
 import useHeader from "./hooks/useHeader";
 import PropTypes from "prop-types";
-import { useUser } from "../../../context/UserContext";
+import { useUser } from "../../../context/UserContext.jsx";
 
 const Header = ({ toggleSidebar, title: initialTitle }) => {
   const {
@@ -254,14 +254,26 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
             className="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-gray-200"
             onClick={toggleProfileDropdown}
           >
-            {user?.picture ? (
-              <img
-                src={user.picture}
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover"
-              />
+            {user && (user.picture || user.profilePicture) ? (
+              <div className="w-10 h-10 rounded-full overflow-hidden">
+                <img
+                  src={user.picture || user.profilePicture}
+                  alt={`${user.name}'s profile`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop
+                    e.target.src = "/assets/icons/default-profile.svg"; // Fallback to default icon
+                    console.log(
+                      "Failed to load profile picture:",
+                      user.picture || user.profilePicture
+                    );
+                  }}
+                />
+              </div>
             ) : (
-              <CgProfile className="text-4xl text-gray-600" />
+              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                <CgProfile className="text-3xl text-gray-600" />
+              </div>
             )}
             <span className="text-base hidden sm:inline text-gray-700">
               {user?.name || "Guest"}

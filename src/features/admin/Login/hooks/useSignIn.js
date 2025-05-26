@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { signInWithPopup } from "firebase/auth";
 import { googleProvider, auth } from "@/firebase";
 import emailService from "../../../../services/emailServices";
-import { useUser } from "../../../../context/UserContext";
+import { useUser } from "../../../../context/UserContext.jsx";
 
 const useSignIn = () => {
   const [email, setEmail] = useState("");
@@ -46,7 +46,6 @@ const useSignIn = () => {
 
     try {
       const response = await emailService.signin({ email, password });
-      console.log("Signin response:", response); // Debug log
 
       if (remember) {
         localStorage.setItem("savedEmail", email);
@@ -59,16 +58,31 @@ const useSignIn = () => {
         localStorage.setItem("token", response.token);
       }
 
-      // Store user data directly from the response
+      // Extract user data from response, ensuring we get the complete user object
+      const userResponse = response.user || response;
+
+      // Store user data with consistent picture handling
       const userData = {
-        email: response.user?.email || email.trim(),
-        name: response.user?.name || response.name, // Try both possible locations
-        id: response.user?.id || response.user?._id || response.id,
-        role: response.user?.role,
+        email: userResponse.email || email.trim(),
+        name: userResponse.name || response.name,
+        id: userResponse.id || userResponse._id || response.id,
+        // Ensure we get the profile picture URL from all possible fields
+        picture:
+          userResponse.picture ||
+          userResponse.profilePicture ||
+          response.picture ||
+          response.profilePicture ||
+          null,
+        profilePicture:
+          userResponse.profilePicture ||
+          userResponse.picture ||
+          response.profilePicture ||
+          response.picture ||
+          null,
+        role: userResponse.role,
       };
 
-      console.log("User data being stored:", userData); // Debug log
-
+      // Update user context with the complete data
       updateUser(userData);
       setIsLoading(false);
       navigate("/registrarHome");
@@ -87,7 +101,6 @@ const useSignIn = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      console.log("Google auth result:", result); // Debug log
 
       const response = await emailService.signin({
         email: user.email,
@@ -96,23 +109,31 @@ const useSignIn = () => {
         googleId: user.uid,
         picture: user.photoURL,
       });
-      console.log("Google signin response:", response); // Debug log
 
       if (response.token) {
         localStorage.setItem("token", response.token);
       }
 
-      // Store user data with consistent structure
+      // Store user data with consistent picture handling
       const userData = {
         email: user.email,
-        name: response.user?.name || user.displayName, // Prefer backend name if available
+        name: response.user?.name || user.displayName,
         id: response.user?.id || response.user?._id || response.id,
-        picture: user.photoURL,
+        picture:
+          response.user?.picture ||
+          response.user?.profilePicture ||
+          user.photoURL ||
+          null,
+        profilePicture:
+          response.user?.profilePicture ||
+          response.user?.picture ||
+          user.photoURL ||
+          null,
         role: response.user?.role,
       };
-      console.log("Google user data being stored:", userData); // Debug log
 
       updateUser(userData);
+      setIsGoogleLoading(false);
       navigate("/registrarHome");
     } catch (error) {
       console.error("Google signin error:", error);

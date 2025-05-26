@@ -156,7 +156,7 @@ const NewPassword = () => {
       >
         <Header />
         <section className="relative flex items-center justify-center pt-28 px-4">
-          <div className="bg-white bg-opacity-30 p-12 rounded-[20px] shadow-lg max-w-xl w-full">
+          <div className="bg-white bg-opacity-30 p-8 rounded-[20px] shadow-lg max-w-xl w-full">
             <h2 className="text-3xl text-white text-center mb-4">
               Create New Password
             </h2>

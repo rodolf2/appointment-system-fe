@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
-import { useUser } from "../../../../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../../../../context/UserContext.jsx";
+import { getUserProfile } from "../../../../services/userServices";
 
 const useHeader = (initialTitle = "") => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -12,11 +13,37 @@ const useHeader = (initialTitle = "") => {
   const [title, setTitle] = useState(initialTitle);
 
   const navigate = useNavigate();
-  const { logout } = useUser();
+  const { user, updateUser, logout } = useUser();
   const profileDropdownRef = useRef(null);
   const notificationDropdownRef = useRef(null);
   const profileToggleRef = useRef(null);
   const notificationToggleRef = useRef(null);
+
+  // Fetch latest user profile when component mounts
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user?.id) {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) return;
+
+          const userProfile = await getUserProfile(user.id, token);
+          if (userProfile) {
+            // Update user context with latest profile data
+            updateUser({
+              ...user,
+              picture: userProfile.picture || userProfile.profilePicture,
+              profilePicture: userProfile.profilePicture || userProfile.picture,
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [user?.id]);
 
   // Mock data for notifications with different types
   useEffect(() => {

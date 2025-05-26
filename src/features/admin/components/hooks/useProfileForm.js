@@ -1,15 +1,27 @@
 import { useState, useEffect } from "react";
-import { useUser } from "../../../../context/UserContext";
-import emailService from "../../../../services/emailServices";
+import { useUser } from "../../../../context/UserContext.jsx";
+import {
+  uploadProfilePicture,
+  updateUserProfile,
+  deleteProfilePicture,
+} from "../../../../services/userServices";
 
 const useProfileForm = () => {
   const { user, updateUser } = useUser();
 
+  // Create user-specific storage keys
+  const getStorageKey = (key) => {
+    return user?.id ? `${key}_${user.id}` : null;
+  };
+
   // Form state with localStorage and user context initialization
   const [formData, setFormData] = useState(() => {
-    const savedData = localStorage.getItem("profileFormData");
-    if (savedData) {
-      return JSON.parse(savedData);
+    const storageKey = getStorageKey("profileFormData");
+    if (storageKey) {
+      const savedData = localStorage.getItem(storageKey);
+      if (savedData) {
+        return JSON.parse(savedData);
+      }
     }
 
     // Initialize from user context if available
@@ -35,23 +47,51 @@ const useProfileForm = () => {
 
   // Profile image state with user context initialization
   const [profileImage, setProfileImage] = useState(() => {
-    const savedImage = localStorage.getItem("profileImage");
-    return savedImage || user?.picture || null;
+    const storageKey = getStorageKey("profileImage");
+    if (storageKey) {
+      const savedImage = localStorage.getItem(storageKey);
+      if (savedImage) {
+        return savedImage;
+      }
+    }
+    return user?.picture || user?.profilePicture || null;
   });
+
+  // Clear previous user's data when user changes
+  useEffect(() => {
+    if (user?.id) {
+      // Clear any existing profile data that doesn't belong to the current user
+      Object.keys(localStorage).forEach((key) => {
+        if (
+          (key.startsWith("profileFormData_") ||
+            key.startsWith("profileImage_")) &&
+          !key.endsWith(user.id)
+        ) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+  }, [user?.id]);
 
   // Save form data to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("profileFormData", JSON.stringify(formData));
-  }, [formData]);
+    const storageKey = getStorageKey("profileFormData");
+    if (storageKey && Object.keys(formData).some((key) => formData[key])) {
+      localStorage.setItem(storageKey, JSON.stringify(formData));
+    }
+  }, [formData, user?.id]);
 
   // Save image to localStorage whenever it changes
   useEffect(() => {
-    if (profileImage) {
-      localStorage.setItem("profileImage", profileImage);
-    } else {
-      localStorage.removeItem("profileImage");
+    const storageKey = getStorageKey("profileImage");
+    if (storageKey) {
+      if (profileImage) {
+        localStorage.setItem(storageKey, profileImage);
+      } else {
+        localStorage.removeItem(storageKey);
+      }
     }
-  }, [profileImage]);
+  }, [profileImage, user?.id]);
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -60,6 +100,68 @@ const useProfileForm = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  // Handle image upload
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        // Get token from localStorage
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error(
+            "Authentication token not found. Please sign in again."
+          );
+        }
+
+        // Upload the profile picture to the server
+        const uploadResponse = await uploadProfilePicture(user.id, file, token);
+        const imageUrl = uploadResponse.profilePicture;
+
+        // Update local state with the new image URL
+        setProfileImage(imageUrl);
+
+        // Update user context with new image URL
+        updateUser({
+          ...user,
+          picture: imageUrl,
+          profilePicture: imageUrl,
+        });
+      } catch (error) {
+        console.error("Error uploading profile picture:", error);
+        throw new Error("Failed to upload profile picture. Please try again.");
+      }
+    }
+  };
+
+  // Handle image removal
+  const handleImageRemove = async () => {
+    try {
+      // Get token from localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error(
+          "Authentication token not found. Please sign in again."
+        );
+      }
+
+      // Delete the profile picture from the server
+      await deleteProfilePicture(user.id, token);
+
+      // Clear the image from state
+      setProfileImage(null);
+
+      // Update user context to reflect removal
+      updateUser({
+        ...user,
+        picture: null,
+        profilePicture: null,
+      });
+    } catch (error) {
+      console.error("Error removing profile picture:", error);
+      throw new Error("Failed to remove profile picture. Please try again.");
+    }
   };
 
   // Handle form submission
@@ -81,14 +183,16 @@ const useProfileForm = () => {
       // Get token from localStorage
       const token = localStorage.getItem("token");
       if (!token) {
-        throw new Error("Authentication token not found");
+        throw new Error(
+          "Authentication token not found. Please sign in again."
+        );
       }
 
-      let updatedUser;
       const userData = {
         name: fullName,
         email: formData.email,
         picture: profileImage,
+        profilePicture: profileImage,
       };
 
       if (formData.password) {
@@ -96,46 +200,29 @@ const useProfileForm = () => {
       }
 
       if (!user?.id) {
-        // Create new profile if user doesn't exist
-        updatedUser = await emailService.signup({
-          ...userData,
-          password: formData.password || Math.random().toString(36).slice(-8), // Generate random password if none provided
-        });
-      } else {
-        // Update existing profile
-        updatedUser = await emailService.updateUser(user.id, userData, token);
+        throw new Error("User ID not found. Please sign in again.");
       }
+
+      // Update profile
+      const updatedUser = await updateUserProfile(user.id, userData, token);
 
       // Update user context with new data
       updateUser({
-        id: updatedUser.id || user?.id,
-        name: fullName,
-        email: formData.email,
-        picture: profileImage,
+        ...user,
+        ...updatedUser.user,
       });
+
+      // Reset password field after successful update
+      setFormData((prev) => ({
+        ...prev,
+        password: "",
+      }));
 
       return updatedUser;
     } catch (error) {
       console.error("Error updating profile:", error);
       throw error;
     }
-  };
-
-  // Handle image upload
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Handle image removal
-  const handleImageRemove = () => {
-    setProfileImage(null);
   };
 
   // Clear all saved data
@@ -148,8 +235,12 @@ const useProfileForm = () => {
       password: "",
     });
     setProfileImage(null);
-    localStorage.removeItem("profileFormData");
-    localStorage.removeItem("profileImage");
+
+    // Clear user-specific data from localStorage
+    const formDataKey = getStorageKey("profileFormData");
+    const imageKey = getStorageKey("profileImage");
+    if (formDataKey) localStorage.removeItem(formDataKey);
+    if (imageKey) localStorage.removeItem(imageKey);
   };
 
   return {
