@@ -14,6 +14,7 @@ import Students from "./features/admin/status/Students";
 import SignIn from "./features/admin/Login/SignIn";
 import SignUp from "./features/admin/Login/SignUp";
 import ForgotPassword from "./features/admin/Login/forgotpassword";
+import NewPassword from "./features/admin/Login/Newpassword";
 import RegistrarHome from "./features/admin/Dashboard/RegistrarHome";
 import Events from "./features/admin/Dashboard/Events";
 import Schedule from "./features/admin/status/Schedule";
@@ -43,6 +44,7 @@ const Layout = () => {
     "/signin",
     "/signup",
     "/forgot-password",
+    "/new-password",
     "/registrarHome",
     "/events",
     "/schedule",
@@ -80,6 +82,7 @@ const Layout = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/new-password" element={<NewPassword />} />
             <Route path="/registrarHome" element={<RegistrarHome />} />
             <Route path="/events" element={<Events />} />
             <Route path="/schedule" element={<Schedule />} />

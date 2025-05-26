@@ -25,6 +25,19 @@ export const emailService = {
     }
   },
 
+  // Verify OTP function
+  verifyOtp: async (email, otp) => {
+    try {
+      const response = await axios.post(`${API_URL}/verify-otp`, {
+        email,
+        otp,
+      });
+      return response.data;w
+    } catch (error) {
+      throw error.response?.data || { message: "Invalid OTP" };
+    }
+  },
+
   // Get all users (admin only)
   getAllUsers: async (token) => {
     try {
