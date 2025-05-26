@@ -28,7 +28,7 @@ const useSignIn = () => {
   const handleRemember = (e) => setRemember(e.target.checked);
 
   const handleTogglePasswordVisibility = () => {
-    setShowPassword(prev => !prev);
+    setShowPassword((prev) => !prev);y
   };
 
   const handleSignIn = async (e) => {
@@ -59,6 +59,7 @@ const useSignIn = () => {
       navigate("/registrarHome");
     } catch (error) {
       setError(error.message || "Invalid email or password");
+      setIsLoading(false);
     }
   };
 

@@ -29,7 +29,12 @@ const SignUp = () => {
         }}
       >
         {/* Background Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#F3BC62]/50 to-[#252F6A]/50"></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(to top, rgba(2, 17, 74, 0.5), rgba(3, 21, 125, 0.5), rgba(107, 123, 222, 0.4))`,
+          }}
+        />
 
         {/* Logo and Title */}
         <Header />
