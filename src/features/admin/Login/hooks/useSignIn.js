@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { signInWithPopup } from "firebase/auth";
 import { googleProvider, auth } from "@/firebase";
 import emailService from "../../../../services/emailServices";
+import { useUser } from "../../../../context/UserContext";
 
 const useSignIn = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ const useSignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const { updateUser } = useUser();
 
   const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ const useSignIn = () => {
   const handleRemember = (e) => setRemember(e.target.checked);
 
   const handleTogglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);y
+    setShowPassword((prev) => !prev);
   };
 
   const handleSignIn = async (e) => {
@@ -44,6 +46,7 @@ const useSignIn = () => {
 
     try {
       const response = await emailService.signin({ email, password });
+      console.log("Signin response:", response); // Debug log
 
       if (remember) {
         localStorage.setItem("savedEmail", email);
@@ -56,8 +59,21 @@ const useSignIn = () => {
         localStorage.setItem("token", response.token);
       }
 
+      // Store user data directly from the response
+      const userData = {
+        email: response.user?.email || email.trim(),
+        name: response.user?.name || response.name, // Try both possible locations
+        id: response.user?.id || response.user?._id || response.id,
+        role: response.user?.role,
+      };
+
+      console.log("User data being stored:", userData); // Debug log
+
+      updateUser(userData);
+      setIsLoading(false);
       navigate("/registrarHome");
     } catch (error) {
+      console.error("Sign in error:", error);
       setError(error.message || "Invalid email or password");
       setIsLoading(false);
     }
@@ -71,6 +87,7 @@ const useSignIn = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
+      console.log("Google auth result:", result); // Debug log
 
       const response = await emailService.signin({
         email: user.email,
@@ -79,14 +96,28 @@ const useSignIn = () => {
         googleId: user.uid,
         picture: user.photoURL,
       });
+      console.log("Google signin response:", response); // Debug log
 
       if (response.token) {
         localStorage.setItem("token", response.token);
       }
 
+      // Store user data with consistent structure
+      const userData = {
+        email: user.email,
+        name: response.user?.name || user.displayName, // Prefer backend name if available
+        id: response.user?.id || response.user?._id || response.id,
+        picture: user.photoURL,
+        role: response.user?.role,
+      };
+      console.log("Google user data being stored:", userData); // Debug log
+
+      updateUser(userData);
       navigate("/registrarHome");
     } catch (error) {
+      console.error("Google signin error:", error);
       setError(error.message || "Google sign-in failed");
+      setIsGoogleLoading(false);
     }
   };
 

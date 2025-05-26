@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router";
+import { UserProvider } from "./context/UserContext";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Announcement from "./Pages/Announcement";
@@ -29,9 +30,11 @@ import TransitionWrapper from "./components/TransitionWrapper";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Layout />
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
+    </UserProvider>
   );
 };
 

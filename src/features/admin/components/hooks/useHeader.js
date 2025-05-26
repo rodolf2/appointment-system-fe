@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
+import { useUser } from "../../../../context/UserContext";
 
 const useHeader = (initialTitle = "") => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -11,6 +12,7 @@ const useHeader = (initialTitle = "") => {
   const [title, setTitle] = useState(initialTitle);
 
   const navigate = useNavigate();
+  const { logout } = useUser();
   const profileDropdownRef = useRef(null);
   const notificationDropdownRef = useRef(null);
   const profileToggleRef = useRef(null);
@@ -110,6 +112,7 @@ const useHeader = (initialTitle = "") => {
 
   const handleSignOut = () => {
     setIsProfileDropdownOpen(false);
+    logout();
     navigate("/signin");
   };
 

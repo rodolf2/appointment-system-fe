@@ -2,10 +2,13 @@ import { useState } from "react";
 import Header from "/src/features/admin/components/Header";
 import Sidebar from "/src/components/Sidebar";
 import Footer from "/src/features/admin/components/Footer";
-import useProfileForm from "./hooks/useProfileForm"; // Import the custom hook
+import useProfileForm from "./hooks/useProfileForm";
 
 const Profile = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   // Use the custom hook
   const {
@@ -14,16 +17,27 @@ const Profile = () => {
     handleInputChange,
     handleImageUpload,
     handleImageRemove,
+    handleSubmit,
   } = useProfileForm();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log("Form submitted:", formData);
+    setError(null);
+    setSuccessMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      await handleSubmit();
+      setSuccessMessage("Profile updated successfully!");
+    } catch (err) {
+      setError(err.message || "Failed to update profile");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -98,7 +112,20 @@ const Profile = () => {
                 <h2 className="text-[32px] font-LatoSemiBold text-[#161f55] mb-6">
                   Edit Profile
                 </h2>
-                <form className="flex flex-col" onSubmit={handleSubmit}>
+
+                {error && (
+                  <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+                    {error}
+                  </div>
+                )}
+
+                {successMessage && (
+                  <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
+                    {successMessage}
+                  </div>
+                )}
+
+                <form className="flex flex-col" onSubmit={onSubmit}>
                   {/* Input Fields */}
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
@@ -110,6 +137,7 @@ const Profile = () => {
                       value={formData.firstName}
                       onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
+                      required
                     />
                   </div>
                   <div className="mb-4 flex items-center justify-start">
@@ -134,6 +162,7 @@ const Profile = () => {
                       value={formData.lastName}
                       onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
+                      required
                     />
                   </div>
                   <div className="mb-4 flex items-center justify-start">
@@ -146,6 +175,7 @@ const Profile = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 placeholder:text-[#000] placeholder:opacity-70 bg-[#D9D9D9] p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
                     />
                   </div>
                   <div className="mb-4 flex items-center justify-start">
@@ -158,6 +188,7 @@ const Profile = () => {
                       value={formData.password}
                       onChange={handleInputChange}
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
+                      placeholder="Leave blank to keep current password"
                     />
                   </div>
 
@@ -165,9 +196,12 @@ const Profile = () => {
                   <div className="text-center">
                     <button
                       type="submit"
-                      className="px-6 py-2 bg-[#161f55] float-right text-white rounded-md text-sm font-medium hover:bg-blue-700 transition duration-200"
+                      disabled={isSubmitting}
+                      className={`px-6 py-2 bg-[#161f55] float-right text-white rounded-md text-sm font-medium hover:bg-blue-700 transition duration-200 ${
+                        isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                     >
-                      Update
+                      {isSubmitting ? "Updating..." : "Update"}
                     </button>
                   </div>
                 </form>

@@ -4,6 +4,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { FaUserEdit, FaSignOutAlt, FaSpinner } from "react-icons/fa";
 import useHeader from "./hooks/useHeader";
 import PropTypes from "prop-types";
+import { useUser } from "../../../context/UserContext";
 
 const Header = ({ toggleSidebar, title: initialTitle }) => {
   const {
@@ -27,6 +28,8 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
     setActiveTab,
     markAsRead,
   } = useHeader(initialTitle);
+
+  const { user } = useUser();
 
   return (
     <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md">
@@ -52,7 +55,11 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
             aria-label={`Notifications (${unreadCount} unread)`}
             disabled={isLoadingNotifications}
           >
-            <img src="/assets/icons/notification.svg" alt="Notification Icon" className="w-8 h-8" />
+            <img
+              src="/assets/icons/notification.svg"
+              alt="Notification Icon"
+              className="w-8 h-8"
+            />
             {unreadCount > 0 && (
               <span className="absolute top-0 right-0 h-4 w-4 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center ring-2 ring-white">
                 {unreadCount}
@@ -76,28 +83,31 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
               {/* Tabs */}
               <div className="flex border-b bg-[#D9D9D9] align-middle rounded-lg p-1 mb-5">
                 <button
-                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${activeTab === "unread"
-                    ? "text-[#161F55] bg-white rounded-lg shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                    }`}
+                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${
+                    activeTab === "unread"
+                      ? "text-[#161F55] bg-white rounded-lg shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
                   onClick={() => setActiveTab("unread")}
                 >
                   Unread
                 </button>
                 <button
-                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${activeTab === "all"
-                    ? "text-[#161F55] bg-white rounded-lg shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                    }`}
+                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${
+                    activeTab === "all"
+                      ? "text-[#161F55] bg-white rounded-lg shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
                   onClick={() => setActiveTab("all")}
                 >
                   All
                 </button>
                 <button
-                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${activeTab === "archive"
-                    ? "text-[#161F55] bg-white rounded-lg shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                    }`}
+                  className={`flex-1 py-2 mx-1 text-base font-medium transition-all ${
+                    activeTab === "archive"
+                      ? "text-[#161F55] bg-white rounded-lg shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
                   onClick={() => setActiveTab("archive")}
                 >
                   Archive
@@ -108,7 +118,8 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
               <div className="divide-y">
                 {isLoadingNotifications ? (
                   <div className="flex justify-center items-center p-8 text-gray-500">
-                    <FaSpinner className="animate-spin mr-3 text-xl" /> Loading...
+                    <FaSpinner className="animate-spin mr-3 text-xl" />{" "}
+                    Loading...
                   </div>
                 ) : notificationError ? (
                   <div className="px-6 py-5 text-red-600 text-base text-center">
@@ -118,7 +129,9 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                   filteredNotifications.map((notif) => (
                     <div
                       key={notif.id}
-                      className={`px-6 py-6 cursor-pointer hover:bg-gray-50 mb-3 ${!notif.read ? "bg-gray-100" : "bg-white"}
+                      className={`px-6 py-6 cursor-pointer hover:bg-gray-50 mb-3 ${
+                        !notif.read ? "bg-gray-100" : "bg-white"
+                      }
         shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05)] 
         transition-shadow relative rounded-lg`}
                       onClick={() => markAsRead(notif.id)}
@@ -136,22 +149,43 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                           </div>
                         )}
 
-                        <div className={`flex-1 min-w-0 ${notif.type !== "user-action" ? "pl-4" : ""}`}>
+                        <div
+                          className={`flex-1 min-w-0 ${
+                            notif.type !== "user-action" ? "pl-4" : ""
+                          }`}
+                        >
                           <div className="flex justify-between items-start gap-2">
                             <div>
-                              <p className={`text-base ${!notif.read ? "text-gray-900" : "text-gray-600"}`}>
+                              <p
+                                className={`text-base ${
+                                  !notif.read
+                                    ? "text-gray-900"
+                                    : "text-gray-600"
+                                }`}
+                              >
                                 {notif.type === "user-action" ? (
                                   <>
-                                    <span className="font-bold">{notif.userName}</span>{" "}
-                                    {notif.action} {notif.reference && (
-                                      <span className="font-mono text-blue-600">#{notif.reference}</span>
-                                    )} {notif.status && (
-                                      <span className={`${notif.status.toLowerCase() === 'completed'
-                                        ? 'text-blue-600'
-                                        : notif.status.toLowerCase() === 'approved'
-                                          ? 'text-green-600'
-                                          : ''
-                                        } uppercase`}>
+                                    <span className="font-bold">
+                                      {notif.userName}
+                                    </span>{" "}
+                                    {notif.action}{" "}
+                                    {notif.reference && (
+                                      <span className="font-mono text-blue-600">
+                                        #{notif.reference}
+                                      </span>
+                                    )}{" "}
+                                    {notif.status && (
+                                      <span
+                                        className={`${
+                                          notif.status.toLowerCase() ===
+                                          "completed"
+                                            ? "text-blue-600"
+                                            : notif.status.toLowerCase() ===
+                                              "approved"
+                                            ? "text-green-600"
+                                            : ""
+                                        } uppercase`}
+                                      >
                                         {notif.status}
                                       </span>
                                     )}
@@ -169,7 +203,13 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                               )}
                             </div>
                             {notif.time && (
-                              <p className={`text-sm ${!notif.read ? "text-gray-700" : "text-gray-500"} whitespace-nowrap`}>
+                              <p
+                                className={`text-sm ${
+                                  !notif.read
+                                    ? "text-gray-700"
+                                    : "text-gray-500"
+                                } whitespace-nowrap`}
+                              >
                                 {notif.time}
                               </p>
                             )}
@@ -214,9 +254,17 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
             className="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-gray-200"
             onClick={toggleProfileDropdown}
           >
-            <CgProfile className="text-4xl text-gray-600" />
+            {user?.picture ? (
+              <img
+                src={user.picture}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            ) : (
+              <CgProfile className="text-4xl text-gray-600" />
+            )}
             <span className="text-base hidden sm:inline text-gray-700">
-              Juan Dela Cruz
+              {user?.name || "Guest"}
             </span>
             <IoMdArrowDropdown className="text-2xl text-gray-600" />
           </div>
@@ -246,6 +294,7 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
     </header>
   );
 };
+
 Header.propTypes = {
   toggleSidebar: PropTypes.func.isRequired,
   title: PropTypes.string,
