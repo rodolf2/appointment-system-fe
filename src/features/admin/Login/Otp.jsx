@@ -1,11 +1,21 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import axios from "axios";
+
+// API endpoints configuration
+const API_BASE_URL = "http://localhost:5000/api/forgot-password";
+const ENDPOINTS = {
+  REQUEST_OTP: `${API_BASE_URL}/request-otp`,
+  VERIFY_OTP: `${API_BASE_URL}/verify-otp`,
+};
 
 const Otp = ({ email, onVerifyOtp }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [resendDisabled, setResendDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const inputRefs = [
     useRef(),
     useRef(),
@@ -16,9 +26,46 @@ const Otp = ({ email, onVerifyOtp }) => {
   ];
   const navigate = useNavigate();
 
-  const handleChange = (index, value) => {
-    if (value.length > 1) return; // Prevent multiple digits
+  // Start countdown timer for resend button
+  const startResendTimer = () => {
+    setResendDisabled(true);
+    setCountdown(30);
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setResendDisabled(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
+  // Handle resend OTP request
+  const handleResendOtp = async () => {
+    try {
+      const response = await axios.post(ENDPOINTS.REQUEST_OTP, { email });
+      if (response.data.success) {
+        setError(null);
+        startResendTimer();
+      } else {
+        throw new Error(response.data.message);
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to resend verification code"
+      );
+    }
+  };
+
+  // Handle input change for OTP digits
+  const handleChange = (index, value) => {
+    // Validate input
+    if (value.length > 1) return;
+    if (value && !/^\d+$/.test(value)) return;
+
+    // Update OTP array
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -29,6 +76,7 @@ const Otp = ({ email, onVerifyOtp }) => {
     }
   };
 
+  // Handle keyboard navigation
   const handleKeyDown = (index, e) => {
     // Handle backspace
     if (e.key === "Backspace" && !otp[index] && index > 0) {
@@ -36,6 +84,7 @@ const Otp = ({ email, onVerifyOtp }) => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -49,10 +98,27 @@ const Otp = ({ email, onVerifyOtp }) => {
     }
 
     try {
-      await onVerifyOtp(otpString);
-      // If verification is successful, the parent component will handle the navigation
+      const response = await axios.post(ENDPOINTS.VERIFY_OTP, {
+        email,
+        otp: otpString,
+      });
+
+      if (response.data.success) {
+        await onVerifyOtp(response.data.email);
+        navigate("/new-password", { state: { email: response.data.email } });
+      } else {
+        throw new Error(response.data.message || "Verification failed");
+      }
     } catch (err) {
-      setError(err.message || "Invalid OTP. Please try again.");
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Invalid verification code. Please try again."
+      );
+      // Clear OTP fields on error
+      setOtp(["", "", "", "", "", ""]);
+      // Focus first input
+      inputRefs[0].current.focus();
     } finally {
       setIsSubmitting(false);
     }
@@ -67,17 +133,6 @@ const Otp = ({ email, onVerifyOtp }) => {
         backgroundPosition: "bottom",
       }}
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `linear-gradient(to top, 
-            rgba(2, 17, 74, 0.5) 0%, 
-            rgba(3, 21, 125, 0.5) 50%, 
-            rgba(107, 123, 222, 0.4) 100%
-          )`,
-        }}
-      />
-
       <section className="relative flex items-center justify-center pt-40 px-4">
         <div className="bg-[#FEFEFE] bg-opacity-30 p-12 rounded-[20px] shadow-lg max-w-xl w-full">
           <h2 className="flex justify-center text-3xl font-LatoBold text-white mb-2 tracking-wider">
@@ -96,6 +151,8 @@ const Otp = ({ email, onVerifyOtp }) => {
                   <input
                     key={index}
                     type="text"
+                    inputMode="numeric"
+                    pattern="\d*"
                     maxLength="1"
                     ref={inputRefs[index]}
                     value={digit}
@@ -103,6 +160,7 @@ const Otp = ({ email, onVerifyOtp }) => {
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#F3BC62] focus:border-transparent"
                     required
+                    autoComplete="off"
                   />
                 ))}
               </div>
@@ -156,9 +214,22 @@ const Otp = ({ email, onVerifyOtp }) => {
                     Verifying...
                   </span>
                 ) : (
-                  "Verify OTP"
+                  "Verify Code"
                 )}
               </button>
+
+              <div className="text-center mt-4">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={resendDisabled}
+                  className="text-[#161f55] hover:text-[#F3BC62] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {resendDisabled
+                    ? `Resend code in ${countdown}s`
+                    : "Didn't receive the code? Resend"}
+                </button>
+              </div>
 
               <div className="text-center">
                 <button
