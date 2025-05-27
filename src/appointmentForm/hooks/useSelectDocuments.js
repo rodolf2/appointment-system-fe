@@ -107,11 +107,14 @@ const useSelectDocuments = (onNext) => {
   const handleModalNext = async () => {
     try {
       // Prepare the document request data
+      const studentId = localStorage.getItem("studentId");
+      console.log("Student ID from localStorage:", studentId);
+
       const requestData = {
         selectedDocuments: convertSelectedDocuments(),
         purpose: state.purpose,
         dateOfRequest: state.date,
-        studentId: localStorage.getItem("studentId"), // Make sure you have this from previous steps
+        studentId: studentId,
       };
 
       // Create the document request
