@@ -3,11 +3,12 @@ import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import dayjs from "dayjs";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"; // Ensure port matches backend
+const API_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"; // Ensure port matches backend
 
 const useEvents = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    const saved = localStorage.getItem('sidebarOpenEventsPage'); // Unique key for this page's sidebar
+    const saved = localStorage.getItem("sidebarOpen");
     return saved !== null ? JSON.parse(saved) : true;
   });
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -17,17 +18,26 @@ const useEvents = () => {
   const [calendarEvents, setCalendarEvents] = useState({}); // Formatted for calendar: { monthKey: { day: eventUIData } }
 
   // --- State for event form and modal ---
-  const initialEventFormState = { title: "", description: "", startDate: "", endDate: "", color: "bg-blue-500" }; // Added default color
+  const initialEventFormState = {
+    title: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    color: "bg-blue-500",
+  }; // Added default color
   const [newEventForm, setNewEventForm] = useState(initialEventFormState);
   const [selectedEventForModal, setSelectedEventForModal] = useState(null); // For displaying event details in modal
   // const [selectedDayForNewEvent, setSelectedDayForNewEvent] = useState(null); // Optional: for UI indication
 
   // Persist sidebar state
   useEffect(() => {
-    localStorage.setItem('sidebarOpenEventsPage', JSON.stringify(isSidebarOpen));
+    localStorage.setItem(
+      "sidebarOpenEventsPage",
+      JSON.stringify(isSidebarOpen)
+    );
   }, [isSidebarOpen]);
 
-  const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   // --- API Interaction ---
   const fetchEventsFromAPI = useCallback(async () => {
@@ -37,7 +47,11 @@ const useEvents = () => {
     } catch (error) {
       console.error("Error fetching events:", error);
       setAllApiEvents([]); // Reset on error
-      alert(`Failed to fetch events: ${error.response?.data?.message || error.message}`);
+      alert(
+        `Failed to fetch events: ${
+          error.response?.data?.message || error.message
+        }`
+      );
     }
   }, []);
 
@@ -49,14 +63,17 @@ const useEvents = () => {
   // Process `allApiEvents` into the `calendarEvents` structure whenever `allApiEvents` changes
   useEffect(() => {
     const formattedForCalendar = {};
-    allApiEvents.forEach(event => {
+    allApiEvents.forEach((event) => {
       if (!event.startDate || !event.endDate) return; // Skip if dates are missing
 
       const eventStartDate = dayjs(event.startDate);
       const eventEndDate = dayjs(event.endDate);
 
       let currentDateIterator = eventStartDate;
-      while (currentDateIterator.isBefore(eventEndDate) || currentDateIterator.isSame(eventEndDate, 'day')) {
+      while (
+        currentDateIterator.isBefore(eventEndDate) ||
+        currentDateIterator.isSame(eventEndDate, "day")
+      ) {
         const monthKey = currentDateIterator.format("YYYY-MM");
         const day = currentDateIterator.date();
 
@@ -75,15 +92,15 @@ const useEvents = () => {
           color: event.color || "bg-blue-500", // Use event's color or default
           // originalEvent: event, // Optionally keep the full original event object
         };
-        currentDateIterator = currentDateIterator.add(1, 'day');
+        currentDateIterator = currentDateIterator.add(1, "day");
       }
     });
     setCalendarEvents(formattedForCalendar);
   }, [allApiEvents]);
 
-
   // Calendar Navigation and Properties
-  const handlePrevMonth = () => setCurrentDate(currentDate.subtract(1, "month"));
+  const handlePrevMonth = () =>
+    setCurrentDate(currentDate.subtract(1, "month"));
   const handleNextMonth = () => setCurrentDate(currentDate.add(1, "month"));
 
   const daysInMonth = currentDate.daysInMonth();
@@ -105,7 +122,11 @@ const useEvents = () => {
     } else {
       // Pre-fill start and end date for a new event form when an empty day is clicked
       const clickedDate = currentDate.date(day).format("YYYY-MM-DD");
-      setNewEventForm({ ...initialEventFormState, startDate: clickedDate, endDate: clickedDate });
+      setNewEventForm({
+        ...initialEventFormState,
+        startDate: clickedDate,
+        endDate: clickedDate,
+      });
       setSelectedEventForModal(null); // Ensure no event modal is open
       // setSelectedDayForNewEvent(day); // Optional for UI
     }
@@ -134,7 +155,11 @@ const useEvents = () => {
       // setSelectedDayForNewEvent(null);
     } catch (error) {
       console.error("Error saving event:", error);
-      alert(`Failed to save event: ${error.response?.data?.message || error.message}`);
+      alert(
+        `Failed to save event: ${
+          error.response?.data?.message || error.message
+        }`
+      );
     }
   };
 
@@ -154,7 +179,11 @@ const useEvents = () => {
       setSelectedEventForModal(null); // Close the modal
     } catch (error) {
       console.error("Error deleting event:", error);
-      alert(`Failed to delete event: ${error.response?.data?.message || error.message}`);
+      alert(
+        `Failed to delete event: ${
+          error.response?.data?.message || error.message
+        }`
+      );
     }
   };
 
