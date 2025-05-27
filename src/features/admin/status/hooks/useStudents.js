@@ -150,7 +150,7 @@ const useStudents = (apiUrl) => {
     // Search state
     searchTerm,
     
-    // Sidebar states and handlers
+     // Sidebar states and handlers
     isSidebarOpen,
     toggleSidebar,
   };
