@@ -1,106 +1,34 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const useAppointment = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    // Optional: Load from localStorage if you want persistence across page refreshes
-    const saved = localStorage.getItem('sidebarOpen');
-    return saved !== null ? JSON.parse(saved) : true; // Default to open
-  });
+  // States for data fetching
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Add this useEffect if you want persistence across refreshes
-  useEffect(() => {
-    localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
-  }, [isSidebarOpen]);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
-  };
+  // States for filtering and search
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("Filter by");
-  const [appointments, setAppointments] = useState([
-    {
-      status: "COMPLETED",
-      transactionNumber: ["TR102938-123"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-      actions: "",
-    },
-    {
-      status: "APPROVED",
-      transactionNumber: ["TR122938-343"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-      actions: "",
-    },
-    {
-      status: "COMPLETED",
-      transactionNumber: ["TR131238-534"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-      actions: "",
-    },
-    {
-      status: "PENDING",
-      transactionNumber: ["TR232352-536"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-      actions: "",
-    },
-    {
-      status: "PENDING",
-      transactionNumber: ["TR254393-678"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-      actions: "2025-01-01",
-    },
-    {
-      status: "APPROVED",
-      transactionNumber: ["TR324693-786"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-      actions: "",
-    },
-    {
-      status: "REJECTED",
-      transactionNumber: ["TR382793-876"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-      actions: "",
-    },
-    {
-      status: "PENDING",
-      transactionNumber: ["TR38883-999"],
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-      actions: "",
-    },
-  ]);
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
+  // Sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem("sidebarOpen");
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("sidebarOpen", JSON.stringify(isSidebarOpen));
+  }, [isSidebarOpen]);
+
+  const toggleSidebar = useCallback(() => {
+    setIsSidebarOpen((prev) => !prev);
+  }, []);
 
   // Function to determine status color
   const getStatusColor = (status) => {
@@ -134,88 +62,231 @@ const useAppointment = () => {
     }
   };
 
-  // Handle filter change
-  const handleFilterChange = (event) => {
-    setSelectedFilter(event.target.value);
+  // Filter appointments based on search term and status filter
+  const filteredAppointments = appointments.filter((data) => {
+    const searchString = searchTerm.toLowerCase();
+    const matchesSearch =
+      data.transactionNumber?.toLowerCase().includes(searchString) ||
+      data.request?.toLowerCase().includes(searchString) ||
+      data.emailAddress?.toLowerCase().includes(searchString);
+
+    const matchesFilter =
+      selectedFilter === "Filter by" ||
+      data.status === selectedFilter.toUpperCase();
+
+    return matchesSearch && matchesFilter;
+  });
+
+  // Calculate pagination values
+  const totalFilteredEntries = filteredAppointments.length;
+  const calculatedTotalPages = Math.ceil(totalFilteredEntries / entriesPerPage);
+  const startEntry =
+    totalFilteredEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
+  const endEntry = Math.min(currentPage * entriesPerPage, totalFilteredEntries);
+
+  // Generate page numbers array
+  const pageNumbers = [];
+  if (calculatedTotalPages > 0) {
+    for (let i = 1; i <= calculatedTotalPages; i++) {
+      pageNumbers.push(i);
+    }
+  }
+
+  // Handlers
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
   };
 
-  // Filter appointments based on selected filter
-  const filteredAppointments =
-    selectedFilter === "Filter by"
-      ? appointments
-      : appointments.filter(
-        (appointment) => appointment.status === selectedFilter.toUpperCase()
-      );
+  const handleFilterChange = (e) => {
+    setSelectedFilter(e.target.value);
+    setCurrentPage(1);
+  };
 
-  // Open modal for delete confirmation
+  const handleEntriesPerPageChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) && value > 0) {
+      setEntriesPerPage(value);
+      setCurrentPage(1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < calculatedTotalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Modal handlers
   const openModal = (appointment) => {
     setSelectedAppointment(appointment);
     setIsModalOpen(true);
   };
 
-  // Close modal
   const closeModal = () => {
     setSelectedAppointment(null);
     setIsModalOpen(false);
   };
 
-  // Delete appointment
-  const deleteAppointment = () => {
-    setAppointments(
-      appointments.filter((appt) => appt !== selectedAppointment)
-    );
-    closeModal();
+  // Appointment status handlers
+  const deleteAppointment = async () => {
+    try {
+      // Add API call to delete appointment
+      const response = await fetch(
+        `/api/appointments/${selectedAppointment.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to delete appointment");
+
+      setAppointments(
+        appointments.filter((appt) => appt.id !== selectedAppointment.id)
+      );
+      closeModal();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
-  // Approve appointment
-  const approveAppointment = (appointment) => {
-    setAppointments(
-      appointments.map((appt) =>
-        appt === appointment ? { ...appt, status: "APPROVED" } : appt
-      )
-    );
+  const updateAppointmentStatus = async (appointment, newStatus) => {
+    try {
+      // Add API call to update appointment status
+      const response = await fetch(`/api/appointments/${appointment.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update appointment status");
+
+      setAppointments(
+        appointments.map((appt) =>
+          appt.id === appointment.id ? { ...appt, status: newStatus } : appt
+        )
+      );
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
-  // Reject appointment
-  const rejectAppointment = (appointment) => {
-    setAppointments(
-      appointments.map((appt) =>
-        appt === appointment ? { ...appt, status: "REJECTED" } : appt
-      )
-    );
-  };
+  const approveAppointment = (appointment) =>
+    updateAppointmentStatus(appointment, "APPROVED");
+  const rejectAppointment = (appointment) =>
+    updateAppointmentStatus(appointment, "REJECTED");
+  const completeAppointment = (appointment) =>
+    updateAppointmentStatus(appointment, "COMPLETED");
 
-  // Complete appointment
-  const completeAppointment = (appointment) => {
-    setAppointments(
-      appointments.map((appt) =>
-        appt === appointment ? { ...appt, status: "COMPLETED" } : appt
-      )
-    );
-  };
+  // Fetch data
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Fetch student records first
+        const studentsResponse = await fetch(
+          "/api/document-requests/docs-with-details"
+        );
+        if (!studentsResponse.ok) {
+          throw new Error(`HTTP error! status: ${studentsResponse.status}`);
+        }
+        const studentsData = await studentsResponse.json();
+
+        // Transform student records into appointments with PENDING status
+        const transformedAppointments = studentsData.map((student) => ({
+          id: student.transactionNumber,
+          status: "PENDING",
+          transactionNumber: student.transactionNumber,
+          request: student.request,
+          emailAddress: student.email,
+          dateOfAppointment: "", // To be filled when approved
+          timeSlot: "", // To be filled when approved
+          dateOfRequest: student.date,
+          name: student.name,
+          program: student.program,
+          contact: student.contact,
+        }));
+
+        setAppointments(transformedAppointments);
+      } catch (err) {
+        console.error("Failed to fetch appointments:", err);
+        setError(err.message || "An error occurred while fetching data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+
+    // Set up auto-refresh every 30 seconds
+    const refreshInterval = setInterval(fetchAppointments, 30000);
+
+    return () => clearInterval(refreshInterval);
+  }, []);
 
   return {
-    isSidebarOpen,
-    setIsSidebarOpen,
-    selectedFilter,
-    setSelectedFilter,
+    // Data states
     appointments,
-    setAppointments,
-    isModalOpen,
-    setIsModalOpen,
-    selectedAppointment,
-    setSelectedAppointment,
-    toggleSidebar,
-    getStatusColor,
-    getTransactionNumberColor,
-    handleFilterChange,
+    loading,
+    error,
+
+    // Pagination states
+    currentPage,
+    entriesPerPage,
+    totalFilteredEntries,
+    calculatedTotalPages,
+    startEntry,
+    endEntry,
+    pageNumbers,
+
+    // Filtered data
     filteredAppointments,
+
+    // Handlers
+    handleSearchChange,
+    handleFilterChange,
+    handleEntriesPerPageChange,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+
+    // Search and filter states
+    searchTerm,
+    selectedFilter,
+
+    // Modal states and handlers
+    isModalOpen,
+    selectedAppointment,
     openModal,
     closeModal,
+
+    // Status handlers
     deleteAppointment,
     approveAppointment,
     rejectAppointment,
     completeAppointment,
+
+    // Style helpers
+    getStatusColor,
+    getTransactionNumberColor,
+
+    // Sidebar states and handlers
+    isSidebarOpen,
+    toggleSidebar,
   };
 };
 
