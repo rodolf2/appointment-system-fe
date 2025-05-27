@@ -14,12 +14,12 @@ const DataPrivacy = ({ onNext }) => {
           "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
       }}
     >
-      <div className="bg-[#EEF2F7] p-10 rounded-lg shadow-lg max-w-xl w-full relative">
-        <h2 className="text-[35px] font-LatoBold text-[#161F55] mb-5 text-center">
+      <div className="bg-[#EEF2F7] p-10 rounded-lg shadow-lg max-w-xl w-full ">
+        <h2 className="text-[35px] font-LatoBold text-[#161F55] mb-5 text-center tracking-wider">
           DATA PRIVACY NOTICE
         </h2>
-        <div className="absolute mx-[70px] w-[22rem] h-1 bg-[#F3BC62]"></div>
-        <p className="text-[16px] mb-6 mt-12 text-[#161F55] font-LatoRegular leading-relaxed">
+        <div className=" mx-auto w-[24rem] h-1 bg-[#F3BC62]"></div>
+        <p className="text-[16px] mb-6 mt-6 text-justify text-[#161F55] font-LatoRegular leading-relaxed">
           In compliance with data privacy laws such as, but not limited to,
           Republic Act No. 10173 (Data Privacy Act of 2012) and its implementing
           rules and regulations, we within the Organization of La Verdad
@@ -57,16 +57,18 @@ const DataPrivacy = ({ onNext }) => {
               type="checkbox"
               id="agree"
               onChange={handleCheckBox}
-              className={`w-4 h-4 mt-1 border-2 ${highlight && !isChecked
-                ? "border-[#B50A0A] border-8"
-                : "border-[#161F55]"
-                }`}
+              className={`w-4 h-4 mt-1 border-2 ${
+                highlight && !isChecked
+                  ? "border-[#B50A0A] border-8"
+                  : "border-[#161F55]"
+              }`}
               aria-label="Agree to the terms and conditions"
             />
             <label
               htmlFor="agree"
-              className={`text-[16px] text-justify text-[#161F55] font-LatoRegular ${highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
-                }`}
+              className={`text-[16px] text-justify text-[#161F55] font-LatoRegular ${
+                highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
+              }`}
             >
               I have read and agree to the{" "}
               <span className="font-LatoBold">Data Privacy Notice</span> of LVCC
@@ -76,8 +78,9 @@ const DataPrivacy = ({ onNext }) => {
         </form>
         <p
           ref={textRef} // Reference to the important text
-          className={`text-[16px] text-justify mb-6 font-LatoRegular ${highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
-            }`}
+          className={`text-[16px] text-justify mb-6 font-LatoRegular ${
+            highlight && !isChecked ? "text-[#B50A0A]" : "text-[#161F55]"
+          }`}
         >
           <p className="font-LatoRegular w-[450px] mx-auto">
             By ticking “I Agree,” I voluntarily give my consent to LVCC in

@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router";
-import { UserProvider } from "./context/UserContext";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { UserProvider } from "./context/UserContext.jsx";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Announcement from "./Pages/Announcement";

@@ -123,8 +123,13 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                         <span>{day.date()}</span>
                         {booking?.status === "available" ? (
                           <span className="text-xs font-semibold text-white">
+<<<<<<< HEAD
                             {booking.schedule.availableSlots} slot
                             {booking.schedule.availableSlots !== 1 ? "s" : ""}
+=======
+                            {/* {booking.schedule.availableSlots} slot */}
+                            {/* {booking.schedule.availableSlots !== 1 ? "s" : ""} */}
+>>>>>>> 1d3f27aef474547e97b97d0f4c685df50691a8a8
                           </span>
                         ) : booking?.status === "unavailable" &&
                           booking?.reason === "Fully booked" ? (
