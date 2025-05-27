@@ -5,147 +5,217 @@ import useStudents from "./hooks/useStudents";
 import { FaSearch } from "react-icons/fa";
 
 const Students = () => {
-  const { appointments, isSidebarOpen, toggleSidebar } = useStudents();
+  const API_URL = "/api/document-requests/docs-with-details";
+  
+  const {
+    // Data states
+    loading,
+    error,
+    
+    // Pagination states
+    currentPage,
+    entriesPerPage,
+    totalFilteredEntries,
+    calculatedTotalPages,
+    startEntry,
+    endEntry,
+    pageNumbers,
+    
+    // Filtered data
+    filteredAppointments,
+    
+    // Handlers
+    handleSearchChange,
+    handleEntriesPerPageChange,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+    
+    // Search state
+    searchTerm,
+    
+    // Sidebar states and handlers
+    isSidebarOpen,
+    toggleSidebar,
+  } = useStudents(API_URL);
+
   return (
     <div className="flex h-screen font-LatoRegular">
       <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">
-        <main className="h-[1050px]">
+        <main className="h-auto">
           <Header
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
             title="Students/Alumni's Records Request"
           />
-          <div>
-            <section className="h-[1050px] z-10 bg-white p-5 my-5">
-              {" "}
-              <div className="bg-[#D9D9D9] h-48 m-4">
-                <div className=" text-[#161F55] px-3 ml-3 pt-2">
-                  <h2 className="text-3xl font-bold tracking-[5px] pt-1">
-                    LIST OF STUDENTS/ALUMNI&#39;S RECORDS REQUEST
-                  </h2>
+          <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
+            <div className="bg-[#D9D9D9] h-52 m-4 pt-2 rounded-md">
+              <div className="text-[#161F55] px-3 pt-2 ml-3">
+                <h2 className="text-3xl font-bold tracking-[5px] pt-1">
+                  LIST OF STUDENTS/ALUMNI'S RECORDS REQUEST
                   <div className="border-b-4 border-[#F3BC62] w-[900px] my-3"></div>
-                </div>
+                </h2>
+              </div>
 
-                <div className="flex justify-between items-center mt-16 ml-4 ">
-                  <div className="text-[#161F55] font-semibold text-[18px]">
-                    <label htmlFor="show" className="mr-2">
-                      SHOW
-                    </label>
-                    <input
-                      id="show"
-                      name="show"
-                      type="number"
-                      min={"0"}
-                      max={"10"}
-                      defaultValue={"1"}
-                      className="text-center always-show-spinner"
-                    />
-                    <span className="ml-2">ENTRIES</span>
-                  </div>
-                  <div className="relative">
-                    <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                      id="search"
-                      type="search"
-                      className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8" // Add padding-left (pl-8) to make space for the icon
-                      placeholder="Search"
-                    />
-                  </div>
+              <div className="flex justify-between items-center mt-16 ml-4 mr-5">
+                <div className="text-[#161F55] font-semibold text-[18px] flex items-center">
+                  <label htmlFor="show-entries" className="mr-2">
+                    SHOW
+                  </label>
+                  <select
+                    id="show-entries"
+                    name="show-entries"
+                    value={entriesPerPage}
+                    onChange={handleEntriesPerPageChange}
+                    className="text-center w-20 p-2 border border-gray-400 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#161F55]"
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                  </select>
+                  <span className="ml-2">ENTRIES</span>
+                </div>
+                <div className="relative">
+                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    id="search"
+                    type="search"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="border-[#989898] py-2 bg-white text-[#161F55] pl-10 pr-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#161F55]"
+                    placeholder="Search"
+                  />
                 </div>
               </div>
-              <div className="m-4 mt-8">
-                <table className="text-[14px] w-full border-collapse border border-[#989898] h-[500px]">
-                  <thead>
-                    <tr className="bg-gray-200 text-center">
-                      <th className="p-3">TRANSACTION <br />NO.</th>
-                      <th className="p-3">NAME</th>
-                      <th className="p-3">
-                        LAST S.Y.
-                        <br />
-                        ATTENDED
-                      </th>
-                      <th className="p-3">
-                        PROGRAM/
-                        <br />
-                        GRADE/STRAND
-                      </th>
-                      <th className="p-3">
-                        CONTACT
-                        <br />
-                        NO.
-                      </th>
-                      <th className="p-3">EMAIL ADDRESS</th>
-                      <th className="p-3">
-                        ATTACHMENT
-                        <br />
-                        PROOF
-                      </th>
-                      <th className="p-3">REQUEST</th>
-                      <th className="p-3">
-                        DATE OF
-                        <br />
-                        REQUEST
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {appointments.map((data, index) => (
-                      <tr key={index} className="even:bg-gray-100 text-[16px]">
-                        <td className="border-2 p-3 border-r-[#989898] border-l-[#989898]  text-[#354CCE] font-bold">
-                          {data.transactionNumber[0]}
+            </div>
+
+            <table className="text-[15px] w-[97%] border-collapse text-[#161F55] mt-8 mx-auto" style={{ tableLayout: "fixed" }}>
+              <thead>
+                <tr className="bg-gray-200 text-center">
+                  <th className="border p-5">TRANSACTION NO.</th>
+                  <th className="border p-5">NAME</th>
+                  <th className="border p-5">LAST S.Y. ATTENDED</th>
+                  <th className="border p-5">PROGRAM/GRADE/<br/>STRAND</th>
+                  <th className="border p-5">CONTACT NO.</th>
+                  <th className="border p-5">EMAIL ADDRESS</th>
+                  <th className="border p-5">ATTACHMENT PROOF</th>
+                  <th className="border p-5">REQUEST</th>
+                  <th className="border p-5">DATE OF REQUEST</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading && (
+                  <tr>
+                    <td colSpan="9" className="text-center p-5">
+                      Loading student records...
+                    </td>
+                  </tr>
+                )}
+                {error && (
+                  <tr>
+                    <td colSpan="9" className="text-center p-5 text-red-500">
+                      Error: {error}
+                    </td>
+                  </tr>
+                )}
+                {!loading && !error && filteredAppointments.length === 0 && (
+                  <tr>
+                    <td colSpan="9" className="text-center p-5">
+                      {searchTerm ? "No matching records found." : "No student records found."}
+                    </td>
+                  </tr>
+                )}
+                {!loading &&
+                  !error &&
+                  filteredAppointments
+                    .slice((currentPage - 1) * entriesPerPage, currentPage * entriesPerPage)
+                    .map((data, index) => (
+                      <tr
+                        key={data.transactionNumber || index}
+                        className={`${index % 2 === 0 ? "bg-gray-100" : ""} text-center`}
+                      >
+                        <td className="border p-5 text-[#354CCE] font-bold">
+                          {data.transactionNumber}
                         </td>
-                        <td className="border-2  p-3  border-r-[#989898]">
-                          {data.name}
+                        <td className="border p-5">{data.name}</td>
+                        <td className="border p-5">{data.lastSY}</td>
+                        <td className="border p-5">{data.program}</td>
+                        <td className="border p-5">{data.contact}</td>
+                        <td className="border p-5">{data.email}</td>
+                        <td className="border p-5">
+                          {data.attachment && data.attachment !== 'No attachments' ? (
+                            <div className="flex flex-col gap-1">
+                              {data.attachment.split(", ").map((filename, index) => (
+                                <span 
+                                  key={index} 
+                                  className="text-blue-600 hover:underline cursor-pointer text-sm"
+                                  title={filename}
+                                >
+                                  {filename.length > 30 ? `${filename.substring(0, 30)}...` : filename}
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <span className="text-gray-500 text-sm">No attachments</span>
+                          )}
                         </td>
-                        <td className="border-2  p-3 border-r-[#989898]">
-                          {data.lastSY}
-                        </td>
-                        <td className="border-2  p-3 border-r-[#989898]">
-                          {data.program}
-                        </td>
-                        <td className="border-2  p-3  border-r-[#989898]">
-                          {data.contact}
-                        </td>
-                        <td className="border-2  p-3 border-r-[#989898]">
-                          {data.email}
-                        </td>
-                        <td className="border-2  p-3 border-r-[#989898]">
-                          {data.attachment}
-                        </td>
-                        <td className="border-2  p-3 border-r-[#989898]">
-                          {data.request}
-                        </td>
-                        <td className="border-2  p-3 border-r-[#989898]">
-                          {data.date}
+                        <td className="border p-5">{data.request}</td>
+                        <td className="border p-5">
+                          {new Date(data.date).toLocaleDateString()}
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
-                <span className="text-[#161F55] uppercase">
-                  Showing 1 to 10 of 10 entries
+              </tbody>
+            </table>
+
+            {calculatedTotalPages > 0 && (
+              <div className="flex justify-between items-center mt-10 text-[18px] px-4 mx-auto w-[97%]">
+                <span className="text-[#161F55]">
+                  SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries} ENTRIES
                 </span>
-                <div>
-                  <button className="border p-1 text-[#161F55]">
-                    Previous
-                  </button>
-                  <button className="border bg-[#161F55] text-[#D9D9D9] w-[40px] h-[35px]">
-                    1
-                  </button>
-                  <button className="border p-1 text-[#161F55]">Next</button>
-                </div>
+                {calculatedTotalPages > 1 && (
+                  <div className="flex items-center">
+                    <button
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                      className="border px-3 py-1 text-[#161F55] rounded-l-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Previous
+                    </button>
+                    {pageNumbers.map((number) => (
+                      <button
+                        key={number}
+                        onClick={() => handlePageChange(number)}
+                        className={`border-t border-b px-3 py-1 ${
+                          currentPage === number
+                            ? "bg-[#161F55] text-white"
+                            : "text-[#161F55] hover:bg-gray-100"
+                        }`}
+                      >
+                        {number}
+                      </button>
+                    ))}
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage === calculatedTotalPages}
+                      className="border px-3 py-1 text-[#161F55] rounded-r-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
-            </section>
-          </div>
+            )}
+          </section>
           <Footer />
         </main>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 

@@ -1,98 +1,156 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-const useStudents = () => {
+const useStudents = (apiUrl) => {
+  // States for data fetching
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // States for pagination and search
+  const [searchTerm, setSearchTerm] = useState("");
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    // Optional: Load from localStorage if you want persistence across page refreshes
-    const saved = localStorage.getItem('sidebarOpen');
-    return saved !== null ? JSON.parse(saved) : true; // Default to open
+    const saved = localStorage.getItem("sidebarOpen");
+    return saved !== null ? JSON.parse(saved) : true;
   });
 
-  // Add this useEffect if you want persistence across refreshes
   useEffect(() => {
-    localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
+    localStorage.setItem("sidebarOpen", JSON.stringify(isSidebarOpen));
   }, [isSidebarOpen]);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
-  };
-  const appointments = [
-    {
-      transactionNumber: ["TR13234-322"],
-      name: "Alice Smith",
-      lastSY: "2020-2021",
-      program: "Grade 11 - STEM",
-      contact: "+1 (123) 456-7890",
-      email: "alice.smith@example.com",
-      attachment: "ID Card",
-      request: "Transcript of Records",
-      date: "2025-01-01",
-      claiming: "Pick-up",
-    },
-    {
-      transactionNumber: ["TR13234-323"],
-      name: "Bob Johnson",
-      lastSY: "2019-2020",
-      program: "Grade 12 - ABM",
-      contact: "+1 (234) 567-8901",
-      email: "bob.johnson@example.com",
-      attachment: "Enrollment Form",
-      request: "Certificate of Graduation",
-      date: "2025-01-02",
-      claiming: "Email",
-    },
-    {
-      transactionNumber: ["TR13234-324"],
-      name: "Charlie Brown",
-      lastSY: "2021-2022",
-      program: "Grade 10",
-      contact: "+1 (345) 678-9012",
-      email: "charlie.brown@example.com",
-      attachment: "Payment Receipt",
-      request: "Good Moral Certificate",
-      date: "2025-01-03",
-      claiming: "Courier",
-    },
-    {
-      transactionNumber: ["TR13234-325"],
-      name: "Daisy Miller",
-      lastSY: "2022-2023",
-      program: "Grade 11 - HUMSS",
-      contact: "+1 (456) 789-0123",
-      email: "daisy.miller@example.com",
-      attachment: "Report Card",
-      request: "Form 137",
-      date: "2025-01-04",
-      claiming: "Pick-up",
-    },
-    {
-      transactionNumber: ["TR13234-326"],
-      name: "Evan Davis",
-      lastSY: "2018-2019",
-      program: "Grade 12 - ICT",
-      contact: "+1 (567) 890-1234",
-      email: "evan.davis@example.com",
-      attachment: "Certificate of Attendance",
-      request: "Diploma",
-      date: "2025-01-05",
-      claiming: "Email",
-    },
-    {
-      transactionNumber: ["TR13234-327"],
-      name: "Fiona Garcia",
-      lastSY: "2017-2018",
-      program: "Grade 9",
-      contact: "+1 (678) 901-2345",
-      email: "fiona.garcia@example.com",
-      attachment: "ID Card",
-      request: "Transcript of Records",
-      date: "2025-01-06",
-      claiming: "Courier",
-    },
-  ];
+  const toggleSidebar = useCallback(() => {
+    setIsSidebarOpen((prev) => !prev);
+  }, []);
 
+  // Filter appointments based on search term
+  const filteredAppointments = appointments.filter((data) => {
+    const searchString = searchTerm.toLowerCase();
+    return (
+      data.transactionNumber?.toLowerCase().includes(searchString) ||
+      data.name?.toLowerCase().includes(searchString) ||
+      data.lastSY?.toLowerCase().includes(searchString) ||
+      data.program?.toLowerCase().includes(searchString) ||
+      data.contact?.toLowerCase().includes(searchString) ||
+      data.email?.toLowerCase().includes(searchString) ||
+      data.request?.toLowerCase().includes(searchString)
+    );
+  });
+
+  // Calculate pagination values
+  const totalFilteredEntries = filteredAppointments.length;
+  const calculatedTotalPages = Math.ceil(totalFilteredEntries / entriesPerPage);
+  const startEntry = totalFilteredEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
+  const endEntry = Math.min(currentPage * entriesPerPage, totalFilteredEntries);
+
+  // Generate page numbers array
+  const pageNumbers = [];
+  if (calculatedTotalPages > 0) {
+    for (let i = 1; i <= calculatedTotalPages; i++) {
+      pageNumbers.push(i);
+    }
+  }
+
+  // Handlers
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
+
+  const handleEntriesPerPageChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) && value > 0) {
+      setEntriesPerPage(value);
+      setCurrentPage(1); // Reset to first page when changing entries per page
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < calculatedTotalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Fetch data
+  useEffect(() => {
+    if (!apiUrl) {
+      setAppointments([]);
+      setLoading(false);
+      setError("API URL is not provided.");
+      return;
+    }
+
+    const fetchStudentsData = async () => {
+      setLoading(true);
+      setError(null);
+      setAppointments([]); // Clear previous data
+
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setAppointments(data);
+      } catch (err) {
+        console.error("Failed to fetch student data:", err);
+        setError(err.message || "An error occurred while fetching data.");
+        setAppointments([]); // Ensure appointments is empty on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudentsData();
+
+    // Set up auto-refresh every 30 seconds
+    const refreshInterval = setInterval(fetchStudentsData, 30000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(refreshInterval);
+  }, [apiUrl]);
 
   return {
+    // Data states
     appointments,
+    loading,
+    error,
+    
+    // Pagination states
+    currentPage,
+    entriesPerPage,
+    totalFilteredEntries,
+    calculatedTotalPages,
+    startEntry,
+    endEntry,
+    pageNumbers,
+    
+    // Filtered data
+    filteredAppointments,
+    
+    // Handlers
+    handleSearchChange,
+    handleEntriesPerPageChange,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+    
+    // Search state
+    searchTerm,
+    
+    // Sidebar states and handlers
     isSidebarOpen,
     toggleSidebar,
   };
