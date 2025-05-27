@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import CustomProgressBar from "@/features/appointment/CustomProgressBar";
 import useAppSchedule from "./hooks/useAppSchedule";
 import dayjs from "dayjs";
@@ -22,7 +22,7 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
     handleCancelSubmit,
     handlePrevMonth,
     handleNextMonth,
-    isSameDay
+    isSameDay,
   } = useAppSchedule(onNext);
 
   return (
@@ -31,7 +31,8 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
         <div
           className="h-1/2 bg-cover bg-bottom relative"
           style={{
-            backgroundImage: "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
+            backgroundImage:
+              "url('/assets/image/la_verdad_christian_school_apalit_pampanga_cover.jpeg')",
             backgroundAttachment: "fixed",
           }}
         >
@@ -81,11 +82,13 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
               </div>
 
               <div className="grid grid-cols-7 text-center mb-2 gap-0 border-b-2 border-gray-300 pb-2">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                  <div key={day} className="text-[#161f55] font-bold text-md">
-                    {day}
-                  </div>
-                ))}
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                  (day) => (
+                    <div key={day} className="text-[#161f55] font-bold text-md">
+                      {day}
+                    </div>
+                  )
+                )}
               </div>
 
               {loading ? (
@@ -100,20 +103,34 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
 
                     return (
                       <div
-                        key={formattedDate}                        className={`p-2 sm:p-3 text-xs sm:text-lg cursor-pointer border border-gray-300 transition-all duration-200 flex flex-col justify-center items-center
+                        key={formattedDate}
+                        className={`p-2 sm:p-3 text-xs sm:text-lg cursor-pointer border border-gray-300 transition-all duration-200 flex flex-col justify-center items-center
                           ${isCurrentMonth ? "text-black" : "text-gray-400"}
-                          ${isToday ? "text-white bg-[#161f55] border-2 border-[#161f55] rounded" : ""}                          ${booking?.status === "available" 
+                          ${
+                            isToday
+                              ? "text-white bg-[#161f55] border-2 border-[#161f55] rounded"
+                              : ""
+                          }                          ${
+                          booking?.status === "available"
                             ? "bg-[#3A993D] hover:bg-[#86EFAC] hover:text-white space-y-0.5"
-                            : booking?.status === "unavailable" && booking?.reason === "Fully booked"
-                              ? "bg-[#D52121] hover:bg-[#FCA5A5] hover:text-white"
-                              : "hover:bg-gray-200"}`}                        onClick={() => handleDateClick(day)}                      >
+                            : booking?.status === "unavailable" &&
+                              booking?.reason === "Fully booked"
+                            ? "bg-[#D52121] hover:bg-[#FCA5A5] hover:text-white"
+                            : "hover:bg-gray-200"
+                        }`}
+                        onClick={() => handleDateClick(day)}
+                      >
                         <span>{day.date()}</span>
                         {booking?.status === "available" ? (
                           <span className="text-xs font-semibold text-white">
-                            {booking.schedule.availableSlots} slot{booking.schedule.availableSlots !== 1 ? 's' : ''}
+                            {/* {booking.schedule.availableSlots} slot */}
+                            {/* {booking.schedule.availableSlots !== 1 ? "s" : ""} */}
                           </span>
-                        ) : booking?.status === "unavailable" && booking?.reason === "Fully booked" ? (
-                          <span className="text-xs font-semibold text-white">Full</span>
+                        ) : booking?.status === "unavailable" &&
+                          booking?.reason === "Fully booked" ? (
+                          <span className="text-xs font-semibold text-white">
+                            Full
+                          </span>
                         ) : null}
                       </div>
                     );
@@ -134,16 +151,19 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                 {availableSlots.length > 0 ? (
                   <>
                     <p className="mt-1 font-bold text-start text-[#3A993D] text-md py-2">
-                      Available Slots ({selectedDate.schedule.availableSlots} remaining)
+                      Available Slots ({selectedDate.schedule.availableSlots}{" "}
+                      remaining)
                     </p>
                     <div className="grid grid-cols-2 gap-2 mt-2">
                       {availableSlots.map((slot, index) => (
                         <button
                           key={index}
                           className={`px-2 py-1 rounded text-md 
-                            ${selectedTimeSlot === slot 
-                              ? "bg-[#161f55] text-white"
-                              : "bg-gray-300 hover:bg-gray-400"}`}
+                            ${
+                              selectedTimeSlot === slot
+                                ? "bg-[#161f55] text-white"
+                                : "bg-gray-300 hover:bg-gray-400"
+                            }`}
                           onClick={() => handleTimeSlotClick(slot)}
                         >
                           {slot}
@@ -152,7 +172,9 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                     </div>
                   </>
                 ) : (
-                  <p className="text-center text-gray-500">No available slots for this date</p>
+                  <p className="text-center text-gray-500">
+                    No available slots for this date
+                  </p>
                 )}
               </>
             ) : (
@@ -161,7 +183,9 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
               </p>
             )}
             {errorMessage && (
-              <p className="text-red-500 text-center mt-2 text-sm">{errorMessage}</p>
+              <p className="text-red-500 text-center mt-2 text-sm">
+                {errorMessage}
+              </p>
             )}
           </div>
 
@@ -184,31 +208,31 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
               Submit
             </button>
           </div>
-        </div>       
-         {/* Confirmation Modal */}
-          {showConfirmation && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-              <div className="bg-white p-4 rounded-lg shadow-lg w-80">
-                <p className="text-md font-LatoRegular text-[#000] py-2 text-center">
-                  Are you sure you want to submit now?
-                </p>
-                <div className="flex justify-end space-x-4 mt-4">
-                  <button
-                    onClick={handleConfirmSubmit}
-                    className=" text-[#161f55] px-4 py-1 rounded text-md"
-                  >
-                    Yes
-                  </button>
-                  <button
-                    onClick={handleCancelSubmit}
-                    className=" text-gray-800 px-4 py-1 rounded text-md"
-                  >
-                    Cancel
-                  </button>
-                </div>
+        </div>
+        {/* Confirmation Modal */}
+        {showConfirmation && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-4 rounded-lg shadow-lg w-80">
+              <p className="text-md font-LatoRegular text-[#000] py-2 text-center">
+                Are you sure you want to submit now?
+              </p>
+              <div className="flex justify-end space-x-4 mt-4">
+                <button
+                  onClick={handleConfirmSubmit}
+                  className=" text-[#161f55] px-4 py-1 rounded text-md"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={handleCancelSubmit}
+                  className=" text-gray-800 px-4 py-1 rounded text-md"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
-          )}
+          </div>
+        )}
       </div>
     </div>
   );

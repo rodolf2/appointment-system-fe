@@ -25,6 +25,19 @@ const useSelectDocuments = (onNext) => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
+  // Clear specific errors when values change
+  useEffect(() => {
+    if (state.purpose.trim()) {
+      setErrors((prev) => ({ ...prev, purpose: "" }));
+    }
+    if (state.date) {
+      setErrors((prev) => ({ ...prev, date: "" }));
+    }
+    if (state.selectedDocuments.length > 0) {
+      setErrors((prev) => ({ ...prev, selectedDocuments: "" }));
+    }
+  }, [state.purpose, state.date, state.selectedDocuments]);
+
   const documentsList = [
     { label: "Certificate of Enrollment", value: "certificate_of_enrollment" },
     { label: "Good Moral Certificate", value: "good_moral_certificate" },
@@ -49,7 +62,6 @@ const useSelectDocuments = (onNext) => {
         ? state.selectedDocuments.filter((doc) => doc !== value)
         : [...state.selectedDocuments, value],
     });
-    setErrors((prev) => ({ ...prev, selectedDocuments: "" }));
   };
 
   // Remove Document
@@ -137,6 +149,7 @@ const useSelectDocuments = (onNext) => {
     date: state.date,
     setDate: (value) => updateState({ date: value }),
     errors,
+    setErrors,
     claimOption: state.claimOption,
     documentsList,
     handleDocumentSelection,

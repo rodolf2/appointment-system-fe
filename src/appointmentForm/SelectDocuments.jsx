@@ -43,7 +43,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
             <div className="h-1/2 bg-[#161f55]"></div>
           </div>
           <div className="relative flex flex-col justify-center text-center">
-            <h2 className="font-LatoBold text-[35px] text-Fwhite tracking-widest py-3">
+            <h2 className="font-LatoBold text-[32px] text-Fwhite tracking-widest py-3">
               APPLICATION FOR <br /> RECORDS
             </h2>
             <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[60%] text-center z-10">
@@ -101,7 +101,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   )}
                 </div>
                 {/* Display Selected Documents with Remove Option */}
-                <div className="mt-2 text-start font-LatoRegular min-h-[135px] ">
+                <div className=" text-start font-LatoRegular min-h-[135px] ">
                   <strong className="ml-8">Selected Documents:</strong>{" "}
                   {selectedDocuments.length > 0 ? (
                     <ul className="grid grid-cols-2 gap-y-1 gap-x-6 mt-1">
@@ -159,7 +159,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 )}
               </div>
 
-              <label className="mt-2 block text-start uppercase">
+              <label className="mt-1 block text-start uppercase">
                 Date of Request
               </label>
               <input
