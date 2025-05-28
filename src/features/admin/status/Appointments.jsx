@@ -10,22 +10,55 @@ import useAppointment from "./hooks/useAppointment";
 
 const Appointments = () => {
   const {
-    isSidebarOpen,
-    selectedFilter,
-    appointments,
-    isModalOpen,
-    toggleSidebar,
-    getStatusColor,
-    getTransactionNumberColor,
-    handleFilterChange,
+    // Data states
+    loading,
+    error,
+
+    // Pagination states
+    currentPage,
+    entriesPerPage,
+    totalFilteredEntries,
+    calculatedTotalPages,
+    startEntry,
+    endEntry,
+    pageNumbers,
+
+    // Filtered data
     filteredAppointments,
+
+    // Handlers
+    handleSearchChange,
+    handleFilterChange,
+    handleEntriesPerPageChange,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+
+    // Search and filter states
+    searchTerm,
+    selectedFilter,
+
+    // Modal states and handlers
+    isModalOpen,
+    selectedAppointment,
     openModal,
     closeModal,
+
+    // Status handlers
     deleteAppointment,
     approveAppointment,
     rejectAppointment,
     completeAppointment,
+
+    // Style helpers
+    getStatusColor,
+    getTransactionNumberColor,
+
+    // Sidebar states and handlers
+    isSidebarOpen,
+    toggleSidebar,
   } = useAppointment();
+
   return (
     <div className="flex h-screen font-LatoRegular">
       <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
@@ -39,8 +72,7 @@ const Appointments = () => {
             title="Appointments"
           />
           <div>
-            <section className="h-[1200px] z-10 bg-white p-5 my-5">
-              {" "}
+            <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
               <div className="bg-[#D9D9D9] h-48 m-4">
                 <div className=" text-[#161F55] px-3 ml-3 pt-2">
                   <h2 className="text-3xl font-bold tracking-[5px] pt-1">
@@ -49,20 +81,24 @@ const Appointments = () => {
                   <div className="border-b-4 border-[#F3BC62] w-[450px] my-3"></div>
                 </div>
 
-                <div className="flex justify-between items-center mt-[78px] ml-4 ">
+                <div className="flex justify-between items-center mt-[78px] ml-4 mr-5">
                   <div className="text-[#161F55] font-semibold text-[18px]">
-                    <label htmlFor="show" className="mr-2">
+                    <label htmlFor="show-entries" className="mr-2">
                       SHOW
                     </label>
-                    <input
-                      name="show"
-                      id="show"
-                      type="number"
-                      min={"0"}
-                      max={"10"}
-                      defaultValue={"1"}
-                      className="text-center always-show-spinner"
-                    />
+                    <select
+                      id="show-entries"
+                      name="show-entries"
+                      value={entriesPerPage}
+                      onChange={handleEntriesPerPageChange}
+                      className="text-center w-20 p-2 border border-gray-400 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#161F55]"
+                    >
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select>
                     <span className="ml-2">ENTRIES</span>
                   </div>
                   <div className="text-[#161F55] font-semibold text-[18px] flex gap-4">
@@ -80,11 +116,13 @@ const Appointments = () => {
                       </select>
                     </div>
                     <div className="relative">
-                      <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <input
                         id="search"
                         type="search"
-                        className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8" // Add padding-left (pl-8) to make space for the icon
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="border-[#989898] py-2 bg-white text-[#161F55] pl-10 pr-3 rounded-md"
                         placeholder="Search"
                       />
                     </div>
@@ -121,124 +159,159 @@ const Appointments = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredAppointments.map((data, index) => (
-                      <tr key={index} className="even:bg-gray-100 text-[18px]">
-                        <td className="border p-4 text-center">
-                          <span
-                            className={`inline-block w-[120px] text-center px-2 py-2 rounded text-white ${getStatusColor(
-                              data.status
-                            )}`}
-                          >
-                            {data.status}
-                          </span>
-                        </td>
-                        <td className="border p-4">
-                          <div className="flex flex-col text-center">
-                            <span
-                              className={`font-bold ${getTransactionNumberColor(
-                                data.status
-                              )}`}
-                            >
-                              {data.transactionNumber}
-                            </span>{" "}
-                          </div>
-                        </td>
-                        <td className="border p-4">{data.request}</td>
-                        <td className="border p-4">{data.emailAddress}</td>
-                        <td className="border p-4">{data.dateOfAppointment}</td>
-                        <td className="border p-4">{data.timeSlot}</td>
-                        <td className="border p-4">{data.dateOfRequest}</td>
-                        <td className="border p-4">
-                          <div className="flex gap-2 justify-center">
-                            {/* Approve Button - show for Pending and Rejected statuses */}
-                            {(data.status === "PENDING" ||
-                              data.status === "REJECTED") && (
-                                <div
-                                  data-tooltip-id="approve-tooltip"
-                                  data-tooltip-content={
-                                    data.status === "REJECTED"
-                                      ? "Approve"
-                                      : "Approve"
-                                  }
-                                  className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
-                                  onClick={() => approveAppointment(data)}
-                                >
-                                  <FaThumbsUp className="text-white" />
-                                </div>
-                              )}
-
-                            {/* Complete Button - show for Pending and Approved statuses */}
-                            {(data.status === "PENDING" ||
-                              data.status === "APPROVED") && (
-                                <div
-                                  data-tooltip-id="complete-tooltip"
-                                  data-tooltip-content="Complete"
-                                  className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
-                                  onClick={() => completeAppointment(data)}
-                                >
-                                  <LuCircleCheckBig className="text-white" />
-                                </div>
-                              )}
-
-                            {/* Reject Button - show for Pending and Approved statuses */}
-                            {(data.status === "PENDING" ||
-                              data.status === "APPROVED") && (
-                                <div
-                                  data-tooltip-id="reject-tooltip"
-                                  data-tooltip-content={
-                                    data.status === "APPROVED"
-                                      ? "Reject"
-                                      : "Reject"
-                                  }
-                                  className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
-                                  onClick={() => rejectAppointment(data)}
-                                >
-                                  <FaThumbsDown className="text-white transform scale-x-[-1]" />
-                                </div>
-                              )}
-
-                            {/* Like Button - show for Completed status */}
-                            {data.status === "COMPLETED" && (
-                              <div
-                                data-tooltip-id="approve-tooltip"
-                                data-tooltip-content="Approve"
-                                className="bg-[#3A993D] p-2 rounded cursor-pointer"
-                              >
-                                <FaThumbsUp className="text-white" />
-                              </div>
-                            )}
-
-                            {/* Delete Button - show for all statuses */}
-                            <div
-                              data-tooltip-id="delete-tooltip"
-                              data-tooltip-content="Delete"
-                              className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
-                              onClick={() => openModal(data)}
-                            >
-                              <BsTrash3 className="text-white" />
-                            </div>
-                          </div>
+                    {loading && (
+                      <tr>
+                        <td colSpan="8" className="text-center p-5">
+                          Loading appointments...
                         </td>
                       </tr>
-                    ))}
+                    )}
+                    {error && (
+                      <tr>
+                        <td
+                          colSpan="8"
+                          className="text-center p-5 text-red-500"
+                        >
+                          Error: {error}
+                        </td>
+                      </tr>
+                    )}
+                    {!loading &&
+                      !error &&
+                      filteredAppointments
+                        .slice(
+                          (currentPage - 1) * entriesPerPage,
+                          currentPage * entriesPerPage
+                        )
+                        .map((data, index) => (
+                          <tr key={data.id} className="even:bg-gray-100">
+                            <td className="border p-4 text-center">
+                              <span
+                                className={`inline-block w-[120px] text-center px-2 py-2 rounded text-white ${getStatusColor(
+                                  data.status
+                                )}`}
+                              >
+                                {data.status}
+                              </span>
+                            </td>
+                            <td className="border p-4">
+                              <div className="flex flex-col text-center">
+                                <span
+                                  className={`font-bold ${getTransactionNumberColor(
+                                    data.status
+                                  )}`}
+                                >
+                                  {data.transactionNumber}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="border p-4">{data.request}</td>
+                            <td className="border p-4">{data.emailAddress}</td>
+                            <td className="border p-4">
+                              {data.dateOfAppointment}
+                            </td>
+                            <td className="border p-4">{data.timeSlot}</td>
+                            <td className="border p-4">
+                              {new Date(
+                                data.dateOfRequest
+                              ).toLocaleDateString()}
+                            </td>
+                            <td className="border p-4">
+                              <div className="flex gap-2 justify-center">
+                                {/* Approve Button - show for Pending and Rejected statuses */}
+                                {(data.status === "PENDING" ||
+                                  data.status === "REJECTED") && (
+                                  <div
+                                    data-tooltip-id="approve-tooltip"
+                                    data-tooltip-content="Approve"
+                                    className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
+                                    onClick={() => approveAppointment(data)}
+                                  >
+                                    <FaThumbsUp className="text-white" />
+                                  </div>
+                                )}
+
+                                {/* Complete Button - show for Pending and Approved statuses */}
+                                {(data.status === "PENDING" ||
+                                  data.status === "APPROVED") && (
+                                  <div
+                                    data-tooltip-id="complete-tooltip"
+                                    data-tooltip-content="Complete"
+                                    className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
+                                    onClick={() => completeAppointment(data)}
+                                  >
+                                    <LuCircleCheckBig className="text-white" />
+                                  </div>
+                                )}
+
+                                {/* Reject Button - show for Pending and Approved statuses */}
+                                {(data.status === "PENDING" ||
+                                  data.status === "APPROVED") && (
+                                  <div
+                                    data-tooltip-id="reject-tooltip"
+                                    data-tooltip-content="Reject"
+                                    className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
+                                    onClick={() => rejectAppointment(data)}
+                                  >
+                                    <FaThumbsDown className="text-white transform scale-x-[-1]" />
+                                  </div>
+                                )}
+
+                                {/* Delete Button - show for all statuses */}
+                                <div
+                                  data-tooltip-id="delete-tooltip"
+                                  data-tooltip-content="Delete"
+                                  className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
+                                  onClick={() => openModal(data)}
+                                >
+                                  <BsTrash3 className="text-white" />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                   </tbody>
                 </table>
               </div>
-              <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
-                <span className="text-[#161F55]">
-                  SHOWING {filteredAppointments.length} OF {appointments.length}{" "}
-                  ENTRIES
-                </span>
-                <div className="mr-6">
-                  <button className="border p-1 text-[#161F55]">
-                    Previous
-                  </button>
-                  <button className="border bg-[#161F55] text-[#D9D9D9] w-[40px] h-[35px]">
-                    1
-                  </button>
-                  <button className="border p-1 text-[#161F55]">Next</button>
+              {calculatedTotalPages > 0 && (
+                <div className="flex justify-between items-center mt-10 text-[18px] px-4">
+                  <span className="text-[#161F55]">
+                    SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries}{" "}
+                    ENTRIES
+                  </span>
+                  {calculatedTotalPages > 1 && (
+                    <div className="flex items-center">
+                      <button
+                        onClick={handlePreviousPage}
+                        disabled={currentPage === 1}
+                        className="border px-3 py-1 text-[#161F55] rounded-l-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Previous
+                      </button>
+                      {pageNumbers.map((number) => (
+                        <button
+                          key={number}
+                          onClick={() => handlePageChange(number)}
+                          className={`border-t border-b px-3 py-1 ${
+                            currentPage === number
+                              ? "bg-[#161F55] text-white"
+                              : "text-[#161F55] hover:bg-gray-100"
+                          }`}
+                        >
+                          {number}
+                        </button>
+                      ))}
+                      <button
+                        onClick={handleNextPage}
+                        disabled={currentPage === calculatedTotalPages}
+                        className="border px-3 py-1 text-[#161F55] rounded-r-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
             </section>
           </div>
 
