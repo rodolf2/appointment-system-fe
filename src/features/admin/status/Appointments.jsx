@@ -225,7 +225,10 @@ const Appointments = () => {
                                     data-tooltip-id="approve-tooltip"
                                     data-tooltip-content="Approve"
                                     className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
-                                    onClick={() => approveAppointment(data)}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      approveAppointment(data);
+                                    }}
                                   >
                                     <FaThumbsUp className="text-white" />
                                   </div>
@@ -238,7 +241,10 @@ const Appointments = () => {
                                     data-tooltip-id="complete-tooltip"
                                     data-tooltip-content="Complete"
                                     className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
-                                    onClick={() => completeAppointment(data)}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      completeAppointment(data);
+                                    }}
                                   >
                                     <LuCircleCheckBig className="text-white" />
                                   </div>
@@ -251,7 +257,10 @@ const Appointments = () => {
                                     data-tooltip-id="reject-tooltip"
                                     data-tooltip-content="Reject"
                                     className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
-                                    onClick={() => rejectAppointment(data)}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      rejectAppointment(data);
+                                    }}
                                   >
                                     <FaThumbsDown className="text-white transform scale-x-[-1]" />
                                   </div>
@@ -262,7 +271,10 @@ const Appointments = () => {
                                   data-tooltip-id="delete-tooltip"
                                   data-tooltip-content="Delete"
                                   className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
-                                  onClick={() => openModal(data)}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    openModal(data);
+                                  }}
                                 >
                                   <BsTrash3 className="text-white" />
                                 </div>
