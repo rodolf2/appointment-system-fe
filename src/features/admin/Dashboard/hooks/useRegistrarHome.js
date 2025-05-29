@@ -185,25 +185,25 @@ const useRegistrarHome = () => {
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSidebarOpen]);
-  const [stats, setStats] = useState({
+const [stats, setStats] = useState({
+  APPROVED: 0,
+  PENDING: 0,
+  COMPLETED: 0,
+  REJECTED: 0,
+  total: 0,
+  morning: {
     APPROVED: 0,
     PENDING: 0,
     COMPLETED: 0,
     REJECTED: 0,
-    total: 0,
-    morning: {
-      APPROVED: 0,
-      PENDING: 0,
-      COMPLETED: 0,
-      REJECTED: 0,
-    },
-    afternoon: {
-      APPROVED: 0,
-      PENDING: 0,
-      COMPLETED: 0,
-      REJECTED: 0,
-    },
-  });
+  },
+  afternoon: {
+    APPROVED: 0,
+    PENDING: 0,
+    COMPLETED: 0,
+    REJECTED: 0,
+  },
+});
 
   // Add this effect to fetch stats
   useEffect(() => {
