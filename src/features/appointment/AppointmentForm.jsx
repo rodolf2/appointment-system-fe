@@ -14,11 +14,20 @@ const AppointmentForm = () => {
     const stepFromParams = searchParams.get("step");
     return stepFromParams ? parseInt(stepFromParams, 10) : 1;
   });
-  const goToNextStep = (step) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    transactionNumber: ""
+  });
+
+  const goToNextStep = (step, data = {}) => {
     const nextStep = step || currentStep + 1;
     console.log('Moving to step:', nextStep);
     setCurrentStep(nextStep);
     setSearchParams({ step: nextStep.toString() });
+    
+    // Update form data if provided
+    if (data.name) setFormData(prev => ({ ...prev, name: data.name }));
+    if (data.transactionNumber) setFormData(prev => ({ ...prev, transactionNumber: data.transactionNumber }));
   };
 
   const goToPreviousStep = (step) => {
@@ -64,6 +73,8 @@ const AppointmentForm = () => {
           onNext={goToNextStep}
           onBack={goToPreviousStep}
           currentStep={5}
+          name={formData.name}
+          transactionNumber={formData.transactionNumber}
         />
       )}
       {currentStep === 7 && (

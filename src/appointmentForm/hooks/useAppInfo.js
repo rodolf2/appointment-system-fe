@@ -95,11 +95,14 @@ const useAppInfo = (onNext) => {
       // Store the student ID for later use
       localStorage.setItem('studentId', response.studentId);
       
-      // Only clear form data after successful submission AND moving forward
-      // This way, data is preserved when going back
+      // Prepare name and transaction number for feedback
+      const fullName = `${formData.firstName.trim()} ${formData.middleName.trim()} ${formData.surname.trim()}`.trim();
       
-      // Move to next step
-      onNext();
+      // Move to next step with name and transaction number
+      onNext(undefined, {
+        name: fullName,
+        transactionNumber: response.studentId
+      });
     } catch (error) {
       setErrors(prev => ({
         ...prev,

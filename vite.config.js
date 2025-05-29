@@ -17,7 +17,9 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: process.env.NODE_ENV === 'production' 
+          ? 'https://appoinment-system-5687f.web.app'  // Replace with your Firebase project URL
+          : 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
       }

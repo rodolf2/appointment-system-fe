@@ -1,17 +1,68 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const Feedback = ({ onNext }) => {
+const Feedback = ({ onNext, transactionNumber, name }) => {
   const [ratings, setRatings] = useState({
-    overall: 0,
     easyToUse: 0,
     features: 0,
     responsiveness: 0,
     reliability: 0,
   });
 
+  const [error, setError] = useState(null);
+
   const handleRating = (category, value) => {
     setRatings({ ...ratings, [category]: value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      // Check if all ratings are provided
+      const allRated = Object.values(ratings).every(rating => rating > 0);
+      if (!allRated) {
+        setError("Please provide ratings for all categories");
+        return;
+      }
+
+      console.log('Submitting feedback:', {
+        name,
+        transactionNumber,
+        ratings
+      });
+
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          transactionNumber,
+          ratings
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        let errorMessage = 'Failed to submit feedback';
+        if (data.message) {
+          errorMessage = data.message;
+          if (data.details) {
+            errorMessage += ': ' + Object.entries(data.details)
+              .map(([key, value]) => `${key}: ${value}`)
+              .join(', ');
+          }
+        }
+        throw new Error(errorMessage);
+      }
+
+      console.log('Feedback submitted successfully:', data);
+      onNext();
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      setError(error.message || 'Failed to submit feedback. Please try again.');
+    }
   };
 
   return (
@@ -39,10 +90,14 @@ const Feedback = ({ onNext }) => {
           How would you rate your experience with our <br /> LV AppointEase?
         </p>
 
-        {/* Overall Rating */}
+        {error && (
+          <div className="text-red-500 mb-4">
+            {error}
+          </div>
+        )}
 
         {/* Other Ratings */}
-        <div className="space-y-4 ] font-LatoRegular">
+        <div className="space-y-4 font-LatoRegular">
           {[
             { label: "Is easy to use", category: "easyToUse" },
             { label: "Has the features I want", category: "features" },
@@ -50,7 +105,7 @@ const Feedback = ({ onNext }) => {
             { label: "Is reliable", category: "reliability" },
           ].map((item, index) => (
             <div key={index} className="flex items-center justify-between">
-              <span className="text-[16px] text-[#161f55">{item.label}</span>
+              <span className="text-[16px] text-[#161f55]">{item.label}</span>
               <StarRating
                 category={item.category}
                 currentRating={ratings[item.category]}
@@ -66,9 +121,7 @@ const Feedback = ({ onNext }) => {
         </p>
         <button
           className="px-6 py-2 bg-[#161f55] text-white rounded mt-6 hover:bg-blue-700"
-          onClick={() => {
-            onNext();
-          }}
+          onClick={handleSubmit}
         >
           Done
         </button>
@@ -83,8 +136,7 @@ const StarRating = ({ category, currentRating, onRate }) => {
       {[1, 2, 3, 4, 5].map((value) => (
         <button
           key={value}
-          className={`w-6 h-6 ${value <= currentRating ? "text-blue-500" : "text-gray-300"
-            }`}
+          className={`w-6 h-6 ${value <= currentRating ? "text-blue-500" : "text-gray-300"}`}
           onClick={() => onRate(category, value)}
         >
           <svg
@@ -99,6 +151,7 @@ const StarRating = ({ category, currentRating, onRate }) => {
     </div>
   );
 };
+
 StarRating.propTypes = {
   category: PropTypes.string,
   currentRating: PropTypes.number,
@@ -107,6 +160,8 @@ StarRating.propTypes = {
 
 Feedback.propTypes = {
   onNext: PropTypes.func,
+  transactionNumber: PropTypes.string,
+  name: PropTypes.string,
 };
 
 export default Feedback;
