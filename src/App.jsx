@@ -27,6 +27,7 @@ import Archived from "./features/admin/status/Archived";
 import Attachment from "./appointmentForm/Attachment";
 import AppSchedule from "./appointmentForm/AppSchedule";
 import TransitionWrapper from "./components/TransitionWrapper";
+import Feedback from "./features/admin/status/Feedback.jsx";
 
 const App = () => {
   return (
@@ -55,6 +56,7 @@ const Layout = () => {
     "/profile",
     "/appointments",
     "/archived",
+    "/feedback",
   ];
   const showHeaderFooter = !excludedPaths.includes(location.pathname);
 
@@ -93,6 +95,7 @@ const Layout = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/archived" element={<Archived />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="/attachment" element={<Attachment />} />
             <Route path="/app-schedule" element={<AppSchedule />} />
           </Routes>

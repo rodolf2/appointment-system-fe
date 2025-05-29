@@ -11,6 +11,8 @@ import {
 import { IoMdHome } from "react-icons/io";
 import { Tooltip } from "react-tooltip";
 import PropTypes from "prop-types";
+import { VscFeedback } from "react-icons/vsc";
+// import { ReactComponent as FeedbackIcon } from '../assets/icons/feedback_icon.svg';
 
 const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
@@ -39,6 +41,7 @@ const Sidebar = ({ isSidebarOpen }) => {
         { path: "/events", icon: <FaCalendarAlt />, label: "EVENTS" },
         { path: "/students", icon: <FaUsers />, label: "STUDENTS/ALUMNI" },
         { path: "/appointments", icon: <FaTasks />, label: "APPOINTMENTS" },
+        { path: "/feedback", icon: <VscFeedback/>, label: 'FEEDBACK'}
       ],
     },
     {
