@@ -2,27 +2,30 @@ import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import dayjs from "dayjs";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
-const API_URL_EVENTS = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"
+const API_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const API_URL_EVENTS =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 const useRegistrarHome = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    const saved = localStorage.getItem('sidebarOpen');
+    const saved = localStorage.getItem("sidebarOpen");
     return saved !== null ? JSON.parse(saved) : true;
   });
 
   const [allFetchedHolidays, setAllFetchedHolidays] = useState([]);
-  const [currentMonthCalendarHolidays, setCurrentMonthCalendarHolidays] = useState([]);
+  const [currentMonthCalendarHolidays, setCurrentMonthCalendarHolidays] =
+    useState([]);
   const [allDashboardEvents, setAllDashboardEvents] = useState([]); // Raw events for this dashboard
   const [calendarDashboardEvents, setCalendarDashboardEvents] = useState({}); // Formatted for calendar
 
   useEffect(() => {
-    localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
+    localStorage.setItem("sidebarOpen", JSON.stringify(isSidebarOpen));
   }, [isSidebarOpen]);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
+    setIsSidebarOpen((prev) => !prev);
   };
 
   const daysInMonth = currentDate.daysInMonth();
@@ -46,11 +49,14 @@ const useRegistrarHome = () => {
 
   useEffect(() => {
     const formatted = {};
-    allDashboardEvents.forEach(event => {
+    allDashboardEvents.forEach((event) => {
       const startDate = dayjs(event.startDate);
       const endDate = dayjs(event.endDate);
       let currentDateIter = startDate;
-      while (currentDateIter.isBefore(endDate) || currentDateIter.isSame(endDate, 'day')) {
+      while (
+        currentDateIter.isBefore(endDate) ||
+        currentDateIter.isSame(endDate, "day")
+      ) {
         const monthKey = currentDateIter.format("YYYY-MM");
         const day = currentDateIter.date();
         if (!formatted[monthKey]) {
@@ -62,7 +68,7 @@ const useRegistrarHome = () => {
           label: "Event", // Or event.title if you want more detail
           color: event.color || "bg-yellow-500", // Different default color for dashboard
         };
-        currentDateIter = currentDateIter.add(1, 'day');
+        currentDateIter = currentDateIter.add(1, "day");
       }
     });
     setCalendarDashboardEvents(formatted);
@@ -71,18 +77,24 @@ const useRegistrarHome = () => {
   const fetchAllHolidaysFromAPI = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/holidays`);
-      const formattedBackendHolidays = response.data.map(h => {
+      const formattedBackendHolidays = response.data.map((h) => {
         let localDateStr = "";
         if (h.date) {
           try {
-            const dateInput = h.date.includes('T') ? h.date : `${h.date}T00:00:00`;
+            const dateInput = h.date.includes("T")
+              ? h.date
+              : `${h.date}T00:00:00`;
             const dateObj = new Date(dateInput);
             const y = dateObj.getFullYear();
-            const m = String(dateObj.getMonth() + 1).padStart(2, '0'); // Correct: Add 1
-            const d = String(dateObj.getDate()).padStart(2, '0');
+            const m = String(dateObj.getMonth() + 1).padStart(2, "0"); // Correct: Add 1
+            const d = String(dateObj.getDate()).padStart(2, "0");
             localDateStr = `${y}-${m}-${d}`;
           } catch (e) {
-            console.error("Error parsing holiday date in useRegistrarHome:", h.date, e);
+            console.error(
+              "Error parsing holiday date in useRegistrarHome:",
+              h.date,
+              e
+            );
           }
         }
         return {
@@ -115,31 +127,6 @@ const useRegistrarHome = () => {
     }
   }, [currentDate, allFetchedHolidays]);
 
-
-  // const events = {
-  //   2: { label: "Fully Booked", color: "bg-[#F63838]" },
-  //   3: { label: "Fully Booked", color: "bg-[#F63838]" },
-  //   6: { label: "Fully Booked", color: "bg-[#F63838]" },
-  //   7: { label: "Fully Booked", color: "bg-[#F63838]" },
-  //   10: { label: "Fully Booked", color: "bg-[#F63838]" },
-  //   13: { label: "Available", color: "bg-[#48E14D]" },
-  //   14: { label: "Available", color: "bg-[#48E14D]" },
-  //   15: { label: "Available", color: "bg-[#48E14D]" },
-  //   16: { label: "Available", color: "bg-[#48E14D]" },
-  //   17: { label: "Available", color: "bg-[#48E14D]" },
-  //   20: { label: "Special Event", color: "bg-[#FBBC05]" },
-  //   21: { label: "Special Event", color: "bg-[#FBBC05]" },
-  //   22: { label: "Available", color: "bg-[#48E14D]" },
-  //   23: { label: "Available", color: "bg-[#48E14D]" },
-  //   24: { label: "Available", color: "bg-[#48E14D]" },
-  //   25: { label: "Available", color: "bg-[#48E14D]" },
-  //   26: { label: "Available", color: "bg-[#48E14D]" },
-  //   27: { label: "Available", color: "bg-[#48E14D]" },
-  //   28: { label: "Available", color: "bg-[#48E14D]" },
-  //   29: { label: "Available", color: "bg-[#48E14D]" },
-  //   30: { label: "Available", color: "bg-[#48E14D]" },
-  //   31: { label: "Available", color: "bg-[#48E14D]" },
-  // };
   const handlePrevMonth = () => {
     setCurrentDate(currentDate.subtract(1, "month"));
   };
@@ -174,6 +161,43 @@ const useRegistrarHome = () => {
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSidebarOpen]);
+const [stats, setStats] = useState({
+  APPROVED: 0,
+  PENDING: 0,
+  COMPLETED: 0,
+  REJECTED: 0,
+  total: 0,
+  morning: {
+    APPROVED: 0,
+    PENDING: 0,
+    COMPLETED: 0,
+    REJECTED: 0,
+  },
+  afternoon: {
+    APPROVED: 0,
+    PENDING: 0,
+    COMPLETED: 0,
+    REJECTED: 0,
+  },
+});
+
+  // Add this effect to fetch stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/dashboard/stats`);
+        setStats(response.data);
+      } catch (error) {
+        console.error("Error fetching dashboard stats:", error);
+      }
+    };
+
+    fetchStats();
+    // Set up a refresh interval
+    const interval = setInterval(fetchStats, 30000); // Refresh every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   return {
     isSidebarOpen,
@@ -185,12 +209,12 @@ const useRegistrarHome = () => {
     monthName,
     year,
     holidays: allFetchedHolidays,
-    // events,
     handlePrevMonth,
     handleNextMonth,
     isWeekend,
     currentMonthHolidays: currentMonthCalendarHolidays,
     events: calendarDashboardEvents,
+    stats,
   };
 };
 

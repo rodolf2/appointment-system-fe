@@ -1,26 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const useFeedback = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem("sidebarOpen");
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  useEffect(() => {
+    localStorage.setItem("sidebarOpen", JSON.stringify(isSidebarOpen));
+  }, [isSidebarOpen]);
   const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const [entriesPerPage] = useState(5);
+  const [entriesPerPage] = useState(6);
   const [sortOrder, setSortOrder] = useState("newest");
 
-  useEffect(() => {
-    fetchFeedback();
-  }, [sortOrder]);
-
-  const fetchFeedback = async () => {
+  const fetchFeedback = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/feedback?sort=${sortOrder}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch feedback');
+        throw new Error("Failed to fetch feedback");
       }
       const data = await response.json();
       setFeedback(data);
@@ -29,7 +29,11 @@ const useFeedback = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [sortOrder]);
+
+  useEffect(() => {
+    fetchFeedback();
+  }, [fetchFeedback]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -38,7 +42,8 @@ const useFeedback = () => {
   // Calculate pagination values
   const totalEntries = feedback.length;
   const calculatedTotalPages = Math.ceil(totalEntries / entriesPerPage);
-  const startEntry = totalEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
+  const startEntry =
+    totalEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
   const endEntry = Math.min(currentPage * entriesPerPage, totalEntries);
 
   // Generate page numbers array
@@ -94,7 +99,7 @@ const useFeedback = () => {
     sortOrder,
     currentFeedback,
     loading,
-    error
+    error,
   };
 };
 
