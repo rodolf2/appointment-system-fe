@@ -103,7 +103,15 @@ const useStudents = (apiUrl) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setAppointments(data);
+
+        // Get archived appointments from localStorage
+        const archivedAppointments = JSON.parse(localStorage.getItem('archivedAppointments') || '[]');
+        const archivedTransactionNumbers = new Set(archivedAppointments.map(appt => appt.transactionNumber));
+
+        // Filter out archived appointments
+        const filteredData = data.filter(student => !archivedTransactionNumbers.has(student.transactionNumber));
+        
+        setAppointments(filteredData);
       } catch (err) {
         console.error("Failed to fetch student data:", err);
         setError(err.message || "An error occurred while fetching data.");

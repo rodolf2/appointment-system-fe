@@ -144,49 +144,36 @@ const useAppointment = () => {
   };
 
   // Appointment status handlers
-  const deleteAppointment = async () => {
-    try {
-      // Delete the document request first
-      const docResponse = await fetch(
-        `/api/document-requests/docs/${selectedAppointment.transactionNumber}`,
-        {
-          method: "DELETE",
-        }
-      );
+  const deleteAppointment = () => {
+    if (selectedAppointment) {
+      try {
+        // Add archived flag and date to the appointment
+        const archivedAppointment = {
+          ...selectedAppointment,
+          archived: true,
+          archivedDate: new Date().toISOString()
+        };
+        
+        // Remove from active appointments
+        setAppointments(appointments.filter(appt => appt.id !== selectedAppointment.id));
+        
+        // Store in localStorage for archived page to access
+        const archivedAppointments = JSON.parse(localStorage.getItem('archivedAppointments') || '[]');
+        archivedAppointments.push(archivedAppointment);
+        localStorage.setItem('archivedAppointments', JSON.stringify(archivedAppointments));
 
-      if (!docResponse.ok) {
-        const errorData = await docResponse.json();
-        throw new Error(errorData.message || "Failed to delete document request");
+        // Remove from students table
+        const studentsData = JSON.parse(localStorage.getItem('studentsData') || '[]');
+        const updatedStudents = studentsData.filter(
+          student => student.transactionNumber !== selectedAppointment.transactionNumber
+        );
+        localStorage.setItem('studentsData', JSON.stringify(updatedStudents));
+        
+        closeModal();
+      } catch (error) {
+        console.error('Error deleting appointment:', error);
+        alert('Failed to delete appointment. Please try again.');
       }
-
-      // Delete the status
-      const statusResponse = await fetch(
-        `/api/status/status/${selectedAppointment.transactionNumber}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      // Even if status deletion fails, we should still close the modal and update the UI
-      // since the document request was successfully deleted
-      if (!statusResponse.ok) {
-        console.warn("Status deletion failed, but document request was deleted");
-      }
-
-      // Update the local state
-      setAppointments(
-        appointments.filter(
-          (appt) => appt.transactionNumber !== selectedAppointment.transactionNumber
-        )
-      );
-      
-      // Always close the modal after attempting deletion
-      closeModal();
-    } catch (err) {
-      console.error("Error deleting appointment:", err);
-      setError(err.message || "An error occurred while deleting the appointment");
-      // Close the modal even if there's an error
-      closeModal();
     }
   };
 
@@ -298,9 +285,17 @@ const useAppointment = () => {
           return acc;
         }, {});
 
-        // Transform student records and merge with status info
+        // Get archived appointments from localStorage
+        const archivedAppointments = JSON.parse(localStorage.getItem('archivedAppointments') || '[]');
+        const archivedIds = new Set(archivedAppointments.map(appt => appt.id));
+
+        // Transform student records and merge with status info, excluding archived appointments
         const transformedAppointments = studentsData
-          .filter(student => student && student.transactionNumber) // Filter out invalid records
+          .filter(student => 
+            student && 
+            student.transactionNumber && 
+            !archivedIds.has(student.transactionNumber) // Filter out archived appointments
+          )
           .map((student) => {
             const statusInfo = statusMap[student.transactionNumber] || {};
             

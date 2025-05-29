@@ -15,35 +15,12 @@ const useArchived = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
   };
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      transactionNumber: "TR102938-123",
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-    },
-    {
-      id: 2,
-      transactionNumber: "TR122938-343",
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-    },
-    {
-      id: 3,
-      transactionNumber: "TR131238-534",
-      request: "",
-      emailAddress: "",
-      dateOfAppointment: "",
-      timeSlot: "",
-      dateOfRequest: "",
-    },
-  ]);
+
+  // Load archived appointments from localStorage
+  const [appointments, setAppointments] = useState(() => {
+    const saved = localStorage.getItem('archivedAppointments');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
@@ -53,11 +30,70 @@ const useArchived = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [isRetrieveModalOpen, setIsRetrieveModalOpen] = useState(false);
-  const [setAppointmentToRetrieve] = useState(null);
+  const [appointmentToRetrieve, setAppointmentToRetrieve] = useState(null);
 
   // Add these states to your hook
   const [showSuccessDelete, setShowSuccessDelete] = useState(false);
   const [showSuccessRetrieve, setShowSuccessRetrieve] = useState(false);
+
+  // Add pagination states
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter appointments based on search term
+  const filteredAppointments = appointments.filter((data) => {
+    const searchString = searchTerm.toLowerCase();
+    return (
+      data.transactionNumber?.toLowerCase().includes(searchString) ||
+      data.request?.toLowerCase().includes(searchString) ||
+      data.emailAddress?.toLowerCase().includes(searchString)
+    );
+  });
+
+  // Calculate pagination values
+  const totalFilteredEntries = filteredAppointments.length;
+  const calculatedTotalPages = Math.ceil(totalFilteredEntries / entriesPerPage);
+  const startEntry = totalFilteredEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
+  const endEntry = Math.min(currentPage * entriesPerPage, totalFilteredEntries);
+
+  // Generate page numbers array
+  const pageNumbers = [];
+  if (calculatedTotalPages > 0) {
+    for (let i = 1; i <= calculatedTotalPages; i++) {
+      pageNumbers.push(i);
+    }
+  }
+
+  // Pagination handlers
+  const handleEntriesPerPageChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) && value > 0) {
+      setEntriesPerPage(value);
+      setCurrentPage(1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < calculatedTotalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
 
   const closeSuccessDelete = () => {
     setShowSuccessDelete(false);
@@ -67,17 +103,85 @@ const useArchived = () => {
     setShowSuccessRetrieve(false);
   };
 
-  const deleteAppointment = () => {
-    setAppointments(
-      appointments.filter((appt) => appt !== selectedAppointment)
-    );
-    setShowSuccessDelete(true); // stays until manually closed
-    closeModal();
+  // Single appointment actions
+  const deleteAppointment = async () => {
+    if (selectedAppointment) {
+      try {
+        // Make API call to delete the appointment
+        const response = await fetch(`/api/document-requests/docs/${selectedAppointment.transactionNumber}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || 'Failed to delete appointment');
+        }
+
+        // Remove from archived appointments
+        const updatedArchived = appointments.filter(
+          appt => appt.id !== selectedAppointment.id
+        );
+        setAppointments(updatedArchived);
+        localStorage.setItem('archivedAppointments', JSON.stringify(updatedArchived));
+
+        // Remove from students table
+        const studentsData = JSON.parse(localStorage.getItem('studentsData') || '[]');
+        const updatedStudents = studentsData.filter(
+          student => student.transactionNumber !== selectedAppointment.transactionNumber
+        );
+        localStorage.setItem('studentsData', JSON.stringify(updatedStudents));
+
+        setShowSuccessDelete(true);
+        closeModal();
+      } catch (error) {
+        console.error('Error deleting appointment:', error);
+        alert(error.message || 'Failed to delete appointment. Please try again.');
+      }
+    }
   };
 
   const retrieveAppointment = () => {
-    setShowSuccessRetrieve(true); // stays until manually closed
-    closeRetrieveModal();
+    if (appointmentToRetrieve) {
+      try {
+        // Remove from archived appointments
+        const updatedArchived = appointments.filter(
+          appt => appt.id !== appointmentToRetrieve.id
+        );
+        setAppointments(updatedArchived);
+        localStorage.setItem('archivedAppointments', JSON.stringify(updatedArchived));
+
+        // Add back to active appointments
+        const activeAppointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+        const { archived, archivedDate, ...appointmentData } = appointmentToRetrieve;
+        activeAppointments.push(appointmentData);
+        localStorage.setItem('appointments', JSON.stringify(activeAppointments));
+
+        // Add back to students table
+        const studentsData = JSON.parse(localStorage.getItem('studentsData') || '[]');
+        const studentData = {
+          transactionNumber: appointmentToRetrieve.transactionNumber,
+          name: appointmentToRetrieve.name,
+          lastSY: appointmentToRetrieve.lastSY,
+          program: appointmentToRetrieve.program,
+          contact: appointmentToRetrieve.contact,
+          email: appointmentToRetrieve.email,
+          attachment: appointmentToRetrieve.attachment,
+          request: appointmentToRetrieve.request,
+          date: appointmentToRetrieve.dateOfRequest
+        };
+        studentsData.push(studentData);
+        localStorage.setItem('studentsData', JSON.stringify(studentsData));
+
+        setShowSuccessRetrieve(true);
+        closeRetrieveModal();
+      } catch (error) {
+        console.error('Error retrieving appointment:', error);
+        alert('Failed to retrieve appointment. Please try again.');
+      }
+    }
   };
 
   const openRetrieveModal = (appointment) => {
@@ -113,19 +217,97 @@ const useArchived = () => {
     setIsBulkDeleteModalOpen(false);
   };
 
-  const retrieveAppointments = () => {
-    // Add logic here to move the selected appointments back to active state
-    alert(`Retrieved ${selectedRows.length} appointments.`);
-    setSelectedRows([]);
-    closeRetrieveModal();
+  // Bulk action handlers
+  const deleteBulkAppointments = async () => {
+    try {
+      // Get selected appointments
+      const selectedAppointments = appointments.filter(appt => selectedRows.includes(appt.id));
+      
+      // Delete each appointment through the API
+      const deletePromises = selectedAppointments.map(async (appointment) => {
+        const response = await fetch(`/api/document-requests/docs/${appointment.transactionNumber}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `Failed to delete appointment ${appointment.transactionNumber}`);
+        }
+        return response;
+      });
+
+      await Promise.all(deletePromises);
+      
+      // Remove from archived appointments
+      const updatedArchived = appointments.filter(appt => !selectedRows.includes(appt.id));
+      setAppointments(updatedArchived);
+      localStorage.setItem('archivedAppointments', JSON.stringify(updatedArchived));
+
+      // Remove from students table
+      const studentsData = JSON.parse(localStorage.getItem('studentsData') || '[]');
+      const selectedTransactionNumbers = selectedAppointments.map(appt => appt.transactionNumber);
+      const updatedStudents = studentsData.filter(
+        student => !selectedTransactionNumbers.includes(student.transactionNumber)
+      );
+      localStorage.setItem('studentsData', JSON.stringify(updatedStudents));
+      
+      // Clear selection and close modal
+      setSelectedRows([]);
+      closeBulkDeleteModal();
+      setShowSuccessDelete(true);
+    } catch (error) {
+      console.error('Error deleting bulk appointments:', error);
+      alert(error.message || 'Failed to delete appointments. Please try again.');
+    }
   };
 
-  const deleteBulkAppointments = () => {
-    setAppointments(
-      appointments.filter((appt) => !selectedRows.includes(appt.id))
-    );
-    setSelectedRows([]);
-    closeBulkDeleteModal();
+  const retrieveBulkAppointments = () => {
+    try {
+      // Get selected appointments
+      const selectedAppointments = appointments.filter(appt => selectedRows.includes(appt.id));
+      
+      // Remove from archived appointments
+      const updatedArchived = appointments.filter(appt => !selectedRows.includes(appt.id));
+      setAppointments(updatedArchived);
+      localStorage.setItem('archivedAppointments', JSON.stringify(updatedArchived));
+
+      // Add back to active appointments
+      const activeAppointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+      selectedAppointments.forEach(appointment => {
+        const { archived, archivedDate, ...appointmentData } = appointment;
+        activeAppointments.push(appointmentData);
+      });
+      localStorage.setItem('appointments', JSON.stringify(activeAppointments));
+
+      // Add back to students table
+      const studentsData = JSON.parse(localStorage.getItem('studentsData') || '[]');
+      selectedAppointments.forEach(appointment => {
+        const studentData = {
+          transactionNumber: appointment.transactionNumber,
+          name: appointment.name,
+          lastSY: appointment.lastSY,
+          program: appointment.program,
+          contact: appointment.contact,
+          email: appointment.email,
+          attachment: appointment.attachment,
+          request: appointment.request,
+          date: appointment.dateOfRequest
+        };
+        studentsData.push(studentData);
+      });
+      localStorage.setItem('studentsData', JSON.stringify(studentsData));
+      
+      // Clear selection and close modal
+      setSelectedRows([]);
+      closeRetrieveModal();
+      setShowSuccessRetrieve(true);
+    } catch (error) {
+      console.error('Error retrieving bulk appointments:', error);
+      alert('Failed to retrieve appointments. Please try again.');
+    }
   };
 
   const handleCheckboxChange = (id) => {
@@ -149,10 +331,15 @@ const useArchived = () => {
   };
 
   const handleDropdownAction = (action) => {
-    if (action === "delete") {
-      openBulkDeleteModal();
-    } else if (action === "retrieve") {
-      openRetrieveModal(); // Updated for retrieve
+    if (selectedRows.length === 0) {
+      alert('Please select at least one appointment');
+      return;
+    }
+
+    if (action === 'delete') {
+      setIsBulkDeleteModalOpen(true);
+    } else if (action === 'return') {
+      setIsRetrieveModalOpen(true);
     }
     setIsDropdownOpen(false);
   };
@@ -175,7 +362,7 @@ const useArchived = () => {
     closeRetrieveModal,
     deleteAppointment,
     deleteBulkAppointments,
-    retrieveAppointments,
+    retrieveBulkAppointments,
     handleCheckboxChange,
     handleSelectAll,
     toggleDropdown,
@@ -187,6 +374,21 @@ const useArchived = () => {
     setShowSuccessRetrieve,
     closeSuccessDelete,
     closeSuccessRetrieve,
+    // Add new pagination-related returns
+    entriesPerPage,
+    currentPage,
+    totalFilteredEntries,
+    calculatedTotalPages,
+    startEntry,
+    endEntry,
+    pageNumbers,
+    handleEntriesPerPageChange,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+    handleSearchChange,
+    searchTerm,
+    filteredAppointments,
   };
 };
 

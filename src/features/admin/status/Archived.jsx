@@ -34,6 +34,21 @@ const Archived = () => {
     showSuccessRetrieve,
     closeSuccessDelete,
     closeSuccessRetrieve,
+    entriesPerPage,
+    currentPage,
+    totalFilteredEntries,
+    calculatedTotalPages,
+    startEntry,
+    endEntry,
+    pageNumbers,
+    handleEntriesPerPageChange,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+    handleSearchChange,
+    searchTerm,
+    filteredAppointments,
+    retrieveBulkAppointments,
   } = useArchived();
 
   return (
@@ -58,30 +73,34 @@ const Archived = () => {
                   </h2>
                   <div className="border-b-4 border-[#F3BC62] w-[650px] my-3"></div>
                 </div>
-                <div className="flex justify-between items-center mt-[78px] ml-4 ">
+                <div className="flex justify-between items-center mt-[78px] ml-4 mr-5">
                   <div className="text-[#161F55] font-semibold text-[18px]">
-                    <label htmlFor="show" className="mr-2">
+                    <label htmlFor="show-entries" className="mr-2">
                       SHOW
                     </label>
-                    <input
-                      id="show"
-                      name="show"
-                      type="number"
-                      min={"0"}
-                      max={"10"}
-                      defaultValue={"1"}
-                      className="text-center always-show-spinner"
-                    />
+                    <select
+                      id="show-entries"
+                      name="show-entries"
+                      value={entriesPerPage}
+                      onChange={handleEntriesPerPageChange}
+                      className="text-center w-20 p-2 border border-gray-400 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#161F55]"
+                    >
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select>
                     <span className="ml-2">ENTRIES</span>
                   </div>
-
                   <div className="relative">
-                    <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                     <input
-                      name="search"
                       id="search"
                       type="search"
-                      className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      className="border-[#989898] py-2 bg-white text-[#161F55] pl-10 pr-3 rounded-md"
                       placeholder="Search"
                     />
                   </div>
@@ -148,83 +167,112 @@ const Archived = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {appointments.map((data) => (
-                      <tr
-                        key={data.id}
-                        className={`text-[18px] ${selectedRows.includes(data.id)
-                          ? "bg-[#C2DBFF] !important"
-                          : "even:bg-gray-100"
-                          }`}
-                      >
-                        <td className="border p-4 text-center">
-                          <div className="flex items-center justify-center">
-                            <input
-                              type="checkbox"
-                              checked={selectedRows.includes(data.id)}
-                              onChange={() => handleCheckboxChange(data.id)}
-                              className="w-5 h-5"
-                            />
-                          </div>
-                        </td>
-                        <td className="border p-4 text-center font-bold">
-                          {data.transactionNumber}
-                        </td>
-                        <td className="border p-4 text-center">
-                          {data.request}
-                        </td>
-                        <td className="border p-4 text-center">
-                          {data.emailAddress}
-                        </td>
-                        <td className="border p-4 text-center">
-                          {data.dateOfAppointment}
-                        </td>
-                        <td className="border p-4 text-center">
-                          {data.timeSlot}
-                        </td>
-                        <td className="border p-4 text-center">
-                          {data.dateOfRequest}
-                        </td>
-                        <td className="border p-4 text-center">
-                          <div className="flex gap-2 justify-center">
-                            <div
-                              data-tooltip-id="retrieve-tooltip"
-                              data-tooltip-content="Retrieve"
-                              className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700 transform scale-x-[-1]"
-                              onClick={() => openRetrieveModal(data)}
-                            >
-                              <TbReload className="text-white" />
+                    {filteredAppointments
+                      .slice(
+                        (currentPage - 1) * entriesPerPage,
+                        currentPage * entriesPerPage
+                      )
+                      .map((data) => (
+                        <tr
+                          key={data.id}
+                          className={`text-[18px] ${selectedRows.includes(data.id)
+                            ? "bg-[#C2DBFF] !important"
+                            : "even:bg-gray-100"
+                            }`}
+                        >
+                          <td className="border p-4 text-center">
+                            <div className="flex items-center justify-center">
+                              <input
+                                type="checkbox"
+                                checked={selectedRows.includes(data.id)}
+                                onChange={() => handleCheckboxChange(data.id)}
+                                className="w-5 h-5"
+                              />
                             </div>
-                            <div
-                              data-tooltip-id="delete-tooltip"
-                              data-tooltip-content="Delete"
-                              className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
-                              onClick={() => openModal(data)}
-                            >
-                              <BsTrash3 className="text-white" />
+                          </td>
+                          <td className="border p-4 text-center font-bold">
+                            {data.transactionNumber}
+                          </td>
+                          <td className="border p-4 text-center">
+                            {data.request}
+                          </td>
+                          <td className="border p-4 text-center">
+                            {data.emailAddress}
+                          </td>
+                          <td className="border p-4 text-center">
+                            {data.dateOfAppointment}
+                          </td>
+                          <td className="border p-4 text-center">
+                            {data.timeSlot}
+                          </td>
+                          <td className="border p-4 text-center">
+                            {data.dateOfRequest}
+                          </td>
+                          <td className="border p-4 text-center">
+                            <div className="flex gap-2 justify-center">
+                              <div
+                                data-tooltip-id="retrieve-tooltip"
+                                data-tooltip-content="Retrieve"
+                                className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700 transform scale-x-[-1]"
+                                onClick={() => openRetrieveModal(data)}
+                              >
+                                <TbReload className="text-white" />
+                              </div>
+                              <div
+                                data-tooltip-id="delete-tooltip"
+                                data-tooltip-content="Delete"
+                                className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
+                                onClick={() => openModal(data)}
+                              >
+                                <BsTrash3 className="text-white" />
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
 
               {/* Pagination */}
-              <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
-                <span className="text-[#161F55]">
-                  SHOWING {appointments.length} OF {appointments.length} ENTRIES
-                </span>
-                <div className="mr-6">
-                  <button className="border p-1 text-[#161F55]">
-                    Previous
-                  </button>
-                  <button className="border bg-[#161F55] text-[#D9D9D9] w-[40px] h-[35px]">
-                    1
-                  </button>
-                  <button className="border p-1 text-[#161F55]">Next</button>
+              {calculatedTotalPages > 0 && (
+                <div className="flex justify-between items-center mt-10 text-[18px] px-4">
+                  <span className="text-[#161F55]">
+                    SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries} ENTRIES
+                  </span>
+                  {calculatedTotalPages > 1 && (
+                    <div className="flex items-center">
+                      <button
+                        onClick={handlePreviousPage}
+                        disabled={currentPage === 1}
+                        className="border px-3 py-1 text-[#161F55] rounded-l-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Previous
+                      </button>
+                      {pageNumbers.map((number) => (
+                        <button
+                          key={number}
+                          onClick={() => handlePageChange(number)}
+                          className={`border-t border-b px-3 py-1 ${
+                            currentPage === number
+                              ? "bg-[#161F55] text-white"
+                              : "text-[#161F55] hover:bg-gray-100"
+                          }`}
+                        >
+                          {number}
+                        </button>
+                      ))}
+                      <button
+                        onClick={handleNextPage}
+                        disabled={currentPage === calculatedTotalPages}
+                        className="border px-3 py-1 text-[#161F55] rounded-r-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
             </section>
           </div>
 
@@ -235,7 +283,7 @@ const Archived = () => {
             <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
               <div className="bg-white p-20 rounded-xl shadow-md">
                 <h2 className="text-xl font-bold mb-4">
-                  Are you sure you want to permanently delete this appointment?
+                  Are you sure you want to delete this appointment?
                 </h2>
                 <div className="flex justify-center gap-10 mt-10">
                   <button
@@ -255,8 +303,8 @@ const Archived = () => {
             </div>
           )}
 
-          {/* Retrieve Confirmation Modal */}
-          {isRetrieveModalOpen && (
+          {/* Single Retrieve Modal */}
+          {isRetrieveModalOpen && !selectedRows.length && (
             <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
               <div className="bg-white p-20 rounded-xl shadow-md">
                 <h2 className="text-xl font-bold mb-4">
@@ -343,7 +391,7 @@ const Archived = () => {
             <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
               <div className="bg-white p-20 rounded-xl shadow-md">
                 <h2 className="text-xl font-bold mb-4">
-                  Are you sure you want to delete the selected appointments?
+                  Are you sure you want to delete {selectedRows.length} selected appointment{selectedRows.length > 1 ? 's' : ''}?
                 </h2>
                 <div className="flex justify-center gap-10 mt-10">
                   <button
@@ -355,6 +403,31 @@ const Archived = () => {
                   <button
                     className="bg-[#161F55] text-white px-10 py-2 rounded-2xl"
                     onClick={deleteBulkAppointments}
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Bulk Retrieve Modal */}
+          {isRetrieveModalOpen && selectedRows.length > 0 && (
+            <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
+              <div className="bg-white p-20 rounded-xl shadow-md">
+                <h2 className="text-xl font-bold mb-4">
+                  Are you sure you want to retrieve {selectedRows.length} selected appointment{selectedRows.length > 1 ? 's' : ''}?
+                </h2>
+                <div className="flex justify-center gap-10 mt-10">
+                  <button
+                    className="bg-gray-300 text-[#161F55] px-10 py-2 rounded-2xl"
+                    onClick={closeRetrieveModal}
+                  >
+                    No
+                  </button>
+                  <button
+                    className="bg-[#161F55] text-white px-10 py-2 rounded-2xl"
+                    onClick={retrieveBulkAppointments}
                   >
                     Yes
                   </button>
