@@ -11,11 +11,11 @@ export const uploadAttachments = async (files, studentId) => {
     });
     formData.append('studentId', studentId);
 
-    const response = await axios.post(`${API_URL}/upload`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await fetch(`${API_URL}/api/attachments/upload`, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include'
+    })
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to upload attachments' };
