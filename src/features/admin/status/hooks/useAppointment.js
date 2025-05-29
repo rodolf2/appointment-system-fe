@@ -78,7 +78,7 @@ const useAppointment = () => {
     // Compare statuses in uppercase to ensure case-insensitive matching
     const appointmentStatus = data.status?.toUpperCase() || "";
     const filterStatus = selectedFilter.toUpperCase();
-    
+
     return matchesSearch && appointmentStatus === filterStatus;
   });
 
@@ -151,49 +151,71 @@ const useAppointment = () => {
         const archivedAppointment = {
           ...selectedAppointment,
           archived: true,
-          archivedDate: new Date().toISOString()
+          archivedDate: new Date().toISOString(),
         };
-        
+
         // Remove from active appointments
-        setAppointments(appointments.filter(appt => appt.id !== selectedAppointment.id));
-        
+        setAppointments(
+          appointments.filter((appt) => appt.id !== selectedAppointment.id)
+        );
+
         // Store in localStorage for archived page to access
-        const archivedAppointments = JSON.parse(localStorage.getItem('archivedAppointments') || '[]');
+        const archivedAppointments = JSON.parse(
+          localStorage.getItem("archivedAppointments") || "[]"
+        );
         archivedAppointments.push(archivedAppointment);
-        localStorage.setItem('archivedAppointments', JSON.stringify(archivedAppointments));
+        localStorage.setItem(
+          "archivedAppointments",
+          JSON.stringify(archivedAppointments)
+        );
 
         // Remove from students table
-        const studentsData = JSON.parse(localStorage.getItem('studentsData') || '[]');
-        const updatedStudents = studentsData.filter(
-          student => student.transactionNumber !== selectedAppointment.transactionNumber
+        const studentsData = JSON.parse(
+          localStorage.getItem("studentsData") || "[]"
         );
-        localStorage.setItem('studentsData', JSON.stringify(updatedStudents));
-        
+        const updatedStudents = studentsData.filter(
+          (student) =>
+            student.transactionNumber !== selectedAppointment.transactionNumber
+        );
+        localStorage.setItem("studentsData", JSON.stringify(updatedStudents));
+
         closeModal();
       } catch (error) {
-        console.error('Error deleting appointment:', error);
-        alert('Failed to delete appointment. Please try again.');
+        console.error("Error deleting appointment:", error);
+        alert("Failed to delete appointment. Please try again.");
       }
     }
   };
 
   const updateAppointmentStatus = async (appointment, newStatus) => {
     try {
-      const response = await fetch(`/api/status/status/${appointment.transactionNumber}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      console.log("Updating status:", { appointment, newStatus }); // Debug log
+      const response = await fetch(
+        `/api/status/status/${appointment.transactionNumber}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: newStatus,
+            emailAddress: appointment.emailAddress, // Make sure this is included
+            name: appointment.name, // Make sure this is included
+            appointmentDate: appointment.dateOfAppointment,
+            timeSlot: appointment.timeSlot,
+          }),
+        }
+      );
+      console.log("Response:", await response.clone().json()); // Debug log
 
       if (!response.ok) {
         throw new Error("Failed to update status");
       }
 
+
       // Update the local state
-      setAppointments(prevAppointments =>
-        prevAppointments.map(appt =>
+      setAppointments((prevAppointments) =>
+        prevAppointments.map((appt) =>
           appt.transactionNumber === appointment.transactionNumber
             ? { ...appt, status: newStatus }
             : appt
@@ -286,19 +308,24 @@ const useAppointment = () => {
         }, {});
 
         // Get archived appointments from localStorage
-        const archivedAppointments = JSON.parse(localStorage.getItem('archivedAppointments') || '[]');
-        const archivedIds = new Set(archivedAppointments.map(appt => appt.id));
+        const archivedAppointments = JSON.parse(
+          localStorage.getItem("archivedAppointments") || "[]"
+        );
+        const archivedIds = new Set(
+          archivedAppointments.map((appt) => appt.id)
+        );
 
         // Transform student records and merge with status info, excluding archived appointments
         const transformedAppointments = studentsData
-          .filter(student => 
-            student && 
-            student.transactionNumber && 
-            !archivedIds.has(student.transactionNumber) // Filter out archived appointments
+          .filter(
+            (student) =>
+              student &&
+              student.transactionNumber &&
+              !archivedIds.has(student.transactionNumber) // Filter out archived appointments
           )
           .map((student) => {
             const statusInfo = statusMap[student.transactionNumber] || {};
-            
+
             return {
               id: student.transactionNumber,
               status: statusInfo.status || "PENDING",
@@ -307,13 +334,14 @@ const useAppointment = () => {
               emailAddress: student.email || "No email specified",
               dateOfAppointment: student.appointmentDate || "Not scheduled",
               timeSlot: student.timeSlot || "Not scheduled",
-              dateOfRequest: student.date || new Date().toISOString().split('T')[0],
+              dateOfRequest:
+                student.date || new Date().toISOString().split("T")[0],
               // Keep additional fields from Students for reference
               name: student.name,
               lastSY: student.lastSY,
               program: student.program,
               contact: student.contact,
-              attachment: student.attachment
+              attachment: student.attachment,
             };
           });
 

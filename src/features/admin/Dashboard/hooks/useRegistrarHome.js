@@ -126,6 +126,7 @@ const useRegistrarHome = () => {
       setCurrentMonthCalendarHolidays([]);
     }
   }, [currentDate, allFetchedHolidays]);
+
   const handlePrevMonth = () => {
     setCurrentDate(currentDate.subtract(1, "month"));
   };
@@ -160,6 +161,43 @@ const useRegistrarHome = () => {
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSidebarOpen]);
+const [stats, setStats] = useState({
+  APPROVED: 0,
+  PENDING: 0,
+  COMPLETED: 0,
+  REJECTED: 0,
+  total: 0,
+  morning: {
+    APPROVED: 0,
+    PENDING: 0,
+    COMPLETED: 0,
+    REJECTED: 0,
+  },
+  afternoon: {
+    APPROVED: 0,
+    PENDING: 0,
+    COMPLETED: 0,
+    REJECTED: 0,
+  },
+});
+
+  // Add this effect to fetch stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/dashboard/stats`);
+        setStats(response.data);
+      } catch (error) {
+        console.error("Error fetching dashboard stats:", error);
+      }
+    };
+
+    fetchStats();
+    // Set up a refresh interval
+    const interval = setInterval(fetchStats, 30000); // Refresh every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   return {
     isSidebarOpen,
@@ -176,6 +214,7 @@ const useRegistrarHome = () => {
     isWeekend,
     currentMonthHolidays: currentMonthCalendarHolidays,
     events: calendarDashboardEvents,
+    stats,
   };
 };
 

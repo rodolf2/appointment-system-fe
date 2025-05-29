@@ -20,15 +20,20 @@ const RegistrarHome = () => {
     handlePrevMonth,
     handleNextMonth,
     isWeekend,
+    stats,
   } = useRegistrarHome();
   return (
     <div className="flex h-screen font-LatoRegular">
       {/* Sidebar */}
       <div
-        className={`sidebar-container ${isSidebarOpen ? "w-[300px]" : "w-[100px]"
-          } z-20`}
+        className={`sidebar-container ${
+          isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        } z-20`}
       >
-        <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
       </div>
 
       {/* Background Image with Dark Overlay */}
@@ -59,43 +64,50 @@ const RegistrarHome = () => {
               <div className="border-b-4 border-[#F3BC62] w-[410px] my-3"></div>
 
               <div className="grid grid-cols-3 gap-6 mt-6">
-                {/* Appointments */}
+                {/* Appointments Card */}
                 <div className="bg-[#FFFFFF] border-2 border-[#DCE0E5] p-6 rounded-lg shadow-md">
                   <div className="flex items-center justify-center">
                     {/* Circle */}
                     <div className="w-32 h-32 rounded-full flex items-center justify-center bg-[#8BE68E] bg-opacity-60 text-[#299057] text-[30px] font-LatoBold">
-                      20
+                      {stats.APPROVED || 0}
                     </div>
                     {/* Appointments */}
                     <div className="ml-4 text-left">
                       <h3 className="text-[#299057] text-xl font-semibold">
-                        Appointments
+                        Approved
                       </h3>
                       <div className="mt-2 text-sm">
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#299057] text-[16px] opacity-50">
                             ●
                           </span>{" "}
-                          Morning <span className="ml-4 font-LatoBold">10</span>
+                          Morning{" "}
+                          <span className="ml-4 font-LatoBold">
+                            {stats.morning?.APPROVED || 0}
+                          </span>
                         </p>
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#299057] text-[16px] opacity-50">
                             ●
                           </span>{" "}
                           Afternoon{" "}
-                          <span className="ml-2 font-LatoBold">10</span>
+                          <span className="ml-2 font-LatoBold">
+                            {stats.afternoon?.APPROVED || 0}
+                          </span>
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
 
+                {/* Pending Card */}
                 <div className="bg-[#FFFFFF] border-2 border-[#DCE0E5] p-6 rounded-lg shadow-md">
                   <div className="flex items-center justify-center">
                     {/* Circle */}
                     <div className="w-32 h-32 rounded-full flex items-center justify-center bg-[#E5E68B] bg-opacity-60 text-[#A0A112] text-[30px] font-LatoBold">
-                      20
+                      {stats.PENDING || 0}
                     </div>
+                    {/* Content */}
                     <div className="ml-4 text-left">
                       <h3 className="text-[#A0A112] text-xl font-semibold">
                         Pendings
@@ -103,26 +115,31 @@ const RegistrarHome = () => {
                       <div className="mt-2 text-sm">
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#E5E68B] text-[16px] ">●</span>{" "}
-                          Morning <span className="ml-4 font-LatoBold">20</span>
+                          Morning{" "}
+                          <span className="ml-4 font-LatoBold">
+                            {stats.morning?.PENDING || 0}
+                          </span>
                         </p>
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#E5E68B] text-[16px] ">●</span>{" "}
                           Afternoon{" "}
-                          <span className="ml-2 font-LatoBold">10</span>
+                          <span className="ml-2 font-LatoBold">
+                            {stats.afternoon?.PENDING || 0}
+                          </span>
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Completed */}
+                {/* Completed Card */}
                 <div className="bg-[#FFFFFF] border-2 border-[#DCE0E5] p-6 rounded-lg shadow-md">
                   <div className="flex items-center justify-center">
                     {/* Circle */}
                     <div className="w-32 h-32 rounded-full flex items-center justify-center bg-[#354CCE] bg-opacity-60 text-[#354CCE] text-[30px] font-LatoBold">
-                      20
+                      {stats.COMPLETED || 0}
                     </div>
-                    {/* Completed */}
+                    {/* Content */}
                     <div className="ml-4 text-left">
                       <h3 className="text-[#354CCE] text-xl font-semibold">
                         Completed
@@ -130,12 +147,17 @@ const RegistrarHome = () => {
                       <div className="mt-2 text-sm">
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#354CCE] text-[16px] ">●</span>{" "}
-                          Morning <span className="ml-4 font-LatoBold">15</span>
+                          Morning{" "}
+                          <span className="ml-4 font-LatoBold">
+                            {stats.morning?.COMPLETED || 0}
+                          </span>
                         </p>
                         <p className="text-[#000] text-[13px] font-LatoRegular">
                           <span className="text-[#354CCE] text-[16px] ">●</span>{" "}
                           Afternoon{" "}
-                          <span className="ml-2 font-LatoBold">5</span>
+                          <span className="ml-2 font-LatoBold">
+                            {stats.afternoon?.COMPLETED || 0}
+                          </span>
                         </p>
                       </div>
                     </div>
@@ -192,16 +214,20 @@ const RegistrarHome = () => {
                 {/* Calendar Days */}
                 {Array.from({ length: daysInMonth }).map((_, index) => {
                   const dayOfMonth = index + 1;
-                  const dateStringForComparison = `${year}-${currentDate.format('MM')}-${String(dayOfMonth).padStart(2, '0')}`;
+                  const dateStringForComparison = `${year}-${currentDate.format(
+                    "MM"
+                  )}-${String(dayOfMonth).padStart(2, "0")}`;
                   const isDayWeekend = isWeekend(dayOfMonth);
 
                   const holidayInfo = currentMonthHolidays.find(
                     (h) => h.date === dateStringForComparison
                   );
 
-                  const eventInfo = events[currentDate.format("YYYY-MM")]?.[dayOfMonth]; // 'events' is calendarDashboardEvents
+                  const eventInfo =
+                    events[currentDate.format("YYYY-MM")]?.[dayOfMonth]; // 'events' is calendarDashboardEvents
 
-                  let dayCellClasses = "p-2 h-[90px] cursor-pointer relative hover:bg-blue-100"; // Base classes
+                  let dayCellClasses =
+                    "p-2 h-[90px] cursor-pointer relative hover:bg-blue-100"; // Base classes
                   let displayItem = null;
                   let itemColor = "";
                   let itemLabel = "";
@@ -233,8 +259,12 @@ const RegistrarHome = () => {
                     currentDate.year() === dayjs().year()
                   ) {
                     // Remove previous background before applying current day highlight
-                    dayCellClasses = dayCellClasses.replace(/bg-(white|purple-100|gray-100)/g, ''); // Remove other BGs
-                    dayCellClasses += " bg-blue-300 font-bold ring-2 ring-blue-500";
+                    dayCellClasses = dayCellClasses.replace(
+                      /bg-(white|purple-100|gray-100)/g,
+                      ""
+                    ); // Remove other BGs
+                    dayCellClasses +=
+                      " bg-blue-300 font-bold ring-2 ring-blue-500";
                   }
 
                   return (
@@ -271,8 +301,12 @@ const RegistrarHome = () => {
                       const displayDate = dayjs(holiday.date).format("MMM DD");
 
                       return (
-                        <li key={holiday.id} className="text-[#161F55] text-base">
-                          <span className="font-semibold">{displayDate}:</span> {holiday.name}
+                        <li
+                          key={holiday.id}
+                          className="text-[#161F55] text-base"
+                        >
+                          <span className="font-semibold">{displayDate}:</span>{" "}
+                          {holiday.name}
                         </li>
                       );
                     })}
