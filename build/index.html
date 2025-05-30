@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/assets/image/LV_logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LVAppointEase</title>
+  <!-- SPA Routing Handler Script -->
+  <script type="text/javascript">
+    // This script checks if we're being redirected from the 404.html page
+    // and handles the redirect to the correct route
+    (function() {
+      // Parse the URL parameters
+      var params = {};
+      var queryString = window.location.search.substring(1);
+      var pairs = queryString.split('&');
+      for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i].split('=');
+        params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+      }
+
+      // If we have a path parameter, use it to navigate
+      if (params.path) {
+        var path = params.path;
+        // Remove the path parameter from the URL
+        window.history.replaceState(null, null, path);
+      }
+    })();
+  </script>
+  <script type="module" crossorigin src="/assets/index-By5fAFI-.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-BZKKJenW.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-Do-bTguX.css">
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>

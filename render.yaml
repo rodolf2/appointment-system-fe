@@ -3,6 +3,10 @@ services:
     name: appointment-system
     buildCommand: npm run build
     staticPublishPath: ./build
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
     routes:
       - type: rewrite
         source: /*
