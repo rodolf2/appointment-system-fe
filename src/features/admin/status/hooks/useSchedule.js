@@ -1,22 +1,22 @@
 import { useState, useEffect, useCallback } from "react";
-import { 
-  getAllSchedules, 
-  createSchedule, 
-  updateSchedule, 
-  deleteSchedule 
+import {
+  getAllSchedules,
+  createSchedule,
+  updateSchedule,
+  deleteSchedule,
 } from "../../../../services/scheduleServices";
 
 const useSchedule = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    const saved = localStorage.getItem('sidebarOpen');
+    const saved = localStorage.getItem("sidebarOpen");
     return saved !== null ? JSON.parse(saved) : true;
   });
 
   useEffect(() => {
-    localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
+    localStorage.setItem("sidebarOpen", JSON.stringify(isSidebarOpen));
   }, [isSidebarOpen]);
 
-  const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -24,7 +24,7 @@ const useSchedule = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   // State for error messages in modals
   const [addModalError, setAddModalError] = useState(null);
   const [editModalError, setEditModalError] = useState(null);
@@ -47,10 +47,10 @@ const useSchedule = () => {
       slots: schedule.slots.toString(),
       availableSlots: (schedule.slots - (schedule.bookedSlots || 0)).toString(),
       bookedSlots: (schedule.bookedSlots || 0).toString(),
-      date: formatDateForStorage(schedule.date.split('T')[0]),
+      date: formatDateForStorage(schedule.date.split("T")[0]),
       startTime: schedule.startTime,
       endTime: schedule.endTime,
-      _id: schedule._id
+      _id: schedule._id,
     };
   }, []);
 
@@ -59,13 +59,13 @@ const useSchedule = () => {
     setLoading(true);
     try {
       const data = await getAllSchedules();
-      const formattedSchedules = data.map((schedule, index) => 
+      const formattedSchedules = data.map((schedule, index) =>
         formatScheduleForDisplay(schedule, index)
       );
       setSchedules(formattedSchedules);
     } catch (error) {
-      console.error('Error fetching schedules:', error);
-      setAddModalError('Failed to fetch schedules');
+      console.error("Error fetching schedules:", error);
+      setAddModalError("Failed to fetch schedules");
     } finally {
       setLoading(false);
     }
@@ -127,24 +127,29 @@ const useSchedule = () => {
     if (!dateString) return "";
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
   const formatDateForStorage = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     const year = date.getFullYear();
     return `${month}/${day}/${year}`;
   };
 
   const handleUpdateSchedule = async () => {
     if (editIndex === null || !originalScheduleForForm) return;
-    
-    if (!newSchedule.slots || !newSchedule.date || !newSchedule.startTime || !newSchedule.endTime) {
+
+    if (
+      !newSchedule.slots ||
+      !newSchedule.date ||
+      !newSchedule.startTime ||
+      !newSchedule.endTime
+    ) {
       setEditModalError("All fields are required");
       return;
     }
@@ -156,7 +161,9 @@ const useSchedule = () => {
 
     // Validate that new slot count isn't less than booked slots
     if (newSlots < bookedSlots) {
-      setEditModalError(`Cannot reduce slots below booked amount (${bookedSlots} slots already booked)`);
+      setEditModalError(
+        `Cannot reduce slots below booked amount (${bookedSlots} slots already booked)`
+      );
       return;
     }
 
@@ -173,13 +180,13 @@ const useSchedule = () => {
 
     try {
       const scheduleToUpdate = schedules[editIndex];
-      
+
       // Prepare update data with slot calculations
       const updateData = {
         ...newSchedule,
         slots: newSlots,
         bookedSlots: bookedSlots,
-        availableSlots: newSlots - bookedSlots
+        availableSlots: newSlots - bookedSlots,
       };
 
       const response = await updateSchedule(scheduleToUpdate._id, updateData);
@@ -188,13 +195,18 @@ const useSchedule = () => {
         closeEditModal();
       }
     } catch (error) {
-      console.error('Error updating schedule:', error);
+      console.error("Error updating schedule:", error);
       setEditModalError(error.message || "Failed to update schedule");
     }
   };
 
   const addSchedule = async () => {
-    if (!newSchedule.slots || !newSchedule.date || !newSchedule.startTime || !newSchedule.endTime) {
+    if (
+      !newSchedule.slots ||
+      !newSchedule.date ||
+      !newSchedule.startTime ||
+      !newSchedule.endTime
+    ) {
       setAddModalError("All fields are required");
       return;
     }
@@ -206,7 +218,7 @@ const useSchedule = () => {
         closeAddModal();
       }
     } catch (error) {
-      console.error('Error adding schedule:', error);
+      console.error("Error adding schedule:", error);
       setAddModalError("Failed to add schedule");
     }
   };
@@ -214,6 +226,11 @@ const useSchedule = () => {
   const openDeleteModal = (index) => {
     setDeleteIndex(index);
     setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteIndex(null);
   };
 
   const confirmDelete = async () => {
@@ -224,17 +241,17 @@ const useSchedule = () => {
       const response = await deleteSchedule(scheduleToDelete._id);
       await fetchSchedules();
       closeDeleteModal();
-      
+
       // Show success message
-      toast.success('Schedule deleted successfully');
-      
+      toast.success("Schedule deleted successfully");
+
       // If notification is included in response, show notification
       if (response.notification) {
         // You can add additional notification handling here if needed
       }
     } catch (error) {
-      console.error('Error deleting schedule:', error);
-      toast.error(error.response?.data?.message || 'Failed to delete schedule');
+      console.error("Error deleting schedule:", error);
+      toast.error(error.response?.data?.message || "Failed to delete schedule");
     }
   };
 
