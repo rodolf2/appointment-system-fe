@@ -216,21 +216,25 @@ const useSchedule = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const closeDeleteModal = () => {
-    setDeleteIndex(null);
-    setIsDeleteModalOpen(false);
-  };
-
   const confirmDelete = async () => {
     if (deleteIndex === null) return;
-    
+
     try {
       const scheduleToDelete = schedules[deleteIndex];
-      await deleteSchedule(scheduleToDelete._id);
+      const response = await deleteSchedule(scheduleToDelete._id);
       await fetchSchedules();
       closeDeleteModal();
+      
+      // Show success message
+      toast.success('Schedule deleted successfully');
+      
+      // If notification is included in response, show notification
+      if (response.notification) {
+        // You can add additional notification handling here if needed
+      }
     } catch (error) {
       console.error('Error deleting schedule:', error);
+      toast.error(error.response?.data?.message || 'Failed to delete schedule');
     }
   };
 

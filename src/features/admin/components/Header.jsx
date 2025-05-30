@@ -27,6 +27,7 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
     markAllAsRead,
     setActiveTab,
     markAsRead,
+    refreshNotifications,
   } = useHeader(initialTitle);
 
   const { user } = useUser();
@@ -73,11 +74,41 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
               className="absolute right-0 top-full mt-2 bg-white border border-gray-200 shadow-lg rounded-lg w-[500px] z-20 max-h-[32rem] overflow-y-auto"
             >
               {/* Header */}
-              <div className="px-6 py-4 border-b">
+              <div className="px-6 py-4 border-b flex justify-between items-center">
                 <h3 className="font-semibold text-gray-800 pb-3 relative inline-block text-2xl">
                   Notifications
                   <span className="absolute bottom-1 left-0 w-full h-1 bg-[#F3BC62]"></span>
                 </h3>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      refreshNotifications();
+                    }}
+                    className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                    title="Refresh notifications"
+                    disabled={isLoadingNotifications}
+                  >
+                    {isLoadingNotifications ? (
+                      <FaSpinner className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
 
               {/* Tabs */}
@@ -183,6 +214,9 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                                             : notif.status.toLowerCase() ===
                                               "approved"
                                             ? "text-green-600"
+                                            : notif.status.toLowerCase() ===
+                                              "rejected"
+                                            ? "text-red-600"
                                             : ""
                                         } uppercase`}
                                       >

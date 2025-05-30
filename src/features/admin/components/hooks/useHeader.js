@@ -2,6 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../../context/UserContext.jsx";
 import { getUserProfile } from "../../../../services/userServices";
+import {
+  getNotifications,
+  markAsRead as markNotificationAsRead,
+  markAllAsRead as markAllNotificationsAsRead,
+} from "../../../../services/notificationServices";
 
 const useHeader = (initialTitle = "") => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -45,55 +50,28 @@ const useHeader = (initialTitle = "") => {
     fetchUserProfile();
   }, [user?.id]);
 
-  // Mock data for notifications with different types
-  useEffect(() => {
+  // Function to fetch notifications that can be called anywhere
+  const fetchNotifications = async () => {
     setIsLoadingNotifications(true);
-    setTimeout(() => {
-      setNotifications([
-        {
-          id: 1,
-          type: "user-action",
-          initials: "AB",
-          userName: "UserName",
-          action: "updated the status appointment of",
-          reference: "TR102938-123",
-          status: "APPROVED",
-          read: false,
-          time: "22 minutes ago",
-        },
-        {
-          id: 2,
-          type: "user-action",
-          initials: "AB",
-          userName: "UserName",
-          action: "updated the status appointment of",
-          reference: "TR104095-567",
-          status: "APPROVED",
-          read: false,
-          time: "35 minutes ago",
-        },
-        {
-          id: 3,
-          type: "system",
-          event: "New Appointment",
-          action: "has been submitted!",
-          read: false,
-          time: "5 minutes ago",
-        },
-        {
-          id: 4,
-          type: "user-action",
-          initials: "AB",
-          userName: "UserName",
-          action: "updated the status appointment of",
-          reference: "TR23132-122",
-          status: "COMPLETED",
-          read: false,
-          time: "43 minutes ago",
-        },
-      ]);
+    try {
+      const data = await getNotifications();
+      setNotifications(data);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      // You can set an error state here if needed
+    } finally {
       setIsLoadingNotifications(false);
-    }, 1000);
+    }
+  };
+
+  // Fetch notifications when component mounts and set up polling
+  useEffect(() => {
+    fetchNotifications();
+
+    // Set up polling to refresh notifications periodically
+    const intervalId = setInterval(fetchNotifications, 15000); // Refresh every 15 seconds
+
+    return () => clearInterval(intervalId);
   }, []);
 
   // Click outside handler
@@ -122,6 +100,8 @@ const useHeader = (initialTitle = "") => {
 
   const filteredNotifications = notifications.filter((notif) => {
     if (activeTab === "unread") return !notif.read;
+    if (activeTab === "all") return true;
+    if (activeTab === "archive") return notif.read;
     return true;
   });
 
@@ -148,14 +128,24 @@ const useHeader = (initialTitle = "") => {
     navigate("/profile");
   };
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  const markAllAsRead = async () => {
+    try {
+      await markAllNotificationsAsRead();
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+    }
   };
 
-  const markAsRead = (id) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
+  const markAsRead = async (id) => {
+    try {
+      await markNotificationAsRead(id);
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+      );
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
   };
 
   return {
@@ -179,6 +169,7 @@ const useHeader = (initialTitle = "") => {
     markAllAsRead,
     markAsRead,
     setActiveTab,
+    refreshNotifications: fetchNotifications, // Expose the refresh function
   };
 };
 
