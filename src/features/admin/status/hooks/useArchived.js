@@ -110,7 +110,7 @@ const useArchived = () => {
       try {
         // Make API call to delete the appointment
         const response = await fetch(
-          `/api/document-requests/docs/${selectedAppointment.transactionNumber}`,
+          `https://appointment-system-backend-n8dk.onrender.com/api/document-requests/docs/${selectedAppointment.transactionNumber}`,
           {
             method: "DELETE",
             headers: {
@@ -232,7 +232,7 @@ const useArchived = () => {
       // Delete each appointment through the API
       const deletePromises = selectedAppointments.map(async (appointment) => {
         const response = await fetch(
-          `/api/document-requests/docs/${appointment.transactionNumber}`,
+          `https://appointment-system-backend-n8dk.onrender.com/api/document-requests/docs/${appointment.transactionNumber}`,
           {
             method: "DELETE",
             headers: {

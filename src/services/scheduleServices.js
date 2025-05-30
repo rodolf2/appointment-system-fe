@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api/schedules";
+const BASE_URL = "https://appointment-system-backend-n8dk.onrender.com/api/schedules";
 
 // Validate schedule data
 const validateScheduleData = (data) => {

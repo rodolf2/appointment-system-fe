@@ -191,7 +191,7 @@ const useAppointment = () => {
     try {
       console.log("Updating status:", { appointment, newStatus }); // Debug log
       const response = await fetch(
-        `/api/status/status/${appointment.transactionNumber}`,
+        `https://appointment-system-backend-n8dk.onrender.com/api/status/status/${appointment.transactionNumber}`,
         {
           method: "PUT",
           headers: {
@@ -251,7 +251,7 @@ const useAppointment = () => {
       try {
         // Fetch student records first
         const studentsResponse = await fetch(
-          "/api/document-requests/docs-with-details"
+          `https://appointment-system-backend-n8dk.onrender.com/api/document-requests/docs-with-details`
         );
         if (!studentsResponse.ok) {
           let errorMessage = `HTTP error! status: ${studentsResponse.status}`;
@@ -276,7 +276,9 @@ const useAppointment = () => {
         }
 
         // Fetch all appointment statuses
-        const statusResponse = await fetch("/api/status");
+        const statusResponse = await fetch(
+          `https://appointment-system-backend-n8dk.onrender.com/api/status`
+        );
         if (!statusResponse.ok) {
           let errorMessage = `HTTP error! status: ${statusResponse.status}`;
           try {
