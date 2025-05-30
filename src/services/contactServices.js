@@ -1,11 +1,11 @@
 // import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = "https://appointment-system-backend-n8dk.onrender.com";
 
 
 export const submitContactForm = async (formData) => {
   try {
-    const response = await fetch(`${API_URL}/api/attachments/upload`, {
+    const response = await fetch(`${API_URL}/api/attachment/upload`, {
       method: "POST",
       body: formData,
       credentials: "include",
