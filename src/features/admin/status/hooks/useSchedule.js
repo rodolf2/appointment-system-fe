@@ -84,7 +84,10 @@ const useSchedule = () => {
     setAddModalError(null);
     setIsAddModalOpen(true);
   };
-
+ const closeDeleteModal = () => {
+    setDeleteIndex(null);
+    setIsDeleteModalOpen(false);
+  };
   const closeAddModal = () => {
     setNewSchedule(initialScheduleState);
     setAddModalError(null);
