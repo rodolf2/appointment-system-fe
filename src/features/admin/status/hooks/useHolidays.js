@@ -2,15 +2,15 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"; // Ensure this matches your backend port
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"; // Ensure this matches your backend port
 
 const useHolidays = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    const saved = localStorage.getItem('sidebarOpen');
+    const saved = localStorage.getItem("sidebarOpen");
     return saved !== null ? JSON.parse(saved) : true;
   });
   useEffect(() => {
-    localStorage.setItem('sidebarOpen', JSON.stringify(isSidebarOpen));
+    localStorage.setItem("sidebarOpen", JSON.stringify(isSidebarOpen));
   }, [isSidebarOpen]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -28,18 +28,24 @@ const useHolidays = () => {
   const fetchAllHolidaysFromAPI = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/holidays`);
-      const formattedHolidays = response.data.map(holiday => {
+      const formattedHolidays = response.data.map((holiday) => {
         let localDateString = "";
         if (holiday.date) {
           try {
-            const dateInput = holiday.date.includes('T') ? holiday.date : `${holiday.date}T00:00:00`;
+            const dateInput = holiday.date.includes("T")
+              ? holiday.date
+              : `${holiday.date}T00:00:00`;
             const dateObj = new Date(dateInput);
             const year = dateObj.getFullYear();
-            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const day = String(dateObj.getDate()).padStart(2, '0');
+            const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+            const day = String(dateObj.getDate()).padStart(2, "0");
             localDateString = `${year}-${month}-${day}`;
           } catch (e) {
-            console.error("Error parsing date in fetchHolidays:", holiday.date, e);
+            console.error(
+              "Error parsing date in fetchHolidays:",
+              holiday.date,
+              e
+            );
             localDateString = "";
           }
         }
@@ -67,7 +73,9 @@ const useHolidays = () => {
     if (searchTerm.trim() !== "") {
       filtered = allHolidays.filter(
         (holiday) =>
-          holiday.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          holiday.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
           holiday.date.includes(searchTerm)
       );
     }
@@ -83,21 +91,24 @@ const useHolidays = () => {
     }
   }, [allHolidays, searchTerm, currentPage, entriesPerPage]);
 
-
   // Calculate total filtered entries and pages (for UI display)
   const getFilteredCount = () => {
     if (searchTerm.trim() !== "") {
       return allHolidays.filter(
         (holiday) =>
-          holiday.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          holiday.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
           holiday.date.includes(searchTerm)
       ).length;
     }
     return allHolidays.length;
   };
   const totalFilteredEntries = getFilteredCount();
-  const calculatedTotalPages = Math.max(1, Math.ceil(totalFilteredEntries / entriesPerPage));
-
+  const calculatedTotalPages = Math.max(
+    1,
+    Math.ceil(totalFilteredEntries / entriesPerPage)
+  );
 
   // Handlers for Search and Pagination
   const handleSearchChange = (event) => {
@@ -131,9 +142,8 @@ const useHolidays = () => {
     }
   };
 
-
   // Existing Modal and CRUD Operation Handlers
-  const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   const openAddModal = () => {
     setNewHoliday(initialHolidayState);
@@ -184,7 +194,9 @@ const useHolidays = () => {
       console.error("Error adding holiday:", error);
       let errorMessage = "Could not add holiday. Please try again.";
       if (error.response) {
-        errorMessage = `Error: ${error.response.data.message || 'Server error.'} (Status: ${error.response.status})`;
+        errorMessage = `Error: ${
+          error.response.data.message || "Server error."
+        } (Status: ${error.response.status})`;
       } else if (error.request) {
         errorMessage = "Error: No response from server.";
       } else {
@@ -207,7 +219,9 @@ const useHolidays = () => {
       console.error("Error updating holiday:", error);
       let errorMessage = "Could not update holiday. Please try again.";
       if (error.response) {
-        errorMessage = `Error: ${error.response.data.message || 'Server error.'} (Status: ${error.response.status})`;
+        errorMessage = `Error: ${
+          error.response.data.message || "Server error."
+        } (Status: ${error.response.status})`;
       } else if (error.request) {
         errorMessage = "Error: No response from server.";
       } else {
@@ -230,7 +244,9 @@ const useHolidays = () => {
       console.error("Error deleting holiday:", error);
       let errorMessage = "Could not delete holiday. Please try again.";
       if (error.response) {
-        errorMessage = `Error: ${error.response.data.message || 'Server error.'} (Status: ${error.response.status})`;
+        errorMessage = `Error: ${
+          error.response.data.message || "Server error."
+        } (Status: ${error.response.status})`;
       } else if (error.request) {
         errorMessage = "Error: No response from server.";
       } else {
@@ -239,7 +255,6 @@ const useHolidays = () => {
       alert(errorMessage);
     }
   };
-
 
   return {
     isSidebarOpen,

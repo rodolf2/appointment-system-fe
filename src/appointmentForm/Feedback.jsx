@@ -18,50 +18,55 @@ const Feedback = ({ onNext, transactionNumber, name }) => {
   const handleSubmit = async () => {
     try {
       // Check if all ratings are provided
-      const allRated = Object.values(ratings).every(rating => rating > 0);
+      const allRated = Object.values(ratings).every((rating) => rating > 0);
       if (!allRated) {
         setError("Please provide ratings for all categories");
         return;
       }
 
-      console.log('Submitting feedback:', {
+      console.log("Submitting feedback:", {
         name,
         transactionNumber,
-        ratings
+        ratings,
       });
 
-      const response = await fetch('/api/feedback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name,
-          transactionNumber,
-          ratings
-        }),
-      });
+      const response = await fetch(
+        "https://appointment-system-backend-n8dk.onrender.com/api/feedback",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            transactionNumber,
+            ratings,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        let errorMessage = 'Failed to submit feedback';
+        let errorMessage = "Failed to submit feedback";
         if (data.message) {
           errorMessage = data.message;
           if (data.details) {
-            errorMessage += ': ' + Object.entries(data.details)
-              .map(([key, value]) => `${key}: ${value}`)
-              .join(', ');
+            errorMessage +=
+              ": " +
+              Object.entries(data.details)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join(", ");
           }
         }
         throw new Error(errorMessage);
       }
 
-      console.log('Feedback submitted successfully:', data);
+      console.log("Feedback submitted successfully:", data);
       onNext();
     } catch (error) {
-      console.error('Error submitting feedback:', error);
-      setError(error.message || 'Failed to submit feedback. Please try again.');
+      console.error("Error submitting feedback:", error);
+      setError(error.message || "Failed to submit feedback. Please try again.");
     }
   };
 
@@ -90,11 +95,7 @@ const Feedback = ({ onNext, transactionNumber, name }) => {
           How would you rate your experience with our <br /> LV AppointEase?
         </p>
 
-        {error && (
-          <div className="text-red-500 mb-4">
-            {error}
-          </div>
-        )}
+        {error && <div className="text-red-500 mb-4">{error}</div>}
 
         {/* Other Ratings */}
         <div className="space-y-4 font-LatoRegular">
@@ -136,7 +137,9 @@ const StarRating = ({ category, currentRating, onRate }) => {
       {[1, 2, 3, 4, 5].map((value) => (
         <button
           key={value}
-          className={`w-6 h-6 ${value <= currentRating ? "text-blue-500" : "text-gray-300"}`}
+          className={`w-6 h-6 ${
+            value <= currentRating ? "text-blue-500" : "text-gray-300"
+          }`}
           onClick={() => onRate(category, value)}
         >
           <svg
