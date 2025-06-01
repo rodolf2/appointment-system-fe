@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/attachment';
+const API_URL = 'https://appointment-system-backend-n8dk.onrender.com/api/attachment';
 
 // Upload attachments
 export const uploadAttachments = async (files, studentId) => {
@@ -11,7 +11,7 @@ export const uploadAttachments = async (files, studentId) => {
     });
     formData.append('studentId', studentId);
 
-    const response = await fetch(`${API_URL}/api/attachments/upload`, {
+    const response = await fetch(`${API_URL}/upload`, {
       method: 'POST',
       body: formData,
       credentials: 'include'

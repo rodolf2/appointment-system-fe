@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import Header from "./Header";
 import useSignUp from "./hooks/useSignUp";
 import { FcGoogle } from "react-icons/fc";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const SignUp = () => {
   const {
@@ -16,6 +17,10 @@ const SignUp = () => {
     handleConfirmPassword,
     handleSignUp,
     handleGoogleSignUp,
+    showPassword,
+    showConfirmPassword,
+    togglePasswordVisibility,
+    toggleConfirmPasswordVisibility,
   } = useSignUp();
 
   return (
@@ -70,25 +75,45 @@ const SignUp = () => {
                       required
                     />
                   </div>
-                  <div>
+                  <div className="relative">
                     <input
                       value={password}
                       onChange={handlePassword}
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Password"
                       className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
                       required
                     />
+                    <span
+                      onClick={togglePasswordVisibility}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                    >
+                      {showPassword ? (
+                        <AiOutlineEyeInvisible className="text-gray-500" />
+                      ) : (
+                        <AiOutlineEye className="text-gray-500" />
+                      )}
+                    </span>
                   </div>
-                  <div>
+                  <div className="relative">
                     <input
                       placeholder="Confirm Password"
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       value={confirmPassword}
                       onChange={handleConfirmPassword}
                       className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:opacity-50 placeholder-[#000]"
                       required
                     />
+                    <span
+                      onClick={toggleConfirmPasswordVisibility}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                    >
+                      {showConfirmPassword ? (
+                        <AiOutlineEyeInvisible className="text-gray-500" />
+                      ) : (
+                        <AiOutlineEye className="text-gray-500" />
+                      )}
+                    </span>
                   </div>
                 </div>
 

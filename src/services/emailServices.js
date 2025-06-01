@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api"; // Adjust this to match your backend URL
+const API_URL = "https://appointment-system-backend-n8dk.onrender.com/api"; // Updated to production backend URL
 
 export const emailService = {
   // Signup function

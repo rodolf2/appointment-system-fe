@@ -5,7 +5,8 @@ import axios from "axios";
 import Header from "./Header";
 
 // API endpoints configuration
-const API_BASE_URL = "http://localhost:5000/api/forgot-password";
+const API_BASE_URL =
+  "https://appointment-system-backend-n8dk.onrender.com/api/forgot-password";
 const ENDPOINTS = {
   REQUEST_OTP: `${API_BASE_URL}/request-otp`,
   VERIFY_OTP: `${API_BASE_URL}/verify-otp`,

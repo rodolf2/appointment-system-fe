@@ -3,8 +3,7 @@ import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import dayjs from "dayjs";
 import axios from "axios";
 
-const API_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"; // Ensure port matches backend
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"; // Ensure port matches backend
 
 const useEvents = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
@@ -42,7 +41,7 @@ const useEvents = () => {
   // --- API Interaction ---
   const fetchEventsFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL}/events`);
+      const response = await axios.get(`${API_URL}/api/events`);
       setAllApiEvents(response.data); // Store the raw array of events
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -149,7 +148,7 @@ const useEvents = () => {
       // NOTE: This simple save always creates a NEW event.
       // To implement UPDATE, you'd need an `editingEventId` state,
       // check if it exists, and make a PUT request instead.
-      await axios.post(`${API_URL}/events`, eventDataToSave);
+      await axios.post(`${API_URL}/api/events`, eventDataToSave);
       fetchEventsFromAPI(); // Re-fetch all events to update the calendar
       setNewEventForm(initialEventFormState); // Reset the form
       // setSelectedDayForNewEvent(null);
@@ -174,7 +173,7 @@ const useEvents = () => {
       return;
     }
     try {
-      await axios.delete(`${API_URL}/events/${selectedEventForModal.id}`);
+      await axios.delete(`${API_URL}/api/events/${selectedEventForModal.id}`);
       fetchEventsFromAPI(); // Re-fetch events
       setSelectedEventForModal(null); // Close the modal
     } catch (error) {

@@ -21,7 +21,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/forgot-password/request-otp",
+        "https://appointment-system-backend-n8dk.onrender.com/api/forgot-password/request-otp",
         { email }
       );
 

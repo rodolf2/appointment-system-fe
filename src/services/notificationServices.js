@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/notifications";
+const API_URL = "https://appointment-system-backend-n8dk.onrender.com/api/notifications";
 
 // Get all notifications
 export const getNotifications = async () => {

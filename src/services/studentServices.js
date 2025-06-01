@@ -1,12 +1,12 @@
 // services/studentService.js
 import axios from 'axios';
 
-const API_URL = '/api/students';
+const API_URL = 'https://appointment-system-backend-n8dk.onrender.com/api/students';
 
 // Create a new student
 export const createStudent = async (studentData) => {
   try {
-    const response = await axios.post(API_URL, studentData);
+    const response = await axios.post(`${API_URL}`, studentData);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to create student' };

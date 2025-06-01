@@ -84,7 +84,10 @@ const useSchedule = () => {
     setAddModalError(null);
     setIsAddModalOpen(true);
   };
-
+  const closeDeleteModal = () => {
+    setDeleteIndex(null);
+    setIsDeleteModalOpen(false);
+  };
   const closeAddModal = () => {
     setNewSchedule(initialScheduleState);
     setAddModalError(null);
@@ -211,6 +214,40 @@ const useSchedule = () => {
       return;
     }
 
+    // Check for time overlap with existing schedules on the same day
+    const existingSchedules = schedules.filter(
+      (schedule) => schedule.date === formatDateForStorage(newSchedule.date)
+    );
+
+    // Convert times to minutes for comparison
+    const newStartMinutes = convertTimeToMinutes(newSchedule.startTime);
+    const newEndMinutes = convertTimeToMinutes(newSchedule.endTime);
+
+    // Check if the new time slot overlaps with any existing slots
+    const hasOverlap = existingSchedules.some((schedule) => {
+      const existingStartMinutes = convertTimeToMinutes(schedule.startTime);
+      const existingEndMinutes = convertTimeToMinutes(schedule.endTime);
+
+      return (
+        (newStartMinutes >= existingStartMinutes &&
+          newStartMinutes < existingEndMinutes) ||
+        (newEndMinutes > existingStartMinutes &&
+          newEndMinutes <= existingEndMinutes) ||
+        (newStartMinutes <= existingStartMinutes &&
+          newEndMinutes >= existingEndMinutes)
+      );
+    });
+
+    if (hasOverlap) {
+      setAddModalError("This time slot overlaps with an existing schedule");
+      return;
+    }
+
+    if (newStartMinutes >= newEndMinutes) {
+      setAddModalError("End time must be after start time");
+      return;
+    }
+
     try {
       const response = await createSchedule(newSchedule);
       if (response) {
@@ -219,8 +256,20 @@ const useSchedule = () => {
       }
     } catch (error) {
       console.error("Error adding schedule:", error);
-      setAddModalError("Failed to add schedule");
+      setAddModalError(error.message || "Failed to add schedule");
     }
+  };
+
+  // Helper function to convert time to minutes for comparison
+  const convertTimeToMinutes = (time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    return hours * 60 + minutes;
+  };
+
+  // Helper function to convert time to minutes for comparison
+  const convertTimeToMinutes = (time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    return hours * 60 + minutes;
   };
 
   const openDeleteModal = (index) => {

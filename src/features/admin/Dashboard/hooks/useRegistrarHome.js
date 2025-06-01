@@ -2,10 +2,9 @@ import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import dayjs from "dayjs";
 import axios from "axios";
 
-const API_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const API_URL_EVENTS =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const useRegistrarHome = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -35,7 +34,7 @@ const useRegistrarHome = () => {
 
   const fetchEventsForDashboard = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL_EVENTS}/events`); // Fetch events
+      const response = await axios.get(`${API_URL_EVENTS}/api/events`); // Fetch events
       setAllDashboardEvents(response.data);
     } catch (error) {
       console.error("Error fetching events for dashboard:", error);
@@ -76,7 +75,7 @@ const useRegistrarHome = () => {
   // Function to fetch all holidays from the backend
   const fetchAllHolidaysFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL}/holidays`);
+      const response = await axios.get(`${API_URL}/api/holidays`);
       const formattedBackendHolidays = response.data.map((h) => {
         let localDateStr = "";
         if (h.date) {
@@ -161,31 +160,31 @@ const useRegistrarHome = () => {
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSidebarOpen]);
-const [stats, setStats] = useState({
-  APPROVED: 0,
-  PENDING: 0,
-  COMPLETED: 0,
-  REJECTED: 0,
-  total: 0,
-  morning: {
+  const [stats, setStats] = useState({
     APPROVED: 0,
     PENDING: 0,
     COMPLETED: 0,
     REJECTED: 0,
-  },
-  afternoon: {
-    APPROVED: 0,
-    PENDING: 0,
-    COMPLETED: 0,
-    REJECTED: 0,
-  },
-});
+    total: 0,
+    morning: {
+      APPROVED: 0,
+      PENDING: 0,
+      COMPLETED: 0,
+      REJECTED: 0,
+    },
+    afternoon: {
+      APPROVED: 0,
+      PENDING: 0,
+      COMPLETED: 0,
+      REJECTED: 0,
+    },
+  });
 
   // Add this effect to fetch stats
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get(`${API_URL}/dashboard/stats`);
+        const response = await axios.get(`${API_URL}/api/dashboard/stats`);
         setStats(response.data);
       } catch (error) {
         console.error("Error fetching dashboard stats:", error);

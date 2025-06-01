@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { signInWithPopup } from "firebase/auth";
 import { googleProvider, auth } from "@/firebase";
+import axios from "axios";
 import emailService from "../../../../services/emailServices";
 import { useUser } from "../../../../context/UserContext.jsx";
 
@@ -45,7 +46,9 @@ const useSignIn = () => {
     }
 
     try {
+      console.log('Attempting to sign in with:', { email, password });
       const response = await emailService.signin({ email, password });
+      console.log('Sign in response:', response);
 
       if (remember) {
         localStorage.setItem("savedEmail", email);
@@ -56,10 +59,13 @@ const useSignIn = () => {
       // Store the token in localStorage
       if (response.token) {
         localStorage.setItem("token", response.token);
+        // Set the token in axios default headers for all future requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
       }
 
       // Extract user data from response, ensuring we get the complete user object
       const userResponse = response.user || response;
+      console.log('User response:', userResponse);
 
       // Store user data with consistent picture handling
       const userData = {
@@ -84,11 +90,16 @@ const useSignIn = () => {
 
       // Update user context with the complete data
       updateUser(userData);
+      
+      // Store the entire user object in localStorage for persistence
+      localStorage.setItem("user", JSON.stringify(userData));
+      
       setIsLoading(false);
+      console.log('Navigating to registrarHome');
       navigate("/registrarHome");
     } catch (error) {
       console.error("Sign in error:", error);
-      setError(error.message || "Invalid email or password");
+      setError(error.response?.data?.message || error.message || "Invalid email or password");
       setIsLoading(false);
     }
   };
