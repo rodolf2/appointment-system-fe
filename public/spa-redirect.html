@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>AppointEase - Single Page App</title>
+    <script>
+      // Single Page Apps for GitHub Pages or Render
+      // This script takes the current URL and converts the path and query
+      // parameters into a route that the single page app expects.
+      
+      // Redirect to the root with the current path as a hash
+      // This is a workaround for hosting providers that don't support proper SPA routing
+      
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // Modified for Render static sites
+      
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <meta http-equiv="refresh" content="0;url=/">
+  </head>
+  <body>
+    Redirecting to the application...
+  </body>
+</html>
