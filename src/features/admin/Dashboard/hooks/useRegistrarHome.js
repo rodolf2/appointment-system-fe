@@ -184,7 +184,7 @@ const useRegistrarHome = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get(`${API_URL}/dashboard/stats`);
+        const response = await axios.get(`${API_URL}/api/dashboard/stats`);
         setStats(response.data);
       } catch (error) {
         console.error("Error fetching dashboard stats:", error);

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://appointment-system-backend-n8dk.onrender.com/api/users";
+const API_URL =
+  "https://appointment-system-backend-n8dk.onrender.com/api/users";
 
 // Upload profile picture
 export const uploadProfilePicture = async (userId, imageFile, token) => {
