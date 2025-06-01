@@ -27,7 +27,7 @@ const useHolidays = () => {
   // Fetching all holidays
   const fetchAllHolidaysFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL}/holidays`);
+      const response = await axios.get(`${API_URL}/api/holidays`);
       const formattedHolidays = response.data.map((holiday) => {
         let localDateString = "";
         if (holiday.date) {
@@ -187,7 +187,7 @@ const useHolidays = () => {
       return;
     }
     try {
-      await axios.post(`${API_URL}/holidays`, newHoliday);
+      await axios.post(`${API_URL}/api/holidays`, newHoliday);
       fetchAllHolidaysFromAPI();
       closeAddModal();
     } catch (error) {
@@ -212,7 +212,10 @@ const useHolidays = () => {
       return;
     }
     try {
-      await axios.put(`${API_URL}/holidays/${editingHolidayId}`, newHoliday);
+      await axios.put(
+        `${API_URL}/api/holidays/${editingHolidayId}`,
+        newHoliday
+      );
       fetchAllHolidaysFromAPI();
       closeEditModal();
     } catch (error) {
@@ -234,7 +237,7 @@ const useHolidays = () => {
   const confirmDelete = async () => {
     if (!editingHolidayId) return;
     try {
-      await axios.delete(`${API_URL}/holidays/${editingHolidayId}`);
+      await axios.delete(`${API_URL}/api/holidays/${editingHolidayId}`);
       fetchAllHolidaysFromAPI();
       if (displayedHolidays.length === 1 && currentPage > 1) {
         setCurrentPage(currentPage - 1);

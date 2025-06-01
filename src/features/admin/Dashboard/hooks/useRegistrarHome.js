@@ -34,7 +34,7 @@ const useRegistrarHome = () => {
 
   const fetchEventsForDashboard = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL_EVENTS}/events`); // Fetch events
+      const response = await axios.get(`${API_URL_EVENTS}/api/events`); // Fetch events
       setAllDashboardEvents(response.data);
     } catch (error) {
       console.error("Error fetching events for dashboard:", error);
@@ -75,7 +75,7 @@ const useRegistrarHome = () => {
   // Function to fetch all holidays from the backend
   const fetchAllHolidaysFromAPI = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL}/holidays`);
+      const response = await axios.get(`${API_URL}/api/holidays`);
       const formattedBackendHolidays = response.data.map((h) => {
         let localDateStr = "";
         if (h.date) {
