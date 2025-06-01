@@ -41,23 +41,20 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
       </div>
 
       <div className="relative flex flex-col justify-center text-center">
-        <h1 className="font-LatoBold text-[35px] text-Fwhite tracking-widest py-4">
+        <h1 className="font-LatoBold text-[35px] text-Fwhite tracking-widest py-3">
           REGISTRAR APPOINTMENT
         </h1>
         <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[40%] text-center">
           <div className="w-full max-w-[50%] place-self-center mt-4">
             <CustomProgressBar currentStep={currentStep} />
           </div>
-
-          <p className="text-[16px] w-[400px] mx-auto font-LatoItalic text-[#161F55] mt-16 mb-8">
+          {/* <p className="text-[16px] w-[400px] mx-auto font-LatoItalic text-[#161F55] mt-16 mb-8">
             Please note that you will receive an email confirmation once your
             appointment has been scheduled.
-          </p>
-
-          <p className="text-center font-LatoRegular text-[#000] mb-6 w-[500px] mx-auto">
+          </p> */}
+          <p className="text-center font-LatoRegular text-[#000] mb-6 w-[500px] mx-auto mt-8">
             SELECT YOUR PREFERRED DATE AND TIME TO CLAIM YOUR DOCUMENT:
           </p>
-
           <div className="w-full flex justify-center px-2">
             <div className="w-full max-w-[550px]">
               <div className="flex justify-between items-center mb-4 px-4">
@@ -138,20 +135,27 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
               )}
             </div>
           </div>
-
           <div className="mt-6 min-h-[100px] transition-all duration-300 max-w-[530px] mx-auto">
             {loading ? (
               <div className="text-center py-4">Loading available slots...</div>
             ) : selectedDate ? (
               <>
-                <h3 className="text-lg font-bold text-[#161f55] text-start">
+                {/* <h3 className="text-lg font-bold text-[#161f55] text-start">
                   {dayjs(selectedDate.date).format("MMMM D, YYYY")}
-                </h3>
+                </h3> */}
                 {selectedDate.availableTimeSlots?.length > 0 ? (
                   <>
-                    <p className="mt-1 font-bold text-start text-[#3A993D] text-md py-2">
-                      Available Time Slots
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className=" font-bold text-start text-[#3A993D] text-[20px]">
+                        Available Time Slots:
+                        <span className="text-[20px] text-[#161f55] ml-1">
+                          {selectedDate.availableTimeSlots.reduce(
+                            (total, slot) => total + slot.availableSlots,
+                            0
+                          )}
+                        </span>
+                      </p>
+                    </div>
                     <div className="grid grid-cols-2 gap-2 mt-2">
                       {selectedDate.availableTimeSlots.map((slot, index) => (
                         <div
@@ -167,12 +171,8 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                               }`}
                             onClick={() => handleTimeSlotClick(slot.timeSlot)}
                           >
+                            {" "}
                             {slot.timeSlot}
-                            <span className="block text-xs mt-1">
-                              {slot.availableSlots}{" "}
-                              {slot.availableSlots === 1 ? "slot" : "slots"}{" "}
-                              available
-                            </span>
                           </button>
                         </div>
                       ))}
@@ -194,11 +194,21 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
                 {errorMessage}
               </p>
             )}
-          </div>
-
-          <div className="flex justify-end gap-2 mt-6">
+          </div>{" "}
+          <div className="flex justify-end gap-2">
             <button
-              onClick={() => onBack(2)}
+              onClick={() => {
+                // Persist current selections in localStorage before navigating back
+                const scheduleData = {
+                  selectedDate: selectedDate,
+                  selectedTimeSlot: selectedTimeSlot,
+                };
+                localStorage.setItem(
+                  "scheduleFormData",
+                  JSON.stringify(scheduleData)
+                );
+                onBack(2);
+              }}
               className="bg-[#161f55] text-white border border-[#161f55] px-6 py-2 rounded text-sm hover:bg-blue-700"
             >
               Back
@@ -226,7 +236,7 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
               <div className="flex justify-end space-x-4 mt-4">
                 <button
                   onClick={handleConfirmSubmit}
-                  className=" text-[#161f55] px-4 py-1 rounded text-md"
+                  className=" text-[#161f55] font-LatoSemiBold py-1 rounded text-md"
                 >
                   Yes
                 </button>

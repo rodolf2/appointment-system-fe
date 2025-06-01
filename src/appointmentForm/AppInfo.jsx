@@ -3,7 +3,8 @@ import useAppInfo from "./hooks/useAppInfo";
 import PropTypes from "prop-types";
 
 const AppInfo = ({ onNext, onBack, currentStep }) => {
-  const { formData, errors, isSubmitting, handleInputChange, handleNext } = useAppInfo(onNext);
+  const { formData, errors, isSubmitting, handleInputChange, handleNext } =
+    useAppInfo(onNext);
 
   return (
     <>
@@ -22,8 +23,8 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
         </div>
 
         <div className="flex flex-col justify-center text-center m-2">
-          <h2 className="mx-auto relative font-LatoBold text-[35px] text-Fwhite tracking-widest mt-6 mb-8">
-            APPLICATION FOR <br /> RECORDS
+          <h2 className="mx-auto relative font-LatoBold text-[35px] text-Fwhite tracking-widest mt-6 mb-4">
+            APPLICATION FOR RECORDS
           </h2>
           <div className="mx-auto flex justify-center items-center bg-white p-8 rounded-lg shadow-md w-[800px] max-w-[90%] text-center z-10">
             <form
@@ -39,7 +40,10 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
 
               {/* Show submission error if any */}
               {errors.submit && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <div
+                  className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                  role="alert"
+                >
                   <span className="block sm:inline">{errors.submit}</span>
                 </div>
               )}
@@ -71,8 +75,9 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                       value={formData[field.name] || ""}
                       onChange={handleInputChange}
                       placeholder={field.placeholder}
-                      className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${errors[field.name] ? "border-red-500" : ""
-                        }`}
+                      className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
+                        errors[field.name] ? "border-red-500" : ""
+                      }`}
                     />
                     {errors[field.name] && (
                       <div className="text-red-600 text-sm text-start">
@@ -125,8 +130,9 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                     onChange={handleInputChange}
                     placeholder={field.placeholder}
                     maxLength={field.maxLength}
-                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${errors[field.name] ? "border-red-500" : ""
-                      }`}
+                    className={`pl-2 mt-1 block w-full border-2 h-8 rounded-md ${
+                      errors[field.name] ? "border-red-500" : ""
+                    }`}
                   />
                   {errors[field.name] && (
                     <p className="text-red-600 text-sm text-start">
@@ -138,24 +144,24 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
 
               <div className="mt-6 flex justify-end">
                 <button
-                className="bg-[#1E2772] text-white px-6 py-2 rounded-lg hover:bg-[#161f55] transition-colors mr-2"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onBack();
-                  Navigate("/appointmentForm?step=2");
-                }}
-              >
-                Back
-              </button>
+                  className="bg-[#1E2772] text-white px-6 py-2 rounded-lg hover:bg-[#161f55] transition-colors mr-2"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onBack();
+                    Navigate("/appointmentForm?step=2");
+                  }}
+                >
+                  Back
+                </button>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className={`bg-[#1E2772] text-white px-6 py-2 rounded-md hover:bg-[#161f55] transition-colors ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                    isSubmitting ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
-                  {isSubmitting ? 'Submitting...' : 'Next'}
+                  {isSubmitting ? "Submitting..." : "Next"}
                 </button>
               </div>
             </form>

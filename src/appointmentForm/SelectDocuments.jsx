@@ -44,14 +44,13 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
           </div>
           <div className="relative flex flex-col justify-center text-center">
             <h2 className="font-LatoBold text-[32px] text-Fwhite tracking-widest py-3">
-              APPLICATION FOR <br /> RECORDS
+              APPLICATION FOR RECORDS
             </h2>
             <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[60%] text-center z-10">
               {/* Progress Bar */}
               <div className="w-full max-w-[50%] place-self-center mt-2 ">
                 <CustomProgressBar currentStep={currentStep} />
               </div>
-
               {/* Add error message display */}
               {errors.submit && (
                 <div
@@ -61,11 +60,9 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   <span className="block sm:inline">{errors.submit}</span>
                 </div>
               )}
-
               <h2 className="uppercase text-lg text-left font-LatoBold my-4">
                 Request:
               </h2>
-
               <label className="text-start block font-LatoRegular text-[#000]">
                 SELECT DOCUMENTS:
               </label>
@@ -134,7 +131,6 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   )}
                 </div>
               </div>
-
               <div className="text-start mt-4">
                 <label className="uppercase font-LatoRegular">
                   State your purpose for applying:
@@ -158,7 +154,6 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                   <p className="invisible">Placeholder</p> // Keeps space reserved
                 )}
               </div>
-
               <label className="mt-1 block text-start uppercase">
                 Date of Request
               </label>
@@ -179,12 +174,11 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 <p className="text-red-600 text-start">{errors.date}</p>
               ) : (
                 <p className="invisible">Placeholder</p> // Keeps space reserved
-              )}
-
+              )}{" "}
               <div className="flex justify-end space-x-2  ">
                 <button
                   className="px-6 py-2  bg-[#161f55] text-white rounded-md"
-                  onClick={onBack}
+                  onClick={() => onBack(2)}
                 >
                   Back
                 </button>
