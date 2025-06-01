@@ -12,6 +12,16 @@ const useSignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const { updateUser } = useUser();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((prev) => !prev);
+  };
 
   const navigate = useNavigate();
 
@@ -130,6 +140,10 @@ const useSignUp = () => {
     handleConfirmPassword,
     handleSignUp,
     handleGoogleSignUp,
+    showPassword,
+    showConfirmPassword,
+    togglePasswordVisibility,
+    toggleConfirmPasswordVisibility,
   };
 };
 
