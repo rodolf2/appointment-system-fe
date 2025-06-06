@@ -28,6 +28,7 @@ const Schedule = () => {
     handleUpdateSchedule,
     editModalError,
     addModalError,
+    loading, // Assuming 'loading' state is managed in useSchedule
   } = useSchedule();
 
   return (
@@ -339,7 +340,7 @@ const Schedule = () => {
         </div>
       )}
 
-      {/* DELETE MODAL (no changes needed here for this specific request) */}
+      {/* DELETE MODAL */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
           <div className="bg-white p-12 rounded-md shadow-md text-center">
@@ -348,16 +349,25 @@ const Schedule = () => {
             </h2>
             <div className="flex justify-center mt-8 gap-8">
               <button
-                className="bg-[#C9C9C9] text-[#161F55] px-8 py-1 rounded-[20px]"
+                className="bg-[#C9C9C9] text-[#161F55] px-8 py-1 rounded-[20px] disabled:opacity-50"
                 onClick={closeDeleteModal}
+                disabled={loading}
               >
                 No
               </button>
               <button
-                className="bg-[#161F55] text-white px-8 py-1 rounded-[20px]"
+                className="bg-[#161F55] text-white px-8 py-1 rounded-[20px] flex items-center justify-center disabled:opacity-50"
                 onClick={confirmDelete}
+                disabled={loading}
               >
-                Yes
+                {loading ? (
+                  <>
+                    <div className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full"></div>
+                    Deleting...
+                  </>
+                ) : (
+                  "Yes"
+                )}
               </button>
             </div>
           </div>

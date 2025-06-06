@@ -90,15 +90,23 @@ const useSchedule = () => {
     setAddModalError(null);
     setIsAddModalOpen(false);
   };
-
   const openEditModal = (index) => {
     const scheduleToEdit = schedules[index];
     if (!scheduleToEdit) return;
+
+    // Clean the time strings to remove any AM/PM
+    const cleanStartTime = scheduleToEdit.startTime
+      .replace(/\s*(AM|PM)/i, "")
+      .trim();
+    const cleanEndTime = scheduleToEdit.endTime
+      .replace(/\s*(AM|PM)/i, "")
+      .trim();
+
     const formReadySchedule = {
       ...scheduleToEdit,
       date: formatDate(scheduleToEdit.date),
-      startTime: scheduleToEdit.startTime,
-      endTime: scheduleToEdit.endTime,
+      startTime: cleanStartTime,
+      endTime: cleanEndTime,
     };
     setEditIndex(index);
     setNewSchedule(formReadySchedule);
@@ -272,26 +280,60 @@ const useSchedule = () => {
     setIsDeleteModalOpen(false);
     setDeleteIndex(null);
   };
-
   const confirmDelete = async () => {
     if (deleteIndex === null) return;
 
     try {
       const scheduleToDelete = schedules[deleteIndex];
-      const response = await deleteSchedule(scheduleToDelete._id);
-      await fetchSchedules();
-      closeDeleteModal();
 
-      // Show success message
-      toast.success("Schedule deleted successfully");
+      // Check if schedule has any booked slots
+      const bookedSlots = parseInt(scheduleToDelete.bookedSlots) || 0;
+      if (bookedSlots > 0) {
+        toast.error(
+          `Cannot delete schedule with ${bookedSlots} booked appointments`
+        );
+        closeDeleteModal();
+        return;
+      }
 
-      // If notification is included in response, show notification
-      if (response.notification) {
-        // You can add additional notification handling here if needed
+      setLoading(true);
+
+      // Store a temporary copy of the schedule being deleted
+      const deletedSchedule = schedules[deleteIndex];
+
+      // First update the UI by removing the schedule
+      setSchedules((prev) => prev.filter((_, index) => index !== deleteIndex));
+
+      // Then close the modal
+      setIsDeleteModalOpen(false);
+      setDeleteIndex(null);
+
+      try {
+        // Actually perform the deletion
+        const response = await deleteSchedule(deletedSchedule._id);
+
+        // Show success message
+        toast.success("Schedule deleted successfully");
+
+        // Refresh schedules to ensure synchronization
+        await fetchSchedules();
+
+        if (response?.notification) {
+          console.log("Schedule deletion notification received");
+        }
+      } catch (error) {
+        // If deletion fails, revert the UI change
+        console.error("Error deleting schedule:", error);
+        toast.error(
+          error.response?.data?.message || "Failed to delete schedule"
+        );
+        await fetchSchedules(); // Refresh to restore the original state
       }
     } catch (error) {
-      console.error("Error deleting schedule:", error);
-      toast.error(error.response?.data?.message || "Failed to delete schedule");
+      console.error("Error in delete process:", error);
+      toast.error("Failed to process deletion");
+    } finally {
+      setLoading(false);
     }
   };
 
