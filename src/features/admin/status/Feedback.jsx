@@ -69,7 +69,7 @@ const Feedback = () => {
             <Header
               toggleSidebar={toggleSidebar}
               isSidebarOpen={isSidebarOpen}
-              title="User Feedback"
+              title="Feedback"
             />
             <section className="min-h-[calc(100vh-160px)] z-10 rounded-md shadow-md max-w-[1600px] mx-auto">
               {/* Header */}
@@ -78,7 +78,7 @@ const Feedback = () => {
                 style={{ minHeight: "120px" }}
               >
                 <div className="text-[#161F55] mb-6">
-                  <h2 className="text-3xl tracking-[5px] mb-2">
+                  <h2 className="text-3xl tracking-[5px] mb-2 font-bold">
                     User Feedback
                   </h2>
                   <div className="border-b-4 border-[#F3BC62] w-[260px]" />
