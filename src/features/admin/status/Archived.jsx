@@ -49,6 +49,9 @@ const Archived = () => {
     searchTerm,
     filteredAppointments,
     retrieveBulkAppointments,
+    showErrorModal,
+    errorMessage,
+    closeErrorModal,
   } = useArchived();
 
   return (
@@ -175,10 +178,11 @@ const Archived = () => {
                       .map((data) => (
                         <tr
                           key={data.id}
-                          className={`text-[18px] ${selectedRows.includes(data.id)
-                            ? "bg-[#C2DBFF] !important"
-                            : "even:bg-gray-100"
-                            }`}
+                          className={`text-[18px] ${
+                            selectedRows.includes(data.id)
+                              ? "bg-[#C2DBFF] !important"
+                              : "even:bg-gray-100"
+                          }`}
                         >
                           <td className="border p-4 text-center">
                             <div className="flex items-center justify-center">
@@ -238,7 +242,8 @@ const Archived = () => {
               {calculatedTotalPages > 0 && (
                 <div className="flex justify-between items-center mt-10 text-[18px] px-4">
                   <span className="text-[#161F55]">
-                    SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries} ENTRIES
+                    SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries}{" "}
+                    ENTRIES
                   </span>
                   {calculatedTotalPages > 1 && (
                     <div className="flex items-center">
@@ -391,7 +396,8 @@ const Archived = () => {
             <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
               <div className="bg-white p-20 rounded-xl shadow-md">
                 <h2 className="text-xl font-bold mb-4">
-                  Are you sure you want to delete {selectedRows.length} selected appointment{selectedRows.length > 1 ? 's' : ''}?
+                  Are you sure you want to delete {selectedRows.length} selected
+                  appointment{selectedRows.length > 1 ? "s" : ""}?
                 </h2>
                 <div className="flex justify-center gap-10 mt-10">
                   <button
@@ -416,7 +422,8 @@ const Archived = () => {
             <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
               <div className="bg-white p-20 rounded-xl shadow-md">
                 <h2 className="text-xl font-bold mb-4">
-                  Are you sure you want to retrieve {selectedRows.length} selected appointment{selectedRows.length > 1 ? 's' : ''}?
+                  Are you sure you want to retrieve {selectedRows.length}{" "}
+                  selected appointment{selectedRows.length > 1 ? "s" : ""}?
                 </h2>
                 <div className="flex justify-center gap-10 mt-10">
                   <button
@@ -431,6 +438,35 @@ const Archived = () => {
                   >
                     Yes
                   </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Error Modal */}
+          {showErrorModal && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="relative">
+                {/* Close Icon - outside the white box */}
+                <img
+                  src="/assets/icons/x_icon.svg"
+                  alt="Close"
+                  onClick={closeErrorModal}
+                  className="w-10 h-10 absolute -top-6 -right-6 cursor-pointer"
+                />
+
+                {/* Modal Box */}
+                <div className="bg-white p-8 rounded-lg shadow-lg">
+                  <div className="flex flex-col items-center">
+                    <img
+                      src="/assets/icons/error_icon.svg"
+                      alt="Error icon"
+                      className="w-20 h-20 mb-8"
+                    />
+                    <p className="text-xl font-semibold text-center text-red-600">
+                      {errorMessage}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

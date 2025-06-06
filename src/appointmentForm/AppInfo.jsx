@@ -93,7 +93,7 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                   name: "schoolYear",
                   label: "Last School Year Attended",
                   placeholder: "ex. 2016 - 2017",
-                  maxLength: 10,
+                  maxLength: 9,
                 },
                 {
                   name: "course",
@@ -148,7 +148,7 @@ const AppInfo = ({ onNext, onBack, currentStep }) => {
                   onClick={(e) => {
                     e.preventDefault();
                     onBack();
-                    Navigate("/appointmentForm?step=2");
+                    // Navigate("/appointmentForm?step=2");
                   }}
                 >
                   Back

@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
 
+const cleanAppointmentData = (appointment) => {
+  const cleanedData = { ...appointment };
+  delete cleanedData.archived;
+  delete cleanedData.archivedDate;
+  return cleanedData;
+};
+
 const useArchived = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     // Optional: Load from localStorage if you want persistence across page refreshes
@@ -40,6 +47,23 @@ const useArchived = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [refreshNotifications, setRefreshNotifications] = useState(null);
+
+  // Error handling states
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Set up refresh notifications handler
+  useEffect(() => {
+    const refreshHandler = () => {
+      // Refresh the appointments list when needed
+      const saved = localStorage.getItem("archivedAppointments");
+      if (saved) {
+        setAppointments(JSON.parse(saved));
+      }
+    };
+    setRefreshNotifications(() => refreshHandler);
+  }, []);
 
   // Filter appointments based on search term
   const filteredAppointments = appointments.filter((data) => {
@@ -103,11 +127,23 @@ const useArchived = () => {
   const closeSuccessRetrieve = () => {
     setShowSuccessRetrieve(false);
   };
-
+  const closeErrorModal = () => {
+    setShowErrorModal(false);
+    setErrorMessage("");
+  };
   // Single appointment actions
   const deleteAppointment = async () => {
     if (selectedAppointment) {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setErrorMessage(
+            "No authorization token found. Please sign in again."
+          );
+          setShowErrorModal(true);
+          return;
+        }
+
         // Make API call to delete the appointment
         const response = await fetch(
           `https://appointment-system-backend-n8dk.onrender.com/api/document-requests/docs/${selectedAppointment.transactionNumber}`,
@@ -115,23 +151,48 @@ const useArchived = () => {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
+            credentials: "include",
           }
         );
+
         if (!response.ok) {
+          if (response.status === 401) {
+            setErrorMessage("Your session has expired. Please sign in again.");
+            setShowErrorModal(true);
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 2000);
+            return;
+          }
+          if (response.status === 403) {
+            setErrorMessage(
+              "You do not have permission to delete this appointment."
+            );
+            setShowErrorModal(true);
+            return;
+          }
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.message || "Failed to delete appointment");
         }
-        // ... update local state ...
+
+        const updatedArchived = appointments.filter(
+          (appt) => appt.id !== selectedAppointment.id
+        );
+        setAppointments(updatedArchived);
+        localStorage.setItem(
+          "archivedAppointments",
+          JSON.stringify(updatedArchived)
+        );
         setShowSuccessDelete(true);
         closeModal();
         // --- Add this line to refresh notifications ---
         refreshNotifications && refreshNotifications();
       } catch (error) {
         console.error("Error deleting appointment:", error);
-        alert(
-          error.message || "Failed to delete appointment. Please try again."
-        );
+        setErrorMessage(error.message);
+        setShowErrorModal(true);
       }
     }
   };
@@ -153,9 +214,8 @@ const useArchived = () => {
         const activeAppointments = JSON.parse(
           localStorage.getItem("appointments") || "[]"
         );
-        const { archived, archivedDate, ...appointmentData } =
-          appointmentToRetrieve;
-        activeAppointments.push(appointmentData);
+        const cleanedAppointment = cleanAppointmentData(appointmentToRetrieve);
+        activeAppointments.push(cleanedAppointment);
         localStorage.setItem(
           "appointments",
           JSON.stringify(activeAppointments)
@@ -183,7 +243,8 @@ const useArchived = () => {
         closeRetrieveModal();
       } catch (error) {
         console.error("Error retrieving appointment:", error);
-        alert("Failed to retrieve appointment. Please try again.");
+        setErrorMessage("Failed to retrieve appointment. Please try again.");
+        setShowErrorModal(true);
       }
     }
   };
@@ -213,7 +274,8 @@ const useArchived = () => {
     if (selectedRows.length > 0) {
       setIsBulkDeleteModalOpen(true);
     } else {
-      alert("Please select at least one appointment to delete.");
+      setErrorMessage("Please select at least one appointment to delete.");
+      setShowErrorModal(true);
     }
   };
 
@@ -224,6 +286,13 @@ const useArchived = () => {
   // Bulk action handlers
   const deleteBulkAppointments = async () => {
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setErrorMessage("No authorization token found. Please sign in again.");
+        setShowErrorModal(true);
+        return;
+      }
+
       // Get selected appointments
       const selectedAppointments = appointments.filter((appt) =>
         selectedRows.includes(appt.id)
@@ -237,11 +306,28 @@ const useArchived = () => {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
+            credentials: "include",
           }
         );
 
         if (!response.ok) {
+          if (response.status === 401) {
+            setErrorMessage("Your session has expired. Please sign in again.");
+            setShowErrorModal(true);
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 2000);
+            return;
+          }
+          if (response.status === 403) {
+            setErrorMessage(
+              "You do not have permission to delete appointments."
+            );
+            setShowErrorModal(true);
+            return;
+          }
           const errorData = await response.json().catch(() => ({}));
           throw new Error(
             errorData.message ||
@@ -282,9 +368,13 @@ const useArchived = () => {
       setShowSuccessDelete(true);
     } catch (error) {
       console.error("Error deleting bulk appointments:", error);
-      alert(
-        error.message || "Failed to delete appointments. Please try again."
-      );
+      setErrorMessage(error.message);
+      setShowErrorModal(true);
+      if (error.message.includes("session has expired")) {
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+      }
     }
   };
 
@@ -310,8 +400,8 @@ const useArchived = () => {
         localStorage.getItem("appointments") || "[]"
       );
       selectedAppointments.forEach((appointment) => {
-        const { archived, archivedDate, ...appointmentData } = appointment;
-        activeAppointments.push(appointmentData);
+        const cleanedAppointment = cleanAppointmentData(appointment);
+        activeAppointments.push(cleanedAppointment);
       });
       localStorage.setItem("appointments", JSON.stringify(activeAppointments));
 
@@ -341,7 +431,8 @@ const useArchived = () => {
       setShowSuccessRetrieve(true);
     } catch (error) {
       console.error("Error retrieving bulk appointments:", error);
-      alert("Failed to retrieve appointments. Please try again.");
+      setErrorMessage("Failed to retrieve appointments. Please try again.");
+      setShowErrorModal(true);
     }
   };
 
@@ -367,7 +458,8 @@ const useArchived = () => {
 
   const handleDropdownAction = (action) => {
     if (selectedRows.length === 0) {
-      alert("Please select at least one appointment");
+      setErrorMessage("Please select at least one appointment");
+      setShowErrorModal(true);
       return;
     }
 
@@ -424,6 +516,10 @@ const useArchived = () => {
     handleSearchChange,
     searchTerm,
     filteredAppointments,
+    // Error handling states
+    showErrorModal,
+    errorMessage,
+    closeErrorModal,
   };
 };
 

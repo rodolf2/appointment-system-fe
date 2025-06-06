@@ -186,16 +186,21 @@ const useAppointment = () => {
       }
     }
   };
-
   const updateAppointmentStatus = async (appointment, newStatus) => {
     try {
       console.log("Updating status:", { appointment, newStatus }); // Debug log
+
+      const API_BASE_URL = import.meta.env.DEV
+        ? "http://localhost:5000/api"
+        : "https://appointment-system-backend-n8dk.onrender.com/api";
+
       const response = await fetch(
-        `https://appointment-system-backend-n8dk.onrender.com/api/status/status/${appointment.transactionNumber}`,
+        `${API_BASE_URL}/status/${appointment.transactionNumber}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Accept: "application/json",
           },
           body: JSON.stringify({
             status: newStatus,
@@ -211,7 +216,6 @@ const useAppointment = () => {
       if (!response.ok) {
         throw new Error("Failed to update status");
       }
-
 
       // Update the local state
       setAppointments((prevAppointments) =>
@@ -240,10 +244,12 @@ const useAppointment = () => {
   const completeAppointment = (appointment) => {
     event?.preventDefault();
     updateAppointmentStatus(appointment, "COMPLETED");
-  };
-
-  // Fetch data
+  }; // Fetch data
   useEffect(() => {
+    const API_BASE_URL = import.meta.env.DEV
+      ? "http://localhost:5000/api"
+      : "https://appointment-system-backend-n8dk.onrender.com/api";
+
     const fetchAppointments = async () => {
       setLoading(true);
       setError(null);
@@ -251,7 +257,12 @@ const useAppointment = () => {
       try {
         // Fetch student records first
         const studentsResponse = await fetch(
-          `https://appointment-system-backend-n8dk.onrender.com/api/document-requests/docs-with-details`
+          `${API_BASE_URL}/document-requests/docs-with-details`,
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
         );
         if (!studentsResponse.ok) {
           let errorMessage = `HTTP error! status: ${studentsResponse.status}`;
@@ -273,12 +284,12 @@ const useAppointment = () => {
         } catch (jsonError) {
           console.error("Error parsing students data:", jsonError);
           throw new Error("Failed to parse students data");
-        }
-
-        // Fetch all appointment statuses
-        const statusResponse = await fetch(
-          `https://appointment-system-backend-n8dk.onrender.com/api/status`
-        );
+        } // Fetch all appointment statuses
+        const statusResponse = await fetch(`${API_BASE_URL}/status`, {
+          headers: {
+            Accept: "application/json",
+          },
+        });
         if (!statusResponse.ok) {
           let errorMessage = `HTTP error! status: ${statusResponse.status}`;
           try {

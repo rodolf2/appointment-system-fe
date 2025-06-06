@@ -11,6 +11,9 @@ const Contact = () => {
   const [emailError, setEmailError] = useState("");
   const [subjectError, setSubjectError] = useState("");
   const [messageError, setMessageError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,8 +60,10 @@ const Contact = () => {
 
     try {
       const formData = { name, email, subject, message };
-      const result = await submitContactForm(formData);
-      alert(result.message || "Form submitted successfully!");
+      await submitContactForm(formData);
+
+      // Show success modal
+      setShowSuccessModal(true);
 
       // Reset fields
       setName("");
@@ -66,7 +71,10 @@ const Contact = () => {
       setSubject("");
       setMessage("");
     } catch (error) {
-      alert(error.error || "Failed to submit the form.");
+      setErrorMessage(
+        error.error || "Failed to submit the form. Please try again later."
+      );
+      setShowErrorModal(true);
     }
   };
 
@@ -123,8 +131,9 @@ const Contact = () => {
                 <div>
                   <label className="block font-LatoRegular text-[25px] text-[#161F55] mb-2">
                     Name
-                  </label>
+                  </label>{" "}
                   <input
+                    maxLength={150}
                     type="text"
                     placeholder="Name"
                     value={name}
@@ -147,9 +156,10 @@ const Contact = () => {
                 <div>
                   <label className="block text-[#161F55] font-LatoRegular text-[25px] mb-2">
                     Email
-                  </label>
+                  </label>{" "}
                   <input
                     type="email"
+                    maxLength={150}
                     placeholder="Email"
                     value={email}
                     onChange={(e) => {
@@ -174,9 +184,10 @@ const Contact = () => {
               <div>
                 <label className="block text-[#161F55] font-LatoRegular text-[25px] mb-2">
                   Subject
-                </label>
+                </label>{" "}
                 <input
                   type="text"
+                  maxLength={150}
                   placeholder="Subject"
                   value={subject}
                   onChange={(e) => {
@@ -198,9 +209,10 @@ const Contact = () => {
               <div>
                 <label className="block text-[#161F55] font-LatoRegular text-[25px] mb-2">
                   Message
-                </label>
+                </label>{" "}
                 <textarea
                   placeholder="Message"
+                  maxLength={400}
                   rows="5"
                   value={message}
                   onChange={(e) => {
@@ -223,12 +235,65 @@ const Contact = () => {
                 type="submit"
                 className="bg-[#161F55] text-Fwhite px-6 py-3 rounded-lg float-right hover:bg-[#0D133F] transition"
               >
-                Send Message
+                Send Message{" "}
               </button>
             </form>
           </div>
         </div>
       </section>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="relative">
+            <img
+              src="/assets/icons/x_icon.svg"
+              alt="Close"
+              onClick={() => setShowSuccessModal(false)}
+              className="w-10 h-10 absolute -top-6 -right-6 cursor-pointer"
+            />
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <div className="flex flex-col items-center">
+                <img
+                  src="/assets/icons/check_icon.svg"
+                  alt="Check icon"
+                  className="w-20 h-20 mb-8"
+                />
+                <p className="text-xl font-semibold text-center">
+                  Thanks for reaching out! We&apos;ve received your message <br />{" "}
+                  and will be in touch shortly with more information.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Modal */}
+      {showErrorModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="relative">
+            <img
+              src="/assets/icons/x_icon.svg"
+              alt="Close"
+              onClick={() => setShowErrorModal(false)}
+              className="w-10 h-10 absolute -top-6 -right-6 cursor-pointer"
+            />
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <div className="flex flex-col items-center">
+                <img
+                  src="/assets/icons/error_icon.svg"
+                  alt="Error icon"
+                  className="w-20 h-20 mb-8"
+                />
+                <p className="text-xl font-semibold text-center text-red-600">
+                  {errorMessage}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

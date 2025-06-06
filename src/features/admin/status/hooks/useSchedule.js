@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
 import {
   getAllSchedules,
   createSchedule,
@@ -83,10 +84,6 @@ const useSchedule = () => {
     setNewSchedule(initialScheduleState);
     setAddModalError(null);
     setIsAddModalOpen(true);
-  };
-  const closeDeleteModal = () => {
-    setDeleteIndex(null);
-    setIsDeleteModalOpen(false);
   };
   const closeAddModal = () => {
     setNewSchedule(initialScheduleState);
@@ -258,12 +255,6 @@ const useSchedule = () => {
       console.error("Error adding schedule:", error);
       setAddModalError(error.message || "Failed to add schedule");
     }
-  };
-
-  // Helper function to convert time to minutes for comparison
-  const convertTimeToMinutes = (time) => {
-    const [hours, minutes] = time.split(":").map(Number);
-    return hours * 60 + minutes;
   };
 
   // Helper function to convert time to minutes for comparison

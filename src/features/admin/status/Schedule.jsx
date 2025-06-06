@@ -27,7 +27,7 @@ const Schedule = () => {
     confirmDelete,
     handleUpdateSchedule,
     editModalError,
-    addModalError
+    addModalError,
   } = useSchedule();
 
   return (
@@ -91,7 +91,11 @@ const Schedule = () => {
               <thead>
                 <tr className="bg-gray-200 text-center">
                   <th className="border p-4">NO.</th>
-                  <th className="border p-4">SLOTS<br/>(Available / Total)</th>
+                  <th className="border p-4">
+                    SLOTS
+                    <br />
+                    (Available / Total)
+                  </th>
                   <th className="border p-4">DATE</th>
                   <th className="border p-4">START TIME</th>
                   <th className="border p-4">END TIME</th>
@@ -99,69 +103,85 @@ const Schedule = () => {
                 </tr>
               </thead>
               <tbody>
-                {/* Ensure schedules is populated before mapping, or handle empty/loading state */}
-                {schedules && schedules.length > 0 ? (
-                  schedules.slice(0, 9).map((schedule, rowIndex) => (
-                    <tr
-                      key={schedule?.id || rowIndex}
-                      className={`${rowIndex % 2 === 0 ? "bg-gray-100" : ""
+                {schedules && schedules.length > 0
+                  ? schedules.slice(0, 9).map((schedule, rowIndex) => (
+                      <tr
+                        key={schedule?.id || rowIndex}
+                        className={`${
+                          rowIndex % 2 === 0 ? "bg-gray-100" : ""
                         } text-center`}
-                    >
-                      <td className="border p-5">{schedule?.no || rowIndex + 1}</td> {/* Display row number or actual 'no' */}
-                      <td className={`border p-5 ${
-                        parseInt(schedule?.availableSlots || 0) === 0 
-                          ? "bg-red-100 text-red-700 font-semibold"
-                          : parseInt(schedule?.availableSlots || 0) <= 2
-                          ? "bg-yellow-100 text-yellow-700 font-semibold"
-                          : ""
-                      }`}>
-                        {schedule?.availableSlots || "0"} / {schedule?.slots || "0"}
-                        {parseInt(schedule?.availableSlots || 0) === 0 && 
-                          <span className="block text-xs text-red-600">Fully Booked</span>
-                        }
-                      </td>
-                      <td className="border p-5">{schedule?.date || ""}</td>
-                      <td className="border p-5">
-                        {schedule?.startTime || ""}
-                      </td>
-                      <td className="border p-5">{schedule?.endTime || ""}</td>
-                      <td className="border p-5">
-                        <div className="flex gap-2 justify-center">
-                          <div
-                            data-tooltip-id="edit-tooltip"
-                            data-tooltip-content="Edit"
-                            className="bg-[#CF5824] p-2 rounded cursor-pointer hover:bg-orange-700"
-                            onClick={() => openEditModal(rowIndex)}
-                          >
-                            <FaEdit className="text-white" />
+                      >
+                        <td className="border p-5">
+                          {schedule?.no || rowIndex + 1}
+                        </td>
+                        <td
+                          className={`border p-5 ${
+                            parseInt(schedule?.availableSlots || 0) === 0
+                              ? "bg-red-100 text-red-700 font-semibold"
+                              : parseInt(schedule?.availableSlots || 0) <= 2
+                              ? "bg-yellow-100 text-yellow-700 font-semibold"
+                              : ""
+                          }`}
+                        >
+                          {schedule?.availableSlots || "0"} /{" "}
+                          {schedule?.slots || "0"}
+                          {parseInt(schedule?.availableSlots || 0) === 0 && (
+                            <span className="block text-xs text-red-600">
+                              Fully Booked
+                            </span>
+                          )}
+                        </td>
+                        <td className="border p-5">{schedule?.date || ""}</td>
+                        <td className="border p-5">
+                          {schedule?.startTime || ""}
+                        </td>
+                        <td className="border p-5">
+                          {schedule?.endTime || ""}
+                        </td>
+                        <td className="border p-5">
+                          <div className="flex gap-2 justify-center">
+                            <div
+                              data-tooltip-id="edit-tooltip"
+                              data-tooltip-content="Edit"
+                              className="bg-[#CF5824] p-2 rounded cursor-pointer hover:bg-orange-700"
+                              onClick={() => openEditModal(rowIndex)}
+                            >
+                              <FaEdit className="text-white" />
+                            </div>
+                            <div
+                              data-tooltip-id="delete-tooltip"
+                              data-tooltip-content="Delete"
+                              className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
+                              onClick={() => openDeleteModal(rowIndex)}
+                            >
+                              <BsTrash3 className="text-white" />
+                            </div>
                           </div>
-                          <div
-                            data-tooltip-id="delete-tooltip"
-                            data-tooltip-content="Delete"
-                            className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
-                            onClick={() => openDeleteModal(rowIndex)}
-                          >
-                            <BsTrash3 className="text-white" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-
-                  Array.from({ length: 9 }).map((_, rowIndex) => (
-                    <tr key={rowIndex} className={`${rowIndex % 2 === 0 ? "bg-gray-100" : ""} text-center`}>
-                      <td className="border p-5 h-[69px]" colSpan={6}> {/* Adjust height and colSpan as needed */}
-                        {rowIndex === 0 && (!schedules || schedules.length === 0) ? "No schedules available" : ""}
-                      </td>
-                    </tr>
-                  ))
-                )}
+                        </td>
+                      </tr>
+                    ))
+                  : Array.from({ length: 9 }).map((_, rowIndex) => (
+                      <tr
+                        key={rowIndex}
+                        className={`${
+                          rowIndex % 2 === 0 ? "bg-gray-100" : ""
+                        } text-center`}
+                      >
+                        <td className="border p-5 h-[69px]" colSpan={6}>
+                          {rowIndex === 0 &&
+                          (!schedules || schedules.length === 0)
+                            ? "No schedules available"
+                            : ""}
+                        </td>
+                      </tr>
+                    ))}
               </tbody>
             </table>
             <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
               <span className="text-[#161F55]">
-                SHOWING 1 TO {schedules ? Math.min(schedules.length, 10) : 0} OF {schedules ? schedules.length : 0} ENTRIES {/* Dynamic counts */}
+                SHOWING 1 TO {schedules ? Math.min(schedules.length, 10) : 0} OF{" "}
+                {schedules ? schedules.length : 0} ENTRIES{" "}
+                {/* Dynamic counts */}
               </span>
               <div className="mr-6">
                 <button className="border p-1 text-[#161F55]">Previous</button>
@@ -250,7 +270,10 @@ const Schedule = () => {
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-[#161F55] bg-opacity-70 z-50">
           <div className="bg-white p-20 rounded-xl shadow-md">
-            <h2 className="text-xl font-bold mb-4 uppercase">Update Schedule</h2> {/* Consider consistent styling with ADD SCHEDULE */}
+            <h2 className="text-xl font-bold mb-4 uppercase">
+              Update Schedule
+            </h2>{" "}
+            {/* Consider consistent styling with ADD SCHEDULE */}
             <div className="border-b-2 border-[#F3BC62] w-60 my-2"></div>
             <div className="w-96">
               <p>Edit Slots</p>
@@ -296,7 +319,9 @@ const Schedule = () => {
                 {editModalError}
               </p>
             )}
-            <div className="flex justify-center gap-10 mt-6"> {/* Ensure editModalError doesn't push buttons too far if it appears */}
+            <div className="flex justify-center gap-10 mt-6">
+              {" "}
+              {/* Ensure editModalError doesn't push buttons too far if it appears */}
               <button
                 className="bg-gray-300 text-black px-8 py-2 rounded-2xl"
                 onClick={closeEditModal}
