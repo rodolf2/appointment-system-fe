@@ -188,43 +188,92 @@ const useAppointment = () => {
   };
   const updateAppointmentStatus = async (appointment, newStatus) => {
     try {
-      console.log("Updating status:", { appointment, newStatus }); // Debug log
+      console.log("Updating status for appointment:", {
+        transactionNumber: appointment.transactionNumber,
+        currentStatus: appointment.status,
+        newStatus: newStatus,
+        emailAddress: appointment.emailAddress,
+        name: appointment.name,
+      });
+      const API_BASE_URL =
+        "https://appointment-system-backend-n8dk.onrender.com/api"; // Log the full URL being used
+      const url = `${API_BASE_URL}/status/status/${appointment.transactionNumber}`;
+      console.log("Request URL:", url);
 
-      const API_BASE_URL = import.meta.env.DEV
-        ? "http://localhost:5000/api"
-        : "https://appointment-system-backend-n8dk.onrender.com/api";
+      const requestBody = {
+        transactionNumber: appointment.transactionNumber,
+        status: newStatus,
+        emailAddress: appointment.emailAddress,
+        name: appointment.name,
+        appointmentDate: appointment.dateOfAppointment,
+        timeSlot: appointment.timeSlot,
+      };
 
-      const response = await fetch(
-        `${API_BASE_URL}/status/${appointment.transactionNumber}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            status: newStatus,
-            emailAddress: appointment.emailAddress, // Make sure this is included
-            name: appointment.name, // Make sure this is included
-            appointmentDate: appointment.dateOfAppointment,
-            timeSlot: appointment.timeSlot,
-          }),
-        }
-      );
-      console.log("Response:", await response.clone().json()); // Debug log
+      console.log("Request body:", requestBody);
+
+      const response = await fetch(url, {
+        method: "PUT", // Changed from PUT to POST
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      console.log("Response status:", response.status);
+
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
 
       if (!response.ok) {
-        throw new Error("Failed to update status");
+        let errorMessage = `Failed to update status: ${response.status} ${response.statusText}`;
+
+        try {
+          // Try to parse the response as JSON
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          // If it's not JSON and not HTML, use the raw text
+          if (!responseText.includes("<!DOCTYPE")) {
+            errorMessage = responseText;
+          }
+        }
+
+        console.error("Error details:", {
+          status: response.status,
+          statusText: response.statusText,
+          errorMessage: errorMessage,
+        });
+
+        throw new Error(errorMessage);
       }
 
-      // Update the local state
+      // Try to parse the success response
+      let updatedData;
+      try {
+        updatedData = JSON.parse(responseText);
+      } catch (_parseError) {
+        console.error("Error parsing success response:", _parseError);
+        updatedData = { status: newStatus }; // Fallback to basic update
+      } // Update the local state immediately for better UX
       setAppointments((prevAppointments) =>
         prevAppointments.map((appt) =>
           appt.transactionNumber === appointment.transactionNumber
-            ? { ...appt, status: newStatus }
+            ? {
+                ...appt,
+                status: updatedData?.status || newStatus,
+                dateOfAppointment:
+                  updatedData?.appointmentDate || appt.dateOfAppointment,
+                timeSlot: updatedData?.timeSlot || appt.timeSlot,
+              }
             : appt
         )
       );
+
+      console.log("Status updated successfully:", {
+        transactionNumber: appointment.transactionNumber,
+        newStatus: updatedData?.status || newStatus,
+      });
     } catch (error) {
       console.error("Error updating status:", error);
       setError(error.message);
@@ -246,9 +295,8 @@ const useAppointment = () => {
     updateAppointmentStatus(appointment, "COMPLETED");
   }; // Fetch data
   useEffect(() => {
-    const API_BASE_URL = import.meta.env.DEV
-      ? "http://localhost:5000/api"
-      : "https://appointment-system-backend-n8dk.onrender.com/api";
+    const API_BASE_URL =
+      "https://appointment-system-backend-n8dk.onrender.com/api";
 
     const fetchAppointments = async () => {
       setLoading(true);

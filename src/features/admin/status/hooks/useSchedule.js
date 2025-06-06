@@ -45,7 +45,6 @@ const useSchedule = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
-  const [displayedSchedules, setDisplayedSchedules] = useState([]);
   const [allSchedules, setAllSchedules] = useState([]);
 
   // Format schedule data for display
@@ -107,9 +106,7 @@ const useSchedule = () => {
 
     const indexOfLastEntry = currentPage * entriesPerPage;
     const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
-    setDisplayedSchedules(filtered.slice(indexOfFirstEntry, indexOfLastEntry));
     setSchedules(filtered.slice(indexOfFirstEntry, indexOfLastEntry));
-
     const totalFiltered = filtered.length;
     const maxPage = Math.max(1, Math.ceil(totalFiltered / entriesPerPage));
     if (currentPage > maxPage) {
