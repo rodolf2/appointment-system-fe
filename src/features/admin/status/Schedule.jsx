@@ -28,8 +28,25 @@ const Schedule = () => {
     handleUpdateSchedule,
     editModalError,
     addModalError,
-    loading, // Assuming 'loading' state is managed in useSchedule
+    loading,
+    // Pagination & search
+    totalFilteredEntries,
+    searchTerm,
+    handleSearchChange,
+    currentPage,
+    entriesPerPage,
+    calculatedTotalPages,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+    handleEntriesPerPageChange,
   } = useSchedule();
+
+  const startEntry =
+    totalFilteredEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
+  const endEntry = Math.min(currentPage * entriesPerPage, totalFilteredEntries);
+  const pageNumbers = [];
+  for (let i = 1; i <= calculatedTotalPages; i++) pageNumbers.push(i);
 
   return (
     <div className="flex h-screen font-LatoRegular">
@@ -42,10 +59,9 @@ const Schedule = () => {
             toggleSidebar={toggleSidebar}
             isSidebarOpen={isSidebarOpen}
             title="Schedule Records"
-          />
-          <section className="h-[1200px] z-10 bg-white p-5 my-5">
-            {/* ... (rest of your table and other UI) ... */}
-            <div className="bg-[#D9D9D9] h-52 m-4 pt-2">
+          />{" "}
+          <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
+            <div className="bg-[#D9D9D9] h-52 m-4 pt-2 rounded-md">
               <div className="text-[#161F55] flex justify-between px-3 pt-2 ml-3">
                 <h2 className="text-3xl font-bold tracking-[5px] pt-1">
                   LIST OF SCHEDULES
@@ -61,28 +77,34 @@ const Schedule = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center mt-16 ml-4">
-                <div className="text-[#161F55] font-semibold text-[18px]">
-                  <label htmlFor="show" className="mr-2">
+              <div className="flex justify-between items-center mt-16 ml-4 mr-5">
+                <div className="text-[#161F55] font-semibold text-[18px] flex items-center">
+                  <label htmlFor="show-entries" className="mr-2">
                     SHOW
                   </label>
-                  <input
-                    id="show"
-                    name="show"
-                    type="number"
-                    min="1"
-                    max="10"
-                    defaultValue="1"
-                    className="text-center always-show-spinner"
-                  />
+                  <select
+                    id="show-entries"
+                    name="show-entries"
+                    value={entriesPerPage}
+                    onChange={handleEntriesPerPageChange}
+                    className="text-center w-20 p-2 border border-gray-400 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#161F55]"
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                  </select>
                   <span className="ml-2">ENTRIES</span>
                 </div>
                 <div className="relative">
-                  <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
-                    id="search"
+                    id="search-schedules"
                     type="search"
-                    className="border-[#989898] py-2 bg-white text-[#161F55] mr-5 pl-8"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="border-[#989898] py-2 bg-white text-[#161F55] pl-10 pr-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#161F55]"
                     placeholder="Search"
                   />
                 </div>
@@ -177,21 +199,46 @@ const Schedule = () => {
                       </tr>
                     ))}
               </tbody>
-            </table>
-            <div className="flex justify-between items-center mt-10 text-[18px] pl-4">
-              <span className="text-[#161F55]">
-                SHOWING 1 TO {schedules ? Math.min(schedules.length, 10) : 0} OF{" "}
-                {schedules ? schedules.length : 0} ENTRIES{" "}
-                {/* Dynamic counts */}
-              </span>
-              <div className="mr-6">
-                <button className="border p-1 text-[#161F55]">Previous</button>
-                <button className="border bg-[#161F55] text-[#D9D9D9] w-[40px] h-[35px]">
-                  1
-                </button>
-                <button className="border p-1 text-[#161F55]">Next</button>
+            </table>{" "}
+            {calculatedTotalPages > 0 && (
+              <div className="flex justify-between items-center mt-10 text-[18px] px-4 mx-auto w-[97%]">
+                <span className="text-[#161F55]">
+                  SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries}{" "}
+                  ENTRIES
+                </span>
+                {calculatedTotalPages > 1 && (
+                  <div className="flex items-center">
+                    <button
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                      className="border px-3 py-1 text-[#161F55] rounded-l-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Previous
+                    </button>
+                    {pageNumbers.map((number) => (
+                      <button
+                        key={number}
+                        onClick={() => handlePageChange(number)}
+                        className={`border-t border-b px-3 py-1 ${
+                          currentPage === number
+                            ? "bg-[#161F55] text-white"
+                            : "text-[#161F55] hover:bg-gray-100"
+                        }`}
+                      >
+                        {number}
+                      </button>
+                    ))}
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage === calculatedTotalPages}
+                      className="border px-3 py-1 text-[#161F55] rounded-r-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
           </section>
           <Footer />
         </main>

@@ -41,6 +41,13 @@ const useSchedule = () => {
   const [newSchedule, setNewSchedule] = useState(initialScheduleState);
   const [schedules, setSchedules] = useState([]);
 
+  // Add pagination and search states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [displayedSchedules, setDisplayedSchedules] = useState([]);
+  const [allSchedules, setAllSchedules] = useState([]);
+
   // Format schedule data for display
   const formatScheduleForDisplay = useCallback((schedule, index) => {
     return {
@@ -63,7 +70,7 @@ const useSchedule = () => {
       const formattedSchedules = data.map((schedule, index) =>
         formatScheduleForDisplay(schedule, index)
       );
-      setSchedules(formattedSchedules);
+      setAllSchedules(formattedSchedules);
     } catch (error) {
       console.error("Error fetching schedules:", error);
       setAddModalError("Failed to fetch schedules");
@@ -78,6 +85,62 @@ const useSchedule = () => {
     const refreshInterval = setInterval(fetchSchedules, 30000); // Refresh every 30 seconds
     return () => clearInterval(refreshInterval);
   }, [fetchSchedules]);
+
+  // Effect to filter and paginate schedules for display
+  useEffect(() => {
+    let filtered = allSchedules;
+
+    if (searchTerm.trim() !== "") {
+      filtered = allSchedules.filter(
+        (schedule) =>
+          (schedule.date &&
+            schedule.date.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (schedule.slots && schedule.slots.toString().includes(searchTerm)) ||
+          (schedule.startTime &&
+            schedule.startTime
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())) ||
+          (schedule.endTime &&
+            schedule.endTime.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    const indexOfLastEntry = currentPage * entriesPerPage;
+    const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+    setDisplayedSchedules(filtered.slice(indexOfFirstEntry, indexOfLastEntry));
+    setSchedules(filtered.slice(indexOfFirstEntry, indexOfLastEntry));
+
+    const totalFiltered = filtered.length;
+    const maxPage = Math.max(1, Math.ceil(totalFiltered / entriesPerPage));
+    if (currentPage > maxPage) {
+      setCurrentPage(maxPage);
+    }
+  }, [allSchedules, searchTerm, currentPage, entriesPerPage]);
+
+  // Calculate total filtered entries and pages
+  const getFilteredCount = () => {
+    if (searchTerm.trim() !== "") {
+      return allSchedules.filter(
+        (schedule) =>
+          (schedule.date &&
+            schedule.date.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (schedule.slots && schedule.slots.toString().includes(searchTerm)) ||
+          (schedule.startTime &&
+            schedule.startTime
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())) ||
+          (schedule.endTime &&
+            schedule.endTime.toLowerCase().includes(searchTerm.toLowerCase()))
+      ).length;
+    }
+    return allSchedules.length;
+  };
+
+  const totalFilteredEntries = getFilteredCount();
+  const calculatedTotalPages = Math.max(
+    1,
+    Math.ceil(totalFilteredEntries / entriesPerPage)
+  );
 
   // --- Modal Open/Close ---
   const openAddModal = () => {
@@ -337,6 +400,37 @@ const useSchedule = () => {
     }
   };
 
+  // Handlers for Search and Pagination
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleEntriesPerPageChange = (event) => {
+    const newEntries = parseInt(event.target.value, 10);
+    if (newEntries > 0) {
+      setEntriesPerPage(newEntries);
+      setCurrentPage(1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < calculatedTotalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= calculatedTotalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
   return {
     isSidebarOpen,
     isAddModalOpen,
@@ -349,20 +443,29 @@ const useSchedule = () => {
     loading,
     addModalError,
     editModalError,
-
     toggleSidebar,
     openAddModal,
     closeAddModal,
     addSchedule,
-
     openEditModal,
     closeEditModal,
     handleInputChange,
     handleUpdateSchedule,
-
     openDeleteModal,
     closeDeleteModal,
     confirmDelete,
+
+    // Pagination and search
+    totalFilteredEntries,
+    searchTerm,
+    handleSearchChange,
+    currentPage,
+    entriesPerPage,
+    calculatedTotalPages,
+    handleNextPage,
+    handlePreviousPage,
+    handlePageChange,
+    handleEntriesPerPageChange,
   };
 };
 
