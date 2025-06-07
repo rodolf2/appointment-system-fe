@@ -48,7 +48,7 @@ const useHeader = (initialTitle = "") => {
     };
 
     fetchUserProfile();
-  }, [user?.id]);
+  }, [user?.id, updateUser, user]);
 
   // Function to fetch notifications that can be called anywhere
   const fetchNotifications = async () => {
