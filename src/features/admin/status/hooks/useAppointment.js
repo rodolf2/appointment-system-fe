@@ -414,13 +414,7 @@ const useAppointment = () => {
         setLoading(false);
       }
     };
-
     fetchAppointments();
-
-    // Set up auto-refresh every 30 seconds
-    const refreshInterval = setInterval(fetchAppointments, 30000);
-
-    return () => clearInterval(refreshInterval);
   }, []);
 
   return {

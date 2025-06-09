@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useLocation, Link } from "react-router-dom"; // Changed import
+import { useLocation, Link } from "react-router-dom";
 import {
   FaUsers,
   FaTasks,
@@ -12,7 +12,35 @@ import { IoMdHome } from "react-icons/io";
 import { Tooltip } from "react-tooltip";
 import PropTypes from "prop-types";
 import { VscFeedback } from "react-icons/vsc";
-// import { ReactComponent as FeedbackIcon } from '../assets/icons/feedback_icon.svg';
+
+// Custom Image Icon component
+const ImageIcon = ({ src, alt, className, color = "white" }) => {
+  // Filter values for different colors
+  const filterValues = {
+    white: "brightness(0) invert(1)", // Convert to white
+    black: "brightness(0)", // Convert to black
+    gray: "brightness(0) opacity(0.6)", // Convert to gray
+    custom: color, // Allow custom filter value
+  };
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={`${className} object-contain transition-all duration-200`}
+      style={{
+        filter: filterValues[color] || filterValues.white,
+      }}
+    />
+  );
+};
+
+ImageIcon.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  color: PropTypes.oneOf(["white", "black", "gray", "custom"]),
+};
 
 const Sidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
@@ -41,7 +69,21 @@ const Sidebar = ({ isSidebarOpen }) => {
         { path: "/events", icon: <FaCalendarAlt />, label: "EVENTS" },
         { path: "/students", icon: <FaUsers />, label: "STUDENTS/ALUMNI" },
         { path: "/appointments", icon: <FaTasks />, label: "APPOINTMENTS" },
-        { path: "/feedback", icon: <VscFeedback/>, label: 'FEEDBACK'}
+        {
+          path: "/feedback",
+          icon: (
+            <ImageIcon
+              src="/assets/icons/feedback.png"
+              alt="Feedback Icon"
+              className={`${isSidebarOpen ? "w-7 h-7" : "w-8 h-8"} ${
+                isActive("/feedback") ? "opacity-100" : "opacity-100"
+              }`}
+              color={isActive("/feedback") ? "black" : "white"}
+            />
+          ),
+          fallbackIcon: <VscFeedback />,
+          label: "FEEDBACK",
+        },
       ],
     },
     {
@@ -49,6 +91,21 @@ const Sidebar = ({ isSidebarOpen }) => {
       items: [
         { path: "/schedule", icon: <FaRegClock />, label: "SCHEDULE" },
         { path: "/holidays", icon: <FaCalendar />, label: "HOLIDAYS" },
+        {
+          path: "/announcements",
+          icon: (
+            <ImageIcon
+              src="/assets/icons/announcement_icon.png"
+              alt="Announcement Icon"
+              className={`${isSidebarOpen ? "w-6 h-6" : "w-6 h-6"} ${
+                isActive("/announcements") ? "opacity-100" : "opacity-100"
+              }`}
+              color={isActive("/announcements") ? "black" : "white"}
+            />
+          ),
+          fallbackIcon: <IoMdHome />,
+          label: "ANNOUNCEMENT",
+        },
         { path: "/archived", icon: <FaArchive />, label: "ARCHIVED" },
       ],
     },
@@ -57,21 +114,24 @@ const Sidebar = ({ isSidebarOpen }) => {
   return (
     <aside
       ref={sidebarRef}
-      className={`h-full bg-side-bar_bg text-white ${isSidebarOpen ? "w-[300px]" : "w-[100px]"
-        } overflow-hidden transition-all duration-300`}
+      className={`h-full bg-side-bar_bg text-white ${
+        isSidebarOpen ? "w-[300px]" : "w-[100px]"
+      } overflow-hidden transition-all duration-300`}
     >
       {/* Logo */}
       <div
-        className={`flex ${isSidebarOpen
-          ? "items-center justify-start pl-4"
-          : "items-center justify-center"
-          } mt-6`}
+        className={`flex ${
+          isSidebarOpen
+            ? "items-center justify-start pl-4"
+            : "items-center justify-center"
+        } mt-6`}
       >
         <img
           src="/assets/image/LV_logo.png"
           alt="LVCC Logo"
-          className={`${isSidebarOpen ? "w-[100px] h-[100px]" : "w-[60px] h-[60px]"
-            } transition-all duration-300`}
+          className={`${
+            isSidebarOpen ? "w-[100px] h-[100px]" : "w-[60px] h-[60px]"
+          } transition-all duration-300`}
         />
         {isSidebarOpen && (
           <div className="ml-4">
@@ -83,8 +143,9 @@ const Sidebar = ({ isSidebarOpen }) => {
 
       {/* Divider */}
       <div
-        className={`border-b-2 border-white w-full ${isSidebarOpen ? "my-6" : "my-4 w-[60%] mx-auto mb-10"
-          }`}
+        className={`border-b-2 border-white w-full ${
+          isSidebarOpen ? "my-6" : "my-4 w-[60%] mx-auto mb-10"
+        }`}
       ></div>
 
       {/* Menu Sections */}
@@ -92,8 +153,9 @@ const Sidebar = ({ isSidebarOpen }) => {
         {menuSections.map((section, index) => (
           <div
             key={index}
-            className={`${index === 0 ? (isSidebarOpen ? "mt-6" : "mt-4") : "mt-10"
-              }`}
+            className={`${
+              index === 0 ? (isSidebarOpen ? "mt-6" : "mt-4") : "mt-10"
+            }`}
           >
             {/* Section Title */}
             {isSidebarOpen && (
@@ -114,10 +176,11 @@ const Sidebar = ({ isSidebarOpen }) => {
                     onClick={(e) => e.stopPropagation()} // Still keep this to prevent bubbling
                   >
                     <div
-                      className={`${isSidebarOpen
-                        ? "text-[20px] w-6 flex justify-center"
-                        : "text-[25px]"
-                        }`}
+                      className={`${
+                        isSidebarOpen
+                          ? "text-[20px] w-6 flex justify-center"
+                          : "text-[25px]"
+                      }`}
                     >
                       {icon}
                     </div>

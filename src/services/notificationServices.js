@@ -1,11 +1,23 @@
 import axios from "axios";
 
-const API_URL = "https://appointment-system-backend-n8dk.onrender.com/api/notifications";
+const API_URL =
+  "https://appointment-system-backend-n8dk.onrender.com/api/notifications";
 
 // Get all notifications
 export const getNotifications = async () => {
   try {
-    const response = await axios.get(API_URL);
+    console.log("Fetching notifications from:", API_URL);
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get(API_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    console.log("Notifications response:", response.data);
+
     // Format the time for display
     return response.data.map((notification) => ({
       ...notification,
@@ -13,7 +25,24 @@ export const getNotifications = async () => {
       time: formatTimeAgo(notification.createdAt),
     }));
   } catch (error) {
-    console.error("Error fetching notifications:", error);
+    console.error("Error fetching notifications:", {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message,
+      code: error.code,
+    });
+
+    if (error.code === "ERR_NETWORK") {
+      throw new Error(
+        "Unable to connect to the server. Please check your internet connection."
+      );
+    }
+
+    if (error.response?.status === 401) {
+      throw new Error("Your session has expired. Please sign in again.");
+    }
+
     throw error;
   }
 };
