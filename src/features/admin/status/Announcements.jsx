@@ -48,7 +48,7 @@ const Announcements = () => {
   };
 
   return (
-    <div className="min-h-screen flex font-LatoRegular relative">
+    <div className="h-screen overflow-hidden flex font-LatoRegular relative">
       <div
         className="absolute inset-0 bg-cover bg-center z-0"
         style={{ backgroundImage: `url("/assets/image/BackGround.png")` }}
@@ -99,7 +99,7 @@ const Announcements = () => {
                   modules={quillModules}
                   placeholder="Description"
                   className="flex-grow flex flex-col"
-                  style={{ minHeight: "400px" }}
+                  style={{ minHeight: "350px" }}
                 />
 
                 <div className="flex justify-end items-center gap-4 pt-10">
