@@ -1,42 +1,82 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+
+const BASE_URL = "https://appointment-system-backend-n8dk.onrender.com/api";
+const API_URL = `${BASE_URL}/announcements`;
 
 const useAnnouncements = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     const saved = localStorage.getItem("sidebarOpen");
     return saved !== null ? JSON.parse(saved) : true;
   });
-
-  const [announcement, setAnnouncement] = useState({
-    id: null,
-    title: "",
-    description: "",
-  });
-
-  const [postedAnnouncements, setPostedAnnouncements] = useState([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const [showDeleteSuccessModal, setShowDeleteSuccessModal] = useState(false);
   const [editingAnnouncement, setEditingAnnouncement] = useState(null);
   const [showUpdateSuccessModal, setShowUpdateSuccessModal] = useState(false);
 
+  const [announcement, setAnnouncement] = useState({
+    title: "",
+    description: "",
+  });
+
+  const [postedAnnouncements, setPostedAnnouncements] = useState([]);
+
   useEffect(() => {
     localStorage.setItem("sidebarOpen", JSON.stringify(isSidebarOpen));
   }, [isSidebarOpen]);
 
+  const fetchAnnouncements = useCallback(async () => {
+    try {
+      console.log("Fetching from:", API_URL); // Debug log
+      const response = await axios.get(API_URL, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.data) {
+        console.log("Fetch successful:", response.data);
+        setPostedAnnouncements(response.data);
+      } else {
+        console.warn("No data received from server");
+        setPostedAnnouncements([]);
+      }
+    } catch (error) {
+      console.error("Error fetching announcements:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        config: error.config,
+      });
+      setPostedAnnouncements([]);
+
+      if (error.response?.status === 404) {
+        console.error(
+          "API endpoint not found. Please check the server URL and routes."
+        );
+      } else if (error.code === "ERR_NETWORK") {
+        console.error("Network error. Please check if the server is running.");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, [fetchAnnouncements]);
+
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   const handleAnnouncementChange = (field, value) => {
-    setAnnouncement((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setAnnouncement((prev) => ({ ...prev, [field]: value }));
   };
 
   const resetForm = () => {
-    setAnnouncement({ id: null, title: "", description: "" });
+    setAnnouncement({ title: "", description: "" });
   };
 
-  const handleAnnounce = () => {
+  const handleAnnounce = async () => {
     if (
       !announcement.title ||
       !announcement.description ||
@@ -46,103 +86,85 @@ const useAnnouncements = () => {
       return;
     }
 
-    if (announcement.id) {
-      setPostedAnnouncements((prev) =>
-        prev.map((a) =>
-          a.id === announcement.id
-            ? {
-                ...a,
-                title: announcement.title,
-                description: announcement.description,
-              }
-            : a
-        )
-      );
-    } else {
-      const newAnnouncement = {
-        id: Date.now(),
+    try {
+      await axios.post(API_URL, {
         title: announcement.title,
         description: announcement.description,
-        timestamp: new Date().toISOString(),
-      };
-      setPostedAnnouncements((prev) => [newAnnouncement, ...prev]);
-
+      });
       setShowSuccessModal(true);
+      resetForm();
+      fetchAnnouncements();
+    } catch (error) {
+      console.error("Error posting announcement:", error);
+      alert("Failed to post announcement. Please try again.");
     }
-    resetForm();
   };
+
   const handleEditAnnouncement = (post) => {
-    setEditingAnnouncement({ ...post }); 
+    setEditingAnnouncement({
+      _id: post._id, // Make sure we're using _id
+      title: post.title,
+      description: post.description,
+    });
   };
 
   const handleEditModalChange = (field, value) => {
     setEditingAnnouncement((prev) => ({ ...prev, [field]: value }));
   };
-  const handleUpdateAnnouncement = () => {
-    if (!editingAnnouncement) return;
 
-    const isDescriptionEmpty =
-      !editingAnnouncement.description ||
-      editingAnnouncement.description.trim() === "<p><br></p>";
-    if (!editingAnnouncement.title.trim() || isDescriptionEmpty) {
-      alert("Title and description cannot be empty.");
-      return; 
+  const handleUpdateAnnouncement = async () => {
+    if (!editingAnnouncement?._id) {
+      console.error("No announcement ID found for update");
+      return;
     }
 
-    const originalPost = postedAnnouncements.find(
-      (post) => post.id === editingAnnouncement.id
-    );
+    try {
+      const response = await axios.put(
+        `${API_URL}/${editingAnnouncement._id}`,
+        {
+          title: editingAnnouncement.title,
+          description: editingAnnouncement.description,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    if (originalPost) {
-      const isUnchanged =
-        originalPost.title === editingAnnouncement.title &&
-        originalPost.description === editingAnnouncement.description;
-
-      if (isUnchanged) {
+      if (response.status === 200) {
+        await fetchAnnouncements();
         setEditingAnnouncement(null);
-        return;
+        setShowUpdateSuccessModal(true);
       }
+    } catch (error) {
+      console.error("Failed to update announcement:", error);
+      alert("Failed to update announcement. Please try again.");
     }
-
-    setPostedAnnouncements((prev) =>
-      prev.map((post) =>
-        post.id === editingAnnouncement.id ? editingAnnouncement : post
-      )
-    );
-    setShowUpdateSuccessModal(true);
-    setEditingAnnouncement(null);
   };
 
-  const closeEditModal = () => {
-    setEditingAnnouncement(null);
-  };
   const handleDeleteAnnouncement = (id) => {
     setItemToDeleteId(id);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (itemToDeleteId) {
-      if (announcement.id === itemToDeleteId) {
-        resetForm();
+      try {
+        await axios.delete(`${API_URL}/${itemToDeleteId}`);
+        setItemToDeleteId(null);
+        setShowDeleteSuccessModal(true);
+        fetchAnnouncements();
+      } catch (error) {
+        console.error("Error deleting announcement:", error);
+        alert("Failed to delete announcement. Please try again.");
       }
-      setPostedAnnouncements((prev) =>
-        prev.filter((a) => a.id !== itemToDeleteId)
-      );
-      setItemToDeleteId(null);
-      setShowDeleteSuccessModal(true);
     }
   };
 
-  const cancelDelete = () => {
-    setItemToDeleteId(null);
-  };
-
-  const closeSuccessModal = () => {
-    setShowSuccessModal(false);
-  };
-  const closeDeleteSuccessModal = () => {
-    setShowDeleteSuccessModal(false);
-  };
+  const cancelDelete = () => setItemToDeleteId(null);
+  const closeEditModal = () => setEditingAnnouncement(null);
+  const closeSuccessModal = () => setShowSuccessModal(false);
+  const closeDeleteSuccessModal = () => setShowDeleteSuccessModal(false);
   const closeUpdateSuccessModal = () => setShowUpdateSuccessModal(false);
 
   return {

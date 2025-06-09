@@ -33,7 +33,7 @@ const Announcements = () => {
     closeUpdateSuccessModal,
   } = useAnnouncements();
 
-  const isEditing = announcement.id !== null;
+  const isEditing = announcement._id !== null;
 
   const quillModules = {
     toolbar: [
@@ -132,7 +132,7 @@ const Announcements = () => {
                   ) : (
                     postedAnnouncements.map((post) => (
                       <div
-                        key={post.id}
+                        key={post._id}
                         className="border rounded-lg p-3 shadow-sm"
                       >
                         <div className="flex justify-between items-start gap-4">
@@ -149,7 +149,7 @@ const Announcements = () => {
                               <FaEdit className="text-white" />
                             </button>
                             <button
-                              onClick={() => handleDeleteAnnouncement(post.id)}
+                              onClick={() => handleDeleteAnnouncement(post._id)}
                               className="p-2 rounded bg-[#D52121] hover:bg-red-500 transition-colors"
                               aria-label="Delete Announcement"
                             >

@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [slides, setSlides] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const slides = [
+  const staticSlides = [
     {
       title: "Requesting and releasing of documents general guidelines.",
       description:
         "To ensure efficient and orderly processing of document requests, the following regulations have been established for both Basic Education and Higher Education. Please be guided accordingly.",
+      isStatic: true,
     },
     {
       title: "Objectives",
@@ -17,6 +21,7 @@ const Carousel = () => {
         "La Verdad Christian College, Inc. aims to provide help through educational assistance to poor but deserving students from different parts of the country so that they may acquire quality education without the worries of high cost of education.",
         "It also aims to alleviate poverty by offering opportunities to poor but determined students to acquire higher quality education to fulfill their dreams and succeed with God's help and mercy.",
       ],
+      isStatic: true,
     },
     {
       title: "College Program Offered",
@@ -31,50 +36,108 @@ const Carousel = () => {
       ],
     },
   ];
+  useEffect(() => {
+    const fetchAndSetSlides = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          "https://appointment-system-backend-n8dk.onrender.com/api/announcements"
+        );
+        const dynamicSlides = response.data.map((announcement) => ({
+          title: announcement.title,
+          description: announcement.description,
+          isHtml: true,
+          isStatic: false,
+        }));
+
+        setSlides([...dynamicSlides, ...staticSlides]);
+      } catch (error) {
+        console.error("Failed to fetch announcements for carousel:", error);
+        setSlides(staticSlides);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAndSetSlides();
+  }, []);
 
   const handlePrev = () => {
+    if (slides.length === 0) return;
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? slides.length - 1 : prevIndex - 1
     );
   };
 
   const handleNext = () => {
+    if (slides.length === 0) return;
     setCurrentIndex((prevIndex) =>
       prevIndex === slides.length - 1 ? 0 : prevIndex + 1
     );
   };
 
+  if (loading) {
+    return (
+      <div className="relative w-full h-screen mx-auto bg-[#161f55] text-white flex items-center justify-center">
+        <p className="text-2xl">Loading Announcements...</p>
+      </div>
+    );
+  }
+
+  if (slides.length === 0) {
+    return (
+      <div className="relative w-full h-screen mx-auto bg-[#161f55] text-white flex items-center justify-center">
+        <p className="text-2xl">No Announcements Available.</p>
+      </div>
+    );
+  }
+
+  const currentSlide = slides[currentIndex];
+
   return (
     <div className="relative w-full h-screen mx-auto bg-[#161f55] text-white p-6 flex flex-col items-center justify-center pt-10 font-lato">
       <div className="text-center max-w-[1000px] flex flex-col justify-center items-center h-screen">
         <h2 className="text-[36px] font-semibold w-[800px]">
-          {slides[currentIndex].title}
+          {currentSlide.title}
         </h2>
         <div className="border-b-4 border-[#F3BC62] w-[50%] my-5"></div>
-        <div
-          className={`text-[30px] pb-10 ${
-            Array.isArray(slides[currentIndex].description)
-              ? " max-h-[350px]"
-              : ""
-          } ${
-            slides[currentIndex].title === "Objectives"
-              ? "text-center "
-              : slides[currentIndex].title === "College Program Offered"
-              ? "text-start leading-tight"
-              : ""
-          }`}
-        >
-          {Array.isArray(slides[currentIndex].description) ? (
-            slides[currentIndex].description.map((desc, index) => (
-              <p key={index} className="mb-4">
-                {desc}
-              </p>
-            ))
-          ) : (
-            <p>{slides[currentIndex].description}</p>
-          )}
-        </div>
-        {currentIndex === 0 && (
+
+        {/* DYNAMIC CONTENT RENDERING */}
+        {currentSlide.isHtml ? (
+          <div
+            className="prose prose-invert prose-xl text-[30px] pb-10 max-h-[350px] overflow-y-auto"
+            dangerouslySetInnerHTML={{ __html: currentSlide.description }}
+          />
+        ) : (
+          <div
+            className={`text-[30px] pb-10 ${
+              Array.isArray(currentSlide.description) ? "max-h-[350px]" : ""
+            }`}
+          >
+            {Array.isArray(currentSlide.description) ? (
+              <div className="text-left w-full max-w-[800px] mx-auto">
+                {currentSlide.description.map((desc, index) => (
+                  <p
+                    key={index}
+                    className={`mb-4 ${
+                      currentSlide.title === "College Program Offered"
+                        ? index === 0
+                          ? "text-center font-semibold mb-6"
+                          : "pl-8 text-[26px]"
+                        : "text-[30px] text-center" // Style for objectives and other content
+                    }`}
+                  >
+                    {desc}
+                  </p>
+                ))}
+              </div>
+            ) : (
+              <p>{currentSlide.description}</p>
+            )}
+          </div>
+        )}
+
+        {currentSlide.isStatic && currentSlide.title.includes("guidelines") && (
           <Link to={"/home/guidelines"}>
             <button className="text-[25px] border border-white px-4 py-2 my-4 rounded hover:bg-white hover:text-[#2A3064] transition">
               See more
@@ -83,17 +146,16 @@ const Carousel = () => {
         )}
       </div>
 
-      <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl font-bold hover:text-gray-400">
+      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
         <button onClick={handlePrev}>
           <FaArrowLeft className="w-10 h-10" />
         </button>
       </div>
-      <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-2xl font-bold hover:text-gray-400">
+      <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
         <button onClick={handleNext}>
           <FaArrowRight className="w-10 h-10" />
         </button>
       </div>
-
       <div className="flex justify-center">
         {slides.map((_, index) => (
           <span
