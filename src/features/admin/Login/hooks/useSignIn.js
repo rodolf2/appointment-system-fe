@@ -69,13 +69,8 @@ const useSignIn = () => {
     }
 
     try {
-      console.log("Attempting to sign in with:", { email, password });
       const response = await emailService.signin({ email, password });
-      console.log("Sign in response:", response);
 
-      // Handle "Remember Me" functionality - save both email and password
-      // ⚠️ WARNING: This stores credentials in browser localStorage
-      // Only use on trusted devices for security reasons
       if (remember) {
         localStorage.setItem("savedEmail", email);
         localStorage.setItem("savedPassword", password);
