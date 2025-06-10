@@ -231,8 +231,56 @@ const useRegistrarHome = () => {
         },
       };
 
-      // Process each status record
-      statusData.forEach((status) => {
+      // ENHANCED DEDUPLICATION: Remove duplicates by email address and prefer TR format
+      // This handles the case where same user has multiple records with different transactionNumber formats
+      const uniqueStatusData = [];
+      const seenEmails = new Set();
+
+      // Sort by dateOfRequest (most recent first) and prefer TR format transactionNumbers
+      const sortedStatusData = [...statusData].sort((a, b) => {
+        // First, prefer TR format over ObjectId format
+        const aIsTR =
+          a.transactionNumber && a.transactionNumber.startsWith("TR");
+        const bIsTR =
+          b.transactionNumber && b.transactionNumber.startsWith("TR");
+
+        if (aIsTR && !bIsTR) return -1; // a comes first (TR format preferred)
+        if (!aIsTR && bIsTR) return 1; // b comes first (TR format preferred)
+
+        // If both are same format, sort by date (most recent first)
+        const dateA = new Date(a.dateOfRequest || 0);
+        const dateB = new Date(b.dateOfRequest || 0);
+        return dateB - dateA;
+      });
+
+      sortedStatusData.forEach((status) => {
+        const email = status.emailAddress;
+        if (email && !seenEmails.has(email)) {
+          uniqueStatusData.push(status);
+          seenEmails.add(email);
+          console.log(
+            `Keeping record for ${email}: ${status.transactionNumber} (${
+              status.transactionNumber?.startsWith("TR")
+                ? "TR format"
+                : "ObjectId format"
+            })`
+          );
+        } else if (email) {
+          console.log(
+            `Skipping duplicate entry for ${email}: ${status.transactionNumber}`
+          );
+        }
+      });
+
+      console.log(
+        `Removed ${
+          statusData.length - uniqueStatusData.length
+        } duplicate entries`
+      );
+      console.log(`Processing ${uniqueStatusData.length} unique appointments`);
+
+      // Process each unique status record
+      uniqueStatusData.forEach((status) => {
         const statusType = status.status || "PENDING";
         const studentInfo = studentMap[status.transactionNumber];
 

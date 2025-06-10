@@ -395,8 +395,44 @@ const useAppointment = () => {
           throw new Error("Failed to parse status data");
         }
 
+        // ENHANCED DEDUPLICATION: Remove duplicates by email address and prefer TR format
+        // This handles the case where same user has multiple records with different transactionNumber formats
+        const uniqueStatusData = [];
+        const seenEmails = new Set();
+
+        // Sort by dateOfRequest (most recent first) and prefer TR format transactionNumbers
+        const sortedStatusData = [...statusData].sort((a, b) => {
+          // First, prefer TR format over ObjectId format
+          const aIsTR =
+            a.transactionNumber && a.transactionNumber.startsWith("TR");
+          const bIsTR =
+            b.transactionNumber && b.transactionNumber.startsWith("TR");
+
+          if (aIsTR && !bIsTR) return -1; // a comes first (TR format preferred)
+          if (!aIsTR && bIsTR) return 1; // b comes first (TR format preferred)
+
+          // If both are same format, sort by date (most recent first)
+          const dateA = new Date(a.dateOfRequest || 0);
+          const dateB = new Date(b.dateOfRequest || 0);
+          return dateB - dateA;
+        });
+
+        sortedStatusData.forEach((status) => {
+          const email = status.emailAddress;
+          if (email && !seenEmails.has(email)) {
+            uniqueStatusData.push(status);
+            seenEmails.add(email);
+          }
+        });
+
+        console.log(
+          `Removed ${
+            statusData.length - uniqueStatusData.length
+          } duplicate status entries`
+        );
+
         // Create a map of transaction numbers to their status
-        const statusMap = statusData.reduce((acc, curr) => {
+        const statusMap = uniqueStatusData.reduce((acc, curr) => {
           if (curr && curr.transactionNumber) {
             acc[curr.transactionNumber] = curr;
           }

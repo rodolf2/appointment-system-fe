@@ -236,7 +236,7 @@ const AppSchedule = ({ onNext, onBack, currentStep }) => {
               <div className="flex justify-end space-x-4 mt-4">
                 <button
                   onClick={handleConfirmSubmit}
-                  className=" text-[#161f55] font-LatoSemiBold py-1 rounded text-md"
+                  className="text-[#161f55] font-LatoSemiBold py-1 rounded text-md"
                 >
                   Yes
                 </button>
