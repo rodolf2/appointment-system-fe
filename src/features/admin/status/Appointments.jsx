@@ -6,6 +6,7 @@ import Sidebar from "/src/components/Sidebar";
 import { FaSearch } from "react-icons/fa";
 import { BsTrash3 } from "react-icons/bs";
 import { Tooltip } from "react-tooltip";
+import SuccessModal from "../../../components/SuccessModal";
 import useAppointment from "./hooks/useAppointment";
 
 const Appointments = () => {
@@ -43,6 +44,11 @@ const Appointments = () => {
     selectedAppointment,
     openModal,
     closeModal,
+
+    // Success modal states
+    showSuccessModal,
+    successMessage,
+    setShowSuccessModal,
 
     // Status handlers
     deleteAppointment,
@@ -353,6 +359,13 @@ const Appointments = () => {
               </div>
             </div>
           )}
+
+          {/* Success Modal */}
+          <SuccessModal
+            show={showSuccessModal}
+            message={successMessage}
+            onClose={() => setShowSuccessModal(false)}
+          />
 
           {/* Tooltips */}
           <Tooltip id="approve-tooltip" />

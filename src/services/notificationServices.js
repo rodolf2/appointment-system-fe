@@ -15,11 +15,35 @@ export const getNotifications = async () => {
       },
     });
 
-    // Format the time for display
+    // Get current user from localStorage for temporary fix
+    const currentUser = JSON.parse(localStorage.getItem("userData") || "{}");
+    const currentUserName = currentUser.name || "Admin";
+
+    // Format the time for display and enhance with initials
     return response.data.map((notification) => ({
       ...notification,
       id: notification._id, // Map MongoDB _id to id for frontend
       time: formatTimeAgo(notification.createdAt),
+      // TEMPORARY FIX: Use current user's name if notification shows "Admin"
+      userName:
+        notification.userName === "Admin"
+          ? currentUserName
+          : notification.userName,
+      // Generate initials from userName for display
+      initials: (
+        notification.userName === "Admin"
+          ? currentUserName
+          : notification.userName
+      )
+        ? (notification.userName === "Admin"
+            ? currentUserName
+            : notification.userName
+          )
+            .split(" ")
+            .map((name) => name.charAt(0))
+            .join("")
+            .toUpperCase()
+        : "A", // Default to 'A' for Admin
     }));
   } catch (error) {
     console.error("Error fetching notifications:", {

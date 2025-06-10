@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
+import { useUser } from "../../../../context/UserContext";
 
 const useAppointment = () => {
+  // Get user context for admin name
+  const { user } = useUser();
   // States for data fetching
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,6 +18,10 @@ const useAppointment = () => {
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+
+  // Success modal state
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
@@ -220,6 +227,10 @@ const useAppointment = () => {
         }
       }
 
+      const adminName = user?.name || "Admin";
+      console.log("Current user context:", user);
+      console.log("Admin name being sent:", adminName);
+
       const requestBody = {
         transactionNumber: appointment.transactionNumber,
         status: newStatus,
@@ -227,6 +238,7 @@ const useAppointment = () => {
         name: appointment.name,
         appointmentDate: formattedAppointmentDate,
         timeSlot: appointment.timeSlot,
+        adminName: adminName, // Include admin name for notifications
       };
 
       console.log("Request body being sent:", requestBody);
@@ -294,6 +306,23 @@ const useAppointment = () => {
         transactionNumber: appointment.transactionNumber,
         newStatus: updatedData?.status || newStatus,
       });
+
+      // Show success modal
+      const statusMessages = {
+        APPROVED: "Appointment approved successfully!",
+        REJECTED: "Appointment rejected successfully!",
+        COMPLETED: "Appointment completed successfully!",
+      };
+
+      setSuccessMessage(
+        statusMessages[newStatus] || "Status updated successfully!"
+      );
+      setShowSuccessModal(true);
+
+      // Auto-hide success modal after 3 seconds
+      setTimeout(() => {
+        setShowSuccessModal(false);
+      }, 3000);
 
       // Trigger dashboard refresh by dispatching custom event
       window.dispatchEvent(
@@ -523,6 +552,11 @@ const useAppointment = () => {
     selectedAppointment,
     openModal,
     closeModal,
+
+    // Success modal states
+    showSuccessModal,
+    successMessage,
+    setShowSuccessModal,
 
     // Status handlers
     deleteAppointment,
