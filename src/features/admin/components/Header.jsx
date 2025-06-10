@@ -294,11 +294,17 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                   src={user.picture || user.profilePicture}
                   alt={`${user.name}'s profile`}
                   className="w-full h-full object-cover"
+                  onLoad={() => {
+                    console.log(
+                      "✅ Header profile image loaded:",
+                      user.picture || user.profilePicture
+                    );
+                  }}
                   onError={(e) => {
                     e.target.onerror = null; // Prevent infinite loop
                     e.target.src = "/assets/icons/default-profile.svg"; // Fallback to default icon
-                    console.log(
-                      "Failed to load profile picture:",
+                    console.error(
+                      "❌ Failed to load header profile picture:",
                       user.picture || user.profilePicture
                     );
                   }}

@@ -88,6 +88,20 @@ const Profile = () => {
                       src={profileImage}
                       alt="Profile"
                       className="w-full h-full object-cover"
+                      onLoad={() => {
+                        console.log(
+                          "✅ Profile image loaded successfully:",
+                          profileImage
+                        );
+                      }}
+                      onError={(e) => {
+                        console.error(
+                          "❌ Failed to load profile image:",
+                          profileImage
+                        );
+                        console.error("Error details:", e);
+                        // Don't replace with fallback, keep trying to load the original
+                      }}
                     />
                   ) : (
                     <img
@@ -97,6 +111,12 @@ const Profile = () => {
                     />
                   )}
                 </div>
+                {/* Debug info */}
+                {profileImage && (
+                  <div className="text-xs text-gray-500 mt-2 max-w-60 break-all">
+                    <strong>Debug URL:</strong> {profileImage}
+                  </div>
+                )}
                 <div className="flex items-center space-x-2">
                   <label className="px-4 py-2 bg-[#161f55] text-white rounded-md text-sm hover:bg-blue-700 transition duration-200 cursor-pointer">
                     Upload

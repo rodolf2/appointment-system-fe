@@ -116,11 +116,16 @@ const useProfileForm = () => {
         }
 
         // Upload the profile picture to the server
+        console.log("🔄 Starting profile picture upload...");
         const uploadResponse = await uploadProfilePicture(user.id, file, token);
+        console.log("📤 Upload response received:", uploadResponse);
+
         const imageUrl = uploadResponse.profilePicture;
+        console.log("🖼️ Image URL extracted:", imageUrl);
 
         // Update local state with the new image URL
         setProfileImage(imageUrl);
+        console.log("✅ Local state updated with image URL");
 
         // Update user context with new image URL
         updateUser({
@@ -128,6 +133,7 @@ const useProfileForm = () => {
           picture: imageUrl,
           profilePicture: imageUrl,
         });
+        console.log("✅ User context updated with image URL");
       } catch (error) {
         console.error("Error uploading profile picture:", error);
         throw new Error("Failed to upload profile picture. Please try again.");

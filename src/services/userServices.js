@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_BASE_URL = "https://appointment-system-backend-n8dk.onrender.com/api";
-const API_URL = `${API_BASE_URL}/signup`; // For user management endpoints
 const PROFILE_URL = `${API_BASE_URL}/profile`; // For profile management endpoints
 
 // Upload profile picture
@@ -57,15 +56,22 @@ export const uploadProfilePicture = async (userId, imageFile, token) => {
 // Get user profile including profile picture
 export const getUserProfile = async (userId, token) => {
   try {
-    const response = await axios.get(`${API_URL}/${userId}`, {
+    console.log("🔍 Fetching user profile for ID:", userId);
+    const url = `${PROFILE_URL}/${userId}`;
+    console.log("📡 API URL:", url);
+
+    const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
       },
       timeout: 5000, // 5 second timeout
     });
+
+    console.log("📥 Profile data received:", response.data);
     return response.data;
   } catch (error) {
+    console.error("❌ Error fetching user profile:", error);
     throw error.response?.data || { message: "Failed to fetch user profile" };
   }
 };
@@ -73,7 +79,7 @@ export const getUserProfile = async (userId, token) => {
 // Update user profile
 export const updateUserProfile = async (userId, userData, token) => {
   try {
-    const response = await axios.put(`${API_URL}/${userId}`, userData, {
+    const response = await axios.put(`${PROFILE_URL}/${userId}`, userData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
