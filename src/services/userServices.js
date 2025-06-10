@@ -56,9 +56,7 @@ export const uploadProfilePicture = async (userId, imageFile, token) => {
 // Get user profile including profile picture
 export const getUserProfile = async (userId, token) => {
   try {
-    console.log("🔍 Fetching user profile for ID:", userId);
     const url = `${PROFILE_URL}/${userId}`;
-    console.log("📡 API URL:", url);
 
     const response = await axios.get(url, {
       headers: {
@@ -68,7 +66,6 @@ export const getUserProfile = async (userId, token) => {
       timeout: 5000, // 5 second timeout
     });
 
-    console.log("📥 Profile data received:", response.data);
     return response.data;
   } catch (error) {
     console.error("❌ Error fetching user profile:", error);

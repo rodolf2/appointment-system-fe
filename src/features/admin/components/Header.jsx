@@ -302,11 +302,34 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                   }}
                   onError={(e) => {
                     e.target.onerror = null; // Prevent infinite loop
-                    e.target.src = "/assets/icons/default-profile.svg"; // Fallback to default icon
+                    const originalUrl = user.picture || user.profilePicture;
                     console.error(
                       "❌ Failed to load header profile picture:",
-                      user.picture || user.profilePicture
+                      originalUrl
                     );
+
+                    // If it's a Google profile picture, try a different approach
+                    if (
+                      originalUrl &&
+                      originalUrl.includes("googleusercontent.com")
+                    ) {
+                      console.log(
+                        "🔄 Trying alternative Google profile picture URL..."
+                      );
+                      // Try removing size parameter and using a more basic URL
+                      const baseUrl = originalUrl.split("=")[0];
+                      e.target.src = baseUrl + "=s96-c";
+
+                      // If that fails too, use default
+                      e.target.onerror = () => {
+                        e.target.onerror = null;
+                        e.target.src = "/assets/icons/default-profile.svg";
+                        console.log("🔄 Using default profile icon");
+                      };
+                    } else {
+                      // For non-Google URLs, use default immediately
+                      e.target.src = "/assets/icons/default-profile.svg";
+                    }
                   }}
                 />
               </div>

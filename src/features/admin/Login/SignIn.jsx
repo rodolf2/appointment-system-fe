@@ -102,14 +102,14 @@ const SignIn = () => {
               </div>
 
               <div className="flex items-center justify-between mb-6">
-                <label className="flex items-center">
+                <label className="flex items-center group cursor-pointer">
                   <input
                     type="checkbox"
                     checked={remember}
                     onChange={handleRemember}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <span className="ml-2 text-sm text-gray-600">
+                  <span className="ml-2 text-sm text-gray-600 group-hover:text-gray-800">
                     Remember me
                   </span>
                 </label>

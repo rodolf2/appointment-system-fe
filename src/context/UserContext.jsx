@@ -6,6 +6,7 @@ export const UserContext = createContext({
   user: null,
   updateUser: () => {},
   logout: () => {},
+  clearSavedCredentials: () => {},
 });
 
 export const UserProvider = ({ children }) => {
@@ -56,9 +57,23 @@ export const UserProvider = ({ children }) => {
       // Clear all user-related data from localStorage
       localStorage.removeItem("userData");
       localStorage.removeItem("token");
-      localStorage.removeItem("savedEmail");
+      // Clear any other user-specific data
+      localStorage.removeItem("user");
+      // Note: We intentionally do NOT clear "savedEmail" here
+      // so that "Remember Me" functionality persists across logout/login cycles
+      // Users can clear it by unchecking "Remember Me" on the login form
     } catch (error) {
       console.error("Error during logout:", error);
+    }
+  };
+
+  // Function to clear saved login credentials (for "Remember Me" functionality)
+  const clearSavedCredentials = () => {
+    try {
+      localStorage.removeItem("savedEmail");
+      localStorage.removeItem("savedPassword");
+    } catch (error) {
+      console.error("Error clearing saved credentials:", error);
     }
   };
 
@@ -66,6 +81,7 @@ export const UserProvider = ({ children }) => {
     user,
     updateUser,
     logout,
+    clearSavedCredentials,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

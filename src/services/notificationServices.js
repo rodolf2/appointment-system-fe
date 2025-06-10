@@ -6,7 +6,6 @@ const API_URL =
 // Get all notifications
 export const getNotifications = async () => {
   try {
-    console.log("Fetching notifications from:", API_URL);
     const token = localStorage.getItem("token");
 
     const response = await axios.get(API_URL, {
@@ -15,8 +14,6 @@ export const getNotifications = async () => {
         Accept: "application/json",
       },
     });
-
-    console.log("Notifications response:", response.data);
 
     // Format the time for display
     return response.data.map((notification) => ({

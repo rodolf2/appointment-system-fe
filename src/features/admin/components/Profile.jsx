@@ -100,7 +100,29 @@ const Profile = () => {
                           profileImage
                         );
                         console.error("Error details:", e);
-                        // Don't replace with fallback, keep trying to load the original
+
+                        // If it's a Google profile picture, try alternative URL
+                        if (
+                          profileImage &&
+                          profileImage.includes("googleusercontent.com")
+                        ) {
+                          console.log(
+                            "🔄 Trying alternative Google profile picture URL..."
+                          );
+                          const baseUrl = profileImage.split("=")[0];
+                          e.target.src = baseUrl + "=s400-c";
+
+                          // If that fails too, use default
+                          e.target.onerror = () => {
+                            e.target.onerror = null;
+                            e.target.src = "/assets/icons/UploadIcon.svg";
+                            console.log("🔄 Using default upload icon");
+                          };
+                        } else {
+                          // For non-Google URLs, use default
+                          e.target.onerror = null;
+                          e.target.src = "/assets/icons/UploadIcon.svg";
+                        }
                       }}
                     />
                   ) : (
@@ -111,12 +133,6 @@ const Profile = () => {
                     />
                   )}
                 </div>
-                {/* Debug info */}
-                {profileImage && (
-                  <div className="text-xs text-gray-500 mt-2 max-w-60 break-all">
-                    <strong>Debug URL:</strong> {profileImage}
-                  </div>
-                )}
                 <div className="flex items-center space-x-2">
                   <label className="px-4 py-2 bg-[#161f55] text-white rounded-md text-sm hover:bg-blue-700 transition duration-200 cursor-pointer">
                     Upload

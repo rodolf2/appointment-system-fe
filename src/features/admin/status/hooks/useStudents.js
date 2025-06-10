@@ -42,7 +42,8 @@ const useStudents = (apiUrl) => {
   // Calculate pagination values
   const totalFilteredEntries = filteredAppointments.length;
   const calculatedTotalPages = Math.ceil(totalFilteredEntries / entriesPerPage);
-  const startEntry = totalFilteredEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
+  const startEntry =
+    totalFilteredEntries > 0 ? (currentPage - 1) * entriesPerPage + 1 : 0;
   const endEntry = Math.min(currentPage * entriesPerPage, totalFilteredEntries);
 
   // Generate page numbers array
@@ -105,12 +106,19 @@ const useStudents = (apiUrl) => {
         const data = await response.json();
 
         // Get archived appointments from localStorage
-        const archivedAppointments = JSON.parse(localStorage.getItem('archivedAppointments') || '[]');
-        const archivedTransactionNumbers = new Set(archivedAppointments.map(appt => appt.transactionNumber));
+        const archivedAppointments = JSON.parse(
+          localStorage.getItem("archivedAppointments") || "[]"
+        );
+        const archivedTransactionNumbers = new Set(
+          archivedAppointments.map((appt) => appt.transactionNumber)
+        );
 
         // Filter out archived appointments
-        const filteredData = data.filter(student => !archivedTransactionNumbers.has(student.transactionNumber));
-        
+        const filteredData = data.filter(
+          (student) =>
+            !archivedTransactionNumbers.has(student.transactionNumber)
+        );
+
         setAppointments(filteredData);
       } catch (err) {
         console.error("Failed to fetch student data:", err);
@@ -124,10 +132,10 @@ const useStudents = (apiUrl) => {
     fetchStudentsData();
 
     // Set up auto-refresh every 30 seconds
-    const refreshInterval = setInterval(fetchStudentsData, 30000);
+    // const refreshInterval = setInterval(fetchStudentsData, 30000);
 
-    // Cleanup interval on unmount
-    return () => clearInterval(refreshInterval);
+    // // Cleanup interval on unmount
+    // return () => clearInterval(refreshInterval);
   }, [apiUrl]);
 
   return {
@@ -135,7 +143,7 @@ const useStudents = (apiUrl) => {
     appointments,
     loading,
     error,
-    
+
     // Pagination states
     currentPage,
     entriesPerPage,
@@ -144,21 +152,21 @@ const useStudents = (apiUrl) => {
     startEntry,
     endEntry,
     pageNumbers,
-    
+
     // Filtered data
     filteredAppointments,
-    
+
     // Handlers
     handleSearchChange,
     handleEntriesPerPageChange,
     handleNextPage,
     handlePreviousPage,
     handlePageChange,
-    
+
     // Search state
     searchTerm,
-    
-     // Sidebar states and handlers
+
+    // Sidebar states and handlers
     isSidebarOpen,
     toggleSidebar,
   };

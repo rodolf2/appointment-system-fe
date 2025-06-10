@@ -20,18 +20,41 @@ const useSignIn = () => {
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
+    const savedPassword = localStorage.getItem("savedPassword");
     if (savedEmail) {
       setEmail(savedEmail);
       setRemember(true);
+    }
+    if (savedPassword) {
+      setPassword(savedPassword);
     }
   }, []);
 
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
-  const handleRemember = (e) => setRemember(e.target.checked);
+
+  // Handle remember me checkbox changes with immediate cleanup
+  const handleRemember = (e) => {
+    const checked = e.target.checked;
+    setRemember(checked);
+    if (!checked) {
+      // If user unchecks "Remember Me", immediately clear saved credentials
+      localStorage.removeItem("savedEmail");
+      localStorage.removeItem("savedPassword");
+    }
+  };
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  // Function to clear saved credentials (for users who want to remove saved credentials)
+  const clearSavedCredentials = () => {
+    localStorage.removeItem("savedEmail");
+    localStorage.removeItem("savedPassword");
+    setEmail("");
+    setPassword("");
+    setRemember(false);
   };
 
   const handleSignIn = async (e) => {
@@ -46,26 +69,33 @@ const useSignIn = () => {
     }
 
     try {
-      console.log('Attempting to sign in with:', { email, password });
+      console.log("Attempting to sign in with:", { email, password });
       const response = await emailService.signin({ email, password });
-      console.log('Sign in response:', response);
+      console.log("Sign in response:", response);
 
+      // Handle "Remember Me" functionality - save both email and password
+      // ⚠️ WARNING: This stores credentials in browser localStorage
+      // Only use on trusted devices for security reasons
       if (remember) {
         localStorage.setItem("savedEmail", email);
+        localStorage.setItem("savedPassword", password);
       } else {
         localStorage.removeItem("savedEmail");
+        localStorage.removeItem("savedPassword");
       }
 
       // Store the token in localStorage
       if (response.token) {
         localStorage.setItem("token", response.token);
         // Set the token in axios default headers for all future requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.token}`;
       }
 
       // Extract user data from response, ensuring we get the complete user object
       const userResponse = response.user || response;
-      console.log('User response:', userResponse);
+      console.log("User response:", userResponse);
 
       // Store user data with consistent picture handling
       const userData = {
@@ -90,16 +120,20 @@ const useSignIn = () => {
 
       // Update user context with the complete data
       updateUser(userData);
-      
+
       // Store the entire user object in localStorage for persistence
       localStorage.setItem("user", JSON.stringify(userData));
-      
+
       setIsLoading(false);
-      console.log('Navigating to registrarHome');
+      console.log("Navigating to registrarHome");
       navigate("/registrarHome");
     } catch (error) {
       console.error("Sign in error:", error);
-      setError(error.response?.data?.message || error.message || "Invalid email or password");
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Invalid email or password"
+      );
       setIsLoading(false);
     }
   };
@@ -167,6 +201,7 @@ const useSignIn = () => {
     handleSignIn,
     handleGmail,
     handleTogglePasswordVisibility,
+    clearSavedCredentials,
   };
 };
 
