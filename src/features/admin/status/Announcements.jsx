@@ -17,7 +17,6 @@ const Announcements = () => {
     handleAnnounce,
     handleDeleteAnnouncement,
     handleEditAnnouncement,
-    resetForm,
     showSuccessModal,
     closeSuccessModal,
     itemToDeleteId,
@@ -32,8 +31,6 @@ const Announcements = () => {
     showUpdateSuccessModal,
     closeUpdateSuccessModal,
   } = useAnnouncements();
-
-  const isEditing = announcement._id !== null;
 
   const quillModules = {
     toolbar: [
@@ -103,19 +100,11 @@ const Announcements = () => {
                 />
 
                 <div className="flex justify-end items-center gap-4 pt-10">
-                  {isEditing && (
-                    <button
-                      onClick={resetForm}
-                      className="text-gray-600 px-6 py-2 rounded-lg hover:bg-gray-100"
-                    >
-                      Cancel
-                    </button>
-                  )}
                   <button
                     onClick={handleAnnounce}
                     className="bg-[#161F55] text-white px-6 py-2 rounded-lg hover:bg-blue-700"
                   >
-                    {isEditing ? "Update" : "Announce"}
+                    Announce
                   </button>
                 </div>
               </div>

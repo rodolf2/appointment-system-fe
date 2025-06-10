@@ -72,9 +72,9 @@ const useAnnouncements = () => {
     setAnnouncement((prev) => ({ ...prev, [field]: value }));
   };
 
-  const resetForm = () => {
-    setAnnouncement({ title: "", description: "" });
-  };
+  // const resetForm = () => {
+  //   setAnnouncement({ title: "", description: "" });
+  // };
 
   const handleAnnounce = async () => {
     if (
@@ -92,7 +92,7 @@ const useAnnouncements = () => {
         description: announcement.description,
       });
       setShowSuccessModal(true);
-      resetForm();
+      // resetForm();
       fetchAnnouncements();
     } catch (error) {
       console.error("Error posting announcement:", error);
@@ -176,7 +176,7 @@ const useAnnouncements = () => {
     handleAnnounce,
     handleDeleteAnnouncement,
     handleEditAnnouncement,
-    resetForm,
+    // resetForm,
     showSuccessModal,
     closeSuccessModal,
     itemToDeleteId,
