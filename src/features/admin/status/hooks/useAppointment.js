@@ -200,16 +200,36 @@ const useAppointment = () => {
       const url = `${API_BASE_URL}/status/status/${appointment.transactionNumber}`;
       console.log("Request URL:", url);
 
+      // Ensure appointmentDate is in proper format
+      let formattedAppointmentDate = appointment.dateOfAppointment;
+      if (
+        formattedAppointmentDate &&
+        formattedAppointmentDate !== "Not scheduled"
+      ) {
+        // If it's already a date string, try to parse and reformat it
+        try {
+          const date = new Date(formattedAppointmentDate);
+          if (!isNaN(date.getTime())) {
+            formattedAppointmentDate = date.toISOString();
+          }
+        } catch (e) {
+          console.warn(
+            "Could not parse appointmentDate:",
+            formattedAppointmentDate
+          );
+        }
+      }
+
       const requestBody = {
         transactionNumber: appointment.transactionNumber,
         status: newStatus,
         emailAddress: appointment.emailAddress,
         name: appointment.name,
-        appointmentDate: appointment.dateOfAppointment,
+        appointmentDate: formattedAppointmentDate,
         timeSlot: appointment.timeSlot,
       };
 
-      console.log("Request body:", requestBody);
+      console.log("Request body being sent:", requestBody);
 
       const response = await fetch(url, {
         method: "PUT", // Changed from PUT to POST
@@ -274,23 +294,38 @@ const useAppointment = () => {
         transactionNumber: appointment.transactionNumber,
         newStatus: updatedData?.status || newStatus,
       });
+
+      // Trigger dashboard refresh by dispatching custom event
+      window.dispatchEvent(
+        new CustomEvent("appointmentStatusUpdated", {
+          detail: {
+            transactionNumber: appointment.transactionNumber,
+            newStatus: updatedData?.status || newStatus,
+            appointmentDate: appointment.dateOfAppointment,
+            timeSlot: appointment.timeSlot,
+          },
+        })
+      );
+
+      // Also set localStorage to trigger refresh in other tabs
+      localStorage.setItem("appointmentStatusUpdated", Date.now().toString());
     } catch (error) {
       console.error("Error updating status:", error);
       setError(error.message);
     }
   };
 
-  const approveAppointment = (appointment) => {
+  const approveAppointment = (appointment, event) => {
     event?.preventDefault();
     updateAppointmentStatus(appointment, "APPROVED");
   };
 
-  const rejectAppointment = (appointment) => {
+  const rejectAppointment = (appointment, event) => {
     event?.preventDefault();
     updateAppointmentStatus(appointment, "REJECTED");
   };
 
-  const completeAppointment = (appointment) => {
+  const completeAppointment = (appointment, event) => {
     event?.preventDefault();
     updateAppointmentStatus(appointment, "COMPLETED");
   }; // Fetch data

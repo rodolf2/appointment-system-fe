@@ -227,7 +227,7 @@ const Appointments = () => {
                                     className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      approveAppointment(data);
+                                      approveAppointment(data, e);
                                     }}
                                   >
                                     <FaThumbsUp className="text-white" />
@@ -243,7 +243,7 @@ const Appointments = () => {
                                     className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      completeAppointment(data);
+                                      completeAppointment(data, e);
                                     }}
                                   >
                                     <LuCircleCheckBig className="text-white" />
@@ -259,7 +259,7 @@ const Appointments = () => {
                                     className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      rejectAppointment(data);
+                                      rejectAppointment(data, e);
                                     }}
                                   >
                                     <FaThumbsDown className="text-white transform scale-x-[-1]" />

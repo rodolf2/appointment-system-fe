@@ -180,23 +180,168 @@ const useRegistrarHome = () => {
     },
   });
 
-  // Add this effect to fetch stats
-  useEffect(() => {
-    const fetchStats = async () => {
+  // Create a fetchStats function that calculates stats from appointment data
+  const fetchStats = useCallback(async () => {
+    try {
+      console.log("Fetching appointment data to calculate stats...");
+
+      // Fetch appointments data directly (same as the appointments page does)
+      const API_BASE_URL =
+        "https://appointment-system-backend-n8dk.onrender.com/api";
+
+      // Get all appointment statuses
+      const statusResponse = await axios.get(`${API_BASE_URL}/status`);
+      const statusData = statusResponse.data;
+
+      // Get student/booking data to get time information
+      const studentsResponse = await axios.get(
+        `${API_BASE_URL}/document-requests/docs-with-details`
+      );
+      const studentsData = studentsResponse.data;
+
+      console.log("Raw status data:", statusData);
+      console.log("Raw students data:", studentsData);
+
+      // Create a map of transaction numbers to their booking info
+      const studentMap = studentsData.reduce((acc, student) => {
+        if (student && student.transactionNumber) {
+          acc[student.transactionNumber] = student;
+        }
+        return acc;
+      }, {});
+
+      // Initialize stats
+      const calculatedStats = {
+        APPROVED: 0,
+        PENDING: 0,
+        COMPLETED: 0,
+        REJECTED: 0,
+        total: 0,
+        morning: {
+          APPROVED: 0,
+          PENDING: 0,
+          COMPLETED: 0,
+          REJECTED: 0,
+        },
+        afternoon: {
+          APPROVED: 0,
+          PENDING: 0,
+          COMPLETED: 0,
+          REJECTED: 0,
+        },
+      };
+
+      // Process each status record
+      statusData.forEach((status) => {
+        const statusType = status.status || "PENDING";
+        const studentInfo = studentMap[status.transactionNumber];
+
+        console.log(
+          `Processing ${status.transactionNumber}: Status=${statusType}, Student=`,
+          studentInfo
+        );
+
+        // Count total for this status
+        if (Object.prototype.hasOwnProperty.call(calculatedStats, statusType)) {
+          calculatedStats[statusType]++;
+          calculatedStats.total++;
+
+          // Determine morning/afternoon from student timeSlot or appointmentTime
+          let timeSlot = "";
+          if (studentInfo) {
+            timeSlot =
+              studentInfo.timeSlot || studentInfo.appointmentTime || "";
+          }
+
+          // Also check the status record itself
+          if (!timeSlot && status.timeSlot) {
+            timeSlot = status.timeSlot;
+          }
+
+          console.log(`  TimeSlot found: "${timeSlot}"`);
+
+          // Determine if it's morning or afternoon
+          const timeSlotUpper = timeSlot.toUpperCase();
+          const isAM =
+            timeSlotUpper.includes("AM") ||
+            timeSlotUpper.includes("MORNING") ||
+            timeSlotUpper.includes("8:") ||
+            timeSlotUpper.includes("9:") ||
+            timeSlotUpper.includes("10:") ||
+            timeSlotUpper.includes("11:");
+          const isPM =
+            timeSlotUpper.includes("PM") ||
+            timeSlotUpper.includes("AFTERNOON") ||
+            timeSlotUpper.includes("1:") ||
+            timeSlotUpper.includes("2:") ||
+            timeSlotUpper.includes("3:") ||
+            timeSlotUpper.includes("4:") ||
+            timeSlotUpper.includes("5:");
+
+          if (isAM) {
+            calculatedStats.morning[statusType]++;
+            console.log(`  -> Added to MORNING ${statusType}`);
+          } else if (isPM) {
+            calculatedStats.afternoon[statusType]++;
+            console.log(`  -> Added to AFTERNOON ${statusType}`);
+          } else {
+            // Default fallback - if no time info, distribute evenly or assign to morning
+            calculatedStats.morning[statusType]++;
+            console.log(
+              `  -> No time info, defaulted to MORNING ${statusType}`
+            );
+          }
+        }
+      });
+
+      console.log("Calculated stats:", calculatedStats);
+      setStats(calculatedStats);
+    } catch (error) {
+      console.error("Error calculating dashboard stats:", error);
+      // Fallback to original API if calculation fails
       try {
         const response = await axios.get(`${API_URL}/api/dashboard/stats`);
         setStats(response.data);
-      } catch (error) {
-        console.error("Error fetching dashboard stats:", error);
+      } catch (fallbackError) {
+        console.error("Fallback API also failed:", fallbackError);
       }
-    };
+    }
+  }, []);
 
+  // Add this effect to fetch stats
+  useEffect(() => {
     fetchStats();
     // Set up a refresh interval
     const interval = setInterval(fetchStats, 30000); // Refresh every 30 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchStats]); // Use fetchStats as dependency
+
+  // Listen for appointment status updates to refresh stats
+  useEffect(() => {
+    const handleStatusUpdate = () => {
+      console.log("Appointment status updated, refreshing dashboard stats...");
+      fetchStats();
+    };
+
+    // Listen for custom events
+    window.addEventListener("appointmentStatusUpdated", handleStatusUpdate);
+
+    // Also listen for storage events (in case updates happen in other tabs)
+    window.addEventListener("storage", (e) => {
+      if (e.key === "appointmentStatusUpdated") {
+        handleStatusUpdate();
+      }
+    });
+
+    return () => {
+      window.removeEventListener(
+        "appointmentStatusUpdated",
+        handleStatusUpdate
+      );
+      window.removeEventListener("storage", handleStatusUpdate);
+    };
+  }, [fetchStats]);
 
   return {
     isSidebarOpen,
@@ -214,6 +359,7 @@ const useRegistrarHome = () => {
     currentMonthHolidays: currentMonthCalendarHolidays,
     events: calendarDashboardEvents,
     stats,
+    refreshStats: fetchStats, // Add this so components can manually refresh stats
   };
 };
 
