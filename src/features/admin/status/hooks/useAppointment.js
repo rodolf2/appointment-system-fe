@@ -151,7 +151,7 @@ const useAppointment = () => {
   };
 
   // Appointment status handlers
-  const deleteAppointment = () => {
+  const deleteAppointment = async () => {
     if (selectedAppointment) {
       try {
         // Add archived flag and date to the appointment
@@ -185,6 +185,36 @@ const useAppointment = () => {
             student.transactionNumber !== selectedAppointment.transactionNumber
         );
         localStorage.setItem("studentsData", JSON.stringify(updatedStudents));
+
+        // Create notification for archiving appointment
+        try {
+          const adminName = user?.name || "Admin";
+          const response = await fetch(
+            "https://appointment-system-backend-n8dk.onrender.com/api/notifications/create",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: JSON.stringify({
+                type: "user-action",
+                userName: adminName,
+                action: "archived the appointment of",
+                reference: selectedAppointment.transactionNumber,
+                status: "ARCHIVED",
+                details: `Appointment with transaction number ${selectedAppointment.transactionNumber} has been archived`,
+                read: false,
+              }),
+            }
+          );
+
+          if (!response.ok) {
+            console.error("Failed to create archive notification");
+          }
+        } catch (notifError) {
+          console.error("Error creating archive notification:", notifError);
+        }
 
         closeModal();
       } catch (error) {

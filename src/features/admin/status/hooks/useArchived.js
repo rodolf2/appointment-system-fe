@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useUser } from "../../../../context/UserContext";
 
 const cleanAppointmentData = (appointment) => {
   const cleanedData = { ...appointment };
@@ -8,6 +9,9 @@ const cleanAppointmentData = (appointment) => {
 };
 
 const useArchived = () => {
+  // Get user context for admin name
+  const { user } = useUser();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     // Optional: Load from localStorage if you want persistence across page refreshes
     const saved = localStorage.getItem("sidebarOpen");
@@ -154,6 +158,9 @@ const useArchived = () => {
               Authorization: `Bearer ${token}`,
             },
             credentials: "include",
+            body: JSON.stringify({
+              adminName: user?.name || "Admin", // Include admin name for notifications
+            }),
           }
         );
 
@@ -309,6 +316,9 @@ const useArchived = () => {
               Authorization: `Bearer ${token}`,
             },
             credentials: "include",
+            body: JSON.stringify({
+              adminName: user?.name || "Admin", // Include admin name for notifications
+            }),
           }
         );
 
