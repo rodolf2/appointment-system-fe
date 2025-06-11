@@ -7,11 +7,18 @@ const Footer = () => {
       <div className="flex justify-between items-center h-[200px] px-12">
         <div>
           <p className="flex items-center font-regular ml-8 text-[32px] text-LBackground">
-            <img
-              src="/assets/image/LV_logo.png"
-              alt="LV Logo"
-              className="w-20 h-20 mr-2 mb-1"
-            />
+            <a
+              href="https://www.facebook.com/lvcc.apalit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mr-2 mb-1"
+            >
+              <img
+                src="/assets/image/LV_logo.png"
+                alt="LV Logo"
+                className="w-20 h-20 hover:scale-105 transition-transform cursor-pointer"
+              />
+            </a>
             LA VERDAD CHRISTIAN COLLEGE
           </p>
           <p className="text-[14px] w-[510px] font-LatoRegular text-LBackground ml-[7.5rem]">

@@ -19,11 +19,18 @@ const LandingPage = () => {
         <div className="relative z-10 w-full h-full flex flex-col">
           {/* Header: Logo and AppointEase - Positioned with percentage and viewport units */}
           <div className="flex items-center p-4 sm:p-6">
-            <img
-              src="/assets/image/LV_logo.png"
-              alt="LVCC Logo"
-              className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 mr-2"
-            />
+            <a
+              href="https://www.facebook.com/lvcc.apalit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mr-2"
+            >
+              <img
+                src="/assets/image/LV_logo.png"
+                alt="LVCC Logo"
+                className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 hover:scale-105 transition-transform cursor-pointer"
+              />
+            </a>
             <div className="flex items-baseline tracking-widest">
               <span className="text-Bbackground text-lg sm:text-xl md:text-2xl lg:text-3xl font-regular font-thin">
                 LVCC

@@ -125,9 +125,9 @@ const Announcement = () => {
             <a
               href="https://www.facebook.com/lvcc.apalit"
               target="_blank"
-              className="underline text-blue-300 z-50 relative pr-70 hover:text-white"
+              className="underline text-white z-50 relative pr-70 hover:text-[#F3BC62]"
             >
-              https://www.facebook.com/lvcc.apalit
+              La Verdad Christian College Apalit Pampanga
             </a>
             <div className="border-b-8 border-[#F3BC62] h-1 w-full pt-20"></div>
           </div>

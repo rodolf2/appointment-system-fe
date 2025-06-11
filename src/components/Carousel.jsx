@@ -42,7 +42,7 @@ const Carousel = () => {
       try {
         const response = await axios.get(
           "https://appointment-system-backend-n8dk.onrender.com/api/announcements"
-        );
+        )
         const dynamicSlides = response.data.map((announcement) => ({
           title: announcement.title,
           description: announcement.description,
@@ -61,6 +61,19 @@ const Carousel = () => {
 
     fetchAndSetSlides();
   }, []);
+
+  // Auto-advance carousel every 5 seconds
+  useEffect(() => {
+    if (slides.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === slides.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 5000); // 5 seconds
+
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   const handlePrev = () => {
     if (slides.length === 0) return;

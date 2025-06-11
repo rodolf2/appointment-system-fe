@@ -31,7 +31,7 @@ const Profile = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Starting profile update...");
+      // console.log("Starting profile update...");
       await handleSubmit();
       setSuccessMessage("Profile updated successfully!.");
 
@@ -89,10 +89,10 @@ const Profile = () => {
                       alt="Profile"
                       className="w-full h-full object-cover"
                       onLoad={() => {
-                        console.log(
-                          "✅ Profile image loaded successfully:",
-                          profileImage
-                        );
+                        // console.log(
+                        //   "✅ Profile image loaded successfully:",
+                        //   profileImage
+                        // );
                       }}
                       onError={(e) => {
                         console.error(
