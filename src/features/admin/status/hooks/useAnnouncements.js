@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-const BASE_URL = "https://appointment-system-backend-n8dk.onrender.com/api";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 const API_URL = `${BASE_URL}/announcements`;
 
 const useAnnouncements = () => {

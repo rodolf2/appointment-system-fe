@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://appointment-system-backend-n8dk.onrender.com";
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 export const submitContactForm = async (formData) => {
   try {

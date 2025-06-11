@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://appointment-system-backend-n8dk.onrender.com/api/attachment';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/attachment`;
 
 // Upload attachments
 export const uploadAttachments = async (files, studentId) => {

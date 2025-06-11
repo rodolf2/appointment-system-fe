@@ -39,14 +39,17 @@ const useSelectDocuments = (onNext) => {
   }, [state.purpose, state.date, state.selectedDocuments]);
 
   const documentsList = [
-    { label: "Certificate of Enrollment", value: "certificate_of_enrollment" },
-    { label: "Good Moral Certificate", value: "good_moral_certificate" },
-    { label: "Form 137", value: "form_137" },
-    { label: "Certified True Copy of Documents", value: "certified_copy" },
-    { label: "Transcript of Records", value: "transcript_of_records" },
+    { label: "Certificate of Enrollment", value: "Certificate of Enrollment" },
+    { label: "Good Moral Certificate", value: "Good Moral Certificate" },
+    { label: "Form 137", value: "Form 137" },
+    {
+      label: "Certified True Copy of Documents",
+      value: "Certified True Copy of Documents",
+    },
+    { label: "Transcript of Records", value: "Transcript of Records" },
     {
       label: "Education Service Contracting Certificate",
-      value: "education_service_contracting_certificate",
+      value: "Education Service Contracting Certificate",
     },
   ];
 
@@ -97,10 +100,7 @@ const useSelectDocuments = (onNext) => {
 
   // Convert selected documents from values to proper format
   const convertSelectedDocuments = () => {
-    return state.selectedDocuments.map((value) => {
-      const doc = documentsList.find((d) => d.value === value);
-      return doc.label;
-    });
+    return state.selectedDocuments; // No need to convert since values now match the schema
   };
 
   // Handle Modal Next Button with API integration
@@ -117,8 +117,12 @@ const useSelectDocuments = (onNext) => {
         studentId: studentId,
       };
 
+      // Debug logging
+      console.log("Creating document request with data:", requestData);
+
       // Create the document request
-      await createDocumentRequest(requestData);
+      const response = await createDocumentRequest(requestData);
+      console.log("Document request created successfully:", response);
 
       // Clear the form data after successful submission
       clearSavedData();

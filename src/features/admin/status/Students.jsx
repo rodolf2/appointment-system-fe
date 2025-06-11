@@ -6,7 +6,7 @@ import { FaSearch } from "react-icons/fa";
 
 const Students = () => {
   const API_URL =
-    "https://appointment-system-backend-n8dk.onrender.com/api/document-requests/docs-with-details";
+    `${import.meta.env.VITE_API_URL}/api/document-requests/docs-with-details`;
 
   const {
     // Data states
@@ -101,39 +101,40 @@ const Students = () => {
             >
               <thead>
                 <tr className="bg-gray-200 text-center">
-                  <th className="border p-5">TRANSACTION NO.</th>
-                  <th className="border p-5">NAME</th>
-                  <th className="border p-5">LAST S.Y. ATTENDED</th>
-                  <th className="border p-5">
+                  <th className="border p-5 w-[10%]">TRANSACTION NO.</th>
+                  <th className="border p-5 w-[15%]">NAME</th>
+                  <th className="border p-5 w-[10%]">LAST S.Y. ATTENDED</th>
+                  <th className="border p-5 w-[10%]">
                     PROGRAM/GRADE/
                     <br />
                     STRAND
                   </th>
-                  <th className="border p-5">CONTACT NO.</th>
-                  <th className="border p-5">EMAIL ADDRESS</th>
-                  <th className="border p-5">ATTACHMENT PROOF</th>
-                  <th className="border p-5">REQUEST</th>
-                  <th className="border p-5">DATE OF REQUEST</th>
+                  <th className="border p-5 w-[10%]">CONTACT NO.</th>
+                  <th className="border p-5 w-[15%]">EMAIL ADDRESS</th>
+                  <th className="border p-5 w-[10%]">ATTACHMENT PROOF</th>
+                  <th className="border p-5 w-[10%]">PURPOSE</th>
+                  <th className="border p-5 w-[10%]">REQUEST</th>
+                  <th className="border p-5 w-[10%]">DATE OF REQUEST</th>
                 </tr>
               </thead>
               <tbody>
                 {loading && (
                   <tr>
-                    <td colSpan="9" className="text-center p-5">
+                    <td colSpan="10" className="text-center p-5">
                       Loading student records...
                     </td>
                   </tr>
                 )}
                 {error && (
                   <tr>
-                    <td colSpan="9" className="text-center p-5 text-red-500">
+                    <td colSpan="10" className="text-center p-5 text-red-500">
                       Error: {error}
                     </td>
                   </tr>
                 )}
                 {!loading && !error && filteredAppointments.length === 0 && (
                   <tr>
-                    <td colSpan="9" className="text-center p-5">
+                    <td colSpan="10" className="text-center p-5">
                       {searchTerm
                         ? "No matching records found."
                         : "No student records found."}
@@ -154,15 +155,15 @@ const Students = () => {
                           index % 2 === 0 ? "bg-gray-100" : ""
                         } text-center`}
                       >
-                        <td className="border p-5 text-[#354CCE] font-bold">
+                        <td className="border p-5 text-[#354CCE] font-bold break-words">
                           {data.transactionNumber}
                         </td>
-                        <td className="border p-5">{data.name}</td>
-                        <td className="border p-5">{data.lastSY}</td>
-                        <td className="border p-5">{data.program}</td>
-                        <td className="border p-5">{data.contact}</td>
-                        <td className="border p-5">{data.email}</td>
-                        <td className="border p-5">
+                        <td className="border p-5 break-words">{data.name}</td>
+                        <td className="border p-5 break-words">{data.lastSY}</td>
+                        <td className="border p-5 break-words">{data.program}</td>
+                        <td className="border p-5 break-words">{data.contact}</td>
+                        <td className="border p-5 break-words">{data.email}</td>
+                        <td className="border p-5 break-words">
                           {data.attachment &&
                           data.attachment !== "No attachments" ? (
                             <div className="flex flex-col gap-1">
@@ -171,7 +172,7 @@ const Students = () => {
                                 .map((filename, index) => (
                                   <span
                                     key={index}
-                                    className="text-blue-600 hover:underline cursor-pointer text-sm"
+                                    className="text-blue-600 hover:underline cursor-pointer text-sm break-words"
                                     title={filename}
                                   >
                                     {filename.length > 30
@@ -186,8 +187,9 @@ const Students = () => {
                             </span>
                           )}
                         </td>
-                        <td className="border p-5">{data.request}</td>
-                        <td className="border p-5">
+                        <td className="border p-5 break-words">{data.purpose}</td>
+                        <td className="border p-5 break-words">{data.request}</td>
+                        <td className="border p-5 break-words">
                           {new Date(data.date).toLocaleDateString()}
                         </td>
                       </tr>

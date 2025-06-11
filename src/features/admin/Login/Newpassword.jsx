@@ -8,7 +8,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 const API_BASE_URL =
-  "https://appointment-system-backend-n8dk.onrender.com/api/forgot-password";
+`${import.meta.env.VITE_API_URL}/api/forgot-password`;
 
 // Success Modal Component
 const SuccessModal = ({ onClose }) => (

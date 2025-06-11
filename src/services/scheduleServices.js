@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const BASE_URL =
-  "https://appointment-system-backend-n8dk.onrender.com/api/schedules";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api/schedules`;
 
 // Validate schedule data
 const validateScheduleData = (data) => {

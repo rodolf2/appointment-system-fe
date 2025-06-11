@@ -34,6 +34,7 @@ const useStudents = (apiUrl) => {
       data.lastSY?.toLowerCase().includes(searchString) ||
       data.program?.toLowerCase().includes(searchString) ||
       data.contact?.toLowerCase().includes(searchString) ||
+      data.purpose?.toLowerCase().includes(searchString) ||
       data.email?.toLowerCase().includes(searchString) ||
       data.request?.toLowerCase().includes(searchString)
     );
@@ -96,34 +97,38 @@ const useStudents = (apiUrl) => {
     const fetchStudentsData = async () => {
       setLoading(true);
       setError(null);
-      setAppointments([]); // Clear previous data
-
       try {
+        console.log("Fetching students data from:", apiUrl);
         const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
         const data = await response.json();
 
-        // Get archived appointments from localStorage
-        const archivedAppointments = JSON.parse(
-          localStorage.getItem("archivedAppointments") || "[]"
-        );
-        const archivedTransactionNumbers = new Set(
-          archivedAppointments.map((appt) => appt.transactionNumber)
-        );
+        console.log("Raw API response:", data);
 
-        // Filter out archived appointments
-        const filteredData = data.filter(
-          (student) =>
-            !archivedTransactionNumbers.has(student.transactionNumber)
-        );
+        // Filter out archived appointments and transform data
+        const filteredData = data
+          .filter((student) => !student.archived)
+          .map((student) => {
+            console.log("Processing student with purpose:", {
+              originalPurpose: student.purpose,
+              appointmentPurpose: student.appointmentPurpose,
+              documentRequestPurpose: student.documentRequest?.purpose,
+            });
+            const processed = {
+              ...student,
+              purpose:
+                student.purpose ||
+                student.appointmentPurpose ||
+                "No purpose specified",
+            };
+            console.log("Processed student data with purpose:", processed);
+            return processed;
+          });
 
+        console.log("Final filtered and processed data:", filteredData);
         setAppointments(filteredData);
       } catch (err) {
         console.error("Failed to fetch student data:", err);
-        setError(err.message || "An error occurred while fetching data.");
-        setAppointments([]); // Ensure appointments is empty on error
+        setError(err.message);
       } finally {
         setLoading(false);
       }

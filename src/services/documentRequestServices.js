@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://appointment-system-backend-n8dk.onrender.com/api/document-requests';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/document-requests`;
 
 // Create a new document request
 export const createDocumentRequest = async (requestData) => {

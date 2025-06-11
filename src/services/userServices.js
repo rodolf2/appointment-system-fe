@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://appointment-system-backend-n8dk.onrender.com/api";
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 const PROFILE_URL = `${API_BASE_URL}/profile`; // For profile management endpoints
 
 // Upload profile picture

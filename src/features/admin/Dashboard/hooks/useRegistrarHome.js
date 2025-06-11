@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import dayjs from "dayjs";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 const API_URL_EVENTS =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  import.meta.env.VITE_API_URL;
 
 const useRegistrarHome = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -187,7 +187,7 @@ const useRegistrarHome = () => {
 
       // Fetch appointments data directly (same as the appointments page does)
       const API_BASE_URL =
-        "https://appointment-system-backend-n8dk.onrender.com/api";
+       `${import.meta.env.VITE_API_URL}/api`;
 
       // Get all appointment statuses
       const statusResponse = await axios.get(`${API_BASE_URL}/status`);

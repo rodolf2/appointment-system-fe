@@ -136,48 +136,46 @@ const Appointments = () => {
                 </div>
               </div>
               <div className="overflow-y-auto m-4 mt-8">
-                <table className="text-[18px] w-full">
+                <table className="text-[18px] w-full" style={{ tableLayout: "fixed" }}>
                   <thead>
                     <tr className="bg-gray-200 text-center">
-                      <th className="border p-4">STATUS</th>
-                      <th className="border p-4">
+                      <th className="border p-4 w-[8%]">STATUS</th>
+                      <th className="border p-4 w-[10%]">
                         TRANSACTION
                         <br />
                         NUMBER
                       </th>
-                      <th className="border p-4">REQUEST</th>
-                      <th className="border p-4">
+                      <th className="border p-4 w-[12%]">REQUEST</th>
+                      <th className="border p-4 w-[12%]">PURPOSE</th>
+                      <th className="border p-4 w-[15%]">
                         EMAIL <br />
                         ADDRESS
                       </th>
-                      <th className="border p-4">
+                      <th className="border p-4 w-[12%]">
                         DATE OF
                         <br />
                         APPOINTMENT
                       </th>
-                      <th className="border p-4">TIME SLOT</th>
-                      <th className="border p-4">
+                      <th className="border p-4 w-[10%]">TIME SLOT</th>
+                      <th className="border p-4 w-[12%]">
                         DATE OF
                         <br />
                         REQUEST
                       </th>
-                      <th className="border p-4">ACTIONS</th>
+                      <th className="border p-4 w-[10%]">ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
                     {loading && (
                       <tr>
-                        <td colSpan="8" className="text-center p-5">
+                        <td colSpan="9" className="text-center p-5">
                           Loading appointments...
                         </td>
                       </tr>
                     )}
                     {error && (
                       <tr>
-                        <td
-                          colSpan="8"
-                          className="text-center p-5 text-red-500"
-                        >
+                        <td colSpan="9" className="text-center p-5 text-red-500">
                           Error: {error}
                         </td>
                       </tr>
@@ -200,7 +198,7 @@ const Appointments = () => {
                                 {data.status}
                               </span>
                             </td>
-                            <td className="border p-4">
+                            <td className="border p-4 break-words">
                               <div className="flex flex-col text-center">
                                 <span
                                   className={`font-bold ${getTransactionNumberColor(
@@ -211,16 +209,15 @@ const Appointments = () => {
                                 </span>
                               </div>
                             </td>
-                            <td className="border p-4">{data.request}</td>
-                            <td className="border p-4">{data.emailAddress}</td>
-                            <td className="border p-4">
+                            <td className="border p-4 break-words">{data.request}</td>
+                            <td className="border p-4 break-words">{data.purpose}</td>
+                            <td className="border p-4 break-words">{data.emailAddress}</td>
+                            <td className="border p-4 break-words">
                               {data.dateOfAppointment}
                             </td>
-                            <td className="border p-4">{data.timeSlot}</td>
-                            <td className="border p-4">
-                              {new Date(
-                                data.dateOfRequest
-                              ).toLocaleDateString()}
+                            <td className="border p-4 break-words">{data.timeSlot}</td>
+                            <td className="border p-4 break-words">
+                              {new Date(data.dateOfRequest).toLocaleDateString()}
                             </td>
                             <td className="border p-4">
                               <div className="flex gap-2 justify-center">

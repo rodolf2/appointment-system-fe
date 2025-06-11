@@ -41,7 +41,7 @@ const Carousel = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://appointment-system-backend-n8dk.onrender.com/api/announcements"
+          `${import.meta.env.VITE_API_URL}/api/announcements`
         )
         const dynamicSlides = response.data.map((announcement) => ({
           title: announcement.title,

@@ -31,7 +31,7 @@ const Feedback = ({ onNext, transactionNumber, name }) => {
       });
 
       const response = await fetch(
-        "https://appointment-system-backend-n8dk.onrender.com/api/feedback",
+        `${import.meta.env.VITE_API_URL}/api/feedback`,
         {
           method: "POST",
           headers: {

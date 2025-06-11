@@ -33,7 +33,7 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
   const { user } = useUser();
 
   // Debug: Log current user to verify name is available
-  console.log("Current user in Header:", user);
+  // console.log("Current user in Header:", user);
 
   return (
     <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md">

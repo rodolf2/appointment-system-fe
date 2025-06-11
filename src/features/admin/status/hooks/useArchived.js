@@ -150,7 +150,9 @@ const useArchived = () => {
 
         // Make API call to delete the appointment
         const response = await fetch(
-          `https://appointment-system-backend-n8dk.onrender.com/api/document-requests/docs/${selectedAppointment.transactionNumber}`,
+          `${import.meta.env.VITE_API_URL}/api/document-requests/docs/${
+            selectedAppointment.transactionNumber
+          }`,
           {
             method: "DELETE",
             headers: {
@@ -308,7 +310,9 @@ const useArchived = () => {
       // Delete each appointment through the API
       const deletePromises = selectedAppointments.map(async (appointment) => {
         const response = await fetch(
-          `https://appointment-system-backend-n8dk.onrender.com/api/document-requests/docs/${appointment.transactionNumber}`,
+          `${import.meta.env.VITE_API_URL}/api/document-requests/docs/${
+            appointment.transactionNumber
+          }`,
           {
             method: "DELETE",
             headers: {

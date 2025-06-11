@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://appointment-system-backend-n8dk.onrender.com/api"; // Updated to production backend URL
+const API_URL = `${import.meta.env.VITE_API_URL}/api`; // Updated to production backend URL
 
 export const emailService = {
   // Signup function

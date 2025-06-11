@@ -1,7 +1,7 @@
 // services/studentService.js
 import axios from 'axios';
 
-const API_URL = 'https://appointment-system-backend-n8dk.onrender.com/api/students';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/students`;
 
 // Create a new student
 export const createStudent = async (studentData) => {

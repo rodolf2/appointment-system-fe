@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const BASE_URL =
-  "https://appointment-system-backend-n8dk.onrender.com/api/bookings";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api/bookings`;
 
 // Validate booking data
 const validateBookingData = (data) => {

@@ -190,7 +190,7 @@ const useAppointment = () => {
         try {
           const adminName = user?.name || "Admin";
           const response = await fetch(
-            "https://appointment-system-backend-n8dk.onrender.com/api/notifications/create",
+            `${import.meta.env.VITE_API_URL}/api/notifications/create`,
             {
               method: "POST",
               headers: {
@@ -232,8 +232,7 @@ const useAppointment = () => {
         emailAddress: appointment.emailAddress,
         name: appointment.name,
       });
-      const API_BASE_URL =
-        "https://appointment-system-backend-n8dk.onrender.com/api"; // Log the full URL being used
+      const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`; // Log the full URL being used
       const url = `${API_BASE_URL}/status/status/${appointment.transactionNumber}`;
       console.log("Request URL:", url);
 
@@ -274,7 +273,7 @@ const useAppointment = () => {
       console.log("Request body being sent:", requestBody);
 
       const response = await fetch(url, {
-        method: "PUT", // Changed from PUT to POST
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -387,10 +386,11 @@ const useAppointment = () => {
   const completeAppointment = (appointment, event) => {
     event?.preventDefault();
     updateAppointmentStatus(appointment, "COMPLETED");
-  }; // Fetch data
+  };
+
+  // Fetch data
   useEffect(() => {
-    const API_BASE_URL =
-      "https://appointment-system-backend-n8dk.onrender.com/api";
+    const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
     const fetchAppointments = async () => {
       setLoading(true);
@@ -420,13 +420,19 @@ const useAppointment = () => {
         let studentsData;
         try {
           studentsData = await studentsResponse.json();
+          // *** ADDED DEBUGGING LOG ***
+          // This will show the raw data from the API.
+          // Check here if the 'purpose' field exists on the objects.
+          console.log("DEBUG: Raw data from /docs-with-details:", studentsData);
           if (!Array.isArray(studentsData)) {
             throw new Error("Invalid response format: expected an array");
           }
         } catch (jsonError) {
           console.error("Error parsing students data:", jsonError);
           throw new Error("Failed to parse students data");
-        } // Fetch all appointment statuses
+        }
+
+        // Fetch all appointment statuses
         const statusResponse = await fetch(`${API_BASE_URL}/status`, {
           headers: {
             Accept: "application/json",
@@ -446,31 +452,20 @@ const useAppointment = () => {
         let statusData;
         try {
           statusData = await statusResponse.json();
-          if (!Array.isArray(statusData)) {
-            throw new Error("Invalid response format: expected an array");
-          }
         } catch (jsonError) {
           console.error("Error parsing status data:", jsonError);
           throw new Error("Failed to parse status data");
         }
 
-        // ENHANCED DEDUPLICATION: Remove duplicates by email address and prefer TR format
-        // This handles the case where same user has multiple records with different transactionNumber formats
         const uniqueStatusData = [];
         const seenEmails = new Set();
-
-        // Sort by dateOfRequest (most recent first) and prefer TR format transactionNumbers
         const sortedStatusData = [...statusData].sort((a, b) => {
-          // First, prefer TR format over ObjectId format
           const aIsTR =
             a.transactionNumber && a.transactionNumber.startsWith("TR");
           const bIsTR =
             b.transactionNumber && b.transactionNumber.startsWith("TR");
-
-          if (aIsTR && !bIsTR) return -1; // a comes first (TR format preferred)
-          if (!aIsTR && bIsTR) return 1; // b comes first (TR format preferred)
-
-          // If both are same format, sort by date (most recent first)
+          if (aIsTR && !bIsTR) return -1;
+          if (!aIsTR && bIsTR) return 1;
           const dateA = new Date(a.dateOfRequest || 0);
           const dateB = new Date(b.dateOfRequest || 0);
           return dateB - dateA;
@@ -484,13 +479,6 @@ const useAppointment = () => {
           }
         });
 
-        console.log(
-          `Removed ${
-            statusData.length - uniqueStatusData.length
-          } duplicate status entries`
-        );
-
-        // Create a map of transaction numbers to their status
         const statusMap = uniqueStatusData.reduce((acc, curr) => {
           if (curr && curr.transactionNumber) {
             acc[curr.transactionNumber] = curr;
@@ -498,7 +486,6 @@ const useAppointment = () => {
           return acc;
         }, {});
 
-        // Get archived appointments from localStorage
         const archivedAppointments = JSON.parse(
           localStorage.getItem("archivedAppointments") || "[]"
         );
@@ -506,34 +493,60 @@ const useAppointment = () => {
           archivedAppointments.map((appt) => appt.id)
         );
 
-        // Transform student records and merge with status info, excluding archived appointments
         const transformedAppointments = studentsData
           .filter(
             (student) =>
               student &&
               student.transactionNumber &&
-              !archivedIds.has(student.transactionNumber) // Filter out archived appointments
+              !archivedIds.has(student.transactionNumber)
           )
           .map((student) => {
-            const statusInfo = statusMap[student.transactionNumber] || {};
+            // *** ADDED DEBUGGING LOG ***
+            // This will show each student object before it's transformed.
+            // Check if 'student.purpose' exists.
+            console.log("DEBUG: Processing student object:", student);
 
-            return {
+            const statusInfo = statusMap[student.transactionNumber] || {};
+            console.log("Processing appointment with purpose:", {
+              originalPurpose: student.purpose,
+              appointmentPurpose: student.appointmentPurpose,
+              documentRequestPurpose: student.documentRequest?.purpose,
+            });
+            // Add debug log for purpose field sources
+            console.log("DEBUG: Processing appointment purpose sources:", {
+              studentId: student._id,
+              directPurpose: student.purpose,
+              documentRequestPurpose: student.documentRequest?.purpose,
+              appointmentPurpose: student.appointmentPurpose,
+            });
+
+            const transformed = {
               id: student.transactionNumber,
               status: statusInfo.status || "PENDING",
               transactionNumber: student.transactionNumber,
               request: student.request || "No request specified",
+              // Match how request field is processed
+              purpose:
+                student.purpose ||
+                (student.documentRequest &&
+                Array.isArray(student.documentRequest.purpose)
+                  ? student.documentRequest.purpose.join(", ")
+                  : student.documentRequest?.purpose) ||
+                "No purpose specified",
               emailAddress: student.email || "No email specified",
               dateOfAppointment: student.appointmentDate || "Not scheduled",
               timeSlot: student.timeSlot || "Not scheduled",
               dateOfRequest:
                 student.date || new Date().toISOString().split("T")[0],
-              // Keep additional fields from Students for reference
               name: student.name,
               lastSY: student.lastSY,
               program: student.program,
               contact: student.contact,
               attachment: student.attachment,
             };
+            // Add debug log to see the transformed data
+            console.log("DEBUG: Transformed appointment data:", transformed);
+            return transformed;
           });
 
         setAppointments(transformedAppointments);

@@ -21,7 +21,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "https://appointment-system-backend-n8dk.onrender.com/api/forgot-password/request-otp",
+        `${import.meta.env.VITE_API_URL}/api/forgot-password/request-otp`,
         { email }
       );
 

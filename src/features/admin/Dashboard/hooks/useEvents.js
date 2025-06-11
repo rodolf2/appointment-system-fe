@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import dayjs from "dayjs";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"; // Ensure port matches backend
+const API_URL = import.meta.env.VITE_API_URL; // Ensure port matches backend
 
 const useEvents = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
