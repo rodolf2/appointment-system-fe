@@ -70,7 +70,7 @@ const Announcements = () => {
 
         <main className="flex-1 p-8 space-y-6 overflow-y-auto max-w-[1440px] w-full mx-auto">
           <section className="bg-white p-8 rounded-lg shadow-lg">
-            <h3 className="text-[24px] font-LatoSemiBold tracking-[2px] text-[#161F55]">
+            <h3 className="text-[24px] font-LatoBold tracking-[2px] text-[#161F55]">
               Add New Announcement
             </h3>
             <div className="border-b-4 border-[#F3BC62] w-[310px] my-2" />
@@ -172,8 +172,8 @@ const Announcements = () => {
               className="w-8 h-8 absolute top-4 right-4 cursor-pointer"
             />
             <h3 className="text-2xl font-bold text-[#161F55] mb-6">
-              Update Announcement
-              <div className="border-b-4 border-[#F3BC62] w-[250px] my-2" />
+              Edit Announcement
+              <div className="border-b-4 border-[#F3BC62] w-[220px] my-2" />
             </h3>
             <div className="space-y-4">
               <input

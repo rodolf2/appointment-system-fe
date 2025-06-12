@@ -82,7 +82,7 @@ const useAnnouncements = () => {
       !announcement.description ||
       announcement.description === "<p><br></p>"
     ) {
-      alert("Please fill in both title and description");
+      // alert("Please fill in both title and description");
       return;
     }
 
