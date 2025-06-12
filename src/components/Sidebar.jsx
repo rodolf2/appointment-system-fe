@@ -13,28 +13,23 @@ import { Tooltip } from "react-tooltip";
 import PropTypes from "prop-types";
 import { VscFeedback } from "react-icons/vsc";
 
-// Custom Image Icon component
+// Custom Image Icon component (no changes needed here)
 const ImageIcon = ({ src, alt, className, color = "white" }) => {
-  // Filter values for different colors
   const filterValues = {
-    white: "brightness(0) invert(1)", // Convert to white
-    black: "brightness(0)", // Convert to black
-    gray: "brightness(0) opacity(0.6)", // Convert to gray
-    custom: color, // Allow custom filter value
+    white: "brightness(0) invert(1)",
+    black: "brightness(0)",
+    gray: "brightness(0) opacity(0.6)",
+    custom: color,
   };
-
   return (
     <img
       src={src}
       alt={alt}
       className={`${className} object-contain transition-all duration-200`}
-      style={{
-        filter: filterValues[color] || filterValues.white,
-      }}
+      style={{ filter: filterValues[color] || filterValues.white }}
     />
   );
 };
-
 ImageIcon.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
@@ -53,13 +48,19 @@ const Sidebar = ({ isSidebarOpen }) => {
   }, [location.pathname]);
 
   const isActive = (path) => location.pathname === path;
+
+  // --- STYLE ADJUSTMENTS to reduce space when OPEN ---
   const activeStyle = isSidebarOpen
-    ? "bg-[#D9D9D9] text-black rounded-xl pl-4 py-2 flex items-center gap-4 cursor-pointer w-full"
-    : "bg-[#D9D9D9] text-black rounded-xl w-[50px] h-[50px] flex items-center justify-center cursor-pointer mx-auto";
+    ? // CHANGE: Reduced vertical padding from py-2 to py-1.5. Gap remains comfortable.
+      "bg-[#D9D9D9] text-black rounded-xl pl-4 py-1.5 flex items-center gap-4 cursor-pointer w-full"
+    : // No change for closed state
+      "bg-[#D9D9D9] text-black rounded-xl w-12 h-12 flex items-center justify-center cursor-pointer mx-auto";
 
   const inactiveStyle = isSidebarOpen
-    ? "flex items-center gap-4 pl-4 py-2 cursor-pointer hover:bg-white/10 rounded-lg transition-colors w-full"
-    : "w-[50px] h-[50px] flex items-center justify-center cursor-pointer hover:bg-white/10 rounded-full transition-colors mx-auto";
+    ? // CHANGE: Reduced vertical padding from py-2 to py-1.5.
+      "flex items-center gap-4 pl-4 py-1.5 cursor-pointer hover:bg-white/10 rounded-lg transition-colors w-full"
+    : // No change for closed state
+      "w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-white/10 rounded-full transition-colors mx-auto";
 
   const menuSections = [
     {
@@ -75,7 +76,7 @@ const Sidebar = ({ isSidebarOpen }) => {
             <ImageIcon
               src="/assets/icons/feedback.png"
               alt="Feedback Icon"
-              className={`${isSidebarOpen ? "w-7 h-7" : "w-8 h-8"} ${
+              className={`w-6 h-6 ${
                 isActive("/feedback") ? "opacity-100" : "opacity-100"
               }`}
               color={isActive("/feedback") ? "black" : "white"}
@@ -97,7 +98,7 @@ const Sidebar = ({ isSidebarOpen }) => {
             <ImageIcon
               src="/assets/icons/announcement_icon.png"
               alt="Announcement Icon"
-              className={`${isSidebarOpen ? "w-6 h-6" : "w-6 h-6"} ${
+              className={`w-6 h-6 ${
                 isActive("/announcements") ? "opacity-100" : "opacity-100"
               }`}
               color={isActive("/announcements") ? "black" : "white"}
@@ -143,8 +144,9 @@ const Sidebar = ({ isSidebarOpen }) => {
 
       {/* Divider */}
       <div
+        // CHANGE: Reduced vertical margin from my-6 to my-5 when open
         className={`border-b-2 border-white w-full ${
-          isSidebarOpen ? "my-6" : "my-4 w-[60%] mx-auto mb-10"
+          isSidebarOpen ? "my-5" : "my-4 w-[60%] mx-auto mb-10"
         }`}
       ></div>
 
@@ -153,8 +155,9 @@ const Sidebar = ({ isSidebarOpen }) => {
         {menuSections.map((section, index) => (
           <div
             key={index}
+            // CHANGE: Reduced top margin from mt-6 to mt-5 (for first section) and mt-10 to mt-8 (for second)
             className={`${
-              index === 0 ? (isSidebarOpen ? "mt-6" : "mt-4") : "mt-10"
+              index === 0 ? (isSidebarOpen ? "mt-5" : "mt-4") : "mt-8"
             }`}
           >
             {/* Section Title */}
@@ -164,7 +167,8 @@ const Sidebar = ({ isSidebarOpen }) => {
               </div>
             )}
 
-            <ul className="space-y-2">
+            {/* CHANGE: Reduced space between list items from space-y-2 to space-y-1.5 */}
+            <ul className="space-y-1.5">
               {section.items.map(({ path, icon, label }) => (
                 <li key={path} className="flex justify-center">
                   <Link
@@ -173,13 +177,13 @@ const Sidebar = ({ isSidebarOpen }) => {
                     data-tooltip-id={`tooltip-${path}`}
                     data-tooltip-content={label}
                     data-tooltip-place="right"
-                    onClick={(e) => e.stopPropagation()} // Still keep this to prevent bubbling
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <div
                       className={`${
                         isSidebarOpen
-                          ? "text-[20px] w-6 flex justify-center"
-                          : "text-[25px]"
+                          ? "text-xl w-6 flex justify-center"
+                          : "text-2xl"
                       }`}
                     >
                       {icon}
@@ -198,14 +202,8 @@ const Sidebar = ({ isSidebarOpen }) => {
                         borderRadius: "6px",
                         padding: "8px 12px",
                         fontSize: "14px",
-                        fontWeight: "500",
-                        boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
                         zIndex: 9999,
-
-                        textShadow: "0 1px 1px rgba(0,0,0,0.3)",
                       }}
-                      border="1px solid rgba(255,255,255,0.1)"
-                      opacity={1}
                       noArrow={false}
                       delayShow={50}
                       place="right"

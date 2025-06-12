@@ -3,7 +3,8 @@ import CustomProgressBar from "/src/features/appointment/CustomProgressBar";
 import { Navigate } from "react-router";
 import PropTypes from "prop-types";
 
-const Attachment = ({ onNext, onBack, currentStep }) => {  const {
+const Attachment = ({ onNext, onBack, currentStep }) => {
+  const {
     files,
     fileInputRef,
     error,
@@ -33,8 +34,7 @@ const Attachment = ({ onNext, onBack, currentStep }) => {  const {
         </div>
         <div className="relative flex flex-col justify-center text-center">
           <h2 className="font-LatoBold text-[35px] text-Fwhite tracking-widest py-8">
-            APPLICATION FOR <br />
-            RECORDS
+            APPLICATION FOR RECORDS
           </h2>
           <div className="relative mx-auto bg-white p-5 rounded-lg shadow-md w-full max-w-[50%] text-center z-10">
             {/* Progress Bar */}
@@ -79,7 +79,8 @@ const Attachment = ({ onNext, onBack, currentStep }) => {  const {
               ref={fileInputRef}
               onChange={handleFileChange}
               className={`my-2 justify-center shadow-md text-[#161f55] border-2 py-2 px-2 w-[380px] rounded-[20px] 
-                ${error ? "border-red-500" : "border-[#000] border-opacity-40"
+                ${
+                  error ? "border-red-500" : "border-[#000] border-opacity-40"
                 }`}
               multiple
               accept="image/*"
@@ -92,8 +93,9 @@ const Attachment = ({ onNext, onBack, currentStep }) => {  const {
             <div className="pr-[210px]">
               <button
                 type="button"
-                className={`border-2 shadow-md border-[#425066] border-opacity-40 font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[15px] w-[180px] h-[50px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors justify-center text-start bg-none ${files.length >= 3 ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                className={`border-2 shadow-md border-[#425066] border-opacity-40 font-LatoBold text-[#000] text-[16px] px-4 py-2 rounded-[15px] w-[180px] h-[50px] mb-4 hover:bg-[#161f55] hover:text-[#fefefe] transition-colors justify-center text-start bg-none ${
+                  files.length >= 3 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 onClick={handleAddFile}
                 disabled={files.length >= 3}
               >
@@ -112,14 +114,15 @@ const Attachment = ({ onNext, onBack, currentStep }) => {  const {
                 }}
               >
                 Back
-              </button>              <button
+              </button>{" "}
+              <button
                 className={`bg-[#161f55] text-white px-6 py-2 rounded-lg hover:bg-blue-800 ${
-                  isUploading ? 'opacity-50 cursor-not-allowed' : ''
+                  isUploading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 onClick={handleNext}
                 disabled={isUploading}
               >
-                {isUploading ? 'Uploading...' : 'Next'}
+                {isUploading ? "Uploading..." : "Next"}
               </button>
             </div>
           </div>

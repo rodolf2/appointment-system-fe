@@ -56,7 +56,7 @@ const Announcements = () => {
       <aside
         className={`${
           isSidebarOpen ? "w-[300px]" : "w-[100px]"
-        } transition-all duration-300 z-10`}
+        } transition-all duration-300 z-20`}
       >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </aside>

@@ -112,7 +112,11 @@ const Appointments = () => {
       {/* Inject custom styles for data tooltips */}
       <style>{tooltipStyle}</style>
 
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
+      <div
+        className={`${
+          isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        }transition-all duration-300 z-20`}
+      >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">

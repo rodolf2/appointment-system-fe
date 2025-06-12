@@ -44,11 +44,11 @@ const Hta = () => {
             </div>
             <div className="space-y-5 bg-gray-200 p-6 rounded-xl shadow-md w-[90%] mx-auto">
               <VideoCard
-                videoSrc="/assets/videos/English.mp4"
+                videoSrc="/assets/videos/English Tutorial.mp4"
                 title={`LV AppointEase: Appointment Scheduling Tutorial (English Ver.)`}
               />
               <VideoCard
-                videoSrc="/assets/videos/TAGALOG.mp4"
+                videoSrc="/assets/videos/Tagalog Tutorial.mp4"
                 title={`LV AppointEase: Appointment Scheduling Tutorial (Tagalog Ver.)`}
               />
             </div>
