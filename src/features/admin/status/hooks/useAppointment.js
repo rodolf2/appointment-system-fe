@@ -259,6 +259,9 @@ const useAppointment = () => {
             formattedAppointmentDate
           );
         }
+      } else {
+        // If appointment date is not scheduled, don't send it
+        formattedAppointmentDate = null;
       }
 
       const adminName = user?.name || "Admin";
@@ -271,7 +274,10 @@ const useAppointment = () => {
         emailAddress: appointment.emailAddress,
         name: appointment.name,
         appointmentDate: formattedAppointmentDate,
-        timeSlot: appointment.timeSlot,
+        timeSlot:
+          appointment.timeSlot !== "Not scheduled"
+            ? appointment.timeSlot
+            : null,
         adminName: adminName, // Include admin name for notifications
       };
 
@@ -393,6 +399,47 @@ const useAppointment = () => {
     updateAppointmentStatus(appointment, "COMPLETED");
   };
 
+  // Function to fix missing appointment data by getting it from student data
+  const fixMissingAppointmentData = async (transactionNumber, studentData) => {
+    try {
+      const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+
+      // If student data has appointment info, use it to update the status
+      if (
+        studentData.appointmentDate &&
+        studentData.appointmentDate !== "Not scheduled" &&
+        studentData.timeSlot &&
+        studentData.timeSlot !== "Not scheduled"
+      ) {
+        const response = await fetch(
+          `${API_BASE_URL}/status/status/${transactionNumber}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              appointmentDate: studentData.appointmentDate,
+              timeSlot: studentData.timeSlot,
+              status: "PENDING", // Keep existing status or set to PENDING
+            }),
+          }
+        );
+
+        if (response.ok) {
+          console.log(`Fixed appointment data for ${transactionNumber}`);
+          return true;
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Failed to fix appointment data for ${transactionNumber}:`,
+        error
+      );
+    }
+    return false;
+  };
+
   // Fetch data
   useEffect(() => {
     const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
@@ -426,10 +473,19 @@ const useAppointment = () => {
         }
         const statusData = await statusResponse.json();
 
+        // Debug: Log all status data to see what we're getting
+        console.log("All status data from API:", statusData);
+        console.log("Number of status records:", statusData.length);
+
         // 3. Create a map of statuses using `transactionNumber` as the key.
         const statusMap = statusData.reduce((acc, statusItem) => {
           if (statusItem && statusItem.transactionNumber) {
             acc[statusItem.transactionNumber] = statusItem;
+            console.log(`Status mapped for ${statusItem.transactionNumber}:`, {
+              appointmentDate: statusItem.appointmentDate,
+              timeSlot: statusItem.timeSlot,
+              status: statusItem.status,
+            });
           }
           return acc;
         }, {});
@@ -452,6 +508,40 @@ const useAppointment = () => {
           )
           .map((student) => {
             const statusInfo = statusMap[student.transactionNumber] || {};
+
+            // Debug logging for appointment date and time issues
+            if (student.transactionNumber) {
+              console.log(`Debug - Transaction ${student.transactionNumber}:`, {
+                hasStatusInfo: Object.keys(statusInfo).length > 0,
+                appointmentDate: statusInfo.appointmentDate,
+                timeSlot: statusInfo.timeSlot,
+                status: statusInfo.status,
+                fullStatusInfo: statusInfo,
+              });
+
+              // Auto-fix missing appointment data
+              if (
+                statusInfo.status &&
+                (!statusInfo.appointmentDate || !statusInfo.timeSlot)
+              ) {
+                console.log(
+                  `Attempting to fix missing data for ${student.transactionNumber}`
+                );
+                console.log("Student data available:", student);
+                fixMissingAppointmentData(
+                  student.transactionNumber,
+                  student
+                ).then((fixed) => {
+                  if (fixed) {
+                    // Refresh the data after fixing
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 1000);
+                  }
+                });
+              }
+            }
+
             const validStatuses = [
               "PENDING",
               "APPROVED",
@@ -478,17 +568,24 @@ const useAppointment = () => {
                   : student.documentRequest?.purpose) ||
                 "No purpose specified",
               emailAddress: student.email || "No email specified",
-              dateOfAppointment: statusInfo.appointmentDate
+              dateOfAppointment: statusInfo?.appointmentDate
                 ? new Date(statusInfo.appointmentDate).toLocaleDateString(
                     "en-US",
                     {
                       year: "numeric",
-                      month: "short",
+                      month: "long",
                       day: "numeric",
                     }
                   )
+                : student.appointmentDate &&
+                  student.appointmentDate !== "Not scheduled"
+                ? student.appointmentDate
                 : "Not scheduled",
-              timeSlot: statusInfo.timeSlot || "Not scheduled",
+              timeSlot:
+                statusInfo?.timeSlot ||
+                (student.timeSlot && student.timeSlot !== "Not scheduled"
+                  ? student.timeSlot
+                  : "Not scheduled"),
               // This is the key field for sorting by submission time
               dateOfRequest:
                 student.date || new Date().toISOString().split("T")[0],
