@@ -458,11 +458,6 @@ const Archived = () => {
                 {/* Modal Box */}
                 <div className="bg-white p-8 rounded-lg shadow-lg">
                   <div className="flex flex-col items-center">
-                    <img
-                      src="/assets/icons/error_icon.svg"
-                      alt="Error icon"
-                      className="w-20 h-20 mb-8"
-                    />
                     <p className="text-xl font-semibold text-center text-red-600">
                       {errorMessage}
                     </p>
