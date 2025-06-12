@@ -11,11 +11,12 @@ const useSignIn = () => {
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const { updateUser } = useUser();
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,15 +31,22 @@ const useSignIn = () => {
     }
   }, []);
 
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handlePassword = (e) => setPassword(e.target.value);
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailError(null);
+    setError(null);
+  };
 
-  // Handle remember me checkbox changes with immediate cleanup
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+    setPasswordError(null);
+    setError(null);
+  };
+
   const handleRemember = (e) => {
     const checked = e.target.checked;
     setRemember(checked);
     if (!checked) {
-      // If user unchecks "Remember Me", immediately clear saved credentials
       localStorage.removeItem("savedEmail");
       localStorage.removeItem("savedPassword");
     }
@@ -48,7 +56,6 @@ const useSignIn = () => {
     setShowPassword((prev) => !prev);
   };
 
-  // Function to clear saved credentials (for users who want to remove saved credentials)
   const clearSavedCredentials = () => {
     localStorage.removeItem("savedEmail");
     localStorage.removeItem("savedPassword");
@@ -57,13 +64,31 @@ const useSignIn = () => {
     setRemember(false);
   };
 
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError(null);
+    setEmailError(null);
+    setPasswordError(null);
     setIsLoading(true);
 
-    if (!email.trim() || !password.trim()) {
-      setError("Please enter both email and password.");
+    // Basic validation
+    if (!email.trim()) {
+      setEmailError("Email is required.");
+      setIsLoading(false);
+      return;
+    }
+    if (!validateEmail(email.trim())) {
+      setEmailError("Invalid email format.");
+      setIsLoading(false);
+      return;
+    }
+    if (!password.trim()) {
+      setPasswordError("Password is required.");
       setIsLoading(false);
       return;
     }
@@ -79,25 +104,19 @@ const useSignIn = () => {
         localStorage.removeItem("savedPassword");
       }
 
-      // Store the token in localStorage
       if (response.token) {
         localStorage.setItem("token", response.token);
-        // Set the token in axios default headers for all future requests
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${response.token}`;
       }
 
-      // Extract user data from response, ensuring we get the complete user object
       const userResponse = response.user || response;
-      console.log("User response:", userResponse);
 
-      // Store user data with consistent picture handling
       const userData = {
         email: userResponse.email || email.trim(),
         name: userResponse.name || response.name,
         id: userResponse.id || userResponse._id || response.id,
-        // Ensure we get the profile picture URL from all possible fields
         picture:
           userResponse.picture ||
           userResponse.profilePicture ||
@@ -113,14 +132,9 @@ const useSignIn = () => {
         role: userResponse.role,
       };
 
-      // Update user context with the complete data
       updateUser(userData);
-
-      // Store the entire user object in localStorage for persistence
       localStorage.setItem("user", JSON.stringify(userData));
-
       setIsLoading(false);
-      console.log("Navigating to registrarHome");
       navigate("/registrarHome");
     } catch (error) {
       console.error("Sign in error:", error);
@@ -154,7 +168,6 @@ const useSignIn = () => {
         localStorage.setItem("token", response.token);
       }
 
-      // Store user data with consistent picture handling
       const userData = {
         email: user.email,
         name: response.user?.name || user.displayName,
@@ -187,6 +200,8 @@ const useSignIn = () => {
     password,
     remember,
     error,
+    emailError,
+    passwordError,
     showPassword,
     isLoading,
     isGoogleLoading,

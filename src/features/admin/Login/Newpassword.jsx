@@ -7,8 +7,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
-const API_BASE_URL =
-  "https://appointment-system-backend-n8dk.onrender.com/api/forgot-password";
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/forgot-password`;
 
 // Success Modal Component
 const SuccessModal = ({ onClose }) => (
@@ -33,11 +32,11 @@ const SuccessModal = ({ onClose }) => (
         </svg>
       </button>
       <div className="text-center">
-        <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full  mb-4">
+        <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full mb-4">
           <IoMdCheckmarkCircleOutline className="text-[#161F55] w-24 h-24" />
         </div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">
-          Successfull password reset!
+          Successful password reset!
         </h3>
         <p className="text-sm text-gray-600 mb-4">
           You can now use your new password to login to your account.
@@ -67,7 +66,6 @@ const NewPassword = () => {
   const location = useLocation();
   const email = location.state?.email;
 
-  // Password requirement checks
   const isLengthValid = password.length >= 8 && password.length <= 30;
   const hasUppercase = /[A-Z]/.test(password);
   const hasLowercase = /[a-z]/.test(password);
@@ -93,7 +91,7 @@ const NewPassword = () => {
     setMessage(null);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("Passwords do not match!");
       setIsSubmitting(false);
       return;
     }
@@ -105,7 +103,7 @@ const NewPassword = () => {
       });
 
       if (response.data.success) {
-        setShowSuccessModal(true); // Show success modal instead of immediate redirect
+        setShowSuccessModal(true);
       } else {
         throw new Error(response.data.message || "Failed to reset password");
       }
@@ -159,12 +157,17 @@ const NewPassword = () => {
         <section className="relative flex items-center justify-center pt-28 px-4">
           <div className="bg-white bg-opacity-30 p-8 rounded-[20px] shadow-lg max-w-xl w-full">
             <h2 className="text-3xl text-white text-center mb-4">
-              Create New Password
+              Set New Password
             </h2>
             <div className="w-[280px] h-1 bg-[#F3BC62] mb-4 mx-auto"></div>
+
+            {/* Error Alert Box */}
             {error && (
-              <p className="text-white text-center text-sm mb-4">{error}</p>
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm text-center mb-4">
+                {error}
+              </div>
             )}
+
             <form
               onSubmit={handleResetPassword}
               className="bg-white p-6 rounded-lg space-y-6"
@@ -184,7 +187,7 @@ const NewPassword = () => {
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility("password")}
-                  className="absolute right-3 top-2/3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 flex items-center justify-center"
+                  className="absolute right-3 top-2/3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                 </button>
@@ -205,7 +208,7 @@ const NewPassword = () => {
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility("confirm")}
-                  className="absolute right-3 top-2/3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 flex items-center justify-center"
+                  className="absolute right-3 top-2/3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   {showConfirmPassword ? (
                     <AiOutlineEyeInvisible />

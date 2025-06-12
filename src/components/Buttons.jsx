@@ -10,91 +10,56 @@ const Buttons = () => {
     setActiveTab(path);
   }, [location]);
 
+  const tabs = [
+    {
+      label: "Announcement",
+      path: "announcement",
+      icon: "/assets/icons/announcement.svg",
+    },
+    {
+      label: "How to Appoint",
+      path: "hta",
+      icon: "/assets/icons/howtoappoint.svg",
+    },
+    {
+      label: "Guidelines",
+      path: "guidelines",
+      icon: "/assets/icons/guidelines.svg",
+    },
+  ];
+
   return (
     <div className="relative">
       <div className="flex items-center justify-center flex-col max-w-[1297px] mx-auto">
         <div className="absolute z-10 text-[27px] flex justify-around w-full">
-          {/* Announcement Button */}
-          <Link
-            to="/home/announcement"
-            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
-              activeTab === "announcement" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
-            }`}
-          >
-            <div className="flex items-center ">
-              <img
-                src="/assets/icons/announcement.svg"
-                alt="Announcement Icon"
-                className="mr-2 w-10 h-10"
-              />
-              <span
-                className={`relative ${
-                  activeTab === "announcement"
-                    ? "text-[#161F55]"
-                    : "text-gray-600"
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.path;
+            return (
+              <Link
+                key={tab.path}
+                to={`/home/${tab.path}`}
+                className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
+                  isActive ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
                 }`}
               >
-                Announcement
-                {activeTab === "announcement" && (
-                  <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
-                )}
-              </span>
-            </div>
-          </Link>
-
-          {/* How to Appoint Button */}
-          <Link
-            to="/home/hta"
-            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
-              activeTab === "hta" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
-            }`}
-          >
-            <div className="flex items-center">
-              <img
-                src="/assets/icons/howtoappoint.svg"
-                alt="How to Appoint Icon"
-                className="mr-2 w-10 h-10"
-              />
-              <span
-                className={`relative ${
-                  activeTab === "hta" ? "text-[#161F55]" : "text-gray-600"
-                }`}
-              >
-                How to Appoint
-                {activeTab === "hta" && (
-                  <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
-                )}
-              </span>
-            </div>
-          </Link>
-
-          {/* Guidelines Button */}
-          <Link
-            to="/home/guidelines"
-            className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
-              activeTab === "guidelines" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
-            }`}
-          >
-            <div className="flex items-center">
-              <img
-                src="/assets/icons/guidelines.svg"
-                alt="Guidelines Icon"
-                className="mr-2 w-10 h-10"
-              />
-              <span
-                className={`relative ${
-                  activeTab === "guidelines"
-                    ? "text-[#161F55]"
-                    : "text-gray-600"
-                }`}
-              >
-                Guidelines
-                {activeTab === "guidelines" && (
-                  <span className="absolute left-0 right-0 bottom-0 border-b-4 border-[#F3BC62]"></span>
-                )}
-              </span>
-            </div>
-          </Link>
+                <div
+                  className={`flex items-center justify-center relative gap-2 ${
+                    isActive ? "text-[#161F55]" : "text-gray-600"
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <img
+                    src={tab.icon}
+                    alt={`${tab.label} Icon`}
+                    className="w-8 h-8" // smaller icon
+                  />
+                  {isActive && (
+                    <span className="absolute left-0 right-0 -bottom-1 h-1 bg-[#F3BC62] w-full"></span>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>

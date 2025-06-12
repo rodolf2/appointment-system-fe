@@ -10,6 +10,8 @@ const SignIn = () => {
     password,
     remember,
     error,
+    emailError,
+    passwordError,
     showPassword,
     handleEmail,
     handlePassword,
@@ -36,7 +38,6 @@ const SignIn = () => {
           background: `linear-gradient(to top, rgba(2, 17, 74, 0.5), rgba(3, 21, 125, 0.5), rgba(107, 123, 222, 0.4))`,
         }}
       />
-      {/* Logo and Title */}
       <Header />
 
       <section className="relative flex items-center justify-center pt-20 pb-10 px-4">
@@ -60,10 +61,16 @@ const SignIn = () => {
                   value={email}
                   onChange={handleEmail}
                   type="email"
-                  required
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                    emailError
+                      ? "border-red-500 focus:ring-red-400"
+                      : "focus:ring-blue-400"
+                  }`}
                   placeholder="Enter your email"
                 />
+                {emailError && (
+                  <p className="mt-1 text-sm text-red-600">{emailError}</p>
+                )}
               </div>
 
               <div className="mb-4">
@@ -79,8 +86,11 @@ const SignIn = () => {
                     value={password}
                     onChange={handlePassword}
                     type={showPassword ? "text" : "password"}
-                    required
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10"
+                    className={`w-full px-4 py-2 border rounded-md pr-10 focus:outline-none focus:ring-2 ${
+                      passwordError
+                        ? "border-red-500 focus:ring-red-400"
+                        : "focus:ring-blue-400"
+                    }`}
                     placeholder="Enter your password"
                   />
                   <button
@@ -99,6 +109,9 @@ const SignIn = () => {
                     )}
                   </button>
                 </div>
+                {passwordError && (
+                  <p className="mt-1 text-sm text-red-600">{passwordError}</p>
+                )}
               </div>
 
               <div className="flex items-center justify-between mb-6">
@@ -153,7 +166,7 @@ const SignIn = () => {
             </p>
 
             {error && (
-              <p className="mt-2 text-center text-red-500 font-semibold">
+              <p className="mt-3 text-center text-red-500 font-semibold">
                 {error}
               </p>
             )}

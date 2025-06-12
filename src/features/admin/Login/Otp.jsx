@@ -6,7 +6,7 @@ import Header from "./Header";
 
 // API endpoints configuration
 const API_BASE_URL =
-  "https://appointment-system-backend-n8dk.onrender.com/api/forgot-password";
+  `${import.meta.env.VITE_API_URL}/api/forgot-password`;
 const ENDPOINTS = {
   REQUEST_OTP: `${API_BASE_URL}/request-otp`,
   VERIFY_OTP: `${API_BASE_URL}/verify-otp`,
