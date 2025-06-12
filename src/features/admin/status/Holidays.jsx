@@ -50,6 +50,7 @@ const Holidays = () => {
     isDeleteModalOpen,
     newHoliday,
     holidays,
+    validationErrors,
     toggleSidebar,
     openAddModal,
     closeAddModal,
@@ -265,9 +266,17 @@ const Holidays = () => {
           <div className="bg-white p-10 sm:p-20 rounded-xl shadow-md w-11/12 max-w-lg">
             <h2 className="text-xl font-bold mb-4 uppercase">Add Holiday</h2>
             <div className="border-b-2 border-[#F3BC62] w-full max-w-xs my-2"></div>
+
+            {/* General Error Message */}
+            {validationErrors.general && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                {validationErrors.general}
+              </div>
+            )}
+
             <div className="w-full">
-              <label htmlFor="add-date" className="block mb-1">
-                DATE
+              <label htmlFor="add-date" className="block mb-1 font-semibold">
+                DATE <span className="text-red-500">*</span>
               </label>
               <input
                 id="add-date"
@@ -275,10 +284,26 @@ const Holidays = () => {
                 type="date"
                 value={newHoliday.date}
                 onChange={handleInputChange}
-                className="border w-full p-2 mb-2"
+                className={`border w-full p-2 rounded ${
+                  validationErrors.date
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                }`}
               />
-              <label htmlFor="add-description" className="block mb-1">
-                DESCRIPTION
+              {/* Fixed placeholder for error message */}
+              <div className="mt-1 h-5">
+                {validationErrors.date && (
+                  <p className="text-sm text-red-500">
+                    {validationErrors.date}
+                  </p>
+                )}
+              </div>
+
+              <label
+                htmlFor="add-description"
+                className="block mb-1 font-semibold"
+              >
+                DESCRIPTION <span className="text-red-500">*</span>
               </label>
               <input
                 id="add-description"
@@ -286,19 +311,32 @@ const Holidays = () => {
                 type="text"
                 value={newHoliday.description}
                 onChange={handleInputChange}
-                placeholder="Description"
-                className="border w-full p-2 mb-4"
+                placeholder="Enter holiday description"
+                className={`border w-full p-2 rounded ${
+                  validationErrors.description
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                }`}
               />
+              {/* Fixed placeholder for error message */}
+              <div className="mt-1 h-5">
+                {validationErrors.description && (
+                  <p className="text-sm text-red-500">
+                    {validationErrors.description}
+                  </p>
+                )}
+              </div>
             </div>
+
             <div className="flex flex-col sm:flex-row justify-between gap-4 mt-6">
               <button
-                className=" bg-gray-300 text-black px-8 py-2 rounded-2xl w-full sm:w-auto"
+                className="bg-gray-300 text-black px-8 py-2 rounded-2xl w-full sm:w-auto hover:bg-gray-400 transition-colors"
                 onClick={closeAddModal}
               >
                 Cancel
               </button>
               <button
-                className="bg-[#161f55] text-white px-8 py-2 rounded-2xl w-full sm:w-auto"
+                className="bg-[#161f55] text-white px-8 py-2 rounded-2xl w-full sm:w-auto hover:bg-blue-800 transition-colors"
                 onClick={addHolidays}
               >
                 Add
@@ -312,9 +350,17 @@ const Holidays = () => {
           <div className="bg-white p-10 sm:p-20 rounded-xl shadow-md w-11/12 max-w-lg">
             <h2 className="text-xl font-bold mb-4 uppercase">Update Holiday</h2>
             <div className="border-b-2 border-[#F3BC62] w-full max-w-xs my-2"></div>
+
+            {/* General Error Message */}
+            {validationErrors.general && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                {validationErrors.general}
+              </div>
+            )}
+
             <div className="w-full">
-              <label htmlFor="edit-date" className="block mb-1">
-                Date
+              <label htmlFor="edit-date" className="block mb-1 font-semibold">
+                DATE <span className="text-red-500">*</span>
               </label>
               <input
                 id="edit-date"
@@ -322,10 +368,26 @@ const Holidays = () => {
                 type="date"
                 value={newHoliday.date}
                 onChange={handleInputChange}
-                className="border w-full p-2 mb-2"
+                className={`border w-full p-2 rounded ${
+                  validationErrors.date
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                }`}
               />
-              <label htmlFor="edit-description" className="block mb-1">
-                Description
+              {/* Fixed placeholder for error message */}
+              <div className="mt-1 h-5">
+                {validationErrors.date && (
+                  <p className="text-sm text-red-500">
+                    {validationErrors.date}
+                  </p>
+                )}
+              </div>
+
+              <label
+                htmlFor="edit-description"
+                className="block mb-1 font-semibold"
+              >
+                DESCRIPTION <span className="text-red-500">*</span>
               </label>
               <input
                 id="edit-description"
@@ -333,19 +395,32 @@ const Holidays = () => {
                 type="text"
                 value={newHoliday.description}
                 onChange={handleInputChange}
-                placeholder="Description"
-                className="border w-full p-2 mb-4"
+                placeholder="Enter holiday description"
+                className={`border w-full p-2 rounded ${
+                  validationErrors.description
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                }`}
               />
+              {/* Fixed placeholder for error message */}
+              <div className="mt-1 h-5">
+                {validationErrors.description && (
+                  <p className="text-sm text-red-500">
+                    {validationErrors.description}
+                  </p>
+                )}
+              </div>
             </div>
+
             <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-10 mt-6">
               <button
-                className="bg-gray-300 text-black px-8 py-2 rounded-2xl w-full sm:w-auto"
+                className="bg-gray-300 text-black px-8 py-2 rounded-2xl w-full sm:w-auto hover:bg-gray-400 transition-colors"
                 onClick={closeEditModal}
               >
                 Cancel
               </button>
               <button
-                className="bg-[#161f55] text-white px-8 py-2 rounded-2xl w-full sm:w-auto"
+                className="bg-[#161f55] text-white px-8 py-2 rounded-2xl w-full sm:w-auto hover:bg-blue-800 transition-colors"
                 onClick={updateHolidays}
               >
                 Save
