@@ -147,8 +147,10 @@ const Contact = () => {
                         : "border-[#425066] border-opacity-40"
                     }`}
                   />
-                  {nameError && (
+                  {nameError ? (
                     <p className="text-red-500 text-sm mt-1">{nameError}</p>
+                  ) : (
+                    <p className="invisible text-sm mt-1">Placeholder</p> // Keeps space reserved
                   )}
                 </div>
 
@@ -174,8 +176,10 @@ const Contact = () => {
                         : "border-[#425066] border-opacity-40"
                     }`}
                   />
-                  {emailError && (
+                  {emailError ? (
                     <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                  ) : (
+                    <p className="invisible text-sm mt-1">Placeholder</p> // Keeps space reserved
                   )}
                 </div>
               </div>
@@ -200,8 +204,10 @@ const Contact = () => {
                       : "border-[#425066] border-opacity-40"
                   }`}
                 />
-                {subjectError && (
+                {subjectError ? (
                   <p className="text-red-500 text-sm mt-1">{subjectError}</p>
+                ) : (
+                  <p className="invisible text-sm mt-1">Placeholder</p> // Keeps space reserved
                 )}
               </div>
 
@@ -225,8 +231,10 @@ const Contact = () => {
                       : "border-[#425066] border-opacity-40"
                   }`}
                 ></textarea>
-                {messageError && (
+                {messageError ? (
                   <p className="text-red-500 text-sm mt-1">{messageError}</p>
+                ) : (
+                  <p className="invisible text-sm mt-1">Placeholder</p> // Keeps space reserved
                 )}
               </div>
 
@@ -260,8 +268,8 @@ const Contact = () => {
                   className="w-20 h-20 mb-8"
                 />
                 <p className="text-xl font-semibold text-center">
-                  Thanks for reaching out! We&apos;ve received your message <br />{" "}
-                  and will be in touch shortly with more information.
+                  Thanks for reaching out! We&apos;ve received your message{" "}
+                  <br /> and will be in touch shortly with more information.
                 </p>
               </div>
             </div>

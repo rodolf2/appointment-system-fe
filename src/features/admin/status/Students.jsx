@@ -3,10 +3,12 @@ import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 import useStudents from "./hooks/useStudents";
 import { FaSearch } from "react-icons/fa";
+import { Tooltip } from "react-tooltip";
 
 const Students = () => {
-  const API_URL =
-    `${import.meta.env.VITE_API_URL}/api/document-requests/docs-with-details`;
+  const API_URL = `${
+    import.meta.env.VITE_API_URL
+  }/api/document-requests/docs-with-details`;
 
   const {
     // Data states
@@ -102,18 +104,18 @@ const Students = () => {
               <thead>
                 <tr className="bg-gray-200 text-center">
                   <th className="border p-5 w-[10%]">TRANSACTION NO.</th>
-                  <th className="border p-5 w-[15%]">NAME</th>
-                  <th className="border p-5 w-[10%]">LAST S.Y. ATTENDED</th>
-                  <th className="border p-5 w-[10%]">
+                  <th className="border p-5 w-[14%]">NAME</th>
+                  <th className="border p-5 w-[9%]">LAST S.Y. ATTENDED</th>
+                  <th className="border p-5 w-[12%]">
                     PROGRAM/GRADE/
                     <br />
                     STRAND
                   </th>
-                  <th className="border p-5 w-[10%]">CONTACT NO.</th>
-                  <th className="border p-5 w-[15%]">EMAIL ADDRESS</th>
+                  <th className="border p-5 w-[9%]">CONTACT NO.</th>
+                  <th className="border p-5 w-[14%]">EMAIL ADDRESS</th>
                   <th className="border p-5 w-[10%]">ATTACHMENT PROOF</th>
-                  <th className="border p-5 w-[10%]">PURPOSE</th>
-                  <th className="border p-5 w-[10%]">REQUEST</th>
+                  <th className="border p-5 w-[9%]">PURPOSE</th>
+                  <th className="border p-5 w-[9%]">REQUEST</th>
                   <th className="border p-5 w-[10%]">DATE OF REQUEST</th>
                 </tr>
               </thead>
@@ -159,10 +161,27 @@ const Students = () => {
                           {data.transactionNumber}
                         </td>
                         <td className="border p-5 break-words">{data.name}</td>
-                        <td className="border p-5 break-words">{data.lastSY}</td>
-                        <td className="border p-5 break-words">{data.program}</td>
-                        <td className="border p-5 break-words">{data.contact}</td>
-                        <td className="border p-5 break-words">{data.email}</td>
+                        <td className="border p-5 break-words">
+                          {data.lastSY}
+                        </td>
+                        <td className="border p-5 break-words">
+                          {data.program}
+                        </td>
+                        <td className="border p-5 break-words">
+                          {data.contact}
+                        </td>
+                        <td className="border p-5 break-words">
+                          <span
+                            data-tooltip-id="email-tooltip"
+                            data-tooltip-content={data.email}
+                            className="cursor-help"
+                            title={data.email}
+                          >
+                            {data.email.length > 20
+                              ? `${data.email.substring(0, 20)}...`
+                              : data.email}
+                          </span>
+                        </td>
                         <td className="border p-5 break-words">
                           {data.attachment &&
                           data.attachment !== "No attachments" ? (
@@ -187,8 +206,12 @@ const Students = () => {
                             </span>
                           )}
                         </td>
-                        <td className="border p-5 break-words">{data.purpose}</td>
-                        <td className="border p-5 break-words">{data.request}</td>
+                        <td className="border p-5 break-words">
+                          {data.purpose}
+                        </td>
+                        <td className="border p-5 break-words">
+                          {data.request}
+                        </td>
                         <td className="border p-5 break-words">
                           {new Date(data.date).toLocaleDateString()}
                         </td>
@@ -240,6 +263,9 @@ const Students = () => {
           <Footer />
         </main>
       </div>
+
+      {/* Tooltips */}
+      <Tooltip id="email-tooltip" />
     </div>
   );
 };
