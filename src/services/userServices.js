@@ -93,20 +93,40 @@ export const updateUserProfile = async (userId, userData, token) => {
 // Delete profile picture
 export const deleteProfilePicture = async (userId, token) => {
   try {
-    const response = await axios.delete(
-      `${PROFILE_URL}/${userId}/profile-picture`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-        timeout: 5000, // 5 second timeout
-      }
-    );
+    console.log("🗑️ Deleting profile picture for user:", userId);
+    const url = `${PROFILE_URL}/${userId}/profile-picture`;
+    console.log("API URL:", url);
+
+    const response = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+      timeout: 5000, // 5 second timeout
+    });
+
+    console.log("Delete response:", response.data);
     return response.data;
   } catch (error) {
+    console.error("Profile picture deletion error:", {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message,
+    });
+
+    if (error.response?.status === 401) {
+      throw { message: "Authentication failed. Please sign in again." };
+    }
+
+    if (error.response?.status === 404) {
+      throw { message: "No profile picture found to delete." };
+    }
+
     throw (
-      error.response?.data || { message: "Failed to delete profile picture" }
+      error.response?.data || {
+        message: "Failed to delete profile picture. Please try again.",
+      }
     );
   }
 };

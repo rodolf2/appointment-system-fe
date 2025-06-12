@@ -326,19 +326,27 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                       // If that fails too, use default
                       e.target.onerror = () => {
                         e.target.onerror = null;
-                        e.target.src = "/assets/icons/default-profile.svg";
+                        e.target.src = "/assets/icons/user 1.png";
+                        e.target.classList.remove("object-cover");
+                        e.target.classList.add("p-2", "bg-gray-100");
                         console.log("🔄 Using default profile icon");
                       };
                     } else {
-                      // For non-Google URLs, use default immediately
-                      e.target.src = "/assets/icons/default-profile.svg";
+                      // For non-Google URLs, use UploadIcon
+                      e.target.src = "/assets/icons/user 1.png";
+                      e.target.classList.remove("object-cover");
+                      e.target.classList.add("p-2", "bg-gray-100");
                     }
                   }}
                 />
               </div>
             ) : (
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                <CgProfile className="text-3xl text-gray-600" />
+              <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center p-2">
+                <img
+                  src="/assets/icons/user 1.png"
+                  alt="Upload profile picture"
+                  className="w-full h-full"
+                />
               </div>
             )}
             <span className="text-base hidden sm:inline text-gray-700">

@@ -22,14 +22,11 @@ const useProfileForm = () => {
       if (savedData) {
         return JSON.parse(savedData);
       }
-    }
-
-    // Initialize from user context if available
+    } // Initialize from user context if available
     if (user) {
-      const [firstName, middleName, lastName] = (user.name || "").split(" ");
+      const [firstName, lastName] = (user.name || "").split(" ");
       return {
         firstName: firstName || "",
-        middleName: middleName || "",
         lastName: lastName || "",
         email: user.email || "",
         password: "",
@@ -38,23 +35,18 @@ const useProfileForm = () => {
 
     return {
       firstName: "",
-      middleName: "",
       lastName: "",
       email: "",
       password: "",
     };
   });
-
   // Profile image state with user context initialization
   const [profileImage, setProfileImage] = useState(() => {
-    const storageKey = getStorageKey("profileImage");
-    if (storageKey) {
-      const savedImage = localStorage.getItem(storageKey);
-      if (savedImage) {
-        return savedImage;
-      }
+    // Prioritize the current user context data over localStorage
+    if (user?.picture || user?.profilePicture) {
+      return user.picture || user.profilePicture;
     }
-    return user?.picture || user?.profilePicture || null;
+    return null;
   });
 
   // Clear previous user's data when user changes
@@ -80,18 +72,19 @@ const useProfileForm = () => {
       localStorage.setItem(storageKey, JSON.stringify(formData));
     }
   }, [formData, user?.id]);
-
-  // Save image to localStorage whenever it changes
+  // Update user context whenever profile image changes
   useEffect(() => {
-    const storageKey = getStorageKey("profileImage");
-    if (storageKey) {
-      if (profileImage) {
-        localStorage.setItem(storageKey, profileImage);
-      } else {
-        localStorage.removeItem(storageKey);
-      }
+    if (
+      user?.id &&
+      (profileImage !== user.picture || profileImage !== user.profilePicture)
+    ) {
+      updateUser({
+        ...user,
+        picture: profileImage,
+        profilePicture: profileImage,
+      });
     }
-  }, [profileImage, user?.id]);
+  }, [profileImage]);
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -107,6 +100,17 @@ const useProfileForm = () => {
     const file = event.target.files[0];
     if (file) {
       try {
+        // Validate file type
+        if (!file.type.startsWith("image/")) {
+          throw new Error("Please upload an image file");
+        }
+
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        if (file.size > maxSize) {
+          throw new Error("Image size should be less than 5MB");
+        }
+
         // Get token from localStorage
         const token = localStorage.getItem("token");
         if (!token) {
@@ -115,28 +119,36 @@ const useProfileForm = () => {
           );
         }
 
-        // Upload the profile picture to the server
         console.log("🔄 Starting profile picture upload...");
+
+        // Upload the profile picture to the server
         const uploadResponse = await uploadProfilePicture(user.id, file, token);
         console.log("📤 Upload response received:", uploadResponse);
 
-        const imageUrl = uploadResponse.profilePicture;
-        console.log("🖼️ Image URL extracted:", imageUrl);
+        if (
+          !uploadResponse?.profilePicture ||
+          !uploadResponse?.cloudinaryPublicId
+        ) {
+          throw new Error("Invalid response from server");
+        }
 
         // Update local state with the new image URL
-        setProfileImage(imageUrl);
-        console.log("✅ Local state updated with image URL");
+        setProfileImage(uploadResponse.profilePicture);
 
-        // Update user context with new image URL
+        // Update user context with new image URL and Cloudinary ID
         updateUser({
           ...user,
-          picture: imageUrl,
-          profilePicture: imageUrl,
+          picture: uploadResponse.profilePicture,
+          profilePicture: uploadResponse.profilePicture,
+          cloudinaryPublicId: uploadResponse.cloudinaryPublicId,
         });
-        console.log("✅ User context updated with image URL");
+
+        return uploadResponse.profilePicture;
       } catch (error) {
-        console.error("Error uploading profile picture:", error);
-        throw new Error("Failed to upload profile picture. Please try again.");
+        console.error("❌ Error uploading profile picture:", error);
+        throw new Error(
+          error.message || "Failed to upload profile picture. Please try again."
+        );
       }
     }
   };
@@ -144,6 +156,8 @@ const useProfileForm = () => {
   // Handle image removal
   const handleImageRemove = async () => {
     try {
+      console.log("🗑️ Starting profile picture removal process...");
+
       // Get token from localStorage
       const token = localStorage.getItem("token");
       if (!token) {
@@ -152,8 +166,24 @@ const useProfileForm = () => {
         );
       }
 
+      // Check if there's an image to delete
+      if (!user?.id) {
+        throw new Error("User ID not found. Please sign in again.");
+      }
+
+      if (!profileImage && !user.profilePicture && !user.picture) {
+        throw new Error("No profile picture to remove.");
+      }
+
       // Delete the profile picture from the server
-      await deleteProfilePicture(user.id, token);
+      const response = await deleteProfilePicture(user.id, token);
+      console.log("✅ Profile picture deleted from server:", response);
+
+      // Clear the image from local storage
+      const imageKey = getStorageKey("profileImage");
+      if (imageKey) {
+        localStorage.removeItem(imageKey);
+      }
 
       // Clear the image from state
       setProfileImage(null);
@@ -163,25 +193,27 @@ const useProfileForm = () => {
         ...user,
         picture: null,
         profilePicture: null,
+        cloudinaryPublicId: null,
       });
+
+      console.log("✅ Profile picture removed successfully");
+      return response;
     } catch (error) {
-      console.error("Error removing profile picture:", error);
-      throw new Error("Failed to remove profile picture. Please try again.");
+      console.error("❌ Error removing profile picture:", error);
+      throw new Error(
+        error.message || "Failed to remove profile picture. Please try again."
+      );
     }
   };
 
   // Handle form submission
   const handleSubmit = async () => {
     // Construct full name
-    const fullName = [
-      formData.firstName,
-      formData.middleName,
-      formData.lastName,
-    ]
-      .filter(Boolean)
-      .join(" ");
+    const fullName = `${formData.firstName || ""} ${
+      formData.lastName || ""
+    }`.trim();
 
-    if (!fullName.trim()) {
+    if (!fullName) {
       throw new Error("Name is required");
     }
 
@@ -212,10 +244,13 @@ const useProfileForm = () => {
       // Update profile
       const updatedUser = await updateUserProfile(user.id, userData, token);
 
-      // Update user context with new data
+      // Update user context with new data, ensuring picture/profilePicture are synced
       updateUser({
         ...user,
         ...updatedUser.user,
+        name: fullName,
+        picture: profileImage || updatedUser.user.profilePicture,
+        profilePicture: profileImage || updatedUser.user.profilePicture,
       });
 
       // Reset password field after successful update
@@ -235,7 +270,6 @@ const useProfileForm = () => {
   const clearProfileData = () => {
     setFormData({
       firstName: "",
-      middleName: "",
       lastName: "",
       email: "",
       password: "",

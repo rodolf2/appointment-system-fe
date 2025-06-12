@@ -9,6 +9,7 @@ const Profile = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Loading state for image removal
 
   // Use the custom hook
   const {
@@ -26,25 +27,22 @@ const Profile = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setSuccessMessage(null);
-    setIsSubmitting(true);
-
     try {
-      // console.log("Starting profile update...");
-      await handleSubmit();
-      setSuccessMessage("Profile updated successfully!.");
+      setError(null);
+      setIsSubmitting(true);
 
-      // Reset form submission state after a brief delay
+      const result = await handleSubmit();
+
+      setSuccessMessage("Profile updated successfully!");
       setTimeout(() => {
         setSuccessMessage(null);
-      }, 5000); // Clear success message after 5 seconds
+      }, 3000);
     } catch (err) {
-      console.error("Profile submission error:", err);
-      setError(
-        err.message ||
-          "Failed to update profile. Please try signing out and back in."
-      );
+      console.error("Error updating profile:", err);
+      setError(err.message || "Failed to update profile");
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -88,62 +86,84 @@ const Profile = () => {
                       src={profileImage}
                       alt="Profile"
                       className="w-full h-full object-cover"
-                      onLoad={() => {
-                        // console.log(
-                        //   "✅ Profile image loaded successfully:",
-                        //   profileImage
-                        // );
-                      }}
                       onError={(e) => {
                         console.error(
                           "❌ Failed to load profile image:",
                           profileImage
                         );
-                        console.error("Error details:", e);
 
-                        // If it's a Google profile picture, try alternative URL
-                        if (
-                          profileImage &&
-                          profileImage.includes("googleusercontent.com")
-                        ) {
+                        // Try to load Google profile picture with different sizes
+                        if (profileImage?.includes("googleusercontent.com")) {
                           console.log(
-                            "🔄 Trying alternative Google profile picture URL..."
+                            "🔄 Attempting to fix Google profile picture URL..."
                           );
-                          const baseUrl = profileImage.split("=")[0];
-                          e.target.src = baseUrl + "=s400-c";
 
-                          // If that fails too, use default
-                          e.target.onerror = () => {
-                            e.target.onerror = null;
-                            e.target.src = "/assets/icons/UploadIcon.svg";
-                            console.log("🔄 Using default upload icon");
+                          // Remove any existing size parameter
+                          const baseUrl = profileImage.split("=")[0];
+
+                          // Try different sizes in order
+                          const sizes = ["s400-c", "s200-c", "s96-c"];
+                          let currentSizeIndex = 0;
+
+                          const tryNextSize = () => {
+                            if (currentSizeIndex < sizes.length) {
+                              console.log(
+                                `🔄 Trying size: ${sizes[currentSizeIndex]}...`
+                              );
+                              e.target.src = `${baseUrl}=${sizes[currentSizeIndex]}`;
+                              currentSizeIndex++;
+                            } else {
+                              // If all sizes fail, use default
+                              console.log(
+                                "⚠️ All Google photo sizes failed, using default..."
+                              );
+                              e.target.src = "/assets/icons/UploadIcon.svg";
+                              e.target.onerror = null; // Prevent infinite loop
+                              e.target.classList.add("p-2", "bg-gray-100");
+                            }
                           };
+
+                          e.target.onerror = () => tryNextSize();
+                          tryNextSize();
                         } else {
-                          // For non-Google URLs, use default
-                          e.target.onerror = null;
-                          e.target.src = "/assets/icons/UploadIcon.svg";
+                          // For non-Google URLs, use default immediately                          e.target.src = "/assets/icons/UploadIcon.svg";
+                          e.target.onerror = null; // Prevent infinite loop
+                          e.target.classList.add("p-2", "bg-gray-100");
                         }
                       }}
                     />
                   ) : (
-                    <img
-                      src="/assets/icons/UploadIcon.svg"
-                      alt="Default Profile"
-                      className="w-8 h-8 object-cover"
-                    />
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                      {" "}
+                      <img
+                        src="/assets/icons/UploadIcon.svg"
+                        alt="Upload profile picture"
+                        className="w-10 h-10 opacity-50"
+                      />
+                    </div>
                   )}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <label className="px-4 py-2 bg-[#161f55] text-white rounded-md text-sm hover:bg-blue-700 transition duration-200 cursor-pointer">
-                    Upload
+                  <label
+                    className={`px-4 py-2 ${
+                      isLoading
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-[#161f55] hover:bg-blue-700"
+                    } text-white rounded-md text-sm transition duration-200 cursor-pointer`}
+                  >
+                    {isLoading ? "Uploading..." : "Upload"}
                     <input
                       type="file"
                       accept="image/*"
                       className="hidden"
+                      disabled={isLoading}
                       onChange={async (e) => {
                         try {
                           setError(null);
+                          setIsLoading(true);
+
                           await handleImageUpload(e);
+
                           setSuccessMessage(
                             "Profile picture updated successfully!"
                           );
@@ -151,20 +171,38 @@ const Profile = () => {
                             setSuccessMessage(null);
                           }, 3000);
                         } catch (err) {
+                          console.error(
+                            "Error uploading profile picture:",
+                            err
+                          );
                           setError(
                             err.message || "Failed to upload profile picture"
                           );
+                          setTimeout(() => {
+                            setError(null);
+                          }, 5000);
+                        } finally {
+                          setIsLoading(false);
                         }
                       }}
                     />
                   </label>
                   <button
                     type="button"
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md text-sm"
+                    className={`px-4 py-2 ${
+                      !profileImage
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                    } rounded-md text-sm transition-colors duration-200`}
                     onClick={async () => {
+                      if (!profileImage) return;
+
                       try {
                         setError(null);
+                        setIsLoading(true);
+
                         await handleImageRemove();
+
                         setSuccessMessage(
                           "Profile picture removed successfully!"
                         );
@@ -172,13 +210,20 @@ const Profile = () => {
                           setSuccessMessage(null);
                         }, 3000);
                       } catch (err) {
+                        console.error("Error removing profile picture:", err);
                         setError(
                           err.message || "Failed to remove profile picture"
                         );
+                        setTimeout(() => {
+                          setError(null);
+                        }, 5000);
+                      } finally {
+                        setIsLoading(false);
                       }
                     }}
+                    disabled={!profileImage || isLoading}
                   >
-                    Remove
+                    {isLoading ? "Removing..." : "Remove"}
                   </button>
                 </div>
               </div>
@@ -215,19 +260,7 @@ const Profile = () => {
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
                       required
                     />
-                  </div>
-                  <div className="mb-4 flex items-center justify-start">
-                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55]">
-                      Middle Name:
-                    </label>
-                    <input
-                      type="text"
-                      name="middleName"
-                      value={formData.middleName}
-                      onChange={handleInputChange}
-                      className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
-                    />
-                  </div>
+                  </div>{" "}
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Last Name:
@@ -267,7 +300,6 @@ const Profile = () => {
                       placeholder="Leave blank to keep current password"
                     />
                   </div>
-
                   {/* Submit Button */}
                   <div className="text-center">
                     <button

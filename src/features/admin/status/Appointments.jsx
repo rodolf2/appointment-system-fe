@@ -137,7 +137,7 @@ const Appointments = () => {
               </div>
               <div className="overflow-y-auto m-4 mt-8">
                 <table
-                  className="text-[18px] w-full"
+                  className="text-[15px] w-full"
                   style={{ tableLayout: "fixed" }}
                 >
                   <thead>
@@ -195,7 +195,7 @@ const Appointments = () => {
                           <tr key={data.id} className="even:bg-gray-100">
                             <td className="border p-4 text-center align-middle">
                               <span
-                                className={`inline-block text-center flex justify-center px-3 py-2 rounded text-white font-medium whitespace-nowrap ${getStatusColor(
+                                className={`text-center flex justify-center px-3 py-2 rounded text-white font-medium whitespace-nowrap ${getStatusColor(
                                   data.status
                                 )}`}
                               >

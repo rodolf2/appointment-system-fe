@@ -23,8 +23,7 @@ const useHeader = (initialTitle = "") => {
   const notificationDropdownRef = useRef(null);
   const profileToggleRef = useRef(null);
   const notificationToggleRef = useRef(null);
-
-  // Fetch latest user profile when component mounts
+  // Fetch latest user profile only when component mounts
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user?.id) {
@@ -34,12 +33,23 @@ const useHeader = (initialTitle = "") => {
 
           const userProfile = await getUserProfile(user.id, token);
           if (userProfile) {
-            // Update user context with latest profile data
-            updateUser({
-              ...user,
-              picture: userProfile.picture || userProfile.profilePicture,
-              profilePicture: userProfile.profilePicture || userProfile.picture,
-            });
+            // Only update if there are actual changes
+            const shouldUpdate =
+              userProfile.name !== user.name ||
+              userProfile.profilePicture !== user.profilePicture ||
+              userProfile.cloudinaryPublicId !== user.cloudinaryPublicId;
+
+            if (shouldUpdate) {
+              updateUser({
+                ...user,
+                name: userProfile.name || user.name,
+                picture: userProfile.profilePicture || user.picture,
+                profilePicture:
+                  userProfile.profilePicture || user.profilePicture,
+                cloudinaryPublicId:
+                  userProfile.cloudinaryPublicId || user.cloudinaryPublicId,
+              });
+            }
           }
         } catch (error) {
           console.error("Error fetching user profile:", error);
@@ -48,7 +58,8 @@ const useHeader = (initialTitle = "") => {
     };
 
     fetchUserProfile();
-  }, [user?.id, updateUser, user]);
+    // Only run on mount and when user ID changes
+  }, [user?.id]);
 
   // Function to fetch notifications that can be called anywhere
   const fetchNotifications = async () => {
@@ -116,9 +127,19 @@ const useHeader = (initialTitle = "") => {
     setIsNotificationOpen((prev) => !prev);
     setIsProfileDropdownOpen(false);
   };
-
   const handleSignOut = () => {
     setIsProfileDropdownOpen(false);
+
+    // Clear all profile-related data from localStorage
+    Object.keys(localStorage).forEach((key) => {
+      if (
+        key.startsWith("profileFormData_") ||
+        key.startsWith("profileImage_")
+      ) {
+        localStorage.removeItem(key);
+      }
+    });
+
     logout();
     navigate("/signin");
   };
