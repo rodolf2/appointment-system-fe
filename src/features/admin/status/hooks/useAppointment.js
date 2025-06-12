@@ -478,7 +478,16 @@ const useAppointment = () => {
                   : student.documentRequest?.purpose) ||
                 "No purpose specified",
               emailAddress: student.email || "No email specified",
-              dateOfAppointment: statusInfo.appointmentDate || "Not scheduled",
+              dateOfAppointment: statusInfo.appointmentDate
+                ? new Date(statusInfo.appointmentDate).toLocaleDateString(
+                    "en-US",
+                    {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    }
+                  )
+                : "Not scheduled",
               timeSlot: statusInfo.timeSlot || "Not scheduled",
               // This is the key field for sorting by submission time
               dateOfRequest:
