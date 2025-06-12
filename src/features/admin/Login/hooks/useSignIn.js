@@ -147,50 +147,38 @@ const useSignIn = () => {
     }
   };
 
-  const handleGmail = async (e) => {
-    e.preventDefault();
+  const handleGmail = async () => {
     setError(null);
     setIsGoogleLoading(true);
 
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
 
-      const response = await emailService.signin({
-        email: user.email,
-        googleAuth: true,
-        name: user.displayName,
-        googleId: user.uid,
-        picture: user.photoURL,
-      });
+      // Only proceed if the sign in was successful
+      if (result.user) {
+        const user = result.user;
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/users/social-auth`,
+          {
+            email: user.email,
+            name: user.displayName,
+            uid: user.uid,
+          }
+        );
 
-      if (response.token) {
-        localStorage.setItem("token", response.token);
+        if (response.data) {
+          const { token, user: userData } = response.data;
+          localStorage.setItem("token", token);
+          updateUser(userData);
+          navigate("/registrarHome");
+        }
       }
-
-      const userData = {
-        email: user.email,
-        name: response.user?.name || user.displayName,
-        id: response.user?.id || response.user?._id || response.id,
-        picture:
-          response.user?.picture ||
-          response.user?.profilePicture ||
-          user.photoURL ||
-          null,
-        profilePicture:
-          response.user?.profilePicture ||
-          response.user?.picture ||
-          user.photoURL ||
-          null,
-        role: response.user?.role,
-      };
-
-      updateUser(userData);
-      setIsGoogleLoading(false);
-      navigate("/registrarHome");
     } catch (error) {
-      console.error("Google signin error:", error);
-      setError(error.message || "Google sign-in failed");
+      // Ignore the popup-closed-by-user error
+      if (error.code !== "auth/popup-closed-by-user") {
+        setError(error.message || "An error occurred during Google sign in");
+      }
+    } finally {
       setIsGoogleLoading(false);
     }
   };

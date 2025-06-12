@@ -5,6 +5,7 @@ import { FaUserEdit, FaSignOutAlt, FaSpinner } from "react-icons/fa";
 import useHeader from "./hooks/useHeader";
 import PropTypes from "prop-types";
 import { useUser } from "../../../context/UserContext.jsx";
+import { useEffect } from "react";
 
 const Header = ({ toggleSidebar, title: initialTitle }) => {
   const {
@@ -32,8 +33,17 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
 
   const { user } = useUser();
 
-  // Debug: Log current user to verify name is available
-  console.log("Current user in Header:", user);
+  // Debug: Log when user context changes
+  useEffect(() => {
+    console.log("📌 Header: User context updated:", user);
+  }, [user]);
+
+  // Get the profile picture URL, trying all possible fields
+  const profilePicture = user?.profilePicture || user?.picture || null;
+
+  useEffect(() => {
+    console.log("🖼️ Header: Profile picture updated:", profilePicture);
+  }, [profilePicture]);
 
   return (
     <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md">
@@ -291,56 +301,29 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
             className="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-gray-200"
             onClick={toggleProfileDropdown}
           >
-            {user && (user.picture || user.profilePicture) ? (
-              <div className="w-10 h-10 rounded-full overflow-hidden">
+            <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-gray-200">
+              {profilePicture ? (
                 <img
-                  src={user.picture || user.profilePicture}
-                  alt={`${user.name}'s profile`}
-                  className="w-full h-full object-cover"
-                  onLoad={() => {
-                    console.log(
-                      "✅ Header profile image loaded:",
-                      user.picture || user.profilePicture
-                    );
-                  }}
+                  key={profilePicture} // Force re-render when URL changes
+                  src={profilePicture}
+                  alt="Profile"
+                  className="h-full w-full object-cover"
                   onError={(e) => {
-                    e.target.onerror = null; // Prevent infinite loop
-                    const originalUrl = user.picture || user.profilePicture;
                     console.error(
-                      "❌ Failed to load header profile picture:",
-                      originalUrl
+                      "Error loading profile image:",
+                      profilePicture
                     );
-
-                    // If it's a Google profile picture, try a different approach
-                    if (
-                      originalUrl &&
-                      originalUrl.includes("googleusercontent.com")
-                    ) {
-                      console.log(
-                        "🔄 Trying alternative Google profile picture URL..."
-                      );
-                      // Try removing size parameter and using a more basic URL
-                      const baseUrl = originalUrl.split("=")[0];
-                      e.target.src = baseUrl + "=s96-c";
-
-                      // If that fails too, use default
-                      e.target.onerror = () => {
-                        e.target.onerror = null;
-                        e.target.src = "/assets/icons/default-profile.svg";
-                        console.log("🔄 Using default profile icon");
-                      };
-                    } else {
-                      // For non-Google URLs, use default immediately
-                      e.target.src = "/assets/icons/default-profile.svg";
-                    }
+                    e.target.src = "/assets/icons/DefaultProfile.svg";
                   }}
                 />
-              </div>
-            ) : (
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                <CgProfile className="text-3xl text-gray-600" />
-              </div>
-            )}
+              ) : (
+                <img
+                  src="/assets/icons/DefaultProfile.svg"
+                  alt="Default Profile"
+                  className="h-full w-full object-cover"
+                />
+              )}
+            </div>
             <span className="text-base hidden sm:inline text-gray-700">
               {user?.name || "Guest"}
             </span>

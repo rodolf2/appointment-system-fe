@@ -229,13 +229,10 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 <span>
                   I will authorize someone else to claim it on my behalf.
                 </span>
-                
               </label>
               {claimOptionError && (
-                  <p className="text-red-600 text-sm mt-2">
-                    {claimOptionError}
-                  </p>
-                )}
+                <p className="text-red-600 text-sm mt-2">{claimOptionError}</p>
+              )}
               {/* Instructions for Authorized Person */}
               <p className="mt-4 text-sm text-[#161f55] italic">
                 Please note that if you authorize someone to claim your

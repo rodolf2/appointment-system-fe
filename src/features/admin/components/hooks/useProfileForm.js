@@ -26,11 +26,16 @@ const useProfileForm = () => {
 
     // Initialize from user context if available
     if (user) {
-      const [firstName, middleName, lastName] = (user.name || "").split(" ");
+      // Split the full name into parts, handling multi-part names
+      const nameParts = (user.name || "").trim().split(" ");
+      const lastName = nameParts.length > 1 ? nameParts.pop() : "";
+      const firstName = nameParts.shift() || "";
+      const middleName = nameParts.join(" ");
+
       return {
-        firstName: firstName || "",
-        middleName: middleName || "",
-        lastName: lastName || "",
+        firstName: firstName,
+        middleName: middleName,
+        lastName: lastName,
         email: user.email || "",
         password: "",
       };
@@ -107,36 +112,96 @@ const useProfileForm = () => {
     const file = event.target.files[0];
     if (file) {
       try {
-        // Get token from localStorage
+        console.log("🚀 Starting image upload process for file:", file.name);
+        console.log("File details:", {
+          type: file.type,
+          size: file.size,
+          lastModified: new Date(file.lastModified).toISOString(),
+        });
+
         const token = localStorage.getItem("token");
         if (!token) {
+          console.error("No token found in localStorage");
           throw new Error(
             "Authentication token not found. Please sign in again."
           );
         }
 
-        // Upload the profile picture to the server
-        console.log("🔄 Starting profile picture upload...");
+        if (!user?.id) {
+          console.error("No user ID available");
+          throw new Error("User ID not found. Please sign in again.");
+        }
+
+        // Validate file type
+        if (!file.type.startsWith("image/")) {
+          throw new Error("Please upload an image file");
+        }
+
+        // Validate file size (e.g., max 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+          throw new Error("Image size should be less than 5MB");
+        }
+
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append("profilePicture", file);
+
+        console.log("📤 Uploading to server...");
         const uploadResponse = await uploadProfilePicture(user.id, file, token);
-        console.log("📤 Upload response received:", uploadResponse);
+
+        // Log the full response for debugging
+        console.log("📥 Server response:", uploadResponse);
+
+        if (!uploadResponse || !uploadResponse.profilePicture) {
+          console.error("Invalid response from server:", uploadResponse);
+          throw new Error("Server returned an invalid response");
+        }
 
         const imageUrl = uploadResponse.profilePicture;
-        console.log("🖼️ Image URL extracted:", imageUrl);
+        console.log("🖼️ New image URL:", imageUrl);
 
-        // Update local state with the new image URL
+        // Validate the returned URL
+        if (!imageUrl || !imageUrl.startsWith("http")) {
+          console.error("Invalid image URL received:", imageUrl);
+          throw new Error("Received invalid image URL from server");
+        }
+
+        // Update local state and user context
         setProfileImage(imageUrl);
-        console.log("✅ Local state updated with image URL");
-
-        // Update user context with new image URL
         updateUser({
           ...user,
           picture: imageUrl,
           profilePicture: imageUrl,
         });
-        console.log("✅ User context updated with image URL");
+
+        console.log("✅ Profile picture updated successfully");
+        return imageUrl;
       } catch (error) {
-        console.error("Error uploading profile picture:", error);
-        throw new Error("Failed to upload profile picture. Please try again.");
+        // Log the full error object
+        console.error("❌ Profile picture upload error:", {
+          message: error.message,
+          stack: error.stack,
+          response: error.response?.data,
+        });
+
+        // Throw a user-friendly error message
+        if (error.response?.status === 413) {
+          throw new Error(
+            "Image file is too large. Please choose a smaller image."
+          );
+        } else if (error.response?.status === 415) {
+          throw new Error(
+            "Invalid file type. Please upload a valid image file."
+          );
+        } else if (error.response?.status === 401) {
+          throw new Error("Your session has expired. Please sign in again.");
+        } else {
+          throw new Error(
+            error.response?.data?.message ||
+              "Failed to upload profile picture. Please try again."
+          );
+        }
       }
     }
   };
@@ -144,7 +209,6 @@ const useProfileForm = () => {
   // Handle image removal
   const handleImageRemove = async () => {
     try {
-      // Get token from localStorage
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error(
@@ -152,13 +216,13 @@ const useProfileForm = () => {
         );
       }
 
-      // Delete the profile picture from the server
+      // Delete the profile picture from Cloudinary through your backend
       await deleteProfilePicture(user.id, token);
 
       // Clear the image from state
       setProfileImage(null);
 
-      // Update user context to reflect removal
+      // Update user context
       updateUser({
         ...user,
         picture: null,
@@ -172,11 +236,10 @@ const useProfileForm = () => {
 
   // Handle form submission
   const handleSubmit = async () => {
-    // Construct full name
     const fullName = [
-      formData.firstName,
-      formData.middleName,
-      formData.lastName,
+      formData.firstName.trim(),
+      formData.middleName.trim(),
+      formData.lastName.trim(),
     ]
       .filter(Boolean)
       .join(" ");
@@ -186,7 +249,6 @@ const useProfileForm = () => {
     }
 
     try {
-      // Get token from localStorage
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error(
@@ -194,10 +256,13 @@ const useProfileForm = () => {
         );
       }
 
+      if (!user?.id) {
+        throw new Error("User ID not found. Please sign in again.");
+      }
+
       const userData = {
         name: fullName,
         email: formData.email,
-        picture: profileImage,
         profilePicture: profileImage,
       };
 
@@ -205,11 +270,7 @@ const useProfileForm = () => {
         userData.password = formData.password;
       }
 
-      if (!user?.id) {
-        throw new Error("User ID not found. Please sign in again.");
-      }
-
-      // Update profile
+      // Update profile through backend
       const updatedUser = await updateUserProfile(user.id, userData, token);
 
       // Update user context with new data

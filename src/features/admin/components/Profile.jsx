@@ -10,7 +10,6 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  // Use the custom hook
   const {
     formData,
     profileImage,
@@ -31,14 +30,9 @@ const Profile = () => {
     setIsSubmitting(true);
 
     try {
-      // console.log("Starting profile update...");
       await handleSubmit();
-      setSuccessMessage("Profile updated successfully!.");
-
-      // Reset form submission state after a brief delay
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 5000); // Clear success message after 5 seconds
+      setSuccessMessage("Profile updated successfully!");
+      setTimeout(() => setSuccessMessage(null), 5000);
     } catch (err) {
       console.error("Profile submission error:", err);
       setError(
@@ -52,14 +46,12 @@ const Profile = () => {
 
   return (
     <div className="relative flex h-screen font-LatoRegular">
-      {/* Sidebar */}
       {isSidebarOpen && (
         <div className="relative z-20">
           <Sidebar isSidebarOpen={isSidebarOpen} />
         </div>
       )}
 
-      {/* Main Content */}
       <div className="flex-1 relative">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
@@ -77,7 +69,6 @@ const Profile = () => {
             title="Account Profile"
           />
 
-          {/* Profile Card */}
           <div className="flex justify-center items-center flex-1 px-4">
             <div className="bg-white p-8 rounded-lg shadow-lg w-[800px] h-[500px] flex">
               {/* Profile Picture Section */}
@@ -88,38 +79,19 @@ const Profile = () => {
                       src={profileImage}
                       alt="Profile"
                       className="w-full h-full object-cover"
-                      onLoad={() => {
-                        // console.log(
-                        //   "✅ Profile image loaded successfully:",
-                        //   profileImage
-                        // );
-                      }}
                       onError={(e) => {
-                        console.error(
-                          "❌ Failed to load profile image:",
-                          profileImage
-                        );
-                        console.error("Error details:", e);
-
-                        // If it's a Google profile picture, try alternative URL
+                        console.error("Error loading image:", profileImage);
                         if (
                           profileImage &&
                           profileImage.includes("googleusercontent.com")
                         ) {
-                          console.log(
-                            "🔄 Trying alternative Google profile picture URL..."
-                          );
                           const baseUrl = profileImage.split("=")[0];
                           e.target.src = baseUrl + "=s400-c";
-
-                          // If that fails too, use default
                           e.target.onerror = () => {
                             e.target.onerror = null;
                             e.target.src = "/assets/icons/UploadIcon.svg";
-                            console.log("🔄 Using default upload icon");
                           };
                         } else {
-                          // For non-Google URLs, use default
                           e.target.onerror = null;
                           e.target.src = "/assets/icons/UploadIcon.svg";
                         }
@@ -143,7 +115,16 @@ const Profile = () => {
                       onChange={async (e) => {
                         try {
                           setError(null);
+                          setSuccessMessage(null);
+
+                          // Add loading state
+                          const loadingMessage = "Uploading profile picture...";
+                          setSuccessMessage(loadingMessage);
+
+                          console.log("Starting upload process");
                           await handleImageUpload(e);
+
+                          // Clear loading message and show success
                           setSuccessMessage(
                             "Profile picture updated successfully!"
                           );
@@ -151,9 +132,14 @@ const Profile = () => {
                             setSuccessMessage(null);
                           }, 3000);
                         } catch (err) {
+                          console.error(
+                            "Profile picture upload error in component:",
+                            err
+                          );
                           setError(
                             err.message || "Failed to upload profile picture"
                           );
+                          setSuccessMessage(null);
                         }
                       }}
                     />
@@ -190,19 +176,18 @@ const Profile = () => {
                 </h2>
 
                 {error && (
-                  <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+                  <div className="mb-4 p-2 bg-red-100 border border-red-400 text-red-800 rounded">
                     {error}
                   </div>
                 )}
 
                 {successMessage && (
-                  <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
+                  <div className="mb-4 p-2 bg-green-100 border border-green-400 text-green-800 rounded">
                     {successMessage}
                   </div>
                 )}
 
                 <form className="flex flex-col" onSubmit={onSubmit}>
-                  {/* Input Fields */}
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       First Name:
@@ -216,18 +201,7 @@ const Profile = () => {
                       required
                     />
                   </div>
-                  <div className="mb-4 flex items-center justify-start">
-                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55]">
-                      Middle Name:
-                    </label>
-                    <input
-                      type="text"
-                      name="middleName"
-                      value={formData.middleName}
-                      onChange={handleInputChange}
-                      className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
-                    />
-                  </div>
+
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Last Name:
@@ -241,6 +215,7 @@ const Profile = () => {
                       required
                     />
                   </div>
+
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Email Address:
@@ -254,6 +229,7 @@ const Profile = () => {
                       required
                     />
                   </div>
+
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Password:
@@ -268,7 +244,6 @@ const Profile = () => {
                     />
                   </div>
 
-                  {/* Submit Button */}
                   <div className="text-center">
                     <button
                       type="submit"
@@ -284,6 +259,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
+
           <Footer />
         </div>
       </div>
