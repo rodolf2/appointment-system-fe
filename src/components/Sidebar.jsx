@@ -13,16 +13,14 @@ import { Tooltip } from "react-tooltip";
 import PropTypes from "prop-types";
 import { VscFeedback } from "react-icons/vsc";
 
-// Custom Image Icon component
+// Custom Image Icon component (no changes needed here)
 const ImageIcon = ({ src, alt, className, color = "white" }) => {
-  // Filter values for different colors
   const filterValues = {
-    white: "brightness(0) invert(1)", // Convert to white
-    black: "brightness(0)", // Convert to black
-    gray: "brightness(0) opacity(0.6)", // Convert to gray
-    custom: color, // Allow custom filter value
+    white: "brightness(0) invert(1)",
+    black: "brightness(0)",
+    gray: "brightness(0) opacity(0.6)",
+    custom: color,
   };
-
   return (
     <img
       src={src}
@@ -53,12 +51,14 @@ const Sidebar = ({ isSidebarOpen }) => {
   }, [location.pathname]);
 
   const isActive = (path) => location.pathname === path;
+
+  // --- CHANGE #1: Reduced vertical padding on links when sidebar is open ---
   const activeStyle = isSidebarOpen
-    ? "bg-[#D9D9D9] text-black rounded-xl pl-4 py-2 flex items-center gap-4 cursor-pointer w-full"
+    ? "bg-[#D9D9D9] text-black rounded-xl pl-4 py-1.5 flex items-center gap-4 cursor-pointer w-full" // py-2 changed to py-1.5
     : "bg-[#D9D9D9] text-black rounded-xl w-[50px] h-[50px] flex items-center justify-center cursor-pointer mx-auto";
 
   const inactiveStyle = isSidebarOpen
-    ? "flex items-center gap-4 pl-4 py-2 cursor-pointer hover:bg-white/10 rounded-lg transition-colors w-full"
+    ? "flex items-center gap-4 pl-4 py-1.5 cursor-pointer hover:bg-white/10 rounded-lg transition-colors w-full" // py-2 changed to py-1.5
     : "w-[50px] h-[50px] flex items-center justify-center cursor-pointer hover:bg-white/10 rounded-full transition-colors mx-auto";
 
   const menuSections = [
@@ -116,7 +116,7 @@ const Sidebar = ({ isSidebarOpen }) => {
       ref={sidebarRef}
       className={`h-full bg-side-bar_bg text-white ${
         isSidebarOpen ? "w-[300px]" : "w-[100px]"
-      } overflow-hidden transition-all duration-300`}
+      } overflow-auto transition-all duration-300`}
     >
       {/* Logo */}
       <div
@@ -141,10 +141,10 @@ const Sidebar = ({ isSidebarOpen }) => {
         )}
       </div>
 
-      {/* Divider */}
+      {/* --- CHANGE #2: Reduced margin on the divider when sidebar is open --- */}
       <div
         className={`border-b-2 border-white w-full ${
-          isSidebarOpen ? "my-6" : "my-4 w-[60%] mx-auto mb-10"
+          isSidebarOpen ? "my-4" : "my-4 w-[60%] mx-auto mb-10" // my-6 changed to my-4
         }`}
       ></div>
 
@@ -153,18 +153,27 @@ const Sidebar = ({ isSidebarOpen }) => {
         {menuSections.map((section, index) => (
           <div
             key={index}
-            className={`${
-              index === 0 ? (isSidebarOpen ? "mt-6" : "mt-4") : "mt-10"
-            }`}
+            // --- CHANGE #3: Reduced margin between sections when sidebar is open ---
+            className={
+              isSidebarOpen
+                ? index === 0
+                  ? "mt-2"
+                  : "mt-5" // Reduced from mt-6 and mt-10
+                : index === 0
+                ? "mt-4"
+                : "mt-10" // Kept original spacing for closed sidebar
+            }
           >
             {/* Section Title */}
             {isSidebarOpen && (
-              <div className="pl-4 pb-4">
+              // --- CHANGE #4: Reduced padding below section titles ---
+              <div className="pl-4 pb-2"> {/* pb-4 changed to pb-2 */}
                 <h1 className="text-[20px] font-semibold">{section.title}</h1>
               </div>
             )}
 
-            <ul className="space-y-2">
+            {/* --- CHANGE #5: Reduced space between list items --- */}
+            <ul className="space-y-1"> {/* space-y-2 changed to space-y-1 */}
               {section.items.map(({ path, icon, label }) => (
                 <li key={path} className="flex justify-center">
                   <Link
@@ -173,7 +182,7 @@ const Sidebar = ({ isSidebarOpen }) => {
                     data-tooltip-id={`tooltip-${path}`}
                     data-tooltip-content={label}
                     data-tooltip-place="right"
-                    onClick={(e) => e.stopPropagation()} // Still keep this to prevent bubbling
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <div
                       className={`${
@@ -201,7 +210,6 @@ const Sidebar = ({ isSidebarOpen }) => {
                         fontWeight: "500",
                         boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
                         zIndex: 9999,
-
                         textShadow: "0 1px 1px rgba(0,0,0,0.3)",
                       }}
                       border="1px solid rgba(255,255,255,0.1)"
@@ -220,6 +228,7 @@ const Sidebar = ({ isSidebarOpen }) => {
     </aside>
   );
 };
+
 Sidebar.propTypes = {
   isSidebarOpen: PropTypes.bool.isRequired,
   setIsSidebarOpen: PropTypes.func,

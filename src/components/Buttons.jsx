@@ -46,16 +46,18 @@ const Buttons = () => {
 
           {/* How to Appoint Button */}
           <Link
-            to="/home/hta"
+            to="/home/how_to_appoint"
             className={`pt-7 rounded-sm w-[399px] h-[104px] flex flex-col items-center ${
-              activeTab === "hta" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
+              activeTab === "how_to_appoint" ? "bg-[#FEFEFE]" : "bg-[#D2D2D2]"
             }`}
           >
             <div className="flex items-center relative">
               <div className="flex items-center">
                 <span
                   className={`${
-                    activeTab === "hta" ? "text-[#161F55]" : "text-gray-600"
+                    activeTab === "how_to_appoint"
+                      ? "text-[#161F55]"
+                      : "text-gray-600"
                   }`}
                 >
                   How to Appoint
@@ -66,7 +68,7 @@ const Buttons = () => {
                   className="ml-2 w-8 h-8"
                 />
               </div>
-              {activeTab === "hta" && (
+              {activeTab === "how_to_appoint" && (
                 <span className="absolute left-0 right-0 -bottom-2 border-b-4 border-[#F3BC62]"></span>
               )}
             </div>

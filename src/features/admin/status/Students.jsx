@@ -236,7 +236,16 @@ const Students = () => {
                           )}
                         </td>
                         <td className="border p-5 break-words">
-                          {data.purpose}
+                          <span
+                            data-tooltip-id="purpose-tooltip"
+                            data-tooltip-content={data.purpose}
+                            className="cursor-help"
+                            title={data.purpose}
+                          >
+                            {data.purpose.length > 20
+                              ? `${data.purpose.substring(0, 20)}...`
+                              : data.purpose}
+                          </span>
                         </td>
                         <td className="border p-5 break-words">
                           {data.request}
@@ -295,6 +304,7 @@ const Students = () => {
 
       {/* Tooltips */}
       <Tooltip id="email-tooltip" />
+      <Tooltip id="purpose-tooltip" />
     </div>
   );
 };

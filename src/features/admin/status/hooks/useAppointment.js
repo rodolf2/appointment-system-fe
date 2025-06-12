@@ -11,7 +11,7 @@ const useAppointment = () => {
 
   // States for filtering and search
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("Filter by");
+  const [selectedFilter, setSelectedFilter] = useState("PENDING");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -71,22 +71,27 @@ const useAppointment = () => {
 
   // Filter appointments based on search term and status filter
   const filteredAppointments = appointments.filter((data) => {
+    // Debug log to help identify any inconsistencies
+    console.log("Filtering appointment:", {
+      id: data.transactionNumber,
+      dataStatus: data.status,
+      filterStatus: selectedFilter,
+      searchTerm: searchTerm,
+    });
+
     const searchString = searchTerm.toLowerCase();
-    const matchesSearch =
-      data.transactionNumber?.toLowerCase().includes(searchString) ||
-      data.request?.toLowerCase().includes(searchString) ||
-      data.emailAddress?.toLowerCase().includes(searchString);
 
-    // Only apply status filter if a specific status is selected
-    if (selectedFilter === "Filter by") {
-      return matchesSearch;
-    }
+    // Search in all relevant fields
+    const matchesSearch = [
+      data.transactionNumber,
+      data.request,
+      data.emailAddress,
+      data.purpose,
+    ].some((field) => field?.toLowerCase().includes(searchString)); // Always filter by status since we no longer have "Filter by" option
+    const appointmentStatus = (data.status || "").toUpperCase();
 
-    // Compare statuses in uppercase to ensure case-insensitive matching
-    const appointmentStatus = data.status?.toUpperCase() || "";
-    const filterStatus = selectedFilter.toUpperCase();
-
-    return matchesSearch && appointmentStatus === filterStatus;
+    // Status must match and search terms if present
+    return matchesSearch && appointmentStatus === selectedFilter;
   });
 
   // Calculate pagination values
@@ -397,95 +402,39 @@ const useAppointment = () => {
       setError(null);
 
       try {
-        // Fetch student records first
+        // 1. Fetch student records (document requests)
         const studentsResponse = await fetch(
           `${API_BASE_URL}/document-requests/docs-with-details`,
-          {
-            headers: {
-              Accept: "application/json",
-            },
-          }
+          { headers: { Accept: "application/json" } }
         );
         if (!studentsResponse.ok) {
-          let errorMessage = `HTTP error! status: ${studentsResponse.status}`;
-          try {
-            const errorData = await studentsResponse.json();
-            errorMessage = errorData.message || errorMessage;
-          } catch (jsonError) {
-            console.warn("Could not parse error response:", jsonError);
-          }
-          throw new Error(errorMessage);
+          throw new Error(
+            `Failed to fetch student details: ${studentsResponse.status}`
+          );
+        }
+        const studentsData = await studentsResponse.json();
+        if (!Array.isArray(studentsData)) {
+          throw new Error("Invalid response format: expected an array");
         }
 
-        let studentsData;
-        try {
-          studentsData = await studentsResponse.json();
-          // *** ADDED DEBUGGING LOG ***
-          // This will show the raw data from the API.
-          // Check here if the 'purpose' field exists on the objects.
-          console.log("DEBUG: Raw data from /docs-with-details:", studentsData);
-          if (!Array.isArray(studentsData)) {
-            throw new Error("Invalid response format: expected an array");
-          }
-        } catch (jsonError) {
-          console.error("Error parsing students data:", jsonError);
-          throw new Error("Failed to parse students data");
-        }
-
-        // Fetch all appointment statuses
+        // 2. Fetch all appointment statuses
         const statusResponse = await fetch(`${API_BASE_URL}/status`, {
-          headers: {
-            Accept: "application/json",
-          },
+          headers: { Accept: "application/json" },
         });
         if (!statusResponse.ok) {
-          let errorMessage = `HTTP error! status: ${statusResponse.status}`;
-          try {
-            const errorData = await statusResponse.json();
-            errorMessage = errorData.message || errorMessage;
-          } catch (jsonError) {
-            console.warn("Could not parse error response:", jsonError);
-          }
-          throw new Error(errorMessage);
+          throw new Error(`Failed to fetch statuses: ${statusResponse.status}`);
         }
+        const statusData = await statusResponse.json();
 
-        let statusData;
-        try {
-          statusData = await statusResponse.json();
-        } catch (jsonError) {
-          console.error("Error parsing status data:", jsonError);
-          throw new Error("Failed to parse status data");
-        }
-
-        const uniqueStatusData = [];
-        const seenEmails = new Set();
-        const sortedStatusData = [...statusData].sort((a, b) => {
-          const aIsTR =
-            a.transactionNumber && a.transactionNumber.startsWith("TR");
-          const bIsTR =
-            b.transactionNumber && b.transactionNumber.startsWith("TR");
-          if (aIsTR && !bIsTR) return -1;
-          if (!aIsTR && bIsTR) return 1;
-          const dateA = new Date(a.dateOfRequest || 0);
-          const dateB = new Date(b.dateOfRequest || 0);
-          return dateB - dateA;
-        });
-
-        sortedStatusData.forEach((status) => {
-          const email = status.emailAddress;
-          if (email && !seenEmails.has(email)) {
-            uniqueStatusData.push(status);
-            seenEmails.add(email);
-          }
-        });
-
-        const statusMap = uniqueStatusData.reduce((acc, curr) => {
-          if (curr && curr.transactionNumber) {
-            acc[curr.transactionNumber] = curr;
+        // 3. Create a map of statuses using `transactionNumber` as the key.
+        const statusMap = statusData.reduce((acc, statusItem) => {
+          if (statusItem && statusItem.transactionNumber) {
+            acc[statusItem.transactionNumber] = statusItem;
           }
           return acc;
         }, {});
 
+        // 4. Get archived appointments from localStorage to filter them out
         const archivedAppointments = JSON.parse(
           localStorage.getItem("archivedAppointments") || "[]"
         );
@@ -493,6 +442,7 @@ const useAppointment = () => {
           archivedAppointments.map((appt) => appt.id)
         );
 
+        // 5. Transform, merge, and SORT the data
         const transformedAppointments = studentsData
           .filter(
             (student) =>
@@ -501,31 +451,25 @@ const useAppointment = () => {
               !archivedIds.has(student.transactionNumber)
           )
           .map((student) => {
-            // *** ADDED DEBUGGING LOG ***
-            // This will show each student object before it's transformed.
-            // Check if 'student.purpose' exists.
-            console.log("DEBUG: Processing student object:", student);
-
             const statusInfo = statusMap[student.transactionNumber] || {};
-            console.log("Processing appointment with purpose:", {
-              originalPurpose: student.purpose,
-              appointmentPurpose: student.appointmentPurpose,
-              documentRequestPurpose: student.documentRequest?.purpose,
-            });
-            // Add debug log for purpose field sources
-            console.log("DEBUG: Processing appointment purpose sources:", {
-              studentId: student._id,
-              directPurpose: student.purpose,
-              documentRequestPurpose: student.documentRequest?.purpose,
-              appointmentPurpose: student.appointmentPurpose,
-            });
+            const validStatuses = [
+              "PENDING",
+              "APPROVED",
+              "REJECTED",
+              "COMPLETED",
+            ];
+            const normalizedStatus = (
+              statusInfo.status || "PENDING"
+            ).toUpperCase();
+            const status = validStatuses.includes(normalizedStatus)
+              ? normalizedStatus
+              : "PENDING";
 
-            const transformed = {
+            return {
               id: student.transactionNumber,
-              status: statusInfo.status || "PENDING",
+              status: status,
               transactionNumber: student.transactionNumber,
               request: student.request || "No request specified",
-              // Match how request field is processed
               purpose:
                 student.purpose ||
                 (student.documentRequest &&
@@ -534,8 +478,9 @@ const useAppointment = () => {
                   : student.documentRequest?.purpose) ||
                 "No purpose specified",
               emailAddress: student.email || "No email specified",
-              dateOfAppointment: student.appointmentDate || "Not scheduled",
-              timeSlot: student.timeSlot || "Not scheduled",
+              dateOfAppointment: statusInfo.appointmentDate || "Not scheduled",
+              timeSlot: statusInfo.timeSlot || "Not scheduled",
+              // This is the key field for sorting by submission time
               dateOfRequest:
                 student.date || new Date().toISOString().split("T")[0],
               name: student.name,
@@ -544,10 +489,12 @@ const useAppointment = () => {
               contact: student.contact,
               attachment: student.attachment,
             };
-            // Add debug log to see the transformed data
-            console.log("DEBUG: Transformed appointment data:", transformed);
-            return transformed;
-          });
+          })
+          // --- THIS IS THE NEW LINE OF CODE ---
+          // 6. Sort by request date in descending order (newest first)
+          .sort(
+            (a, b) => new Date(b.dateOfRequest) - new Date(a.dateOfRequest)
+          );
 
         setAppointments(transformedAppointments);
       } catch (err) {
@@ -557,6 +504,7 @@ const useAppointment = () => {
         setLoading(false);
       }
     };
+
     fetchAppointments();
   }, []);
 

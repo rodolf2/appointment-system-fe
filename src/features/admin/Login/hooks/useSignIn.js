@@ -174,10 +174,12 @@ const useSignIn = () => {
 
       updateUser(userData);
       setIsGoogleLoading(false);
-      navigate("/registrarHome");
-    } catch (error) {
+      navigate("/registrarHome");    } catch (error) {
       console.error("Google signin error:", error);
-      setError(error.message || "Google sign-in failed");
+      // Don't show error message if user just closed the popup
+      if (error.code !== "auth/popup-closed-by-user") {
+        setError(error.message || "Google sign-in failed");
+      }
       setIsGoogleLoading(false);
     }
   };

@@ -114,11 +114,11 @@ const Appointments = () => {
                         onChange={handleFilterChange}
                         className="bg-white border-2 border-gray-300 px-2 text-gray-400 py-2"
                       >
-                        <option value="Filter by">Filter by</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Approved">Approved</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Completed">Completed</option>
+                        {" "}
+                        <option value="PENDING">Pending</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="REJECTED">Rejected</option>
+                        <option value="COMPLETED">Completed</option>
                       </select>
                     </div>
                     <div className="relative">
@@ -213,9 +213,17 @@ const Appointments = () => {
                             </td>
                             <td className="border p-4 break-words">
                               {data.request}
-                            </td>
-                            <td className="border p-4 break-words">
-                              {data.purpose}
+                            </td>                            <td className="border p-4 break-words">
+                              <span
+                                data-tooltip-id="purpose-tooltip"
+                                data-tooltip-content={data.purpose}
+                                className="cursor-help"
+                                title={data.purpose}
+                              >
+                                {data.purpose.length > 20
+                                  ? `${data.purpose.substring(0, 20)}...`
+                                  : data.purpose}
+                              </span>
                             </td>
                             <td className="border p-4 break-words">
                               <span
@@ -394,12 +402,12 @@ const Appointments = () => {
             onClose={() => setShowSuccessModal(false)}
           />
 
-          {/* Tooltips */}
-          <Tooltip id="approve-tooltip" />
+          {/* Tooltips */}          <Tooltip id="approve-tooltip" />
           <Tooltip id="complete-tooltip" />
           <Tooltip id="reject-tooltip" />
           <Tooltip id="delete-tooltip" />
           <Tooltip id="email-tooltip" />
+          <Tooltip id="purpose-tooltip" />
         </main>
       </div>
     </div>
