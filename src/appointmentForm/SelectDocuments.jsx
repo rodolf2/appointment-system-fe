@@ -138,9 +138,12 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 <textarea
                   value={purpose}
                   onChange={(e) => {
-                    setPurpose(e.target.value);
-                    setErrors((prev) => ({ ...prev, purpose: "" }));
+                    if (e.target.value.length <= 200) {
+                      setPurpose(e.target.value);
+                      setErrors((prev) => ({ ...prev, purpose: "" }));
+                    }
                   }}
+                  maxLength={200}
                   placeholder="Type here..."
                   className={`w-full border h-20 rounded-md pl-2 pt-2 shadow-md ${
                     errors.purpose
@@ -148,11 +151,15 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                       : "border-[#000000] border-opacity-40"
                   }`}
                 ></textarea>
-                {errors.purpose ? (
-                  <p className="text-red-600">{errors.purpose}</p>
-                ) : (
-                  <p className="invisible">Placeholder</p> // Keeps space reserved
-                )}
+                <div className="flex justify-between mt-1">
+                  <div>
+                    {errors.purpose ? (
+                      <p className="text-red-600">{errors.purpose}</p>
+                    ) : (
+                      <p className="invisible">Placeholder</p>
+                    )}
+                  </div>
+                </div>
               </div>
               <label className="mt-1 block text-start uppercase">
                 Date of Request
@@ -245,10 +252,16 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 </li>
                 <li>
                   Photocopy of Valid ID (front and back) of the authorized
-                  person processing the request, with 3 signatures.
+                  person processing the request, with 3 signatures.{" "}
                 </li>
               </ul>
             </div>
+            {/* Error message */}
+            {errors.claimOption && (
+              <p className="text-red-600 text-sm mt-4 text-left">
+                {errors.claimOption}
+              </p>
+            )}
             {/* Modal Buttons */}
             <div className="flex justify-end space-x-2 mt-6">
               <button

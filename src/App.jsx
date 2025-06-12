@@ -9,7 +9,7 @@ import About from "./pages/About";
 import Faqs from "./pages/Faqs";
 import Contact from "./pages/Contact";
 import AppointmentForm from "./features/appointment/AppointmentForm";
-import Hta from "./features/appointment/Hta";
+import Hta from "./Pages/HowToAppoint.jsx";
 import HomePage from "./pages/HomePage";
 import Students from "./features/admin/status/Students";
 import SignIn from "./features/admin/Login/SignIn";

@@ -77,19 +77,19 @@ const useAttachment = (onNext) => {
     try {
       setIsUploading(true);
       setError("");
-      
+
       // Get student ID from localStorage (set during AppInfo step)
       const studentId = localStorage.getItem("studentId");
       if (!studentId) {
-        throw new Error("Student ID not found. Please complete the previous steps first.");
-      }
-
-      // Upload files to server
+        throw new Error(
+          "Student ID not found. Please complete the previous steps first."
+        );
+      } // Upload files to server
       await uploadAttachments(files, studentId);
 
-      // Clear the files from localStorage after successful upload
-      localStorage.removeItem("uploadedFiles");
-      
+      // Keep the files in localStorage until the form is fully submitted
+      // They will be cleared after successful form submission
+
       // Move to next step
       onNext();
     } catch (err) {

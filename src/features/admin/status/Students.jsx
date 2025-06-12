@@ -106,8 +106,9 @@ const Students = () => {
                   <th className="border p-5 w-[10%]">TRANSACTION NO.</th>
                   <th className="border p-5 w-[14%]">NAME</th>
                   <th className="border p-5 w-[9%]">LAST S.Y. ATTENDED</th>
-                  <th className="border p-5 w-[12%]">
-                    PROGRAM/GRADE/
+                  <th className="border p-5 w-[9%]">
+                    PROGRAM/ <br />
+                    GRADE/
                     <br />
                     STRAND
                   </th>
@@ -181,24 +182,52 @@ const Students = () => {
                               ? `${data.email.substring(0, 20)}...`
                               : data.email}
                           </span>
-                        </td>
+                        </td>{" "}
                         <td className="border p-5 break-words">
                           {data.attachment &&
                           data.attachment !== "No attachments" ? (
                             <div className="flex flex-col gap-1">
-                              {data.attachment
-                                .split(", ")
-                                .map((filename, index) => (
-                                  <span
+                              {" "}
+                              {data.attachment.split(", ").map((url, index) => {
+                                // Extract original filename from the Cloudinary URL
+                                const urlParts = url.split("/");
+                                const lastPart = urlParts[urlParts.length - 1];
+                                // Get the original filename by removing timestamp and random numbers
+                                const filename =
+                                  lastPart.replace(
+                                    /^attachment-([^-]+)-\d+-\d+/,
+                                    "$1"
+                                  ) || `Attachment ${index + 1}`;
+                                // Ensure the URL has the complete Cloudinary path with transformations
+                                let viewableUrl;
+                                if (
+                                  url.startsWith("https://res.cloudinary.com")
+                                ) {
+                                  viewableUrl = url;
+                                } else {
+                                  // Remove any leading slashes
+                                  const cleanPath = url.replace(/^\/+/, "");
+                                  // Add Cloudinary transformations for optimal viewing
+                                  viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_scale,w_800/${cleanPath}`;
+                                }
+
+                                return (
+                                  <div
                                     key={index}
-                                    className="text-blue-600 hover:underline cursor-pointer text-sm break-words"
-                                    title={filename}
+                                    className="flex items-center space-x-2"
                                   >
-                                    {filename.length > 30
-                                      ? `${filename.substring(0, 30)}...`
-                                      : filename}
-                                  </span>
-                                ))}
+                                    <a
+                                      href={viewableUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:underline text-sm break-words flex-1"
+                                      title="Click to view full size"
+                                    >
+                                      {filename}
+                                    </a>
+                                  </div>
+                                );
+                              })}
                             </div>
                           ) : (
                             <span className="text-gray-500 text-sm">

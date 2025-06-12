@@ -24,7 +24,6 @@ const useSelectDocuments = (onNext) => {
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
   }, [state]);
-
   // Clear specific errors when values change
   useEffect(() => {
     if (state.purpose.trim()) {
@@ -36,7 +35,10 @@ const useSelectDocuments = (onNext) => {
     if (state.selectedDocuments.length > 0) {
       setErrors((prev) => ({ ...prev, selectedDocuments: "" }));
     }
-  }, [state.purpose, state.date, state.selectedDocuments]);
+    if (state.claimOption) {
+      setErrors((prev) => ({ ...prev, claimOption: "" }));
+    }
+  }, [state.purpose, state.date, state.selectedDocuments, state.claimOption]);
 
   const documentsList = [
     { label: "Certificate of Enrollment", value: "Certificate of Enrollment" },
@@ -73,14 +75,24 @@ const useSelectDocuments = (onNext) => {
       selectedDocuments: state.selectedDocuments.filter((doc) => doc !== value),
     });
   };
-
   // Form Validation
   const handleValidation = () => {
     let newErrors = {};
-    if (state.selectedDocuments.length === 0)
+    
+    // Check for documents selection
+    if (state.selectedDocuments.length === 0) {
       newErrors.selectedDocuments = "Please select at least one document.";
-    if (!state.purpose.trim()) newErrors.purpose = "This field is required.";
-    if (!state.date) newErrors.date = "Please select a date.";
+    }
+    
+    // Check for purpose with trimmed spaces
+    if (!state.purpose.trim()) {
+      newErrors.purpose = "This field is required.";
+    }
+    
+    // Check for date
+    if (!state.date) {
+      newErrors.date = "Please select a date.";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -102,10 +114,16 @@ const useSelectDocuments = (onNext) => {
   const convertSelectedDocuments = () => {
     return state.selectedDocuments; // No need to convert since values now match the schema
   };
-
   // Handle Modal Next Button with API integration
   const handleModalNext = async () => {
     try {
+      if (!state.claimOption) {
+        setErrors((prev) => ({
+          ...prev,
+          claimOption: "Please select how you will claim your document",
+        }));
+        return;
+      }
       // Prepare the document request data
       const studentId = localStorage.getItem("studentId");
       console.log("Student ID from localStorage:", studentId);
@@ -122,18 +140,18 @@ const useSelectDocuments = (onNext) => {
 
       // Create the document request
       const response = await createDocumentRequest(requestData);
-      console.log("Document request created successfully:", response);
-
-      // Clear the form data after successful submission
-      clearSavedData();
-
+      console.log("Document request created successfully:", response);      // Only clear form data after the final step
+      // We'll keep the data in localStorage for now
+      
       // Update UI and navigate
       updateState({ showModal: false });
       if (state.claimOption === "personal") {
-        onNext(5);
+        onNext(5); // Calendar page
       } else if (state.claimOption === "authorized") {
-        onNext(4);
+        onNext(4); // Attachment page
       }
+      
+      // Data will persist in localStorage until the form is fully completed
     } catch (error) {
       setErrors((prev) => ({
         ...prev,

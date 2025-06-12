@@ -1,7 +1,7 @@
 import Buttons from "@/components/Buttons";
 import VideoCard from "@/components/CustomVideoPlayer";
 
-const Hta = () => {
+const HowToAppoint = () => {
   return (
     <>
       <div className="font-LatoRegular">
@@ -137,4 +137,4 @@ const Hta = () => {
   );
 };
 
-export default Hta;
+export default HowToAppoint;
