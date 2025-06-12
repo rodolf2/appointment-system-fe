@@ -136,34 +136,40 @@ const Appointments = () => {
                 </div>
               </div>
               <div className="overflow-y-auto m-4 mt-8">
+<<<<<<< HEAD
                 <table
                   className="text-[15px] w-full"
                   style={{ tableLayout: "fixed" }}
                 >
+=======
+                <table className="text-[18px] w-full" style={{ tableLayout: "fixed" }}>
+>>>>>>> parent of d561021 (minor changes)
                   <thead>
                     <tr className="bg-gray-200 text-center">
-                      <th className="border p-4 w-[11%]">STATUS</th>
-                      <th className="border p-4 w-[12%]">
+                      <th className="border p-4 w-[8%]">STATUS</th>
+                      <th className="border p-4 w-[10%]">
                         TRANSACTION
                         <br />
                         NUMBER
                       </th>
-                      <th className="border p-4 w-[10%]">REQUEST</th>
-                      <th className="border p-4 w-[10%]">PURPOSE</th>
-                      <th className="border p-4 w-[13%]">
+                      <th className="border p-4 w-[12%]">REQUEST</th>
+                      <th className="border p-4 w-[12%]">PURPOSE</th>
+                      <th className="border p-4 w-[15%]">
                         EMAIL <br />
                         ADDRESS
                       </th>
-                      <th className=" border w-[10%] text">
-                        DATE OF APPOINTMENT
+                      <th className="border p-4 w-[12%]">
+                        DATE OF
+                        <br />
+                        APPOINTMENT
                       </th>
-                      <th className="border p-4 w-[8%]">TIME SLOT</th>
-                      <th className="border p-4 w-[10%]">
+                      <th className="border p-4 w-[10%]">TIME SLOT</th>
+                      <th className="border p-4 w-[12%]">
                         DATE OF
                         <br />
                         REQUEST
                       </th>
-                      <th className="border p-4 w-[16%]">ACTIONS</th>
+                      <th className="border p-4 w-[10%]">ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -176,10 +182,7 @@ const Appointments = () => {
                     )}
                     {error && (
                       <tr>
-                        <td
-                          colSpan="9"
-                          className="text-center p-5 text-red-500"
-                        >
+                        <td colSpan="9" className="text-center p-5 text-red-500">
                           Error: {error}
                         </td>
                       </tr>
@@ -193,25 +196,21 @@ const Appointments = () => {
                         )
                         .map((data, index) => (
                           <tr key={data.id} className="even:bg-gray-100">
-                            <td className="border p-4 text-center align-middle">
+                            <td className="border p-4 text-center">
                               <span
+<<<<<<< HEAD
                                 className={`text-center flex justify-center px-3 py-2 rounded text-white font-medium whitespace-nowrap ${getStatusColor(
+=======
+                                className={`inline-block w-[120px] text-center px-2 py-2 rounded text-white ${getStatusColor(
+>>>>>>> parent of d561021 (minor changes)
                                   data.status
                                 )}`}
                               >
                                 {data.status}
                               </span>
                             </td>
-                            <td className="border p-4 text-center align-middle">
-                              <span
-                                className={`font-bold ${getTransactionNumberColor(
-                                  data.status
-                                )} break-all`}
-                              >
-                                {data.transactionNumber}
-                              </span>
-                            </td>
                             <td className="border p-4 break-words">
+<<<<<<< HEAD
                               {data.request}
                             </td>                            <td className="border p-4 break-words">
                               <span
@@ -250,28 +249,43 @@ const Appointments = () => {
                                 ) : (
                                   data.timeSlot
                                 )}
+=======
+                              <div className="flex flex-col text-center">
+                                <span
+                                  className={`font-bold ${getTransactionNumberColor(
+                                    data.status
+                                  )}`}
+                                >
+                                  {data.transactionNumber}
+                                </span>
+>>>>>>> parent of d561021 (minor changes)
                               </div>
                             </td>
+                            <td className="border p-4 break-words">{data.request}</td>
+                            <td className="border p-4 break-words">{data.purpose}</td>
+                            <td className="border p-4 break-words">{data.emailAddress}</td>
                             <td className="border p-4 break-words">
-                              {new Date(
-                                data.dateOfRequest
-                              ).toLocaleDateString()}
+                              {data.dateOfAppointment}
+                            </td>
+                            <td className="border p-4 break-words">{data.timeSlot}</td>
+                            <td className="border p-4 break-words">
+                              {new Date(data.dateOfRequest).toLocaleDateString()}
                             </td>
                             <td className="border p-4">
-                              <div className="flex gap-1 justify-center flex-wrap">
+                              <div className="flex gap-2 justify-center">
                                 {/* Approve Button - show for Pending and Rejected statuses */}
                                 {(data.status === "PENDING" ||
                                   data.status === "REJECTED") && (
                                   <div
                                     data-tooltip-id="approve-tooltip"
                                     data-tooltip-content="Approve"
-                                    className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700 min-w-[32px] min-h-[32px] flex items-center justify-center"
+                                    className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
                                     onClick={(e) => {
                                       e.preventDefault();
                                       approveAppointment(data, e);
                                     }}
                                   >
-                                    <FaThumbsUp className="text-white text-sm" />
+                                    <FaThumbsUp className="text-white" />
                                   </div>
                                 )}
 
@@ -281,13 +295,13 @@ const Appointments = () => {
                                   <div
                                     data-tooltip-id="complete-tooltip"
                                     data-tooltip-content="Complete"
-                                    className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700 min-w-[32px] min-h-[32px] flex items-center justify-center"
+                                    className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
                                     onClick={(e) => {
                                       e.preventDefault();
                                       completeAppointment(data, e);
                                     }}
                                   >
-                                    <LuCircleCheckBig className="text-white text-sm" />
+                                    <LuCircleCheckBig className="text-white" />
                                   </div>
                                 )}
 
@@ -297,13 +311,13 @@ const Appointments = () => {
                                   <div
                                     data-tooltip-id="reject-tooltip"
                                     data-tooltip-content="Reject"
-                                    className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700 min-w-[32px] min-h-[32px] flex items-center justify-center"
+                                    className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
                                     onClick={(e) => {
                                       e.preventDefault();
                                       rejectAppointment(data, e);
                                     }}
                                   >
-                                    <FaThumbsDown className="text-white text-sm transform scale-x-[-1]" />
+                                    <FaThumbsDown className="text-white transform scale-x-[-1]" />
                                   </div>
                                 )}
 
@@ -311,13 +325,13 @@ const Appointments = () => {
                                 <div
                                   data-tooltip-id="delete-tooltip"
                                   data-tooltip-content="Delete"
-                                  className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700 min-w-[32px] min-h-[32px] flex items-center justify-center"
+                                  className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     openModal(data);
                                   }}
                                 >
-                                  <BsTrash3 className="text-white text-sm" />
+                                  <BsTrash3 className="text-white" />
                                 </div>
                               </div>
                             </td>
@@ -406,8 +420,11 @@ const Appointments = () => {
           <Tooltip id="complete-tooltip" />
           <Tooltip id="reject-tooltip" />
           <Tooltip id="delete-tooltip" />
+<<<<<<< HEAD
           <Tooltip id="email-tooltip" />
           <Tooltip id="purpose-tooltip" />
+=======
+>>>>>>> parent of d561021 (minor changes)
         </main>
       </div>
     </div>
