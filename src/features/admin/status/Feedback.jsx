@@ -51,7 +51,11 @@ const Feedback = () => {
     <div className="flex h-screen font-LatoRegular">
       <main className="flex-1 flex flex-row">
         {/* Sidebar */}
-        <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"} z-20`}>
+        <div
+          className={`${
+            isSidebarOpen ? "w-[300px]" : "w-[100px]"
+          }transition-all duration-300 z-20`}
+        >
           <Sidebar isSidebarOpen={isSidebarOpen} />
         </div>
 

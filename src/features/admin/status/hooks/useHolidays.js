@@ -183,7 +183,7 @@ const useHolidays = () => {
   // CRUD functions - fetchAllHolidaysFromAPI is called after success
   const addHolidays = async () => {
     if (!newHoliday.date || !newHoliday.description) {
-      alert("Date and Description cannot be empty.");
+      // alert("Date and Description cannot be empty.");
       return;
     }
     try {

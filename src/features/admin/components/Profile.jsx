@@ -11,7 +11,6 @@ const Profile = () => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // Loading state for image removal
 
-  // Use the custom hook
   const {
     formData,
     profileImage,
@@ -27,16 +26,19 @@ const Profile = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
     try {
       setError(null);
       setIsSubmitting(true);
 
-      const result = await handleSubmit();
+      // console.log("Starting profile update...");
+      await handleSubmit();
+      setSuccessMessage("Profile updated successfully!.");
 
-      setSuccessMessage("Profile updated successfully!");
+      // Reset form submission state after a brief delay
       setTimeout(() => {
         setSuccessMessage(null);
-      }, 3000);
+      }, 5000); // Clear success message after 5 seconds
     } catch (err) {
       console.error("Error updating profile:", err);
       setError(err.message || "Failed to update profile");
@@ -50,14 +52,12 @@ const Profile = () => {
 
   return (
     <div className="relative flex h-screen font-LatoRegular">
-      {/* Sidebar */}
       {isSidebarOpen && (
         <div className="relative z-20">
           <Sidebar isSidebarOpen={isSidebarOpen} />
         </div>
       )}
 
-      {/* Main Content */}
       <div className="flex-1 relative">
         <div
           className="absolute inset-0 bg-cover bg-center z-0"
@@ -75,7 +75,6 @@ const Profile = () => {
             title="Account Profile"
           />
 
-          {/* Profile Card */}
           <div className="flex justify-center items-center flex-1 px-4">
             <div className="bg-white p-8 rounded-lg shadow-lg w-[800px] h-[500px] flex">
               {/* Profile Picture Section */}
@@ -87,41 +86,33 @@ const Profile = () => {
                       alt="Profile"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        // Try to load Google profile picture with different sizes
-                        if (profileImage?.includes("googleusercontent.com")) {
+                        console.error(
+                          "❌ Failed to load profile image:",
+                          profileImage
+                        );
+                        console.error("Error details:", e);
+
+                        // If it's a Google profile picture, try alternative URL
+                        if (
+                          profileImage &&
+                          profileImage.includes("googleusercontent.com")
+                        ) {
                           console.log(
-                            "🔄 Attempting to fix Google profile picture URL..."
+                            "🔄 Trying alternative Google profile picture URL..."
                           );
-
-                          // Remove any existing size parameter
                           const baseUrl = profileImage.split("=")[0];
+                          e.target.src = baseUrl + "=s400-c";
 
-                          // Try different sizes in order
-                          const sizes = ["s400-c", "s200-c", "s96-c"];
-                          let currentSizeIndex = 0;
-
-                          const tryNextSize = () => {
-                            if (currentSizeIndex < sizes.length) {
-                              // console.log(
-                              //   `🔄 Trying size: ${sizes[currentSizeIndex]}...`
-                              // );
-                              e.target.src = `${baseUrl}=${sizes[currentSizeIndex]}`;
-                              currentSizeIndex++;
-                            } else {
-                              // If all sizes fail, use default
-
-                              e.target.src = "/assets/icons/UploadIcon.svg";
-                              e.target.onerror = null; // Prevent infinite loop
-                              e.target.classList.add("p-2", "bg-gray-100");
-                            }
+                          // If that fails too, use default
+                          e.target.onerror = () => {
+                            e.target.onerror = null;
+                            e.target.src = "/assets/icons/UploadIcon.svg";
+                            console.log("🔄 Using default upload icon");
                           };
-
-                          e.target.onerror = () => tryNextSize();
-                          tryNextSize();
                         } else {
-                          // For non-Google URLs, use default immediately                          e.target.src = "/assets/icons/UploadIcon.svg";
-                          e.target.onerror = null; // Prevent infinite loop
-                          e.target.classList.add("p-2", "bg-gray-100");
+                          // For non-Google URLs, use default
+                          e.target.onerror = null;
+                          e.target.src = "/assets/icons/UploadIcon.svg";
                         }
                       }}
                     />
@@ -153,10 +144,7 @@ const Profile = () => {
                       onChange={async (e) => {
                         try {
                           setError(null);
-                          setIsLoading(true);
-
                           await handleImageUpload(e);
-
                           setSuccessMessage(
                             "Profile picture updated successfully!"
                           );
@@ -164,18 +152,9 @@ const Profile = () => {
                             setSuccessMessage(null);
                           }, 3000);
                         } catch (err) {
-                          console.error(
-                            "Error uploading profile picture:",
-                            err
-                          );
                           setError(
                             err.message || "Failed to upload profile picture"
                           );
-                          setTimeout(() => {
-                            setError(null);
-                          }, 5000);
-                        } finally {
-                          setIsLoading(false);
                         }
                       }}
                     />
@@ -227,22 +206,19 @@ const Profile = () => {
                   Edit Profile
                 </h2>
 
-                {/* Fixed placeholder for messages to prevent layout shift */}
-                <div className="mb-4 h-10 flex items-center">
-                  {error && (
-                    <div className="w-full p-2 bg-red-100 text-red-700 rounded">
-                      {error}
-                    </div>
-                  )}
-                  {successMessage && (
-                    <div className="w-full p-2 bg-green-100 text-green-700 rounded">
-                      {successMessage}
-                    </div>
-                  )}
-                </div>
+                {error && (
+                  <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+                    {error}
+                  </div>
+                )}
+
+                {successMessage && (
+                  <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
+                    {successMessage}
+                  </div>
+                )}
 
                 <form className="flex flex-col" onSubmit={onSubmit}>
-                  {/* Input Fields */}
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       First Name:
@@ -255,7 +231,19 @@ const Profile = () => {
                       className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
                       required
                     />
-                  </div>{" "}
+                  </div>
+                  <div className="mb-4 flex items-center justify-start">
+                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55]">
+                      Middle Name:
+                    </label>
+                    <input
+                      type="text"
+                      name="middleName"
+                      value={formData.middleName}
+                      onChange={handleInputChange}
+                      className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
+                    />
+                  </div>
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Last Name:
@@ -269,6 +257,7 @@ const Profile = () => {
                       required
                     />
                   </div>
+
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Email Address:
@@ -282,6 +271,7 @@ const Profile = () => {
                       required
                     />
                   </div>
+
                   <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Password:
@@ -295,6 +285,7 @@ const Profile = () => {
                       placeholder="Leave blank to keep current password"
                     />
                   </div>
+
                   {/* Submit Button */}
                   <div className="text-center">
                     <button
@@ -311,6 +302,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
+
           <Footer />
         </div>
       </div>

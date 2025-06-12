@@ -17,7 +17,7 @@ const useSelectDocuments = (onNext) => {
           claimOption: null,
         };
   });
-
+  const [claimOptionError, setClaimOptionError] = useState("");
   const [errors, setErrors] = useState({});
 
   // Persist to localStorage whenever state changes
@@ -108,7 +108,9 @@ const useSelectDocuments = (onNext) => {
   // Handle Claim Option
   const handleClaimOption = (option) => {
     updateState({ claimOption: option });
+    setClaimOptionError(""); // Clear error once user selects
   };
+  
 
   // Convert selected documents from values to proper format
   const convertSelectedDocuments = () => {
@@ -116,6 +118,12 @@ const useSelectDocuments = (onNext) => {
   };
   // Handle Modal Next Button with API integration
   const handleModalNext = async () => {
+    if (!state.claimOption) {
+      setClaimOptionError("Please select a claim option.");
+      return;
+    }
+
+    setClaimOptionError(""); // Clear if valid
     try {
       if (!state.claimOption) {
         setErrors((prev) => ({
@@ -184,6 +192,8 @@ const useSelectDocuments = (onNext) => {
     handleModalNext,
     setShowModal: (value) => updateState({ showModal: value }),
     clearSavedData,
+    claimOptionError,
+    setClaimOptionError,
   };
 };
 

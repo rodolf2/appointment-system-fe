@@ -10,6 +10,50 @@ const Students = () => {
     import.meta.env.VITE_API_URL
   }/api/document-requests/docs-with-details`;
 
+  // Custom CSS for tooltips
+  const tooltipStyle = `
+  /* The parent element (now the <td>) needs to be the positioning context */
+  [data-tooltip] {
+    position: relative;
+  }
+
+  /* The cursor should only change to a pointer if a tooltip exists */
+  [data-tooltip][data-tooltip]:hover {
+    cursor: pointer;
+  }
+
+  [data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: pre-line;
+    max-width: 300px;
+    width: max-content;
+    z-index: 100;
+
+    /* Initially hidden and non-interactive */
+    opacity: 0;
+    pointer-events: none;
+
+    /* Positioning */
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* Smooth transition */
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  /* Show on hover */
+  [data-tooltip]:hover::before {
+    opacity: 1;
+  }
+`;
+
   const {
     // Data states
     loading,
@@ -44,7 +88,13 @@ const Students = () => {
 
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
+      <style>{tooltipStyle}</style>
+
+      <div
+        className={`${
+          isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        }transition-all duration-300 z-20`}
+      >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">
@@ -103,41 +153,40 @@ const Students = () => {
             >
               <thead>
                 <tr className="bg-gray-200 text-center">
-                  <th className="border p-5 w-[10%]">TRANSACTION NO.</th>
-                  <th className="border p-5 w-[14%]">NAME</th>
-                  <th className="border p-5 w-[9%]">LAST S.Y. ATTENDED</th>
-                  <th className="border p-5 w-[9%]">
-                    PROGRAM/ <br />
-                    GRADE/
+                  <th className="border p-5 w-[12%]">TRANSACTION NO.</th>
+                  <th className="border p-5 w-[15%]">NAME</th>
+                  <th className="border p-5 w-[10%]">LAST S.Y. ATTENDED</th>
+                  <th className="border p-5 w-[12%]">
+                    PROGRAM/GRADE/
                     <br />
                     STRAND
                   </th>
-                  <th className="border p-5 w-[9%]">CONTACT NO.</th>
-                  <th className="border p-5 w-[14%]">EMAIL ADDRESS</th>
+                  <th className="border p-5 w-[10%]">CONTACT NO.</th>
+                  <th className="border p-5 w-[13%]">EMAIL ADDRESS</th>
+                  <th className="border p-5 w-[12%]">PURPOSE</th>
                   <th className="border p-5 w-[10%]">ATTACHMENT PROOF</th>
-                  <th className="border p-5 w-[9%]">PURPOSE</th>
-                  <th className="border p-5 w-[9%]">REQUEST</th>
-                  <th className="border p-5 w-[10%]">DATE OF REQUEST</th>
+                  <th className="border p-5 w-[8%]">REQUEST</th>
+                  <th className="border p-5 w-[8%]">DATE OF REQUEST</th>
                 </tr>
               </thead>
               <tbody>
                 {loading && (
                   <tr>
-                    <td colSpan="10" className="text-center p-5">
+                    <td colSpan="11" className="text-center p-5">
                       Loading student records...
                     </td>
                   </tr>
                 )}
                 {error && (
                   <tr>
-                    <td colSpan="10" className="text-center p-5 text-red-500">
+                    <td colSpan="11" className="text-center p-5 text-red-500">
                       Error: {error}
                     </td>
                   </tr>
                 )}
                 {!loading && !error && filteredAppointments.length === 0 && (
                   <tr>
-                    <td colSpan="10" className="text-center p-5">
+                    <td colSpan="11" className="text-center p-5">
                       {searchTerm
                         ? "No matching records found."
                         : "No student records found."}
@@ -151,110 +200,139 @@ const Students = () => {
                       (currentPage - 1) * entriesPerPage,
                       currentPage * entriesPerPage
                     )
-                    .map((data, index) => (
-                      <tr
-                        key={data.transactionNumber || index}
-                        className={`${
-                          index % 2 === 0 ? "bg-gray-100" : ""
-                        } text-center`}
-                      >
-                        <td className="border p-5 text-[#354CCE] font-bold break-words">
-                          {data.transactionNumber}
-                        </td>
-                        <td className="border p-5 break-words">{data.name}</td>
-                        <td className="border p-5 break-words">
-                          {data.lastSY}
-                        </td>
-                        <td className="border p-5 break-words">
-                          {data.program}
-                        </td>
-                        <td className="border p-5 break-words">
-                          {data.contact}
-                        </td>
-                        <td className="border p-5 break-words">
-                          <span
-                            data-tooltip-id="email-tooltip"
-                            data-tooltip-content={data.email}
-                            className="cursor-help"
-                            title={data.email}
-                          >
-                            {data.email.length > 20
-                              ? `${data.email.substring(0, 20)}...`
-                              : data.email}
-                          </span>
-                        </td>{" "}
-                        <td className="border p-5 break-words">
-                          {data.attachment &&
-                          data.attachment !== "No attachments" ? (
-                            <div className="flex flex-col gap-1">
-                              {" "}
-                              {data.attachment.split(", ").map((url, index) => {
-                                // Extract original filename from the Cloudinary URL
-                                const urlParts = url.split("/");
-                                const lastPart = urlParts[urlParts.length - 1];
-                                // Get the original filename by removing timestamp and random numbers
-                                const filename =
-                                  lastPart.replace(
-                                    /^attachment-([^-]+)-\d+-\d+/,
-                                    "$1"
-                                  ) || `Attachment ${index + 1}`;
-                                // Ensure the URL has the complete Cloudinary path with transformations
-                                let viewableUrl;
-                                if (
-                                  url.startsWith("https://res.cloudinary.com")
-                                ) {
-                                  viewableUrl = url;
-                                } else {
-                                  // Remove any leading slashes
-                                  const cleanPath = url.replace(/^\/+/, "");
-                                  // Add Cloudinary transformations for optimal viewing
-                                  viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_scale,w_800/${cleanPath}`;
-                                }
+                    .map((data, index) => {
+                      const charLimit = 20;
+                      const isTransactionLong =
+                        data.transactionNumber?.length > charLimit;
+                      const isNameLong = data.name?.length > charLimit;
+                      const isLastSYLong = data.lastSY?.length > charLimit;
+                      const isProgramLong = data.program?.length > charLimit;
+                      const isContactLong = data.contact?.length > charLimit;
+                      const isEmailLong = data.email?.length > charLimit;
+                      const isPurposeLong = data.purpose?.length > charLimit;
+                      const isRequestLong = data.request?.length > charLimit;
+                      const formattedDate = new Date(
+                        data.date
+                      ).toLocaleDateString();
 
-                                return (
-                                  <div
-                                    key={index}
-                                    className="flex items-center space-x-2"
-                                  >
-                                    <a
-                                      href={viewableUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:underline text-sm break-words flex-1"
-                                      title="Click to view full size"
-                                    >
-                                      {filename}
-                                    </a>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          ) : (
-                            <span className="text-gray-500 text-sm">
-                              No attachments
-                            </span>
-                          )}
-                        </td>
-                        <td className="border p-5 break-words">
-                          <span
-                            data-tooltip-id="purpose-tooltip"
-                            data-tooltip-content={data.purpose}
-                            className="cursor-help"
-                            title={data.purpose}
+                      return (
+                        <tr
+                          key={data.transactionNumber || index}
+                          className={`${
+                            index % 2 === 0 ? "bg-gray-100" : ""
+                          } text-center`}
+                        >
+                          <td
+                            className="border p-5 text-[#354CCE] font-bold"
+                            data-tooltip={
+                              isTransactionLong ? data.transactionNumber : null
+                            }
                           >
-                            {data.purpose.length > 20
-                              ? `${data.purpose.substring(0, 20)}...`
-                              : data.purpose}
-                          </span>
-                        </td>
-                        <td className="border p-5 break-words">
-                          {data.request}
-                        </td>
-                        <td className="border p-5 break-words">
-                          {new Date(data.date).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
+                            <div
+                              className={isTransactionLong ? "truncate" : ""}
+                            >
+                              {data.transactionNumber}
+                            </div>
+                          </td>
+                          <td
+                            className="border p-5"
+                            data-tooltip={isNameLong ? data.name : null}
+                          >
+                            <div className={isNameLong ? "truncate" : ""}>
+                              {data.name}
+                            </div>
+                          </td>
+                          <td
+                            className="border p-5"
+                            data-tooltip={isLastSYLong ? data.lastSY : null}
+                          >
+                            <div className={isLastSYLong ? "truncate" : ""}>
+                              {data.lastSY}
+                            </div>
+                          </td>
+                          <td
+                            className="border p-5"
+                            data-tooltip={isProgramLong ? data.program : null}
+                          >
+                            <div className={isProgramLong ? "truncate" : ""}>
+                              {data.program}
+                            </div>
+                          </td>
+                          <td
+                            className="border p-5"
+                            data-tooltip={isContactLong ? data.contact : null}
+                          >
+                            <div className={isContactLong ? "truncate" : ""}>
+                              {data.contact}
+                            </div>
+                          </td>
+                          <td
+                            className="border p-5"
+                            data-tooltip={isEmailLong ? data.email : null}
+                          >
+                            <div className={isEmailLong ? "truncate" : ""}>
+                              {data.email}
+                            </div>
+                          </td>
+                          <td
+                            className="border p-5"
+                            data-tooltip={
+                              isPurposeLong
+                                ? data.purpose?.replace(/(.{50})/g, "$1\n")
+                                : null
+                            }
+                          >
+                            <div className={isPurposeLong ? "truncate" : ""}>
+                              {data.purpose || "No purpose specified"}
+                            </div>
+                          </td>
+                          <td className="border p-5">
+                            {data.attachment &&
+                            data.attachment !== "No attachments" ? (
+                              <div className="flex flex-col gap-1">
+                                {data.attachment
+                                  .split(", ")
+                                  .map((filename, fileIndex) => {
+                                    const isFilenameLong = filename.length > 15;
+                                    return (
+                                      <div
+                                        key={fileIndex}
+                                        data-tooltip={
+                                          isFilenameLong ? filename : null
+                                        }
+                                        className="relative"
+                                      >
+                                        <div
+                                          className={`${
+                                            isFilenameLong ? "truncate" : ""
+                                          } text-blue-600 hover:underline cursor-pointer text-sm`}
+                                        >
+                                          {filename}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                              </div>
+                            ) : (
+                              <span className="text-gray-500 text-sm">
+                                No attachments
+                              </span>
+                            )}
+                          </td>
+                          <td
+                            className="border p-5"
+                            data-tooltip={isRequestLong ? data.request : null}
+                          >
+                            <div className={isRequestLong ? "truncate" : ""}>
+                              {data.request}
+                            </div>
+                          </td>
+                          <td className="border p-5">
+                            <div>{formattedDate}</div>
+                          </td>
+                        </tr>
+                      );
+                    })}
               </tbody>
             </table>
 
@@ -264,6 +342,7 @@ const Students = () => {
                   SHOWING {startEntry} TO {endEntry} OF {totalFilteredEntries}{" "}
                   ENTRIES
                 </span>
+
                 {calculatedTotalPages > 1 && (
                   <div className="flex items-center">
                     <button

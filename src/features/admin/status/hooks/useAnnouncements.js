@@ -110,6 +110,7 @@ const useAnnouncements = () => {
     // If there are validation errors, set them and return
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
+      // alert("Please fill in both title and description");
       return;
     }
 

@@ -56,7 +56,11 @@ const Archived = () => {
 
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
+      <div
+        className={`${
+          isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        } transition-all duration-300 z-20`}
+      >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">
@@ -458,11 +462,6 @@ const Archived = () => {
                 {/* Modal Box */}
                 <div className="bg-white p-8 rounded-lg shadow-lg">
                   <div className="flex flex-col items-center">
-                    <img
-                      src="/assets/icons/error_icon.svg"
-                      alt="Error icon"
-                      className="w-20 h-20 mb-8"
-                    />
                     <p className="text-xl font-semibold text-center text-red-600">
                       {errorMessage}
                     </p>

@@ -148,6 +148,8 @@ const useArchived = () => {
           return;
         }
 
+        console.log("Deleting appointment:", selectedAppointment);
+
         // Make API call to delete the appointment
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/document-requests/docs/${
@@ -161,12 +163,40 @@ const useArchived = () => {
             },
             credentials: "include",
             body: JSON.stringify({
-              adminName: user?.name || "Admin", // Include admin name for notifications
+              adminName: user?.name || "Admin",
+              transactionNumber: selectedAppointment.transactionNumber, // Add this explicitly
             }),
           }
         );
 
+        console.log("Delete response status:", response.status);
+
+        // Try to get response body regardless of status
+        const responseData = await response.json().catch((e) => {
+          console.log("Error parsing response:", e);
+          return {};
+        });
+        console.log("Delete response data:", responseData);
+
         if (!response.ok) {
+          if (response.status === 404) {
+            // Remove from local storage even if backend says not found
+            console.log(
+              "Document not found in backend, removing from local storage"
+            );
+            const updatedArchived = appointments.filter(
+              (appt) => appt.id !== selectedAppointment.id
+            );
+            setAppointments(updatedArchived);
+            localStorage.setItem(
+              "archivedAppointments",
+              JSON.stringify(updatedArchived)
+            );
+            setShowSuccessDelete(true);
+            closeModal();
+            return;
+          }
+
           if (response.status === 401) {
             setErrorMessage("Your session has expired. Please sign in again.");
             setShowErrorModal(true);
@@ -175,17 +205,13 @@ const useArchived = () => {
             }, 2000);
             return;
           }
-          if (response.status === 403) {
-            setErrorMessage(
-              "You do not have permission to delete this appointment."
-            );
-            setShowErrorModal(true);
-            return;
-          }
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.message || "Failed to delete appointment");
+
+          throw new Error(
+            responseData.message || "Failed to delete appointment"
+          );
         }
 
+        // Success - update local state
         const updatedArchived = appointments.filter(
           (appt) => appt.id !== selectedAppointment.id
         );
@@ -196,11 +222,12 @@ const useArchived = () => {
         );
         setShowSuccessDelete(true);
         closeModal();
-        // --- Add this line to refresh notifications ---
         refreshNotifications && refreshNotifications();
       } catch (error) {
         console.error("Error deleting appointment:", error);
-        setErrorMessage(error.message);
+        setErrorMessage(
+          error.message || "Failed to delete appointment. Please try again."
+        );
         setShowErrorModal(true);
       }
     }
@@ -306,56 +333,64 @@ const useArchived = () => {
       const selectedAppointments = appointments.filter((appt) =>
         selectedRows.includes(appt.id)
       );
+      console.log("Selected appointments for deletion:", selectedAppointments);
 
       // Delete each appointment through the API
-      const deletePromises = selectedAppointments.map(async (appointment) => {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/document-requests/docs/${
-            appointment.transactionNumber
-          }`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              adminName: user?.name || "Admin", // Include admin name for notifications
-            }),
-          }
-        );
+      const results = await Promise.allSettled(
+        selectedAppointments.map(async (appointment) => {
+          console.log("Attempting to delete:", appointment.transactionNumber);
 
-        if (!response.ok) {
-          if (response.status === 401) {
-            setErrorMessage("Your session has expired. Please sign in again.");
-            setShowErrorModal(true);
-            setTimeout(() => {
-              window.location.href = "/login";
-            }, 2000);
-            return;
-          }
-          if (response.status === 403) {
-            setErrorMessage(
-              "You do not have permission to delete appointments."
-            );
-            setShowErrorModal(true);
-            return;
-          }
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(
-            errorData.message ||
-              `Failed to delete appointment ${appointment.transactionNumber}`
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/document-requests/docs/${
+              appointment.transactionNumber
+            }`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                adminName: user?.name || "Admin",
+                transactionNumber: appointment.transactionNumber,
+              }),
+            }
           );
-        }
-        return response;
-      });
 
-      await Promise.all(deletePromises);
+          console.log(
+            `Delete response for ${appointment.transactionNumber}:`,
+            response.status
+          );
 
-      // Remove from archived appointments
+          // Always try to parse response body
+          const responseData = await response.json().catch(() => ({}));
+          console.log(
+            `Response data for ${appointment.transactionNumber}:`,
+            responseData
+          );
+
+          if (!response.ok && response.status !== 404) {
+            throw new Error(
+              responseData.message ||
+                `Failed to delete appointment ${appointment.transactionNumber}`
+            );
+          }
+
+          return appointment.id;
+        })
+      );
+
+      console.log("Bulk delete results:", results);
+
+      // Handle results
+      const successfulDeletes = results
+        .filter((result) => result.status === "fulfilled")
+        .map((result) => result.value);
+
+      // Remove successfully deleted appointments from local state
       const updatedArchived = appointments.filter(
-        (appt) => !selectedRows.includes(appt.id)
+        (appt) => !successfulDeletes.includes(appt.id)
       );
       setAppointments(updatedArchived);
       localStorage.setItem(
@@ -363,32 +398,27 @@ const useArchived = () => {
         JSON.stringify(updatedArchived)
       );
 
-      // Remove from students table
-      const studentsData = JSON.parse(
-        localStorage.getItem("studentsData") || "[]"
-      );
-      const selectedTransactionNumbers = selectedAppointments.map(
-        (appt) => appt.transactionNumber
-      );
-      const updatedStudents = studentsData.filter(
-        (student) =>
-          !selectedTransactionNumbers.includes(student.transactionNumber)
-      );
-      localStorage.setItem("studentsData", JSON.stringify(updatedStudents));
-
       // Clear selection and close modal
       setSelectedRows([]);
       closeBulkDeleteModal();
       setShowSuccessDelete(true);
-    } catch (error) {
-      console.error("Error deleting bulk appointments:", error);
-      setErrorMessage(error.message);
-      setShowErrorModal(true);
-      if (error.message.includes("session has expired")) {
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
+
+      const failedDeletes = results.filter(
+        (result) => result.status === "rejected"
+      );
+      if (failedDeletes.length > 0) {
+        console.log("Some deletions failed:", failedDeletes);
+        setErrorMessage(
+          `${failedDeletes.length} appointments failed to delete.`
+        );
+        setShowErrorModal(true);
       }
+    } catch (error) {
+      console.error("Error in bulk delete:", error);
+      setErrorMessage(
+        error.message || "Failed to delete appointments. Please try again."
+      );
+      setShowErrorModal(true);
     }
   };
 

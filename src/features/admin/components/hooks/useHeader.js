@@ -23,7 +23,7 @@ const useHeader = (initialTitle = "") => {
   const notificationDropdownRef = useRef(null);
   const profileToggleRef = useRef(null);
   const notificationToggleRef = useRef(null);
-  // Fetch latest user profile only when component mounts
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user?.id) {
@@ -31,6 +31,7 @@ const useHeader = (initialTitle = "") => {
           const token = localStorage.getItem("token");
           if (!token) return;
 
+          console.log("🔄 Header: Fetching latest user profile...");
           const userProfile = await getUserProfile(user.id, token);
           if (userProfile) {
             // Only update if there are actual changes
@@ -50,16 +51,25 @@ const useHeader = (initialTitle = "") => {
                   userProfile.cloudinaryPublicId || user.cloudinaryPublicId,
               });
             }
+            console.log("✅ Header: Got latest profile:", userProfile);
+            // Update user context with latest profile data
+            const updatedUser = {
+              ...user,
+              picture: userProfile.profilePicture || userProfile.picture,
+              profilePicture: userProfile.profilePicture || userProfile.picture,
+            };
+            console.log("👤 Header: Updating user context with:", updatedUser);
+            updateUser(updatedUser);
           }
         } catch (error) {
-          console.error("Error fetching user profile:", error);
+          console.error("❌ Header: Error fetching user profile:", error);
         }
       }
     };
 
     fetchUserProfile();
     // Only run on mount and when user ID changes
-  }, [user?.id]);
+  }, [user?.id, user?.profilePicture, updateUser, user]);
 
   // Function to fetch notifications that can be called anywhere
   const fetchNotifications = async () => {

@@ -10,6 +10,72 @@ import SuccessModal from "../../../components/SuccessModal";
 import useAppointment from "./hooks/useAppointment";
 
 const Appointments = () => {
+  // Helper function to format date
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  // Helper function to format time slot
+  const formatTimeSlot = (timeSlot) => {
+    if (!timeSlot) return "";
+
+    const timeSlotMap = {
+      MORNING: "8am-11am",
+      AFTERNOON: "1pm-4pm",
+      EVENING: "4pm-7pm",
+    };
+
+    return timeSlotMap[timeSlot.toUpperCase()] || timeSlot;
+  };
+
+  // Custom CSS for tooltips on truncated table data
+  const tooltipStyle = `
+    /* The parent element (the <td>) needs to be the positioning context */
+    [data-tooltip] {
+      position: relative;
+    }
+    
+    /* The cursor should only change to a pointer if a tooltip exists */
+    [data-tooltip][data-tooltip]:hover {
+      cursor: pointer;
+    }
+
+    [data-tooltip]::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 100;
+      
+      /* Initially hidden and non-interactive */
+      opacity: 0;
+      pointer-events: none; 
+
+      /* Positioning */
+      bottom: 105%;
+      left: 50%;
+      transform: translateX(-50%);
+
+      /* Smooth transition */
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    /* Show on hover */
+    [data-tooltip]:hover::before {
+      opacity: 1;
+    }
+  `;
+
   const {
     // Data states
     loading,
@@ -67,7 +133,14 @@ const Appointments = () => {
 
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
+      {/* Inject custom styles for data tooltips */}
+      <style>{tooltipStyle}</style>
+
+      <div
+        className={`${
+          isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        }transition-all duration-300 z-20`}
+      >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">
@@ -142,34 +215,35 @@ const Appointments = () => {
                 >
                   <thead>
                     <tr className="bg-gray-200 text-center">
-                      <th className="border p-4 w-[11%]">STATUS</th>
-                      <th className="border p-4 w-[12%]">
+                      <th className="border p-4 w-[12%]">STATUS</th>
+                      <th className="border p-4 w-[15%]">
                         TRANSACTION
                         <br />
                         NUMBER
                       </th>
-                      <th className="border p-4 w-[10%]">REQUEST</th>
-                      <th className="border p-4 w-[10%]">PURPOSE</th>
-                      <th className="border p-4 w-[13%]">
+                      <th className="border p-4 w-[15%]">REQUEST</th>
+                      <th className="border p-4 w-[20%]">
                         EMAIL <br />
                         ADDRESS
                       </th>
-                      <th className=" border w-[10%] text">
-                        DATE OF APPOINTMENT
+                      <th className="border p-4 w-[12%]">
+                        DATE OF
+                        <br />
+                        APPOINTMENT
                       </th>
-                      <th className="border p-4 w-[8%]">TIME SLOT</th>
-                      <th className="border p-4 w-[10%]">
+                      <th className="border p-4 w-[10%]">TIME SLOT</th>
+                      <th className="border p-4 w-[12%]">
                         DATE OF
                         <br />
                         REQUEST
                       </th>
-                      <th className="border p-4 w-[16%]">ACTIONS</th>
+                      <th className="border p-4 w-[15%]">ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
                     {loading && (
                       <tr>
-                        <td colSpan="9" className="text-center p-5">
+                        <td colSpan="8" className="text-center p-5">
                           Loading appointments...
                         </td>
                       </tr>
@@ -177,7 +251,7 @@ const Appointments = () => {
                     {error && (
                       <tr>
                         <td
-                          colSpan="9"
+                          colSpan="8"
                           className="text-center p-5 text-red-500"
                         >
                           Error: {error}
@@ -191,141 +265,131 @@ const Appointments = () => {
                           (currentPage - 1) * entriesPerPage,
                           currentPage * entriesPerPage
                         )
-                        .map((data, index) => (
-                          <tr key={data.id} className="even:bg-gray-100">
-                            <td className="border p-4 text-center align-middle">
-                              <span
-                                className={`text-center flex justify-center px-3 py-2 rounded text-white font-medium whitespace-nowrap ${getStatusColor(
-                                  data.status
-                                )}`}
-                              >
-                                {data.status}
-                              </span>
-                            </td>
-                            <td className="border p-4 text-center align-middle">
-                              <span
-                                className={`font-bold ${getTransactionNumberColor(
-                                  data.status
-                                )} break-all`}
-                              >
-                                {data.transactionNumber}
-                              </span>
-                            </td>
-                            <td className="border p-4 break-words">
-                              {data.request}
-                            </td>                            <td className="border p-4 break-words">
-                              <span
-                                data-tooltip-id="purpose-tooltip"
-                                data-tooltip-content={data.purpose}
-                                className="cursor-help"
-                                title={data.purpose}
-                              >
-                                {data.purpose.length > 20
-                                  ? `${data.purpose.substring(0, 20)}...`
-                                  : data.purpose}
-                              </span>
-                            </td>
-                            <td className="border p-4 break-words">
-                              <span
-                                data-tooltip-id="email-tooltip"
-                                data-tooltip-content={data.emailAddress}
-                                className="cursor-help"
-                                title={data.emailAddress}
-                              >
-                                {data.emailAddress.length > 20
-                                  ? `${data.emailAddress.substring(0, 20)}...`
-                                  : data.emailAddress}
-                              </span>
-                            </td>
-                            <td className="border p-4 break-words text-center">
-                              {data.dateOfAppointment}
-                            </td>
-                            <td className="border p-4 text-center">
-                              <div className="leading-tight">
-                                {data.timeSlot.includes(" - ") ? (
-                                  <>
-                                    {data.timeSlot.split(" - ")[0]} -<br />
-                                    {data.timeSlot.split(" - ")[1]}
-                                  </>
-                                ) : (
-                                  data.timeSlot
-                                )}
-                              </div>
-                            </td>
-                            <td className="border p-4 break-words">
-                              {new Date(
-                                data.dateOfRequest
-                              ).toLocaleDateString()}
-                            </td>
-                            <td className="border p-4">
-                              <div className="flex gap-1 justify-center flex-wrap">
-                                {/* Approve Button - show for Pending and Rejected statuses */}
-                                {(data.status === "PENDING" ||
-                                  data.status === "REJECTED") && (
-                                  <div
-                                    data-tooltip-id="approve-tooltip"
-                                    data-tooltip-content="Approve"
-                                    className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700 min-w-[32px] min-h-[32px] flex items-center justify-center"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      approveAppointment(data, e);
-                                    }}
-                                  >
-                                    <FaThumbsUp className="text-white text-sm" />
-                                  </div>
-                                )}
+                        .map((data) => {
+                          const isTransactionLong =
+                            data.transactionNumber?.length > 20;
+                          const isRequestLong = data.request?.length > 25;
+                          const isEmailLong = data.emailAddress?.length > 25;
 
-                                {/* Complete Button - show for Pending and Approved statuses */}
-                                {(data.status === "PENDING" ||
-                                  data.status === "APPROVED") && (
-                                  <div
-                                    data-tooltip-id="complete-tooltip"
-                                    data-tooltip-content="Complete"
-                                    className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700 min-w-[32px] min-h-[32px] flex items-center justify-center"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      completeAppointment(data, e);
-                                    }}
-                                  >
-                                    <LuCircleCheckBig className="text-white text-sm" />
-                                  </div>
-                                )}
-
-                                {/* Reject Button - show for Pending and Approved statuses */}
-                                {(data.status === "PENDING" ||
-                                  data.status === "APPROVED") && (
-                                  <div
-                                    data-tooltip-id="reject-tooltip"
-                                    data-tooltip-content="Reject"
-                                    className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700 min-w-[32px] min-h-[32px] flex items-center justify-center"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      rejectAppointment(data, e);
-                                    }}
-                                  >
-                                    <FaThumbsDown className="text-white text-sm transform scale-x-[-1]" />
-                                  </div>
-                                )}
-
-                                {/* Delete Button - show for all statuses */}
-                                <div
-                                  data-tooltip-id="delete-tooltip"
-                                  data-tooltip-content="Delete"
-                                  className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700 min-w-[32px] min-h-[32px] flex items-center justify-center"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    openModal(data);
-                                  }}
+                          return (
+                            <tr key={data.id} className="even:bg-gray-100">
+                              <td className="border p-4 text-center">
+                                <span
+                                  className={`inline-block w-[120px] text-center px-2 py-2 rounded text-white ${getStatusColor(
+                                    data.status
+                                  )}`}
                                 >
-                                  <BsTrash3 className="text-white text-sm" />
+                                  {data.status}
+                                </span>
+                              </td>
+                              <td
+                                className="border p-4 text-center"
+                                data-tooltip={
+                                  isTransactionLong
+                                    ? data.transactionNumber
+                                    : null
+                                }
+                              >
+                                <div
+                                  className={`font-bold ${getTransactionNumberColor(
+                                    data.status
+                                  )} ${isTransactionLong ? "truncate" : ""}`}
+                                >
+                                  {data.transactionNumber}
                                 </div>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
+                              </td>
+                              <td
+                                className="border p-4"
+                                data-tooltip={
+                                  isRequestLong ? data.request : null
+                                }
+                              >
+                                <div
+                                  className={isRequestLong ? "truncate" : ""}
+                                >
+                                  {data.request}
+                                </div>
+                              </td>
+                              <td
+                                className="border p-4"
+                                data-tooltip={
+                                  isEmailLong ? data.emailAddress : null
+                                }
+                              >
+                                <div className={isEmailLong ? "truncate" : ""}>
+                                  {data.emailAddress}
+                                </div>
+                              </td>
+                              <td className="border p-4 text-center">
+                                {formatDate(data.dateOfAppointment)}
+                              </td>
+                              <td className="border p-4 text-center">
+                                {formatTimeSlot(data.timeSlot)}
+                              </td>
+                              <td className="border p-4 text-center">
+                                {new Date(
+                                  data.dateOfRequest
+                                ).toLocaleDateString()}
+                              </td>
+                              <td className="border p-4">
+                                <div className="flex gap-2 justify-center">
+                                  {/* Action buttons using react-tooltip */}
+                                  {(data.status === "PENDING" ||
+                                    data.status === "REJECTED") && (
+                                    <div
+                                      data-tooltip-id="approve-tooltip"
+                                      data-tooltip-content="Approve"
+                                      className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
+                                      onClick={(e) =>
+                                        approveAppointment(data, e)
+                                      }
+                                    >
+                                      <FaThumbsUp className="text-white" />
+                                    </div>
+                                  )}
+                                  {(data.status === "PENDING" ||
+                                    data.status === "APPROVED") && (
+                                    <div
+                                      data-tooltip-id="complete-tooltip"
+                                      data-tooltip-content="Complete"
+                                      className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
+                                      onClick={(e) =>
+                                        completeAppointment(data, e)
+                                      }
+                                    >
+                                      <LuCircleCheckBig className="text-white" />
+                                    </div>
+                                  )}
+                                  {(data.status === "PENDING" ||
+                                    data.status === "APPROVED") && (
+                                    <div
+                                      data-tooltip-id="reject-tooltip"
+                                      data-tooltip-content="Reject"
+                                      className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
+                                      onClick={(e) =>
+                                        rejectAppointment(data, e)
+                                      }
+                                    >
+                                      <FaThumbsDown className="text-white transform scale-x-[-1]" />
+                                    </div>
+                                  )}
+                                  <div
+                                    data-tooltip-id="delete-tooltip"
+                                    data-tooltip-content="Delete"
+                                    className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
+                                    onClick={() => openModal(data)}
+                                  >
+                                    <BsTrash3 className="text-white" />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
                   </tbody>
                 </table>
               </div>
+              {/* Pagination */}
               {calculatedTotalPages > 0 && (
                 <div className="flex justify-between items-center mt-10 text-[18px] px-4">
                   <span className="text-[#161F55]">
@@ -334,6 +398,7 @@ const Appointments = () => {
                   </span>
                   {calculatedTotalPages > 1 && (
                     <div className="flex items-center">
+                      {/* PREVIOUS BUTTON RESTORED */}
                       <button
                         onClick={handlePreviousPage}
                         disabled={currentPage === 1}
@@ -354,6 +419,7 @@ const Appointments = () => {
                           {number}
                         </button>
                       ))}
+                      {/* NEXT BUTTON RESTORED */}
                       <button
                         onClick={handleNextPage}
                         disabled={currentPage === calculatedTotalPages}
@@ -402,7 +468,8 @@ const Appointments = () => {
             onClose={() => setShowSuccessModal(false)}
           />
 
-          {/* Tooltips */}          <Tooltip id="approve-tooltip" />
+          {/* Tooltips for Action Buttons (from react-tooltip) */}
+          <Tooltip id="approve-tooltip" />
           <Tooltip id="complete-tooltip" />
           <Tooltip id="reject-tooltip" />
           <Tooltip id="delete-tooltip" />

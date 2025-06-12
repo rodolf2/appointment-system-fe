@@ -69,29 +69,29 @@ const useAppointment = () => {
     }
   };
 
-  // Filter appointments based on search term and status filter
+  // ====================================================================
+  // === CORRECTED FILTERING LOGIC ======================================
+  // ====================================================================
   const filteredAppointments = appointments.filter((data) => {
-    // Debug log to help identify any inconsistencies
-    console.log("Filtering appointment:", {
-      id: data.transactionNumber,
-      dataStatus: data.status,
-      filterStatus: selectedFilter,
-      searchTerm: searchTerm,
-    });
-
+    // Step 1: Filter by Search Term
+    // If there's no search term, everything matches by default.
     const searchString = searchTerm.toLowerCase();
+    const matchesSearch = searchTerm
+      ? data.transactionNumber?.toLowerCase().includes(searchString) ||
+        data.request?.toLowerCase().includes(searchString) ||
+        data.emailAddress?.toLowerCase().includes(searchString) ||
+        data.purpose?.toLowerCase().includes(searchString)
+      : true;
 
-    // Search in all relevant fields
-    const matchesSearch = [
-      data.transactionNumber,
-      data.request,
-      data.emailAddress,
-      data.purpose,
-    ].some((field) => field?.toLowerCase().includes(searchString)); // Always filter by status since we no longer have "Filter by" option
-    const appointmentStatus = (data.status || "").toUpperCase();
+    // Step 2: Filter by Status
+    // If the filter is "Filter by", everything matches by default.
+    const matchesFilter =
+      selectedFilter === "Filter by"
+        ? true
+        : data.status?.toUpperCase() === selectedFilter.toUpperCase();
 
-    // Status must match and search terms if present
-    return matchesSearch && appointmentStatus === selectedFilter;
+    // Step 3: An item is included only if it matches BOTH conditions
+    return matchesSearch && matchesFilter;
   });
 
   // Calculate pagination values
@@ -237,17 +237,15 @@ const useAppointment = () => {
         emailAddress: appointment.emailAddress,
         name: appointment.name,
       });
-      const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`; // Log the full URL being used
+      const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
       const url = `${API_BASE_URL}/status/status/${appointment.transactionNumber}`;
       console.log("Request URL:", url);
 
-      // Ensure appointmentDate is in proper format
       let formattedAppointmentDate = appointment.dateOfAppointment;
       if (
         formattedAppointmentDate &&
         formattedAppointmentDate !== "Not scheduled"
       ) {
-        // If it's already a date string, try to parse and reformat it
         try {
           const date = new Date(formattedAppointmentDate);
           if (!isNaN(date.getTime())) {
@@ -272,7 +270,7 @@ const useAppointment = () => {
         name: appointment.name,
         appointmentDate: formattedAppointmentDate,
         timeSlot: appointment.timeSlot,
-        adminName: adminName, // Include admin name for notifications
+        adminName: adminName,
       };
 
       console.log("Request body being sent:", requestBody);
@@ -295,11 +293,9 @@ const useAppointment = () => {
         let errorMessage = `Failed to update status: ${response.status} ${response.statusText}`;
 
         try {
-          // Try to parse the response as JSON
           const errorData = JSON.parse(responseText);
           errorMessage = errorData.message || errorData.error || errorMessage;
         } catch {
-          // If it's not JSON and not HTML, use the raw text
           if (!responseText.includes("<!DOCTYPE")) {
             errorMessage = responseText;
           }
@@ -314,14 +310,13 @@ const useAppointment = () => {
         throw new Error(errorMessage);
       }
 
-      // Try to parse the success response
       let updatedData;
       try {
         updatedData = JSON.parse(responseText);
       } catch (_parseError) {
         console.error("Error parsing success response:", _parseError);
-        updatedData = { status: newStatus }; // Fallback to basic update
-      } // Update the local state immediately for better UX
+        updatedData = { status: newStatus };
+      }
       setAppointments((prevAppointments) =>
         prevAppointments.map((appt) =>
           appt.transactionNumber === appointment.transactionNumber
@@ -341,7 +336,6 @@ const useAppointment = () => {
         newStatus: updatedData?.status || newStatus,
       });
 
-      // Show success modal
       const statusMessages = {
         APPROVED: "Appointment approved successfully!",
         REJECTED: "Appointment rejected successfully!",
@@ -353,12 +347,10 @@ const useAppointment = () => {
       );
       setShowSuccessModal(true);
 
-      // Auto-hide success modal after 3 seconds
       setTimeout(() => {
         setShowSuccessModal(false);
       }, 3000);
 
-      // Trigger dashboard refresh by dispatching custom event
       window.dispatchEvent(
         new CustomEvent("appointmentStatusUpdated", {
           detail: {
@@ -370,7 +362,6 @@ const useAppointment = () => {
         })
       );
 
-      // Also set localStorage to trigger refresh in other tabs
       localStorage.setItem("appointmentStatusUpdated", Date.now().toString());
     } catch (error) {
       console.error("Error updating status:", error);
@@ -426,10 +417,41 @@ const useAppointment = () => {
         }
         const statusData = await statusResponse.json();
 
-        // 3. Create a map of statuses using `transactionNumber` as the key.
-        const statusMap = statusData.reduce((acc, statusItem) => {
-          if (statusItem && statusItem.transactionNumber) {
-            acc[statusItem.transactionNumber] = statusItem;
+        // 3. Remove duplicates and sort status data
+        const uniqueStatusData = [];
+        const seenEmails = new Set();
+
+        const sortedStatusData = [...statusData].sort((a, b) => {
+          const aIsTR =
+            a.transactionNumber && a.transactionNumber.startsWith("TR");
+          const bIsTR =
+            b.transactionNumber && b.transactionNumber.startsWith("TR");
+
+          if (aIsTR && !bIsTR) return -1;
+          if (!aIsTR && bIsTR) return 1;
+
+          const dateA = new Date(a.dateOfRequest || 0);
+          const dateB = new Date(b.dateOfRequest || 0);
+          return dateB - dateA;
+        });
+
+        sortedStatusData.forEach((status) => {
+          const email = status.emailAddress;
+          if (email && !seenEmails.has(email)) {
+            uniqueStatusData.push(status);
+            seenEmails.add(email);
+          }
+        });
+
+        console.log(
+          `Removed ${
+            statusData.length - uniqueStatusData.length
+          } duplicate status entries`
+        );
+
+        const statusMap = uniqueStatusData.reduce((acc, curr) => {
+          if (curr && curr.transactionNumber) {
+            acc[curr.transactionNumber] = curr;
           }
           return acc;
         }, {});

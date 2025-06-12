@@ -11,11 +11,12 @@ const useSignIn = () => {
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const { updateUser } = useUser();
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,15 +31,22 @@ const useSignIn = () => {
     }
   }, []);
 
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handlePassword = (e) => setPassword(e.target.value);
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailError(null);
+    setError(null);
+  };
 
-  // Handle remember me checkbox changes with immediate cleanup
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+    setPasswordError(null);
+    setError(null);
+  };
+
   const handleRemember = (e) => {
     const checked = e.target.checked;
     setRemember(checked);
     if (!checked) {
-      // If user unchecks "Remember Me", immediately clear saved credentials
       localStorage.removeItem("savedEmail");
       localStorage.removeItem("savedPassword");
     }
@@ -48,7 +56,6 @@ const useSignIn = () => {
     setShowPassword((prev) => !prev);
   };
 
-  // Function to clear saved credentials (for users who want to remove saved credentials)
   const clearSavedCredentials = () => {
     localStorage.removeItem("savedEmail");
     localStorage.removeItem("savedPassword");
@@ -57,13 +64,31 @@ const useSignIn = () => {
     setRemember(false);
   };
 
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError(null);
+    setEmailError(null);
+    setPasswordError(null);
     setIsLoading(true);
 
-    if (!email.trim() || !password.trim()) {
-      setError("Please enter both email and password.");
+    // Basic validation
+    if (!email.trim()) {
+      setEmailError("Email is required.");
+      setIsLoading(false);
+      return;
+    }
+    if (!validateEmail(email.trim())) {
+      setEmailError("Invalid email format.");
+      setIsLoading(false);
+      return;
+    }
+    if (!password.trim()) {
+      setPasswordError("Password is required.");
       setIsLoading(false);
       return;
     }
@@ -79,25 +104,19 @@ const useSignIn = () => {
         localStorage.removeItem("savedPassword");
       }
 
-      // Store the token in localStorage
       if (response.token) {
         localStorage.setItem("token", response.token);
-        // Set the token in axios default headers for all future requests
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${response.token}`;
       }
 
-      // Extract user data from response, ensuring we get the complete user object
       const userResponse = response.user || response;
-      console.log("User response:", userResponse);
 
-      // Store user data with consistent picture handling
       const userData = {
         email: userResponse.email || email.trim(),
         name: userResponse.name || response.name,
         id: userResponse.id || userResponse._id || response.id,
-        // Ensure we get the profile picture URL from all possible fields
         picture:
           userResponse.picture ||
           userResponse.profilePicture ||
@@ -113,14 +132,9 @@ const useSignIn = () => {
         role: userResponse.role,
       };
 
-      // Update user context with the complete data
       updateUser(userData);
-
-      // Store the entire user object in localStorage for persistence
       localStorage.setItem("user", JSON.stringify(userData));
-
       setIsLoading(false);
-      console.log("Navigating to registrarHome");
       navigate("/registrarHome");
     } catch (error) {
       console.error("Sign in error:", error);
@@ -133,53 +147,53 @@ const useSignIn = () => {
     }
   };
 
-  const handleGmail = async (e) => {
-    e.preventDefault();
+  const handleGmail = async () => {
     setError(null);
     setIsGoogleLoading(true);
 
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
 
-      const response = await emailService.signin({
-        email: user.email,
-        googleAuth: true,
-        name: user.displayName,
-        googleId: user.uid,
-        picture: user.photoURL,
-      });
+      // Only proceed if the sign in was successful
+      if (result.user) {
+        const user = result.user;
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/signin`,
+          {
+            email: user.email,
+            name: user.displayName,
+            googleAuth: true,
+            googleId: user.uid,
+            picture: user.photoURL,
+          }
+        );
 
-      if (response.token) {
-        localStorage.setItem("token", response.token);
+        if (response.data) {
+          const { token, user: userData } = response.data;
+          localStorage.setItem("token", token);
+
+          // Store user data with consistent picture handling
+          const enhancedUserData = {
+            ...userData,
+            picture: userData.picture || user.photoURL || null,
+            profilePicture:
+              userData.profilePicture ||
+              userData.picture ||
+              user.photoURL ||
+              null,
+          };
+
+          updateUser(enhancedUserData);
+          navigate("/registrarHome");
+        }
       }
-
-      // Store user data with consistent picture handling
-      const userData = {
-        email: user.email,
-        name: response.user?.name || user.displayName,
-        id: response.user?.id || response.user?._id || response.id,
-        picture:
-          response.user?.picture ||
-          response.user?.profilePicture ||
-          user.photoURL ||
-          null,
-        profilePicture:
-          response.user?.profilePicture ||
-          response.user?.picture ||
-          user.photoURL ||
-          null,
-        role: response.user?.role,
-      };
-
-      updateUser(userData);
-      setIsGoogleLoading(false);
-      navigate("/registrarHome");    } catch (error) {
+    } catch (error) {
       console.error("Google signin error:", error);
       // Don't show error message if user just closed the popup
       if (error.code !== "auth/popup-closed-by-user") {
         setError(error.message || "Google sign-in failed");
       }
+    } finally {
       setIsGoogleLoading(false);
     }
   };
@@ -189,6 +203,8 @@ const useSignIn = () => {
     password,
     remember,
     error,
+    emailError,
+    passwordError,
     showPassword,
     isLoading,
     isGoogleLoading,
