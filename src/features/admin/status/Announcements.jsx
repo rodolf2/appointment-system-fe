@@ -30,6 +30,7 @@ const Announcements = () => {
     handleUpdateAnnouncement,
     showUpdateSuccessModal,
     closeUpdateSuccessModal,
+    validationErrors,
   } = useAnnouncements();
 
   const quillModules = {
@@ -56,7 +57,7 @@ const Announcements = () => {
       <aside
         className={`${
           isSidebarOpen ? "w-[300px]" : "w-[100px]"
-        } transition-all duration-300 z-10`}
+        } transition-all duration-300 z-20`}
       >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </aside>
@@ -79,25 +80,51 @@ const Announcements = () => {
           <section className="bg-white p-8 rounded-lg shadow-lg">
             <div className="grid grid-cols-1 lg:grid-cols-[3fr,1fr] gap-8">
               <div className="flex flex-col space-y-4">
-                <input
-                  type="text"
-                  placeholder="Title"
-                  value={announcement.title}
-                  onChange={(e) =>
-                    handleAnnouncementChange("title", e.target.value)
-                  }
-                  className="w-full p-3 border rounded-lg"
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    value={announcement.title}
+                    onChange={(e) =>
+                      handleAnnouncementChange("title", e.target.value)
+                    }
+                    className={`w-full p-3 border rounded-lg ${
+                      validationErrors.title
+                        ? "border-red-500  focus:border-red-500 focus:ring-red-500"
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    }`}
+                  />
+                  {validationErrors.title && (
+                    <p className="text-red-500 text-sm mt-1 font-medium">
+                      {validationErrors.title}
+                    </p>
+                  )}
+                </div>
 
-                <ReactQuill
-                  theme="snow"
-                  value={announcement.description}
-                  onChange={handleQuillChange}
-                  modules={quillModules}
-                  placeholder="Description"
-                  className="flex-grow flex flex-col"
-                  style={{ minHeight: "350px" }}
-                />
+                <div>
+                  <div
+                    className={`${
+                      validationErrors.description
+                        ? "border border-red-500 rounded-lg "
+                        : ""
+                    }`}
+                  >
+                    <ReactQuill
+                      theme="snow"
+                      value={announcement.description}
+                      onChange={handleQuillChange}
+                      modules={quillModules}
+                      placeholder="Description"
+                      className="flex-grow flex flex-col"
+                      style={{ minHeight: "350px" }}
+                    />
+                  </div>
+                  {validationErrors.description && (
+                    <p className="text-red-500 text-sm mt-1 font-medium">
+                      {validationErrors.description}
+                    </p>
+                  )}
+                </div>
 
                 <div className="flex justify-end items-center gap-4 pt-10">
                   <button

@@ -87,11 +87,6 @@ const Profile = () => {
                       alt="Profile"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        console.error(
-                          "❌ Failed to load profile image:",
-                          profileImage
-                        );
-
                         // Try to load Google profile picture with different sizes
                         if (profileImage?.includes("googleusercontent.com")) {
                           console.log(
@@ -107,16 +102,14 @@ const Profile = () => {
 
                           const tryNextSize = () => {
                             if (currentSizeIndex < sizes.length) {
-                              console.log(
-                                `🔄 Trying size: ${sizes[currentSizeIndex]}...`
-                              );
+                              // console.log(
+                              //   `🔄 Trying size: ${sizes[currentSizeIndex]}...`
+                              // );
                               e.target.src = `${baseUrl}=${sizes[currentSizeIndex]}`;
                               currentSizeIndex++;
                             } else {
                               // If all sizes fail, use default
-                              console.log(
-                                "⚠️ All Google photo sizes failed, using default..."
-                              );
+
                               e.target.src = "/assets/icons/UploadIcon.svg";
                               e.target.onerror = null; // Prevent infinite loop
                               e.target.classList.add("p-2", "bg-gray-100");
@@ -208,7 +201,7 @@ const Profile = () => {
                         );
                         setTimeout(() => {
                           setSuccessMessage(null);
-                        }, 3000);
+                        }, 2000);
                       } catch (err) {
                         console.error("Error removing profile picture:", err);
                         setError(
@@ -234,17 +227,19 @@ const Profile = () => {
                   Edit Profile
                 </h2>
 
-                {error && (
-                  <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-                    {error}
-                  </div>
-                )}
-
-                {successMessage && (
-                  <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
-                    {successMessage}
-                  </div>
-                )}
+                {/* Fixed placeholder for messages to prevent layout shift */}
+                <div className="mb-4 h-10 flex items-center">
+                  {error && (
+                    <div className="w-full p-2 bg-red-100 text-red-700 rounded">
+                      {error}
+                    </div>
+                  )}
+                  {successMessage && (
+                    <div className="w-full p-2 bg-green-100 text-green-700 rounded">
+                      {successMessage}
+                    </div>
+                  )}
+                </div>
 
                 <form className="flex flex-col" onSubmit={onSubmit}>
                   {/* Input Fields */}

@@ -20,6 +20,7 @@ const useAnnouncements = () => {
     description: "",
   });
 
+  const [validationErrors, setValidationErrors] = useState({});
   const [postedAnnouncements, setPostedAnnouncements] = useState([]);
 
   useEffect(() => {
@@ -70,6 +71,15 @@ const useAnnouncements = () => {
 
   const handleAnnouncementChange = (field, value) => {
     setAnnouncement((prev) => ({ ...prev, [field]: value }));
+
+    // Clear validation error for this field when user starts typing
+    if (validationErrors[field]) {
+      setValidationErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   // const resetForm = () => {
@@ -77,12 +87,29 @@ const useAnnouncements = () => {
   // };
 
   const handleAnnounce = async () => {
+    // Clear previous validation errors
+    setValidationErrors({});
+
+    const errors = {};
+
+    // Validate title
+    if (!announcement.title || announcement.title.trim() === "") {
+      errors.title = "Title is required";
+    }
+
+    // Validate description
     if (
-      !announcement.title ||
       !announcement.description ||
-      announcement.description === "<p><br></p>"
+      announcement.description.trim() === "" ||
+      announcement.description === "<p><br></p>" ||
+      announcement.description === "<p></p>"
     ) {
-      alert("Please fill in both title and description");
+      errors.description = "Description is required";
+    }
+
+    // If there are validation errors, set them and return
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
       return;
     }
 
@@ -190,6 +217,7 @@ const useAnnouncements = () => {
     handleUpdateAnnouncement,
     showUpdateSuccessModal,
     closeUpdateSuccessModal,
+    validationErrors,
   };
 };
 
