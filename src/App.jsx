@@ -9,7 +9,7 @@ import About from "./pages/About";
 import Faqs from "./pages/Faqs";
 import Contact from "./pages/Contact";
 import AppointmentForm from "./features/appointment/AppointmentForm";
-import Hta from "./pages/HowToAppoint.jsx";
+import HowToAppoint from "./pages/HowToAppoint.jsx";
 import HomePage from "./pages/HomePage";
 import Students from "./features/admin/status/Students";
 import SignIn from "./features/admin/Login/SignIn";
@@ -72,7 +72,7 @@ const Layout = () => {
             <Route path="/home" element={<HomePage />}>
               <Route index element={<Announcement />} />
               <Route path="announcement" element={<Announcement />} />
-              <Route path="hta" element={<Hta />} />
+              <Route path="how_to_appoint" element={<HowToAppoint />} />
               <Route path="guidelines" element={<Guidelines />} />
             </Route>
             <Route path="/about" element={<About />} />
@@ -80,7 +80,7 @@ const Layout = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/appointmentForm" element={<AppointmentForm />} />
             <Route path="/announcement" element={<Announcement />} />
-            <Route path="/hta" element={<Hta />} />
+            <Route path="/how_to_appoint" element={<HowToAppoint />} />
             <Route path="/guidelines" element={<Guidelines />} />
             <Route path="/about" element={<About />} />
             <Route path="/faqs" element={<Faqs />} />
