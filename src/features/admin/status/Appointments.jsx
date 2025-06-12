@@ -51,18 +51,20 @@ const Appointments = () => {
       position: absolute;
       background: rgba(0, 0, 0, 0.85);
       color: #fff;
-      padding: 6px 10px;
+      padding: 8px 12px;
       border-radius: 4px;
       font-size: 12px;
-      white-space: nowrap;
-      z-index: 100;
-      
+      white-space: pre-line;
+      max-width: 300px;
+      width: max-content;
+      z-index: 1000;
+
       /* Initially hidden and non-interactive */
       opacity: 0;
-      pointer-events: none; 
+      pointer-events: none;
 
-      /* Positioning */
-      bottom: 105%;
+      /* Positioning - show below the element */
+      top: 105%;
       left: 50%;
       transform: translateX(-50%);
 
@@ -222,10 +224,11 @@ const Appointments = () => {
                         NUMBER
                       </th>
                       <th className="border p-4 w-[15%]">REQUEST</th>
-                      <th className="border p-4 w-[20%]">
+                      <th className="border p-4 w-[18%]">
                         EMAIL <br />
                         ADDRESS
                       </th>
+                      <th className="border p-5 w-[12%]">PURPOSE</th>
                       <th className="border p-4 w-[12%]">
                         DATE OF
                         <br />
@@ -243,7 +246,7 @@ const Appointments = () => {
                   <tbody>
                     {loading && (
                       <tr>
-                        <td colSpan="8" className="text-center p-5">
+                        <td colSpan="9" className="text-center p-5">
                           Loading appointments...
                         </td>
                       </tr>
@@ -251,7 +254,7 @@ const Appointments = () => {
                     {error && (
                       <tr>
                         <td
-                          colSpan="8"
+                          colSpan="9"
                           className="text-center p-5 text-red-500"
                         >
                           Error: {error}
@@ -270,6 +273,7 @@ const Appointments = () => {
                             data.transactionNumber?.length > 20;
                           const isRequestLong = data.request?.length > 25;
                           const isEmailLong = data.emailAddress?.length > 25;
+                          const isPurposeLong = data.purpose?.length > 20;
 
                           return (
                             <tr key={data.id} className="even:bg-gray-100">
@@ -318,6 +322,20 @@ const Appointments = () => {
                               >
                                 <div className={isEmailLong ? "truncate" : ""}>
                                   {data.emailAddress}
+                                </div>
+                              </td>
+                              <td
+                                className="border p-5"
+                                data-tooltip={
+                                  isPurposeLong
+                                    ? data.purpose?.replace(/(.{50})/g, "$1\n")
+                                    : null
+                                }
+                              >
+                                <div
+                                  className={isPurposeLong ? "truncate" : ""}
+                                >
+                                  {data.purpose || "No purpose specified"}
                                 </div>
                               </td>
                               <td className="border p-4 text-center">

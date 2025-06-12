@@ -11,6 +11,7 @@ const Events = () => {
     events,
     newEvent,
     selectedEvent,
+    validationErrors,
     toggleSidebar,
     handlePrevMonth,
     handleNextMonth,
@@ -103,12 +104,13 @@ const Events = () => {
                     return (
                       <div
                         key={`day-${day}`} // Use a more unique key
-                        className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${currentDate.date() === day &&
-                          currentDate.month() === currentDate.get('month') && // Check against current month of 'currentDate' state
-                          currentDate.year() === currentDate.get('year') // Check against current year of 'currentDate' state
-                          ? "bg-blue-300 font-bold ring-2 ring-blue-500"
-                          : ""
-                          }`}
+                        className={`p-2 bg-white h-[90px] cursor-pointer relative hover:bg-blue-100 ${
+                          currentDate.date() === day &&
+                          currentDate.month() === currentDate.get("month") && // Check against current month of 'currentDate' state
+                          currentDate.year() === currentDate.get("year") // Check against current year of 'currentDate' state
+                            ? "bg-blue-300 font-bold ring-2 ring-blue-500"
+                            : ""
+                        }`}
                         onClick={() => handleDayClick(day)}
                       >
                         {day}
@@ -132,12 +134,19 @@ const Events = () => {
                 </h3>
                 <div className="border-b-4 border-[#F3BC62] w-[200px] my-3"></div>
                 <form>
+                  {/* General Error Message */}
+                  {validationErrors.general && (
+                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                      {validationErrors.general}
+                    </div>
+                  )}
+
                   <div className="mb-4">
                     <label
                       htmlFor="title"
                       className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2"
                     >
-                      Title
+                      Title <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -145,12 +154,24 @@ const Events = () => {
                       name="title"
                       value={newEvent.title}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded"
-                      placeholder="Event Title"
+                      className={`w-full p-2 border rounded ${
+                        validationErrors.title
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                          : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      }`}
+                      placeholder="Enter event title"
                     />
+                    {/* Fixed placeholder for error message */}
+                    <div className="mt-1 h-5">
+                      {validationErrors.title && (
+                        <p className="text-sm text-red-500">
+                          {validationErrors.title}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="mb-4">
+                  <div className="mb-2">
                     <label
                       htmlFor="description"
                       className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2"
@@ -162,9 +183,22 @@ const Events = () => {
                       name="description"
                       value={newEvent.description}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded"
-                      placeholder="Event Description"
+                      className={`w-full p-2 border rounded ${
+                        validationErrors.description
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                          : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      }`}
+                      placeholder="Enter event description (optional)"
+                      rows="3"
                     ></textarea>
+                    {/* Fixed placeholder for error message */}
+                    <div className="mt-1 h-5">
+                      {validationErrors.description && (
+                        <p className="text-sm text-red-500">
+                          {validationErrors.description}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mb-4">
@@ -172,7 +206,7 @@ const Events = () => {
                       htmlFor="startDate"
                       className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2"
                     >
-                      Start Date
+                      Start Date <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -180,8 +214,20 @@ const Events = () => {
                       name="startDate"
                       value={newEvent.startDate}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded"
+                      className={`w-full p-2 border rounded ${
+                        validationErrors.startDate
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                          : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      }`}
                     />
+                    {/* Fixed placeholder for error message */}
+                    <div className="mt-1 h-5">
+                      {validationErrors.startDate && (
+                        <p className="text-sm text-red-500">
+                          {validationErrors.startDate}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mb-4">
@@ -189,7 +235,7 @@ const Events = () => {
                       htmlFor="endDate"
                       className="block font-LatoSemiBold text-[#161f55] text-[18px] mb-2"
                     >
-                      End Date
+                      End Date <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -197,22 +243,34 @@ const Events = () => {
                       name="endDate"
                       value={newEvent.endDate}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded"
+                      className={`w-full p-2 border rounded ${
+                        validationErrors.endDate
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                          : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      }`}
                     />
+                    {/* Fixed placeholder for error message */}
+                    <div className="mt-1 h-5">
+                      {validationErrors.endDate && (
+                        <p className="text-sm text-red-500">
+                          {validationErrors.endDate}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex gap-4">
                     <button
                       type="button"
                       onClick={handleSaveEvent}
-                      className="w-full px-4 py-2 bg-[#3A993D] text-white font-LatoSemiBold uppercase rounded hover:bg-green-600"
+                      className="w-full px-4 py-2 bg-[#3A993D] text-white font-LatoSemiBold uppercase rounded hover:bg-green-600 transition-colors"
                     >
                       Save
                     </button>
                     <button
                       type="button"
                       onClick={handleCancelEvent}
-                      className="w-full px-4 py-2 bg-[#9CA3AF] text-white font-LatoSemiBold uppercase rounded hover:bg-gray-500"
+                      className="w-full px-4 py-2 bg-[#9CA3AF] text-white font-LatoSemiBold uppercase rounded hover:bg-gray-500 transition-colors"
                     >
                       Cancel
                     </button>

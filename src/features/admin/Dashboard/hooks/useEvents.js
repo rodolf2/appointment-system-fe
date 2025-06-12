@@ -26,6 +26,7 @@ const useEvents = () => {
   }; // Added default color
   const [newEventForm, setNewEventForm] = useState(initialEventFormState);
   const [selectedEventForModal, setSelectedEventForModal] = useState(null); // For displaying event details in modal
+  const [validationErrors, setValidationErrors] = useState({}); // For form validation errors
   // const [selectedDayForNewEvent, setSelectedDayForNewEvent] = useState(null); // Optional: for UI indication
 
   // Persist sidebar state
@@ -112,6 +113,15 @@ const useEvents = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewEventForm({ ...newEventForm, [name]: value });
+
+    // Clear validation error for this field when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleDayClick = (day) => {
@@ -133,12 +143,31 @@ const useEvents = () => {
 
   const handleSaveEvent = async () => {
     const { title, startDate, endDate, description, color } = newEventForm;
-    if (!title || !startDate || !endDate) {
-      alert("Event title, start date, and end date are required.");
-      return;
+
+    // Clear previous validation errors
+    setValidationErrors({});
+
+    const errors = {};
+
+    // Validate required fields
+    if (!title || title.trim() === "") {
+      errors.title = "Event title is required";
     }
-    if (dayjs(endDate).isBefore(dayjs(startDate))) {
-      alert("End date cannot be before start date.");
+    if (!startDate) {
+      errors.startDate = "Start date is required";
+    }
+    if (!endDate) {
+      errors.endDate = "End date is required";
+    }
+
+    // Validate date logic
+    if (startDate && endDate && dayjs(endDate).isBefore(dayjs(startDate))) {
+      errors.endDate = "End date cannot be before start date";
+    }
+
+    // If there are validation errors, set them and return
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
       return;
     }
 
@@ -151,19 +180,21 @@ const useEvents = () => {
       await axios.post(`${API_URL}/api/events`, eventDataToSave);
       fetchEventsFromAPI(); // Re-fetch all events to update the calendar
       setNewEventForm(initialEventFormState); // Reset the form
+      setValidationErrors({}); // Clear validation errors
       // setSelectedDayForNewEvent(null);
     } catch (error) {
       console.error("Error saving event:", error);
-      alert(
-        `Failed to save event: ${
+      setValidationErrors({
+        general: `Failed to save event: ${
           error.response?.data?.message || error.message
-        }`
-      );
+        }`,
+      });
     }
   };
 
   const handleCancelEvent = () => {
     setNewEventForm(initialEventFormState); // Reset the form
+    setValidationErrors({}); // Clear validation errors
     // setSelectedDayForNewEvent(null);
   };
 
@@ -197,6 +228,7 @@ const useEvents = () => {
     allEvents: allApiEvents, // The raw list of all events from API (e.g., for a list view if needed)
     newEvent: newEventForm, // Renamed for clarity (was newEvent, now newEventForm)
     selectedEvent: selectedEventForModal, // Renamed for clarity
+    validationErrors, // Expose validation errors
     toggleSidebar,
     handlePrevMonth,
     handleNextMonth,

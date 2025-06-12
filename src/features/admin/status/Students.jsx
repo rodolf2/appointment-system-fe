@@ -33,14 +33,14 @@ const Students = () => {
     white-space: pre-line;
     max-width: 300px;
     width: max-content;
-    z-index: 100;
+    z-index: 1000;
 
     /* Initially hidden and non-interactive */
     opacity: 0;
     pointer-events: none;
 
-    /* Positioning */
-    bottom: 105%;
+    /* Positioning - show below the element */
+    top: 105%;
     left: 50%;
     transform: translateX(-50%);
 
