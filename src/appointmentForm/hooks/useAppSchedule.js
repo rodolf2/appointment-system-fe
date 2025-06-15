@@ -6,6 +6,7 @@ import {
 } from "../../services/scheduleServices";
 import { createBooking } from "../../services/bookingServices";
 import { auth } from "../../firebase";
+import { clearAllFormData } from "../../lib/clearFormData";
 
 const useAppSchedule = (onNext) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());

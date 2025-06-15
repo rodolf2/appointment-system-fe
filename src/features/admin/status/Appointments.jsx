@@ -136,14 +136,10 @@ const Appointments = () => {
                 </div>
               </div>
               <div className="overflow-y-auto m-4 mt-8">
-<<<<<<< HEAD
                 <table
                   className="text-[15px] w-full"
                   style={{ tableLayout: "fixed" }}
                 >
-=======
-                <table className="text-[18px] w-full" style={{ tableLayout: "fixed" }}>
->>>>>>> parent of d561021 (minor changes)
                   <thead>
                     <tr className="bg-gray-200 text-center">
                       <th className="border p-4 w-[8%]">STATUS</th>
@@ -182,7 +178,10 @@ const Appointments = () => {
                     )}
                     {error && (
                       <tr>
-                        <td colSpan="9" className="text-center p-5 text-red-500">
+                        <td
+                          colSpan="9"
+                          className="text-center p-5 text-red-500"
+                        >
                           Error: {error}
                         </td>
                       </tr>
@@ -198,11 +197,7 @@ const Appointments = () => {
                           <tr key={data.id} className="even:bg-gray-100">
                             <td className="border p-4 text-center">
                               <span
-<<<<<<< HEAD
                                 className={`text-center flex justify-center px-3 py-2 rounded text-white font-medium whitespace-nowrap ${getStatusColor(
-=======
-                                className={`inline-block w-[120px] text-center px-2 py-2 rounded text-white ${getStatusColor(
->>>>>>> parent of d561021 (minor changes)
                                   data.status
                                 )}`}
                               >
@@ -210,9 +205,20 @@ const Appointments = () => {
                               </span>
                             </td>
                             <td className="border p-4 break-words">
-<<<<<<< HEAD
+                              <div className="flex flex-col text-center">
+                                <span
+                                  className={`font-bold ${getTransactionNumberColor(
+                                    data.status
+                                  )}`}
+                                >
+                                  {data.transactionNumber}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="border p-4 break-words">
                               {data.request}
-                            </td>                            <td className="border p-4 break-words">
+                            </td>
+                            <td className="border p-4 break-words">
                               <span
                                 data-tooltip-id="purpose-tooltip"
                                 data-tooltip-content={data.purpose}
@@ -249,27 +255,12 @@ const Appointments = () => {
                                 ) : (
                                   data.timeSlot
                                 )}
-=======
-                              <div className="flex flex-col text-center">
-                                <span
-                                  className={`font-bold ${getTransactionNumberColor(
-                                    data.status
-                                  )}`}
-                                >
-                                  {data.transactionNumber}
-                                </span>
->>>>>>> parent of d561021 (minor changes)
                               </div>
                             </td>
-                            <td className="border p-4 break-words">{data.request}</td>
-                            <td className="border p-4 break-words">{data.purpose}</td>
-                            <td className="border p-4 break-words">{data.emailAddress}</td>
                             <td className="border p-4 break-words">
-                              {data.dateOfAppointment}
-                            </td>
-                            <td className="border p-4 break-words">{data.timeSlot}</td>
-                            <td className="border p-4 break-words">
-                              {new Date(data.dateOfRequest).toLocaleDateString()}
+                              {new Date(
+                                data.dateOfRequest
+                              ).toLocaleDateString()}
                             </td>
                             <td className="border p-4">
                               <div className="flex gap-2 justify-center">
@@ -416,15 +407,13 @@ const Appointments = () => {
             onClose={() => setShowSuccessModal(false)}
           />
 
-          {/* Tooltips */}          <Tooltip id="approve-tooltip" />
+          {/* Tooltips */}
+          <Tooltip id="approve-tooltip" />
           <Tooltip id="complete-tooltip" />
           <Tooltip id="reject-tooltip" />
           <Tooltip id="delete-tooltip" />
-<<<<<<< HEAD
           <Tooltip id="email-tooltip" />
           <Tooltip id="purpose-tooltip" />
-=======
->>>>>>> parent of d561021 (minor changes)
         </main>
       </div>
     </div>
