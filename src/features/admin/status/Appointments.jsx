@@ -142,30 +142,30 @@ const Appointments = () => {
                 >
                   <thead>
                     <tr className="bg-gray-200 text-center">
-                      <th className="border p-4 w-[8%]">STATUS</th>
-                      <th className="border p-4 w-[10%]">
+                      <th className="border p-4 w-[12%]">STATUS</th>
+                      <th className="border p-4 w-[13%]">
                         TRANSACTION
                         <br />
                         NUMBER
                       </th>
-                      <th className="border p-4 w-[12%]">REQUEST</th>
-                      <th className="border p-4 w-[12%]">PURPOSE</th>
-                      <th className="border p-4 w-[15%]">
+                      <th className="border p-4 w-[10%]">REQUEST</th>
+                      <th className="border p-4 w-[10%]">PURPOSE</th>
+                      <th className="border p-4 w-[12%]">
                         EMAIL <br />
                         ADDRESS
                       </th>
-                      <th className="border p-4 w-[12%]">
+                      <th className="border p-4 w-[10%]">
                         DATE OF
                         <br />
                         APPOINTMENT
                       </th>
                       <th className="border p-4 w-[10%]">TIME SLOT</th>
-                      <th className="border p-4 w-[12%]">
+                      <th className="border p-4 w-[10%]">
                         DATE OF
                         <br />
                         REQUEST
                       </th>
-                      <th className="border p-4 w-[10%]">ACTIONS</th>
+                      <th className="border p-4 w-[13%]">ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -196,13 +196,21 @@ const Appointments = () => {
                         .map((data, index) => (
                           <tr key={data.id} className="even:bg-gray-100">
                             <td className="border p-4 text-center">
-                              <span
-                                className={`text-center flex justify-center px-3 py-2 rounded text-white font-medium whitespace-nowrap ${getStatusColor(
-                                  data.status
-                                )}`}
-                              >
-                                {data.status}
-                              </span>
+                              <div className="flex justify-center">
+                                <span
+                                  data-tooltip-id="status-tooltip"
+                                  data-tooltip-content={`Status Details:\nLast Updated: ${new Date(
+                                    data.dateOfRequest
+                                  ).toLocaleString()}\nRequest Type: ${
+                                    data.request
+                                  }\nEmail: ${data.emailAddress}`}
+                                  className={`px-4 py-2 rounded text-white font-medium text-sm cursor-help whitespace-nowrap ${getStatusColor(
+                                    data.status
+                                  )}`}
+                                >
+                                  {data.status}
+                                </span>
+                              </div>
                             </td>
                             <td className="border p-4 break-words">
                               <div className="flex flex-col text-center">
@@ -221,36 +229,38 @@ const Appointments = () => {
                             <td className="border p-4 break-words">
                               <span
                                 data-tooltip-id="purpose-tooltip"
-                                data-tooltip-content={data.purpose}
+                                data-tooltip-content={
+                                  data.purpose.length > 50
+                                    ? data.purpose.replace(/(.{50})/g, "$1\n")
+                                    : data.purpose
+                                }
                                 className="cursor-help"
-                                title={data.purpose}
                               >
                                 {data.purpose.length > 20
                                   ? `${data.purpose.substring(0, 20)}...`
                                   : data.purpose}
                               </span>
                             </td>
-                            <td className="border p-4 break-words">
-                              <span
-                                data-tooltip-id="email-tooltip"
-                                data-tooltip-content={data.emailAddress}
-                                className="cursor-help"
-                                title={data.emailAddress}
-                              >
-                                {data.emailAddress.length > 20
-                                  ? `${data.emailAddress.substring(0, 20)}...`
-                                  : data.emailAddress}
-                              </span>
+                            <td className="border p-4">
+                              <div className="max-w-[150px]">
+                                <span
+                                  data-tooltip-id="email-tooltip"
+                                  data-tooltip-content={data.emailAddress}
+                                  className="cursor-help block truncate"
+                                >
+                                  {data.emailAddress}
+                                </span>
+                              </div>
                             </td>
                             <td className="border p-4 break-words text-center">
                               {data.dateOfAppointment}
                             </td>
                             <td className="border p-4 text-center">
-                              <div className="leading-tight">
+                              <div className="leading-tight text-center">
                                 {data.timeSlot.includes(" - ") ? (
                                   <>
-                                    {data.timeSlot.split(" - ")[0]} -<br />
-                                    {data.timeSlot.split(" - ")[1]}
+                                    <div>{data.timeSlot.split(" - ")[0]} -</div>
+                                    <div>{data.timeSlot.split(" - ")[1]}</div>
                                   </>
                                 ) : (
                                   data.timeSlot
@@ -408,12 +418,13 @@ const Appointments = () => {
           />
 
           {/* Tooltips */}
+          <Tooltip id="status-tooltip" style={{ whiteSpace: "pre-line" }} />
+          <Tooltip id="purpose-tooltip" style={{ whiteSpace: "pre-line" }} />
           <Tooltip id="approve-tooltip" />
           <Tooltip id="complete-tooltip" />
           <Tooltip id="reject-tooltip" />
           <Tooltip id="delete-tooltip" />
           <Tooltip id="email-tooltip" />
-          <Tooltip id="purpose-tooltip" />
         </main>
       </div>
     </div>

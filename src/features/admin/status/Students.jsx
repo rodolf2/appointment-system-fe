@@ -171,17 +171,16 @@ const Students = () => {
                         <td className="border p-5 break-words">
                           {data.contact}
                         </td>
-                        <td className="border p-5 break-words">
-                          <span
-                            data-tooltip-id="email-tooltip"
-                            data-tooltip-content={data.email}
-                            className="cursor-help"
-                            title={data.email}
-                          >
-                            {data.email.length > 20
-                              ? `${data.email.substring(0, 20)}...`
-                              : data.email}
-                          </span>
+                        <td className="border p-5">
+                          <div className="max-w-[150px]">
+                            <span
+                              data-tooltip-id="email-tooltip"
+                              data-tooltip-content={data.email}
+                              className="cursor-help block truncate"
+                            >
+                              {data.email}
+                            </span>
+                          </div>
                         </td>
                         <td className="border p-5 break-words">
                           {data.attachment &&
@@ -238,9 +237,12 @@ const Students = () => {
                         <td className="border p-5 break-words">
                           <span
                             data-tooltip-id="purpose-tooltip"
-                            data-tooltip-content={data.purpose}
+                            data-tooltip-content={
+                              data.purpose.length > 50
+                                ? data.purpose.replace(/(.{50})/g, "$1\n")
+                                : data.purpose
+                            }
                             className="cursor-help"
-                            title={data.purpose}
                           >
                             {data.purpose.length > 20
                               ? `${data.purpose.substring(0, 20)}...`
@@ -304,7 +306,7 @@ const Students = () => {
 
       {/* Tooltips */}
       <Tooltip id="email-tooltip" />
-      <Tooltip id="purpose-tooltip" />
+      <Tooltip id="purpose-tooltip" style={{ whiteSpace: "pre-line" }} />
     </div>
   );
 };
