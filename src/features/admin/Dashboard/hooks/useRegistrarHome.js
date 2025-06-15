@@ -3,8 +3,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const API_URL_EVENTS =
-  import.meta.env.VITE_API_URL;
+const API_URL_EVENTS = import.meta.env.VITE_API_URL;
 
 const useRegistrarHome = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -180,37 +179,85 @@ const useRegistrarHome = () => {
     },
   });
 
-  // Create a fetchStats function that calculates stats from appointment data
+  // Create a fetchStats function that uses EXACT same logic as appointments page
   const fetchStats = useCallback(async () => {
     try {
-      console.log("Fetching appointment data to calculate stats...");
-
-      // Fetch appointments data directly (same as the appointments page does)
-      const API_BASE_URL =
-       `${import.meta.env.VITE_API_URL}/api`;
-
-      // Get all appointment statuses
-      const statusResponse = await axios.get(`${API_BASE_URL}/status`);
-      const statusData = statusResponse.data;
-
-      // Get student/booking data to get time information
-      const studentsResponse = await axios.get(
-        `${API_BASE_URL}/document-requests/docs-with-details`
+      console.log(
+        "🔄 Dashboard: Fetching appointment data using SAME logic as appointments page..."
       );
-      const studentsData = studentsResponse.data;
 
-      console.log("Raw status data:", statusData);
-      console.log("Raw students data:", studentsData);
+      const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
-      // Create a map of transaction numbers to their booking info
-      const studentMap = studentsData.reduce((acc, student) => {
-        if (student && student.transactionNumber) {
-          acc[student.transactionNumber] = student;
-        }
-        return acc;
-      }, {});
+      // 1. Fetch student records (document requests) - EXACT SAME AS APPOINTMENTS PAGE
+      const studentsResponse = await fetch(
+        `${API_BASE_URL}/document-requests/docs-with-details`,
+        { headers: { Accept: "application/json" } }
+      );
+      if (!studentsResponse.ok) {
+        throw new Error(
+          `Failed to fetch student details: ${studentsResponse.status}`
+        );
+      }
+      const studentsData = await studentsResponse.json();
+      if (!Array.isArray(studentsData)) {
+        throw new Error("Invalid response format: expected an array");
+      }
 
-      // Initialize stats
+      // 2. Fetch all appointment statuses - EXACT SAME AS APPOINTMENTS PAGE
+      const statusResponse = await fetch(`${API_BASE_URL}/status`, {
+        headers: { Accept: "application/json" },
+      });
+      if (!statusResponse.ok) {
+        throw new Error(`Failed to fetch statuses: ${statusResponse.status}`);
+      }
+      const statusData = await statusResponse.json();
+
+      // 3. Create status map - EXACT SAME AS APPOINTMENTS PAGE
+      const statusMap = {};
+      statusData.forEach((status) => {
+        statusMap[status.transactionNumber] = status;
+      });
+
+      // 4. Get archived appointments to filter them out - EXACT SAME AS APPOINTMENTS PAGE
+      const archivedAppointments = JSON.parse(
+        localStorage.getItem("archivedAppointments") || "[]"
+      );
+      const archivedIds = new Set(archivedAppointments.map((appt) => appt.id));
+
+      // 5. Transform, merge, and SORT the data - EXACT SAME LOGIC AS APPOINTMENTS PAGE
+      const transformedAppointments = studentsData
+        .filter(
+          (student) =>
+            student &&
+            student.transactionNumber &&
+            !archivedIds.has(student.transactionNumber)
+        )
+        .map((student) => {
+          const statusInfo = statusMap[student.transactionNumber] || {};
+          return {
+            id: student.transactionNumber,
+            transactionNumber: student.transactionNumber,
+            status: statusInfo.status || "PENDING",
+            appointmentDate: statusInfo.appointmentDate,
+            timeSlot: statusInfo.timeSlot,
+            dateOfRequest: statusInfo.dateOfRequest,
+            request: student.documentRequest?.requestType || "N/A",
+            purpose:
+              student.purpose ||
+              student.appointmentPurpose ||
+              "No purpose specified",
+            emailAddress: student.emailAddress || statusInfo.emailAddress,
+            // Include all fields from both sources
+            ...student,
+            ...statusInfo,
+          };
+        });
+
+      console.log(
+        `📊 Dashboard: Found ${transformedAppointments.length} active appointments (matching appointments page logic)`
+      );
+
+      // 6. Initialize stats counters
       const calculatedStats = {
         APPROVED: 0,
         PENDING: 0,
@@ -231,128 +278,61 @@ const useRegistrarHome = () => {
         },
       };
 
-      // ENHANCED DEDUPLICATION: Remove duplicates by email address and prefer TR format
-      // This handles the case where same user has multiple records with different transactionNumber formats
-      const uniqueStatusData = [];
-      const seenEmails = new Set();
-
-      // Sort by dateOfRequest (most recent first) and prefer TR format transactionNumbers
-      const sortedStatusData = [...statusData].sort((a, b) => {
-        // First, prefer TR format over ObjectId format
-        const aIsTR =
-          a.transactionNumber && a.transactionNumber.startsWith("TR");
-        const bIsTR =
-          b.transactionNumber && b.transactionNumber.startsWith("TR");
-
-        if (aIsTR && !bIsTR) return -1; // a comes first (TR format preferred)
-        if (!aIsTR && bIsTR) return 1; // b comes first (TR format preferred)
-
-        // If both are same format, sort by date (most recent first)
-        const dateA = new Date(a.dateOfRequest || 0);
-        const dateB = new Date(b.dateOfRequest || 0);
-        return dateB - dateA;
-      });
-
-      sortedStatusData.forEach((status) => {
-        const email = status.emailAddress;
-        if (email && !seenEmails.has(email)) {
-          uniqueStatusData.push(status);
-          seenEmails.add(email);
-          console.log(
-            `Keeping record for ${email}: ${status.transactionNumber} (${
-              status.transactionNumber?.startsWith("TR")
-                ? "TR format"
-                : "ObjectId format"
-            })`
-          );
-        } else if (email) {
-          console.log(
-            `Skipping duplicate entry for ${email}: ${status.transactionNumber}`
-          );
-        }
-      });
-
-      console.log(
-        `Removed ${
-          statusData.length - uniqueStatusData.length
-        } duplicate entries`
-      );
-      console.log(`Processing ${uniqueStatusData.length} unique appointments`);
-
-      // Process each unique status record
-      uniqueStatusData.forEach((status) => {
-        const statusType = status.status || "PENDING";
-        const studentInfo = studentMap[status.transactionNumber];
-
-        console.log(
-          `Processing ${status.transactionNumber}: Status=${statusType}, Student=`,
-          studentInfo
-        );
+      // 7. Calculate stats from the transformed appointments (same data as appointments page)
+      transformedAppointments.forEach((appointment) => {
+        const status = appointment.status || "PENDING";
+        const timeSlot = appointment.timeSlot || "";
 
         // Count total for this status
-        if (Object.prototype.hasOwnProperty.call(calculatedStats, statusType)) {
-          calculatedStats[statusType]++;
+        if (calculatedStats.hasOwnProperty(status)) {
+          calculatedStats[status]++;
           calculatedStats.total++;
 
-          // Determine morning/afternoon from student timeSlot or appointmentTime
-          let timeSlot = "";
-          if (studentInfo) {
-            timeSlot =
-              studentInfo.timeSlot || studentInfo.appointmentTime || "";
-          }
+          // Count time slots if available
+          if (timeSlot && timeSlot !== "Not scheduled") {
+            const timeSlotUpper = timeSlot.toUpperCase();
+            const isAM =
+              timeSlotUpper.includes("AM") ||
+              timeSlotUpper.includes("MORNING") ||
+              timeSlotUpper === "MORNING" ||
+              timeSlotUpper.includes("8:") ||
+              timeSlotUpper.includes("9:") ||
+              timeSlotUpper.includes("10:") ||
+              timeSlotUpper.includes("11:");
+            const isPM =
+              timeSlotUpper.includes("PM") ||
+              timeSlotUpper.includes("AFTERNOON") ||
+              timeSlotUpper === "AFTERNOON" ||
+              timeSlotUpper.includes("1:") ||
+              timeSlotUpper.includes("2:") ||
+              timeSlotUpper.includes("3:") ||
+              timeSlotUpper.includes("4:") ||
+              timeSlotUpper.includes("5:");
 
-          // Also check the status record itself
-          if (!timeSlot && status.timeSlot) {
-            timeSlot = status.timeSlot;
-          }
-
-          console.log(`  TimeSlot found: "${timeSlot}"`);
-
-          // Determine if it's morning or afternoon
-          const timeSlotUpper = timeSlot.toUpperCase();
-          const isAM =
-            timeSlotUpper.includes("AM") ||
-            timeSlotUpper.includes("MORNING") ||
-            timeSlotUpper.includes("8:") ||
-            timeSlotUpper.includes("9:") ||
-            timeSlotUpper.includes("10:") ||
-            timeSlotUpper.includes("11:");
-          const isPM =
-            timeSlotUpper.includes("PM") ||
-            timeSlotUpper.includes("AFTERNOON") ||
-            timeSlotUpper.includes("1:") ||
-            timeSlotUpper.includes("2:") ||
-            timeSlotUpper.includes("3:") ||
-            timeSlotUpper.includes("4:") ||
-            timeSlotUpper.includes("5:");
-
-          if (isAM) {
-            calculatedStats.morning[statusType]++;
-            console.log(`  -> Added to MORNING ${statusType}`);
-          } else if (isPM) {
-            calculatedStats.afternoon[statusType]++;
-            console.log(`  -> Added to AFTERNOON ${statusType}`);
-          } else {
-            // Default fallback - if no time info, distribute evenly or assign to morning
-            calculatedStats.morning[statusType]++;
-            console.log(
-              `  -> No time info, defaulted to MORNING ${statusType}`
-            );
+            if (isAM) {
+              calculatedStats.morning[status]++;
+            } else if (isPM) {
+              calculatedStats.afternoon[status]++;
+            }
           }
         }
       });
 
-      console.log("Calculated stats:", calculatedStats);
+      console.log("📊 Dashboard final stats:", calculatedStats);
+      console.log("✅ This should now match your appointments page count!");
       setStats(calculatedStats);
     } catch (error) {
-      console.error("Error calculating dashboard stats:", error);
-      // Fallback to original API if calculation fails
-      try {
-        const response = await axios.get(`${API_URL}/api/dashboard/stats`);
-        setStats(response.data);
-      } catch (fallbackError) {
-        console.error("Fallback API also failed:", fallbackError);
-      }
+      console.error("❌ Error calculating dashboard stats:", error);
+      // Set empty stats on error
+      setStats({
+        APPROVED: 0,
+        PENDING: 0,
+        COMPLETED: 0,
+        REJECTED: 0,
+        total: 0,
+        morning: { APPROVED: 0, PENDING: 0, COMPLETED: 0, REJECTED: 0 },
+        afternoon: { APPROVED: 0, PENDING: 0, COMPLETED: 0, REJECTED: 0 },
+      });
     }
   }, []);
 
