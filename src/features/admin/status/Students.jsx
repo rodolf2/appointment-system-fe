@@ -185,45 +185,80 @@ const Students = () => {
                         <td className="border p-5 break-words">
                           {data.attachment &&
                           data.attachment !== "No attachments" ? (
-                            <div className="flex flex-col gap-1">
-                              {" "}
+                            <div className="flex flex-col gap-2">
                               {data.attachment.split(", ").map((url, index) => {
                                 // Extract original filename from the Cloudinary URL
                                 const urlParts = url.split("/");
                                 const lastPart = urlParts[urlParts.length - 1];
                                 // Get the original filename by removing timestamp and random numbers
-                                const filename =
+                                let filename =
                                   lastPart.replace(
                                     /^attachment-([^-]+)-\d+-\d+/,
                                     "$1"
                                   ) || `Attachment ${index + 1}`;
+
+                                // Clean up filename further if needed
+                                if (filename.includes(".")) {
+                                  const parts = filename.split(".");
+                                  filename =
+                                    parts[0] + "." + parts[parts.length - 1];
+                                }
+
                                 // Ensure the URL has the complete Cloudinary path with transformations
                                 let viewableUrl;
+                                let thumbnailUrl;
                                 if (
                                   url.startsWith("https://res.cloudinary.com")
                                 ) {
                                   viewableUrl = url;
+                                  thumbnailUrl = url.replace(
+                                    "/upload/",
+                                    "/upload/c_thumb,w_50,h_50,g_face/"
+                                  );
                                 } else {
                                   // Remove any leading slashes
                                   const cleanPath = url.replace(/^\/+/, "");
                                   // Add Cloudinary transformations for optimal viewing
                                   viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_scale,w_800/${cleanPath}`;
+                                  thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_50,h_50,g_face/${cleanPath}`;
                                 }
 
                                 return (
                                   <div
                                     key={index}
-                                    className="flex items-center space-x-2"
+                                    className="flex items-center space-x-2 group"
                                   >
-                                    <a
-                                      href={viewableUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:underline text-sm break-words flex-1"
-                                      title="Click to view full size"
-                                    >
-                                      {filename}
-                                    </a>
+                                    {/* Thumbnail preview */}
+                                    <img
+                                      src={thumbnailUrl}
+                                      alt="Attachment thumbnail"
+                                      className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
+                                      onClick={() =>
+                                        window.open(viewableUrl, "_blank")
+                                      }
+                                      onError={(e) => {
+                                        e.target.style.display = "none";
+                                      }}
+                                    />
+
+                                    {/* Filename with truncation */}
+                                    <div className="flex-1 min-w-0">
+                                      <a
+                                        href={viewableUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:underline text-sm block"
+                                        title={filename}
+                                      >
+                                        <span
+                                          data-tooltip-id="attachment-tooltip"
+                                          data-tooltip-content={filename}
+                                          className="cursor-help block truncate max-w-[120px]"
+                                        >
+                                          {filename}
+                                        </span>
+                                      </a>
+                                    </div>
                                   </div>
                                 );
                               })}
@@ -307,6 +342,7 @@ const Students = () => {
       {/* Tooltips */}
       <Tooltip id="email-tooltip" />
       <Tooltip id="purpose-tooltip" style={{ whiteSpace: "pre-line" }} />
+      <Tooltip id="attachment-tooltip" />
     </div>
   );
 };

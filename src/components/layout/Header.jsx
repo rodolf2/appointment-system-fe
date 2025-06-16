@@ -1,11 +1,19 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const Header = () => {
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
-    <header className="bg-Bbackground py-4 sticky top-0 z-50">
+    <header className="bg-Bbackground py-2 md:py-4 sticky top-0 z-50">
       <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
+        {/* Logo and Brand */}
         <div className="flex items-center group hover:opacity-80 transition-opacity">
           <a
             href="https://www.facebook.com/lvcc.apalit"
@@ -16,22 +24,32 @@ const Header = () => {
             <img
               src="/assets/image/LV_logo.png"
               alt="LV logo"
-              className="w-20 h-20 mr-2 mb-1 hover:scale-105 transition-transform"
+              className="w-16 h-16 md:w-20 md:h-20 mr-2 mb-1 hover:scale-105 transition-transform"
             />
           </a>
           <Link to="/home/announcement" className="flex items-center">
-            <span className="font-regular text-2xl text-LBackground">LVCC</span>
-            <span className="font-LatoRegular text-[26px] text-[#252F6A] pl-2 mb-1 ">
+            <span className="font-regular text-xl md:text-2xl text-LBackground">
+              LVCC
+            </span>
+            <span className="font-LatoRegular text-xl md:text-[26px] text-[#252F6A] pl-2 mb-1">
               AppointEase
             </span>
           </Link>
         </div>
 
-        {/* Navigation */}
-        <nav>
-          <ul className="flex space-x-10 text-[26px] text-[#000] relative left-[14rem]">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={toggleMenu}
+          className="text-[#252F6A] p-2 rounded-lg md:hidden hover:bg-gray-100"
+        >
+          {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+        </button>
+
+        {/* Navigation - Desktop */}
+        <nav className="hidden md:block">
+          <ul className="flex space-x-6 lg:space-x-10 text-[26px]">
             <li
-              className={`text-lg font-LatoRegular hover:text-LBackground ${
+              className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground ${
                 location.pathname.startsWith("/home")
                   ? "border-b-4 border-Gold"
                   : ""
@@ -40,7 +58,7 @@ const Header = () => {
               <Link to="/home/announcement">HOME</Link>
             </li>
             <li
-              className={`text-lg font-LatoRegular hover:text-LBackground ${
+              className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground ${
                 location.pathname.startsWith("/about")
                   ? "border-b-4 border-Gold"
                   : ""
@@ -49,7 +67,7 @@ const Header = () => {
               <Link to="/about">ABOUT</Link>
             </li>
             <li
-              className={`text-lg font-LatoRegular hover:text-LBackground ${
+              className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground ${
                 location.pathname.startsWith("/faqs")
                   ? "border-b-4 border-Gold"
                   : ""
@@ -58,7 +76,7 @@ const Header = () => {
               <Link to="/faqs">FAQs</Link>
             </li>
             <li
-              className={`text-lg font-LatoRegular hover:text-LBackground ${
+              className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground ${
                 location.pathname.startsWith("/contact")
                   ? "border-b-4 border-Gold"
                   : ""
@@ -69,10 +87,73 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Button */}
-        <button className="px-6 py-3 bg-[#252F6A] text-[#FAFAFA] text-sm uppercase rounded-[10px] hover:bg-blue-700 relative right-3">
+        {/* Appoint Now Button - Desktop */}
+        <button className="hidden md:block px-4 lg:px-6 py-2 lg:py-3 bg-[#252F6A] text-[#FAFAFA] text-sm uppercase rounded-[10px] hover:bg-blue-700 transition-colors">
           <Link to="/appointmentForm?step=1">Appoint Now</Link>
         </button>
+
+        {/* Mobile Menu - Overlay */}
+        {isMenuOpen && (
+          <div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden">
+            <nav className="px-4 py-2">
+              <ul className="space-y-2">
+                <li
+                  className={`py-2 ${
+                    location.pathname.startsWith("/home")
+                      ? "text-LBackground"
+                      : ""
+                  }`}
+                >
+                  <Link to="/home/announcement" onClick={toggleMenu}>
+                    HOME
+                  </Link>
+                </li>
+                <li
+                  className={`py-2 ${
+                    location.pathname.startsWith("/about")
+                      ? "text-LBackground"
+                      : ""
+                  }`}
+                >
+                  <Link to="/about" onClick={toggleMenu}>
+                    ABOUT
+                  </Link>
+                </li>
+                <li
+                  className={`py-2 ${
+                    location.pathname.startsWith("/faqs")
+                      ? "text-LBackground"
+                      : ""
+                  }`}
+                >
+                  <Link to="/faqs" onClick={toggleMenu}>
+                    FAQs
+                  </Link>
+                </li>
+                <li
+                  className={`py-2 ${
+                    location.pathname.startsWith("/contact")
+                      ? "text-LBackground"
+                      : ""
+                  }`}
+                >
+                  <Link to="/contact" onClick={toggleMenu}>
+                    CONTACT
+                  </Link>
+                </li>
+                <li className="py-2">
+                  <Link
+                    to="/appointmentForm?step=1"
+                    onClick={toggleMenu}
+                    className="block w-full px-4 py-2 bg-[#252F6A] text-[#FAFAFA] text-sm uppercase rounded-[10px] text-center hover:bg-blue-700 transition-colors"
+                  >
+                    Appoint Now
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   );
