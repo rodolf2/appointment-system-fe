@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { signInWithPopup } from "firebase/auth";
 import { googleProvider, auth } from "@/firebase";
 import axios from "axios";
@@ -17,6 +17,7 @@ const useSignIn = () => {
   const { updateUser } = useUser();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
@@ -121,7 +122,10 @@ const useSignIn = () => {
 
       setIsLoading(false);
       console.log("Navigating to registrarHome");
-      navigate("/registrarHome");
+
+      // Redirect to the originally requested page or default to registrarHome
+      const from = location.state?.from?.pathname || "/registrarHome";
+      navigate(from, { replace: true });
     } catch (error) {
       console.error("Sign in error:", error);
       setError(
@@ -174,7 +178,11 @@ const useSignIn = () => {
 
       updateUser(userData);
       setIsGoogleLoading(false);
-      navigate("/registrarHome");    } catch (error) {
+
+      // Redirect to the originally requested page or default to registrarHome
+      const from = location.state?.from?.pathname || "/registrarHome";
+      navigate(from, { replace: true });
+    } catch (error) {
       console.error("Google signin error:", error);
       // Don't show error message if user just closed the popup
       if (error.code !== "auth/popup-closed-by-user") {

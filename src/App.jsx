@@ -29,13 +29,17 @@ import AppSchedule from "./appointmentForm/AppSchedule";
 import TransitionWrapper from "./components/TransitionWrapper";
 import Feedback from "./features/admin/status/Feedback.jsx";
 import Announcements from "./features/admin/status/Announcements.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import AuthProvider from "./components/AuthProvider.jsx";
 
 const App = () => {
   return (
     <UserProvider>
-      <BrowserRouter>
-        <Layout />
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Layout />
+        </BrowserRouter>
+      </AuthProvider>
     </UserProvider>
   );
 };
@@ -90,17 +94,84 @@ const Layout = () => {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/new-password" element={<NewPassword />} />
-            <Route path="/registrarHome" element={<RegistrarHome />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/holidays" element={<Holidays />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/archived" element={<Archived />} />
-            <Route path="/feedback" element={<Feedback />} />
+
+            {/* Protected Admin Routes */}
+            <Route
+              path="/registrarHome"
+              element={
+                <ProtectedRoute>
+                  <RegistrarHome />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/events"
+              element={
+                <ProtectedRoute>
+                  <Events />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/schedule"
+              element={
+                <ProtectedRoute>
+                  <Schedule />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/holidays"
+              element={
+                <ProtectedRoute>
+                  <Holidays />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/appointments"
+              element={
+                <ProtectedRoute>
+                  <Appointments />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/archived"
+              element={
+                <ProtectedRoute>
+                  <Archived />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/feedback"
+              element={
+                <ProtectedRoute>
+                  <Feedback />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/announcements"
+              element={
+                <ProtectedRoute>
+                  <Announcements />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Non-protected routes */}
             <Route path="/attachment" element={<Attachment />} />
             <Route path="/app-schedule" element={<AppSchedule />} />
-            <Route path="/announcements" element={<Announcements />} />
           </Routes>
           {showHeaderFooter && <Footer />}
         </TransitionWrapper>

@@ -39,6 +39,20 @@ export const UserProvider = ({ children }) => {
     }
   }, [user]);
 
+  // Listen for auth expiration events
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      console.log("Authentication expired, logging out user");
+      setUser(null);
+    };
+
+    window.addEventListener("auth-expired", handleAuthExpired);
+
+    return () => {
+      window.removeEventListener("auth-expired", handleAuthExpired);
+    };
+  }, []);
+
   const updateUser = (userData) => {
     if (userData) {
       try {
