@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <header className="bg-Bbackground py-2 md:py-4 sticky top-0 z-50">
       <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
-        {/* Logo and Brand */}
+        {/* LEFT SIDE: Logo and Brand */}
         <div className="flex items-center group hover:opacity-80 transition-opacity">
           <a
             href="https://www.facebook.com/lvcc.apalit"
@@ -37,60 +37,69 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={toggleMenu}
-          className="text-[#252F6A] p-2 rounded-lg md:hidden hover:bg-gray-100"
-        >
-          {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-        </button>
+        {/* RIGHT SIDE: Navigation and Actions */}
+        <div className="flex items-center gap-4 md:gap-6 lg:gap-8">
+          {/* Navigation - Desktop */}
+          <nav className="hidden md:block">
+            <ul className="flex items-center space-x-6 lg:space-x-10">
+              <li
+                className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground transition-colors ${
+                  location.pathname.startsWith("/home")
+                    ? "border-b-4 border-Gold"
+                    : ""
+                }`}
+              >
+                <Link to="/home/announcement">HOME</Link>
+              </li>
+              <li
+                className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground transition-colors ${
+                  location.pathname.startsWith("/about")
+                    ? "border-b-4 border-Gold"
+                    : ""
+                }`}
+              >
+                <Link to="/about">ABOUT</Link>
+              </li>
+              <li
+                className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground transition-colors ${
+                  location.pathname.startsWith("/faqs")
+                    ? "border-b-4 border-Gold"
+                    : ""
+                }`}
+              >
+                <Link to="/faqs">FAQs</Link>
+              </li>
+              <li
+                className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground transition-colors ${
+                  location.pathname.startsWith("/contact")
+                    ? "border-b-4 border-Gold"
+                    : ""
+                }`}
+              >
+                <Link to="/contact">CONTACT</Link>
+              </li>
+            </ul>
+          </nav>
 
-        {/* Navigation - Desktop */}
-        <nav className="hidden md:block">
-          <ul className="flex space-x-6 lg:space-x-10 text-[26px]">
-            <li
-              className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground ${
-                location.pathname.startsWith("/home")
-                  ? "border-b-4 border-Gold"
-                  : ""
-              }`}
+          {/* Appoint Now Button - Desktop */}
+          <div className="hidden md:block">
+            <Link
+              to="/appointmentForm?step=1"
+              className="inline-block px-4 lg:px-6 py-2 lg:py-3 bg-[#252F6A] text-[#FAFAFA] text-sm uppercase rounded-[10px] hover:bg-blue-700 transition-colors font-medium"
             >
-              <Link to="/home/announcement">HOME</Link>
-            </li>
-            <li
-              className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground ${
-                location.pathname.startsWith("/about")
-                  ? "border-b-4 border-Gold"
-                  : ""
-              }`}
-            >
-              <Link to="/about">ABOUT</Link>
-            </li>
-            <li
-              className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground ${
-                location.pathname.startsWith("/faqs")
-                  ? "border-b-4 border-Gold"
-                  : ""
-              }`}
-            >
-              <Link to="/faqs">FAQs</Link>
-            </li>
-            <li
-              className={`text-base lg:text-lg font-LatoRegular hover:text-LBackground ${
-                location.pathname.startsWith("/contact")
-                  ? "border-b-4 border-Gold"
-                  : ""
-              }`}
-            >
-              <Link to="/contact">CONTACT</Link>
-            </li>
-          </ul>
-        </nav>
+              Appoint Now
+            </Link>
+          </div>
 
-        {/* Appoint Now Button - Desktop */}
-        <button className="hidden md:block px-4 lg:px-6 py-2 lg:py-3 bg-[#252F6A] text-[#FAFAFA] text-sm uppercase rounded-[10px] hover:bg-blue-700 transition-colors">
-          <Link to="/appointmentForm?step=1">Appoint Now</Link>
-        </button>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMenu}
+            className="flex items-center justify-center text-[#252F6A] p-2 rounded-lg md:hidden hover:bg-gray-100 transition-colors"
+            aria-label="Toggle mobile menu"
+          >
+            {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </button>
+        </div>
 
         {/* Mobile Menu - Overlay */}
         {isMenuOpen && (
