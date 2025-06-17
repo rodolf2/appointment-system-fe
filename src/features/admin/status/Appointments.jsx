@@ -393,8 +393,8 @@ const Appointments = () => {
                                   data.timeSlot
                                 )}
                               </div>
-                            </td>
-                            <td className="border p-4 break-words">
+                            </td>{" "}
+                            <td className="border p-4 break-words text-center">
                               {new Date(
                                 data.dateOfRequest
                               ).toLocaleDateString()}
