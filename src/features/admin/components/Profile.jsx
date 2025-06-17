@@ -233,18 +233,6 @@ const Profile = () => {
                     />
                   </div>
                   <div className="mb-4 flex items-center justify-start">
-                    <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55]">
-                      Middle Name:
-                    </label>
-                    <input
-                      type="text"
-                      name="middleName"
-                      value={formData.middleName}
-                      onChange={handleInputChange}
-                      className="ml-4 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#D9D9D9]"
-                    />
-                  </div>
-                  <div className="mb-4 flex items-center justify-start">
                     <label className="block w-[145px] text-left font-LatoSemiBold text-[#161F55] font-medium">
                       Last Name:
                     </label>
