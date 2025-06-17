@@ -1,5 +1,6 @@
 import { CiFacebook } from "react-icons/ci";
 import { TfiEmail } from "react-icons/tfi";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -9,10 +10,8 @@ const Footer = () => {
         <div className="flex flex-col lg:flex-row lg:justify-between gap-8 lg:gap-4">
           {/* Logo and Description */}
           <div className="flex flex-col items-center lg:items-start max-w-full lg:max-w-xl">
-            <a
-              href="https://www.facebook.com/lvcc.apalit"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/home/announcement"
               className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-4"
             >
               <img
@@ -23,7 +22,7 @@ const Footer = () => {
               <p className="text-center sm:text-left font-regular text-xl sm:text-2xl md:text-[32px] text-LBackground">
                 LA VERDAD CHRISTIAN COLLEGE
               </p>
-            </a>
+            </Link>
             <p className="text-sm sm:text-[14px] text-center lg:text-left font-LatoRegular text-LBackground max-w-[510px] mt-2 ml-24">
               Seamless appointment management—stay organized, save time, and
               never miss an appointment with ease and efficiency.
