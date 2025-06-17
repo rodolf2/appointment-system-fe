@@ -124,19 +124,23 @@ const Carousel = () => {
           </button>
 
           {/* Slide Content */}
-          <div className="text-center px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">
-            <h2
-              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl 
-              font-bold text-white mb-4 sm:mb-6 transition-all duration-500 ease-out
-              transform ${currentIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}"
-            >
-              {slides[currentIndex]?.title}
-            </h2>
+          <div className="text-center px-4 sm:px-6 md:px-8 max-w-4xl mx-auto">            <div className="inline-block">              <h2
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl
+                font-bold text-white mb-4 transition-all duration-500 ease-out tracking-wide
+                transform ${currentIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}"
+              >
+                {slides[currentIndex]?.title}
+              </h2>
 
-            <div className="text-white/90 space-y-2 sm:space-y-3">
+              {/* Gold line separator that matches text width */}
+              <div className="border-b-4 border-[#F3BC62] mb-6 transition-all duration-500"></div>
+            </div>
+
+            <div className="text-white/90 space-y-4 max-w-4xl mx-auto">
               {typeof slides[currentIndex]?.description === "string" ? (
                 <p
-                  className="text-sm xs:text-base sm:text-lg md:text-xl 
+                  className="text-base sm:text-lg md:text-xl
+                  leading-relaxed tracking-wide
                   transition-all duration-500 delay-100 ease-out
                   transform ${currentIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}"
                 >
@@ -146,7 +150,8 @@ const Carousel = () => {
                 slides[currentIndex]?.description?.map((item, idx) => (
                   <p
                     key={idx}
-                    className="text-sm xs:text-base sm:text-lg md:text-xl 
+                    className="text-base sm:text-lg md:text-xl
+                    leading-relaxed tracking-wide
                     transition-all duration-500 delay-100 ease-out
                     transform ${currentIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}"
                   >

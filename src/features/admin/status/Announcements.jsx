@@ -181,12 +181,10 @@ const Announcements = () => {
                               <BsTrash3 className="text-white text-sm md:text-base" />
                             </button>
                           </div>
+                        </div>{" "}
+                        <div className="prose prose-sm max-w-none text-gray-600 mt-2 text-xs md:text-sm">
+                          {post.description}
                         </div>
-
-                        <div
-                          className="prose prose-sm max-w-none text-gray-600 mt-2 text-xs md:text-sm"
-                          dangerouslySetInnerHTML={{ __html: post.description }}
-                        />
                       </div>
                     ))
                   )}
@@ -206,36 +204,59 @@ const Announcements = () => {
               alt="Close"
               onClick={closeEditModal}
               className="w-6 h-6 md:w-8 md:h-8 absolute top-3 right-3 md:top-4 md:right-4 cursor-pointer"
-            />
-            <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-[#161F55] mb-4 md:mb-6 pr-8">
-              Update Announcement
-              <div className="border-b-4 border-[#F3BC62] w-full max-w-[250px] my-2" />
-            </h3>
+            />{" "}
+            <div className="text-center mb-8">
+              <h3 className="text-[40px] font-bold text-[#161F55]">
+                Announcement
+              </h3>
+              <div className="border-b-8 border-[#F3BC62] w-[250px] my-4 mx-auto"></div>
+            </div>
+            {validationErrors.general && (
+              <p className="text-red-500 text-sm mb-4">
+                {validationErrors.general}
+              </p>
+            )}
             <div className="space-y-4">
-              <input
-                type="text"
-                placeholder="Title"
-                value={editingAnnouncement.title}
-                onChange={(e) => handleEditModalChange("title", e.target.value)}
-                className="w-full p-2 md:p-3 border rounded-lg text-sm md:text-base"
-              />
-              <ReactQuill
-                theme="snow"
-                value={editingAnnouncement.description}
-                onChange={(content) =>
-                  handleEditModalChange("description", content)
-                }
-                modules={quillModules}
-                className="bg-white [&_.ql-editor]:min-h-[150px] md:[&_.ql-editor]:min-h-[200px] lg:[&_.ql-editor]:min-h-[250px]"
-                style={{
-                  minHeight:
-                    window.innerWidth < 768
-                      ? "200px"
-                      : window.innerWidth < 1024
-                      ? "250px"
-                      : "300px",
-                }}
-              />
+              <div>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={editingAnnouncement.title}
+                  onChange={(e) =>
+                    handleEditModalChange("title", e.target.value)
+                  }
+                  className={`w-full p-2 md:p-3 border rounded-lg text-sm md:text-base ${
+                    validationErrors.title
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  }`}
+                />
+                {validationErrors.title && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {validationErrors.title}
+                  </p>
+                )}
+              </div>
+              <div>
+                <ReactQuill
+                  theme="snow"
+                  value={editingAnnouncement.description}
+                  onChange={(content) =>
+                    handleEditModalChange("description", content)
+                  }
+                  modules={quillModules}
+                  className={`bg-white [&_.ql-container]:rounded-b-lg [&_.ql-toolbar]:rounded-t-lg ${
+                    validationErrors.description
+                      ? "[&_.ql-container]:border-red-500 [&_.ql-toolbar]:border-red-500"
+                      : "[&_.ql-container]:border-gray-300 [&_.ql-toolbar]:border-gray-300"
+                  } [&_.ql-editor]:min-h-[150px] md:[&_.ql-editor]:min-h-[200px] lg:[&_.ql-editor]:min-h-[250px]`}
+                />
+                {validationErrors.description && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {validationErrors.description}
+                  </p>
+                )}
+              </div>
               <div className="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-3 sm:gap-4 pt-6 md:pt-10">
                 <button
                   onClick={closeEditModal}

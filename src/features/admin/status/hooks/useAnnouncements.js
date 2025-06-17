@@ -114,11 +114,18 @@ const useAnnouncements = () => {
       // alert("Please fill in both title and description");
       return;
     }
-
     try {
+      // Strip HTML tags from both title and description
+      const cleanTitle = announcement.title.replace(/<[^>]*>/g, "");
+      const cleanDescription = announcement.description
+        .replace(/<[^>]*>/g, "")
+        .replace(/&nbsp;/g, " ") // Replace &nbsp; with regular space
+        .replace(/\s+/g, " ") // Replace multiple spaces with single space
+        .trim(); // Remove leading/trailing spaces
+
       await axios.post(API_URL, {
-        title: announcement.title,
-        description: announcement.description,
+        title: cleanTitle,
+        description: cleanDescription,
       });
       setShowSuccessModal(true);
       // resetForm();
@@ -147,12 +154,42 @@ const useAnnouncements = () => {
       return;
     }
 
+    // Validate fields
+    const errors = {};
+    if (!editingAnnouncement.title || editingAnnouncement.title.trim() === "") {
+      errors.title = "Title is required";
+    }
+
+    if (
+      !editingAnnouncement.description ||
+      editingAnnouncement.description.trim() === "" ||
+      editingAnnouncement.description === "<p><br></p>" ||
+      editingAnnouncement.description === "<p></p>" ||
+      editingAnnouncement.description.replace(/<[^>]*>/g, "").trim() === ""
+    ) {
+      errors.description = "Description is required";
+    }
+
+    // If there are validation errors, set them and return
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
     try {
+      // Strip HTML tags from both title and description
+      const cleanTitle = editingAnnouncement.title.replace(/<[^>]*>/g, "");
+      const cleanDescription = editingAnnouncement.description
+        .replace(/<[^>]*>/g, "")
+        .replace(/&nbsp;/g, " ") // Replace &nbsp; with regular space
+        .replace(/\s+/g, " ") // Replace multiple spaces with single space
+        .trim(); // Remove leading/trailing spaces
+
       const response = await axios.put(
         `${API_URL}/${editingAnnouncement._id}`,
         {
-          title: editingAnnouncement.title,
-          description: editingAnnouncement.description,
+          title: cleanTitle,
+          description: cleanDescription,
         },
         {
           headers: {
@@ -165,10 +202,13 @@ const useAnnouncements = () => {
         await fetchAnnouncements();
         setEditingAnnouncement(null);
         setShowUpdateSuccessModal(true);
+        setValidationErrors({});
       }
     } catch (error) {
       console.error("Failed to update announcement:", error);
-      alert("Failed to update announcement. Please try again.");
+      setValidationErrors({
+        general: "Failed to update announcement. Please try again.",
+      });
     }
   };
 
