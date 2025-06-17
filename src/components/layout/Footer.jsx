@@ -24,7 +24,7 @@ const Footer = () => {
                 LA VERDAD CHRISTIAN COLLEGE
               </p>
             </a>
-            <p className="text-sm sm:text-[14px] text-center lg:text-left font-LatoRegular text-LBackground max-w-[510px] mt-2">
+            <p className="text-sm sm:text-[14px] text-center lg:text-left font-LatoRegular text-LBackground max-w-[510px] mt-2 ml-24">
               Seamless appointment management—stay organized, save time, and
               never miss an appointment with ease and efficiency.
             </p>
