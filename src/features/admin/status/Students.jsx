@@ -8,9 +8,6 @@ import { useState, useEffect } from "react";
 import { AdminSkeleton } from "../../../components/skeleton/AdminSkeleton";
 
 const Students = () => {
-  // State for tracking image loading errors
-  const [imgErrors, setImgErrors] = useState({});
-
   const API_URL = `${
     import.meta.env.VITE_API_URL
   }/api/document-requests/docs-with-details`;
@@ -93,14 +90,10 @@ const Students = () => {
 
   // State for storing actual attachment URLs
   const [attachmentUrls, setAttachmentUrls] = useState({});
-  const [attachmentLoading, setAttachmentLoading] = useState(false);
-
   // Fetch actual attachment URLs from the backend
   useEffect(() => {
     const fetchAttachmentUrls = async () => {
       if (!filteredAppointments || filteredAppointments.length === 0) return;
-
-      setAttachmentLoading(true);
       try {
         const ATTACHMENT_API_URL = `${
           import.meta.env.VITE_API_URL
@@ -158,8 +151,6 @@ const Students = () => {
         setAttachmentUrls(urlMapping);
       } catch (error) {
         console.error("❌ Error fetching attachment URLs:", error);
-      } finally {
-        setAttachmentLoading(false);
       }
     };
 
@@ -512,27 +503,28 @@ const Students = () => {
                                           studentId: data.transactionNumber,
                                         }
                                       );
-
                                       return (
                                         <div
-                                          key={`real-${data.transactionNumber}-${index}-${attachment.filename}`}
-                                          className="flex items-center group"
+                                          key={index}
+                                          className="flex items-center space-x-2 group"
                                         >
-                                          <a
-                                            href={viewableUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-600 hover:underline text-sm block"
-                                            title={filename}
-                                          >
-                                            <span
-                                              data-tooltip-id="attachment-tooltip"
-                                              data-tooltip-content={filename}
-                                              className="cursor-pointer block truncate max-w-[120px]"
+                                          <div className="flex-1 min-w-0">
+                                            <a
+                                              href={viewableUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="text-blue-600 hover:underline text-sm block"
+                                              title={filename}
                                             >
-                                              {filename}
-                                            </span>
-                                          </a>
+                                              <span
+                                                data-tooltip-id="attachment-tooltip"
+                                                data-tooltip-content={filename}
+                                                className="cursor-help block truncate max-w-[120px]"
+                                              >
+                                                {filename}
+                                              </span>
+                                            </a>
+                                          </div>
                                         </div>
                                       );
                                     }
