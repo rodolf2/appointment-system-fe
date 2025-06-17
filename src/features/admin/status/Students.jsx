@@ -729,7 +729,9 @@ const Students = () => {
 
                                         // Construct the URLs with version
                                         viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/v${versionTimestamp}/appointment-system/attachments/${publicId}`;
-                                        thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_60,h_60,g_face/v${versionTimestamp}/appointment-system/attachments/${publicId}`;
+                                        {
+                                          /* thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_60,h_60,g_face/v${versionTimestamp}/appointment-system/attachments/${publicId}`; */
+                                        }
 
                                         // Also create fallback URLs without version (more forgiving)
                                         const fallbackViewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/appointment-system/attachments/${publicId}`;
