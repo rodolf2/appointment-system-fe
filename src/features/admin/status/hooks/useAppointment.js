@@ -11,7 +11,7 @@ const useAppointment = () => {
 
   // States for filtering and search
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("PENDING");
+  const [selectedFilter, setSelectedFilter] = useState("Filter by");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -86,7 +86,7 @@ const useAppointment = () => {
     // Step 2: Filter by Status
     // If the filter is "Filter by", everything matches by default.
     const matchesFilter =
-      selectedFilter === "Filter by"
+      selectedFilter === "DEFAULT"
         ? true
         : data.status?.toUpperCase() === selectedFilter.toUpperCase();
 

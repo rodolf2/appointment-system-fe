@@ -242,6 +242,7 @@ const Appointments = () => {
                         className="bg-white border-2 border-gray-300 px-2 text-gray-400 py-2"
                       >
                         {" "}
+                        <option value="DEFAULT">Filter By</option>
                         <option value="PENDING">Pending</option>
                         <option value="APPROVED">Approved</option>
                         <option value="REJECTED">Rejected</option>
