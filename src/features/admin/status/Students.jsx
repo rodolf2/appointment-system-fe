@@ -165,116 +165,130 @@ const Students = () => {
 
     fetchAttachmentUrls();
   }, [filteredAppointments]);
-
   if (loading) {
     return (
       <div className="flex h-screen font-LatoRegular">
-        <Sidebar />
+        <style>{tooltipStyle}</style>
+        <div
+          className={`${
+            isSidebarOpen ? "w-[300px]" : "w-[100px]"
+          } transition-all duration-300 z-20`}
+        >
+          <Sidebar isSidebarOpen={isSidebarOpen} />
+        </div>
         <div className="flex-1 overflow-y-auto">
-          <Header />
-          <div>
+          <main className="h-auto">
+            <Header
+              toggleSidebar={toggleSidebar}
+              isSidebarOpen={isSidebarOpen}
+              title="Students/Alumni's Records Request"
+            />
             <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
-              {/* Header Section */}
-              <div className="bg-[#D9D9D9] h-48 m-4">
-                <div className="text-[#161F55] px-3 ml-3 pt-2">
-                  <div className="h-10 w-[450px] bg-gray-300 rounded animate-pulse mt-2"></div>
-                  <div className="border-b-4 border-[#F3BC62] w-[450px] my-3"></div>
+              {" "}
+              <div className="bg-[#D9D9D9] h-52 m-4 pt-2 rounded-md">
+                <div className="text-[#161F55] px-3 pt-2 ml-3">
+                  <h2 className="text-3xl font-bold tracking-[5px] pt-1">
+                    LIST OF STUDENTS/ALUMNI RECORDS REQUEST
+                  </h2>
+                  <div className="border-b-4 border-[#F3BC62] w-[900px] my-3"></div>
                 </div>
 
-                {/* Controls Section */}
-                <div className="flex justify-between items-center mt-[78px] ml-4 mr-5">
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-16 bg-gray-300 rounded animate-pulse"></div>
-                    <div className="h-10 w-20 bg-gray-300 rounded animate-pulse"></div>
-                    <div className="h-8 w-20 bg-gray-300 rounded animate-pulse"></div>
+                <div className="flex justify-between items-center mt-16 ml-4 mr-5">
+                  <div className="text-[#161F55] font-semibold text-[18px] flex items-center gap-2">
+                    <label htmlFor="show-entries" className="mr-2">
+                      SHOW
+                    </label>
+                    <select className="text-center w-20 p-2 border border-gray-400 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#161F55]">
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select>
+                    <span className="ml-2">ENTRIES</span>
                   </div>
-                  <div className="flex gap-4">
-                    <div className="h-10 w-32 bg-gray-300 rounded animate-pulse"></div>
+                  <div className="relative">
                     <div className="h-10 w-48 bg-gray-300 rounded animate-pulse"></div>
                   </div>
                 </div>
               </div>
-
-              {/* Table Section */}
-              <div className="overflow-y-auto m-4 mt-8">
-                <table
-                  className="text-[15px] w-full"
-                  style={{ tableLayout: "fixed" }}
-                >
-                  <thead>
-                    <tr className="bg-gray-200 text-center">
-                      <th className="border p-4 w-[12%]">TRANSACTION NO.</th>
-                      <th className="border p-4 w-[15%]">NAME</th>
-                      <th className="border p-4 w-[10%]">LAST S.Y. ATTENDED</th>
-                      <th className="border p-4 w-[12%]">
-                        PROGRAM/GRADE
-                        <br />
-                        STRAND
-                      </th>
-                      <th className="border p-4 w-[10%]">CONTACT NO.</th>
-                      <th className="border p-4 w-[15%]">EMAIL ADDRESS</th>
-                      <th className="border p-4 w-[10%]">ATTACHMENT PROOF</th>
-                      <th className="border p-4 w-[10%]">PURPOSE</th>
-                      <th className="border p-4 w-[10%]">REQUEST</th>
-                      <th className="border p-4 w-[10%]">DATE OF REQUEST</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Array(5)
-                      .fill(null)
-                      .map((_, index) => (
-                        <tr
-                          key={index}
-                          className={index % 2 === 0 ? "bg-gray-100" : ""}
-                        >
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-28"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-32"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-8 w-8 bg-gray-300 rounded animate-pulse mx-auto"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
-                          </td>
-                          <td className="border p-4">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Pagination Section */}
+              <table
+                className="text-[15px] w-[97%] border-collapse text-[#161F55] mt-8 mx-auto"
+                style={{ tableLayout: "fixed" }}
+              >
+                <thead>
+                  <tr className="bg-gray-200 text-center">
+                    <th className="border p-4 w-[12%]">TRANSACTION NO.</th>
+                    <th className="border p-4 w-[15%]">NAME</th>
+                    <th className="border p-4 w-[10%]">LAST S.Y. ATTENDED</th>
+                    <th className="border p-4 w-[12%]">
+                      PROGRAM/GRADE
+                      <br />
+                      STRAND
+                    </th>
+                    <th className="border p-4 w-[10%]">CONTACT NO.</th>
+                    <th className="border p-4 w-[15%]">EMAIL ADDRESS</th>
+                    <th className="border p-4 w-[10%]">ATTACHMENT PROOF</th>
+                    <th className="border p-4 w-[10%]">PURPOSE</th>
+                    <th className="border p-4 w-[10%]">REQUEST</th>
+                    <th className="border p-4 w-[10%]">DATE OF REQUEST</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array(5)
+                    .fill(null)
+                    .map((_, index) => (
+                      <tr
+                        key={index}
+                        className={index % 2 === 0 ? "bg-gray-100" : ""}
+                      >
+                        <td className="border p-4">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-28"></div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="flex items-center justify-center">
+                            <div className="h-6 bg-gray-300 rounded animate-pulse w-32"></div>
+                          </div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-20"></div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-24"></div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-28"></div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-36"></div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="h-8 w-8 bg-gray-300 rounded animate-pulse mx-auto"></div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-24"></div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-24"></div>
+                        </td>
+                        <td className="border p-4">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-28"></div>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
               <div className="flex justify-between items-center mt-10 text-[18px] px-4">
                 <div className="h-6 w-64 bg-gray-300 rounded animate-pulse"></div>
                 <div className="flex gap-2">
-                  <div className="h-8 w-20 bg-gray-300 rounded animate-pulse"></div>
+                  <div className="h-8 w-24 bg-gray-300 rounded animate-pulse"></div>
                   <div className="h-8 w-32 bg-gray-300 rounded animate-pulse"></div>
-                  <div className="h-8 w-20 bg-gray-300 rounded animate-pulse"></div>
+                  <div className="h-8 w-24 bg-gray-300 rounded animate-pulse"></div>
                 </div>
               </div>
             </section>
-          </div>
-          <Footer />
+            <Footer />
+          </main>
         </div>
       </div>
     );

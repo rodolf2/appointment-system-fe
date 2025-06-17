@@ -71,27 +71,38 @@ const Appointments = () => {
           <Header />
           <div>
             <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
-              {/* Header Section */}
+              {/* Header Section */}{" "}
               <div className="bg-[#D9D9D9] h-48 m-4">
                 <div className="text-[#161F55] px-3 ml-3 pt-2">
-                  <div className="h-10 w-[450px] bg-gray-300 rounded animate-pulse mt-2"></div>
+                  <h2 className="text-3xl font-bold tracking-[5px] pt-1">
+                    LIST OF APPOINTMENTS
+                  </h2>
                   <div className="border-b-4 border-[#F3BC62] w-[450px] my-3"></div>
                 </div>
 
                 {/* Controls Section */}
                 <div className="flex justify-between items-center mt-[78px] ml-4 mr-5">
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-16 bg-gray-300 rounded animate-pulse"></div>
-                    <div className="h-10 w-20 bg-gray-300 rounded animate-pulse"></div>
-                    <div className="h-8 w-20 bg-gray-300 rounded animate-pulse"></div>
+                  <div className="text-[#161F55] font-semibold text-[18px] flex items-center">
+                    <label htmlFor="show-entries" className="mr-2">
+                      SHOW
+                    </label>
+                    <select className="text-center w-20 p-2 border border-gray-400 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#161F55]">
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                    </select>
+                    <span className="ml-2">ENTRIES</span>
                   </div>
                   <div className="flex gap-4">
                     <div className="h-10 w-32 bg-gray-300 rounded animate-pulse"></div>
-                    <div className="h-10 w-48 bg-gray-300 rounded animate-pulse"></div>
+                    <div className="relative">
+                      <div className="h-10 w-48 bg-gray-300 rounded animate-pulse"></div>
+                    </div>
                   </div>
                 </div>
               </div>
-
               {/* Table Section */}
               <div className="overflow-y-auto m-4 mt-8">
                 <table
@@ -172,7 +183,6 @@ const Appointments = () => {
                   </tbody>
                 </table>
               </div>
-
               {/* Pagination Section */}
               <div className="flex justify-between items-center mt-10 text-[18px] px-4">
                 <div className="h-6 w-64 bg-gray-300 rounded animate-pulse"></div>
