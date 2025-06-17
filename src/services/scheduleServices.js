@@ -68,14 +68,34 @@ export const getAllSchedules = async () => {
     console.log("Fetching schedules from:", BASE_URL);
     const response = await axios.get(BASE_URL);
 
-    // Transform the response to include calculated available slots
-    const schedules = response.data.map((schedule) => ({
-      ...schedule,
-      availableSlots: schedule.slots - (schedule.bookedSlots || 0),
-      bookedSlots: schedule.bookedSlots || 0,
-    }));
+    // We need to get booking data to calculate proper available vs total slots
+    const bookingResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/bookings`);
+    const bookings = bookingResponse.data || [];
 
-    console.log("Processed schedules:", schedules);
+    const schedules = response.data.map((schedule) => {
+      // Count bookings for this schedule
+      const scheduleBookings = bookings.filter(booking =>
+        booking.scheduleId &&
+        (booking.scheduleId._id === schedule._id || booking.scheduleId === schedule._id) &&
+        booking.status !== 'cancelled'
+      );
+
+      const bookedSlots = scheduleBookings.length;
+
+      // Backend 'slots' field currently represents available slots (gets decremented)
+      // But we need to calculate the original total slots
+      const currentAvailableSlots = schedule.slots || 0;
+      const totalSlots = currentAvailableSlots + bookedSlots;
+
+      return {
+        ...schedule,
+        availableSlots: currentAvailableSlots,
+        totalSlots: totalSlots,
+        bookedSlots: bookedSlots,
+      };
+    });
+
+    console.log("Processed schedules with booking data:", schedules);
     return schedules;
   } catch (error) {
     console.error("Error details:", error.response || error);
