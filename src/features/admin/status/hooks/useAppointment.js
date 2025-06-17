@@ -272,16 +272,11 @@ const useAppointment = () => {
         emailAddress: appointment.emailAddress,
         name: appointment.name,
         appointmentDate: formattedAppointmentDate,
-<<<<<<< HEAD
-        timeSlot: appointment.timeSlot,
-        adminName: adminName,
-=======
         timeSlot:
           appointment.timeSlot !== "Not scheduled"
             ? appointment.timeSlot
             : null,
         adminName: adminName, // Include admin name for notifications
->>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
       };
 
       console.log("Request body being sent:", requestBody);
@@ -469,43 +464,6 @@ const useAppointment = () => {
         }
         const statusData = await statusResponse.json();
 
-<<<<<<< HEAD
-        // 3. Remove duplicates and sort status data
-        const uniqueStatusData = [];
-        const seenEmails = new Set();
-
-        const sortedStatusData = [...statusData].sort((a, b) => {
-          const aIsTR =
-            a.transactionNumber && a.transactionNumber.startsWith("TR");
-          const bIsTR =
-            b.transactionNumber && b.transactionNumber.startsWith("TR");
-
-          if (aIsTR && !bIsTR) return -1;
-          if (!aIsTR && bIsTR) return 1;
-
-          const dateA = new Date(a.dateOfRequest || 0);
-          const dateB = new Date(b.dateOfRequest || 0);
-          return dateB - dateA;
-        });
-
-        sortedStatusData.forEach((status) => {
-          const email = status.emailAddress;
-          if (email && !seenEmails.has(email)) {
-            uniqueStatusData.push(status);
-            seenEmails.add(email);
-          }
-        });
-
-        console.log(
-          `Removed ${
-            statusData.length - uniqueStatusData.length
-          } duplicate status entries`
-        );
-
-        const statusMap = uniqueStatusData.reduce((acc, curr) => {
-          if (curr && curr.transactionNumber) {
-            acc[curr.transactionNumber] = curr;
-=======
         // Debug: Log all status data to see what we're getting
         console.log("All status data from API:", statusData);
         console.log("Number of status records:", statusData.length);
@@ -519,7 +477,6 @@ const useAppointment = () => {
               timeSlot: statusItem.timeSlot,
               status: statusItem.status,
             });
->>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
           }
           return acc;
         }, {});
