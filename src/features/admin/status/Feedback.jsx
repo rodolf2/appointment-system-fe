@@ -50,92 +50,88 @@ const Feedback = () => {
   if (loading) {
     return (
       <div className="flex h-screen font-LatoRegular">
-        <Sidebar />
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <Header />
-          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-            {/* Title Section */}
-            <div className="animate-slideIn mb-6">
-              <div className="h-8 w-72 bg-gray-200 rounded animate-pulse"></div>
-              <div className="h-1 w-48 bg-gray-200 rounded mt-2 animate-pulse"></div>
-            </div>
+        <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
+          <Sidebar isSidebarOpen={isSidebarOpen} />
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            title="Feedback"
+          />
+          <div>
+            <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
+              {" "}
+              {/* Header Section */}
+              <div className="bg-[#D9D9D9] h-48 m-4">
+                <div className="text-[#161F55] px-3 ml-3 pt-2">
+                  <h2 className="text-3xl font-bold tracking-[5px] pt-1">
+                    User Feedback
+                  </h2>
+                  <div className="border-b-4 border-[#F3BC62] w-[450px] my-3"></div>
+                </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-4 gap-6 mb-8 animate-slideIn delay-150">
-              {Array(4)
-                .fill(null)
-                .map((_, idx) => (
-                  <div key={idx} className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="flex items-center justify-between">
-                      <div className="h-12 w-12 bg-gray-200 rounded-full animate-pulse"></div>
-                      <div className="flex-1 ml-4">
-                        <div className="h-6 w-24 bg-gray-200 rounded animate-pulse mb-2"></div>
-                        <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
-                      </div>
-                    </div>
+                {/* Controls Section */}
+                <div className="flex justify-between items-center mt-[78px] ml-4 mr-5">
+                  <div className="flex items-center gap-2">
+                    <label htmlFor="sort" className="text-sm text-[#000]">
+                      Sort by:
+                    </label>
+                    <select className="text-sm border border-[#000] rounded-sm text-[#000]">
+                      <option value="newest">Newest</option>
+                      <option value="oldest">Oldest</option>
+                    </select>
                   </div>
-                ))}
-            </div>
-
-            {/* Feedback Cards Grid */}
-            <div className="grid grid-cols-3 gap-6 animate-slideIn delay-300">
-              {Array(9)
-                .fill(null)
-                .map((_, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-white rounded-lg shadow-md p-6"
-                    style={{
-                      animationDelay: `${(idx + 4) * 0.1}s`,
-                    }}
-                  >
-                    {/* User Info */}
-                    <div className="flex items-center mb-4">
-                      <div className="h-12 w-12 bg-gray-200 rounded-full animate-pulse"></div>
-                      <div className="ml-4">
-                        <div className="h-5 w-32 bg-gray-200 rounded animate-pulse mb-2"></div>
-                        <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
-                      </div>
-                    </div>
-
-                    {/* Rating */}
-                    <div className="flex mb-4">
-                      {Array(5)
-                        .fill(null)
-                        .map((_, starIdx) => (
-                          <div
-                            key={starIdx}
-                            className="h-5 w-5 bg-gray-200 rounded-full mr-1 animate-pulse"
-                          ></div>
-                        ))}
-                    </div>
-
-                    {/* Feedback Text */}
-                    <div className="space-y-2">
-                      <div className="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
-                      <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse"></div>
-                      <div className="h-4 w-1/2 bg-gray-200 rounded animate-pulse"></div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-
-            {/* Pagination */}
-            <div className="mt-8 flex justify-center items-center animate-slideIn delay-500">
-              <div className="flex items-center space-x-2">
-                <div className="h-10 w-10 bg-gray-200 rounded animate-pulse"></div>
-                {Array(3)
+                </div>
+              </div>
+              {/* Feedback Grid Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 m-4">
+                {Array(6)
                   .fill(null)
                   .map((_, idx) => (
                     <div
                       key={idx}
-                      className="h-10 w-10 bg-gray-200 rounded animate-pulse"
-                    ></div>
+                      className="bg-white rounded-lg shadow-md p-6"
+                    >
+                      {/* User Info */}
+                      <div className="flex items-center mb-4">
+                        <div className="h-12 w-12 bg-gray-300 rounded-full animate-pulse"></div>
+                        <div className="ml-4">
+                          <div className="h-5 w-32 bg-gray-300 rounded animate-pulse mb-2"></div>
+                          <div className="h-4 w-24 bg-gray-300 rounded animate-pulse"></div>
+                        </div>
+                      </div>
+                      {/* Rating */}
+                      <div className="flex mb-4">
+                        {Array(5)
+                          .fill(null)
+                          .map((_, starIdx) => (
+                            <div
+                              key={starIdx}
+                              className="h-5 w-5 bg-gray-300 rounded-sm animate-pulse mr-1"
+                            ></div>
+                          ))}
+                      </div>
+                      {/* Feedback Text */}
+                      <div className="space-y-2">
+                        <div className="h-4 w-full bg-gray-300 rounded animate-pulse"></div>
+                        <div className="h-4 w-3/4 bg-gray-300 rounded animate-pulse"></div>
+                        <div className="h-4 w-1/2 bg-gray-300 rounded animate-pulse"></div>
+                      </div>
+                    </div>
                   ))}
-                <div className="h-10 w-10 bg-gray-200 rounded animate-pulse"></div>
               </div>
-            </div>
-          </main>
+              {/* Pagination Section */}
+              <div className="flex justify-between items-center mt-10 text-[18px] px-4">
+                <div className="h-6 w-64 bg-gray-300 rounded animate-pulse"></div>
+                <div className="flex gap-2">
+                  <div className="h-8 w-24 bg-gray-300 rounded animate-pulse"></div>
+                  <div className="h-8 w-32 bg-gray-300 rounded animate-pulse"></div>
+                  <div className="h-8 w-24 bg-gray-300 rounded animate-pulse"></div>
+                </div>
+              </div>
+            </section>
+          </div>
           <Footer />
         </div>
       </div>
