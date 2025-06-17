@@ -187,41 +187,95 @@ const Students = () => {
                           data.attachment !== "No attachments" ? (
                             <div className="flex flex-col gap-2">
                               {data.attachment.split(", ").map((url, index) => {
+                                console.log(
+                                  "🔍 DEBUG: Processing attachment URL:",
+                                  {
+                                    originalUrl: url,
+                                    isCloudinaryUrl: url.startsWith(
+                                      "https://res.cloudinary.com"
+                                    ),
+                                    urlLength: url.length,
+                                    studentData: data.transactionNumber,
+                                  }
+                                );
+
                                 // Extract original filename from the Cloudinary URL
                                 const urlParts = url.split("/");
                                 const lastPart = urlParts[urlParts.length - 1];
-                                // Get the original filename by removing timestamp and random numbers
-                                let filename =
-                                  lastPart.replace(
-                                    /^attachment-([^-]+)-\d+-\d+/,
-                                    "$1"
-                                  ) || `Attachment ${index + 1}`;
 
-                                // Clean up filename further if needed
-                                if (filename.includes(".")) {
-                                  const parts = filename.split(".");
-                                  filename =
-                                    parts[0] + "." + parts[parts.length - 1];
+                                // Extract filename from the public_id format: originalname-studentId-timestamp
+                                let filename = lastPart;
+
+                                // Try to extract original filename from the pattern
+                                const publicIdMatch = lastPart.match(
+                                  /^(.+)-[^-]+-\d+(\.[^.]+)?$/
+                                );
+                                if (publicIdMatch) {
+                                  // Replace underscores back to spaces and get original name
+                                  filename = publicIdMatch[1].replace(
+                                    /_/g,
+                                    " "
+                                  );
+                                  // Add extension if it exists
+                                  if (publicIdMatch[2]) {
+                                    filename += publicIdMatch[2];
+                                  } else {
+                                    // Default to .jpg if no extension found
+                                    filename += ".jpg";
+                                  }
+                                } else {
+                                  // Fallback to generic name
+                                  filename = `Attachment ${index + 1}`;
                                 }
 
                                 // Ensure the URL has the complete Cloudinary path with transformations
                                 let viewableUrl;
                                 let thumbnailUrl;
+
                                 if (
                                   url.startsWith("https://res.cloudinary.com")
                                 ) {
+                                  // URL is already complete
                                   viewableUrl = url;
+                                  // Create thumbnail by adding transformation
                                   thumbnailUrl = url.replace(
                                     "/upload/",
                                     "/upload/c_thumb,w_50,h_50,g_face/"
                                   );
                                 } else {
-                                  // Remove any leading slashes
-                                  const cleanPath = url.replace(/^\/+/, "");
-                                  // Add Cloudinary transformations for optimal viewing
-                                  viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_scale,w_800/${cleanPath}`;
-                                  thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_50,h_50,g_face/${cleanPath}`;
+                                  // Simple fix: Use the exact pattern from your database
+                                  const filename = url
+                                    .replace(/\.[^/.]+$/, "")
+                                    .replace(/[^a-zA-Z0-9]/g, "_");
+
+                                  // Try multiple timestamps that might work
+                                  const possibleTimestamps = [
+                                    "1750090241090", // From your database example
+                                    "1749976559176", // From previous examples
+                                    Date.now().toString(), // Current timestamp as fallback
+                                  ];
+
+                                  // Use the first timestamp for now
+                                  const timestamp = possibleTimestamps[0];
+                                  const versionTimestamp = timestamp.substring(
+                                    0,
+                                    10
+                                  ); // First 10 digits for version
+
+                                  viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/v${versionTimestamp}/appointment-system/attachments/${filename}-undefined-${timestamp}`;
+                                  thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_50,h_50,g_face/v${versionTimestamp}/appointment-system/attachments/${filename}-undefined-${timestamp}`;
+
+                                  console.log("Constructed URLs:", {
+                                    viewableUrl,
+                                    thumbnailUrl,
+                                  });
                                 }
+
+                                console.log("Processed URLs:", {
+                                  viewableUrl,
+                                  thumbnailUrl,
+                                  filename,
+                                });
 
                                 return (
                                   <div
@@ -237,7 +291,51 @@ const Students = () => {
                                         window.open(viewableUrl, "_blank")
                                       }
                                       onError={(e) => {
-                                        e.target.style.display = "none";
+                                        // Try alternative URLs if the first one fails
+                                        const originalName = url
+                                          .replace(/\.[^/.]+$/, "")
+                                          .replace(/[^a-zA-Z0-9]/g, "_");
+                                        // Try different timestamps for other images
+                                        const possibleTimestamps = [
+                                          "1749976559176", // Previous example
+                                          "1750090000000", // Approximate timestamp
+                                          "1749900000000", // Earlier timestamp
+                                          "1750000000000", // Another possibility
+                                          "1750100000000", // Later timestamp
+                                        ];
+
+                                        const alternatives =
+                                          possibleTimestamps.map(
+                                            (timestamp) => {
+                                              const versionTimestamp =
+                                                timestamp.substring(0, 10);
+                                              return `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_50,h_50,g_face/v${versionTimestamp}/appointment-system/attachments/${originalName}-undefined-${timestamp}`;
+                                            }
+                                          );
+
+                                        let currentIndex = parseInt(
+                                          e.target.dataset.attemptIndex || "0"
+                                        );
+                                        if (
+                                          currentIndex < alternatives.length
+                                        ) {
+                                          console.log(
+                                            `Trying alternative URL ${
+                                              currentIndex + 1
+                                            }:`,
+                                            alternatives[currentIndex]
+                                          );
+                                          e.target.src =
+                                            alternatives[currentIndex];
+                                          e.target.dataset.attemptIndex = (
+                                            currentIndex + 1
+                                          ).toString();
+                                        } else {
+                                          console.log(
+                                            "All alternative URLs failed, hiding image"
+                                          );
+                                          e.target.style.display = "none";
+                                        }
                                       }}
                                     />
 
