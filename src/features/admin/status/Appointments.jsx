@@ -393,9 +393,14 @@ const Appointments = () => {
                               </div>
                             </td>{" "}
                             <td className="border p-4 break-words text-center">
-                              {new Date(
-                                data.dateOfRequest
-                              ).toLocaleDateString()}
+                              {new Date(data.dateOfRequest).toLocaleDateString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}
                             </td>
                             <td className="border p-4">
                               <div className="flex gap-2 justify-center">
