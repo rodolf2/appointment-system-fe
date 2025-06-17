@@ -440,14 +440,30 @@ const Students = () => {
                                   (attachmentList) => {
                                     if (Array.isArray(attachmentList)) {
                                       attachmentList.forEach((attachment) => {
-                                        // We'll match by checking if the attachment filename appears in the data.attachment string
-                                        if (
-                                          data.attachment &&
-                                          data.attachment.includes(
-                                            attachment.filename
-                                          )
-                                        ) {
-                                          studentAttachments.push(attachment);
+                                        // Improved matching: split data.attachment by comma and check for exact filename matches
+                                        if (data.attachment && attachment.filename) {
+                                          const attachmentFiles = data.attachment
+                                            .split(", ")
+                                            .map(file => file.trim());
+
+                                          // Check if this exact filename exists in the attachment list
+                                          const hasExactMatch = attachmentFiles.some(file =>
+                                            file === attachment.filename ||
+                                            file.includes(attachment.filename) ||
+                                            attachment.filename.includes(file)
+                                          );
+
+                                          if (hasExactMatch) {
+                                            // Avoid duplicates by checking if already added
+                                            const isDuplicate = studentAttachments.some(existing =>
+                                              existing.filename === attachment.filename &&
+                                              existing.url === attachment.url
+                                            );
+
+                                            if (!isDuplicate) {
+                                              studentAttachments.push(attachment);
+                                            }
+                                          }
                                         }
                                       });
                                     }
@@ -458,7 +474,9 @@ const Students = () => {
                                   console.log(
                                     "✅ Using actual attachment URLs for student:",
                                     data.transactionNumber,
-                                    studentAttachments
+                                    "Found attachments:",
+                                    studentAttachments.length,
+                                    studentAttachments.map(a => a.filename)
                                   );
 
                                   return studentAttachments.map(
@@ -483,94 +501,24 @@ const Students = () => {
 
                                       return (
                                         <div
-                                          key={index}
-                                          className="flex items-center space-x-2 group"
+                                          key={`real-${data.transactionNumber}-${index}-${attachment.filename}`}
+                                          className="flex items-center group"
                                         >
-                                          {" "}
-                                          {!imgErrors[
-                                            `${data.transactionNumber}-${index}`
-                                          ] ? (
-                                            <img
-                                              src={thumbnailUrl}
-                                              alt="Attachment thumbnail"
-                                              className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
-                                              onClick={() =>
-                                                window.open(
-                                                  viewableUrl,
-                                                  "_blank"
-                                                )
-                                              }
-                                              onError={(e) => {
-                                                // Try fallback URLs first
-                                                const fallbacks =
-                                                  window.cloudinaryFallbacks;
-                                                if (fallbacks) {
-                                                  console.log(
-                                                    "🔄 Trying fallback URLs..."
-                                                  );
-                                                  e.target.src =
-                                                    fallbacks.thumbnail;
-                                                  // Update the onClick handler to use fallback viewable URL
-                                                  e.target.onclick = () =>
-                                                    window.open(
-                                                      fallbacks.viewable,
-                                                      "_blank"
-                                                    );
-                                                  return;
-                                                }
-
-                                                console.log(
-                                                  "❌ Image failed to load:",
-                                                  thumbnailUrl
-                                                );
-                                                setImgErrors((prev) => ({
-                                                  ...prev,
-                                                  [`${data.transactionNumber}-${index}`]: true,
-                                                }));
-                                              }}
-                                            />
-                                          ) : (
-                                            <div
-                                              className="w-8 h-8 bg-gray-300 rounded border flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors"
-                                              onClick={() =>
-                                                window.open(
-                                                  viewableUrl,
-                                                  "_blank"
-                                                )
-                                              }
+                                          <a
+                                            href={viewableUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:underline text-sm block"
+                                            title={filename}
+                                          >
+                                            <span
+                                              data-tooltip-id="attachment-tooltip"
+                                              data-tooltip-content={filename}
+                                              className="cursor-pointer block truncate max-w-[120px]"
                                             >
-                                              <svg
-                                                className="w-4 h-4 text-gray-500"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                              >
-                                                <path
-                                                  strokeLinecap="round"
-                                                  strokeLinejoin="round"
-                                                  strokeWidth="2"
-                                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                                />
-                                              </svg>
-                                            </div>
-                                          )}
-                                          <div className="flex-1 min-w-0">
-                                            <a
-                                              href={viewableUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="text-blue-600 hover:underline text-sm block"
-                                              title={filename}
-                                            >
-                                              <span
-                                                data-tooltip-id="attachment-tooltip"
-                                                data-tooltip-content={filename}
-                                                className="cursor-help block truncate max-w-[120px]"
-                                              >
-                                                {filename}
-                                              </span>
-                                            </a>
-                                          </div>
+                                              {filename}
+                                            </span>
+                                          </a>
                                         </div>
                                       );
                                     }
@@ -579,11 +527,15 @@ const Students = () => {
                                   // Fallback to the old method if no real URLs found
                                   console.log(
                                     "⚠️ No real URLs found, falling back to reconstruction for:",
-                                    data.transactionNumber
+                                    data.transactionNumber,
+                                    "Original attachment string:",
+                                    data.attachment
                                   );
-                                  return data.attachment
-                                    .split(", ")
-                                    .map((url, index) => {
+
+                                  const attachmentUrls = data.attachment.split(", ");
+                                  console.log("Split attachment URLs:", attachmentUrls);
+
+                                  return attachmentUrls.map((url, index) => {
                                       console.log(
                                         "🔍 DEBUG: Processing attachment URL:",
                                         {
@@ -796,161 +748,24 @@ const Students = () => {
 
                                       return (
                                         <div
-                                          key={index}
-                                          className="flex items-center space-x-2 group"
+                                          key={`fallback-${data.transactionNumber}-${index}-${url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('/') + 20)}`}
+                                          className="flex items-center group"
                                         >
-                                          {/* Thumbnail preview */}
-                                          <img
-                                            src={thumbnailUrl}
-                                            alt="Attachment thumbnail"
-                                            className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
-                                            onClick={() =>
-                                              window.open(viewableUrl, "_blank")
-                                            }
-                                            onError={(e) => {
-                                              console.log(
-                                                "❌ Image failed to load, trying alternatives..."
-                                              );
-
-                                              // Try to construct alternative URLs using the same logic as above
-                                              const originalName = url
-                                                .replace(/\.[^/.]+$/, "")
-                                                .replace(/[^a-zA-Z0-9]/g, "_");
-
-                                              // Get student ID from context for better URL construction
-                                              const studentId =
-                                                data.transactionNumber ||
-                                                "unknown";
-
-                                              console.log(
-                                                "🔄 Trying alternative URLs for:",
-                                                {
-                                                  originalUrl: url,
-                                                  cleanedName: originalName,
-                                                  studentId: studentId,
-                                                }
-                                              );
-
-                                              // Try different timestamp patterns that might exist
-                                              const currentTime = Date.now();
-                                              const oneDayMs =
-                                                24 * 60 * 60 * 1000;
-
-                                              const possibleTimestamps = [
-                                                "1750090241090", // Current example
-                                                "1749976559176", // Previous example
-                                                currentTime.toString(),
-                                                (
-                                                  currentTime - oneDayMs
-                                                ).toString(),
-                                                (
-                                                  currentTime -
-                                                  2 * oneDayMs
-                                                ).toString(),
-                                                (
-                                                  currentTime -
-                                                  3 * oneDayMs
-                                                ).toString(),
-                                                "1750090000000", // Approximate timestamp
-                                                "1749900000000", // Earlier timestamp
-                                                "1750000000000", // Another possibility
-                                                "1750100000000", // Later timestamp
-                                              ];
-
-                                              const alternatives =
-                                                possibleTimestamps.map(
-                                                  (timestamp) => {
-                                                    const versionTimestamp =
-                                                      timestamp.substring(
-                                                        0,
-                                                        10
-                                                      );
-                                                    const publicId = `${originalName}-${studentId}-${timestamp}`;
-                                                    return `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_60,h_60,g_face/v${versionTimestamp}/appointment-system/attachments/${publicId}`;
-                                                  }
-                                                );
-
-                                              let currentIndex = parseInt(
-                                                e.target.dataset.attemptIndex ||
-                                                  "0"
-                                              );
-
-                                              if (
-                                                currentIndex <
-                                                alternatives.length
-                                              ) {
-                                                console.log(
-                                                  `🔄 Trying alternative URL ${
-                                                    currentIndex + 1
-                                                  }:`,
-                                                  alternatives[currentIndex]
-                                                );
-                                                e.target.src =
-                                                  alternatives[currentIndex];
-                                                e.target.dataset.attemptIndex =
-                                                  (currentIndex + 1).toString();
-                                              } else if (
-                                                window.cloudinaryFallbacks &&
-                                                !e.target.dataset.triedFallback
-                                              ) {
-                                                // Try fallback URLs without version
-                                                console.log(
-                                                  "🔄 Trying fallback URL without version:",
-                                                  window.cloudinaryFallbacks
-                                                    .thumbnail
-                                                );
-                                                e.target.src =
-                                                  window.cloudinaryFallbacks.thumbnail;
-                                                e.target.dataset.triedFallback =
-                                                  "true";
-                                              } else {
-                                                console.log(
-                                                  "❌ All alternative URLs failed, showing placeholder"
-                                                );
-                                                // Replace with a placeholder icon
-                                                e.target.style.display = "none";
-                                                const placeholder =
-                                                  document.createElement("div");
-                                                placeholder.className =
-                                                  "w-8 h-8 bg-gray-300 rounded border flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors";
-                                                placeholder.innerHTML = `
-                                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                            </svg>
-                                          `;
-                                                placeholder.addEventListener(
-                                                  "click",
-                                                  () =>
-                                                    window.open(
-                                                      viewableUrl,
-                                                      "_blank"
-                                                    )
-                                                );
-                                                e.target.parentElement.appendChild(
-                                                  placeholder
-                                                );
-                                              }
-                                            }}
-                                          />
-
-                                          {/* Filename with truncation */}
-                                          <div className="flex-1 min-w-0">
-                                            <a
-                                              href={viewableUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="text-blue-600 hover:underline text-sm block"
-                                              title={filename}
+                                          <a
+                                            href={viewableUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:underline text-sm block"
+                                            title={filename}
+                                          >
+                                            <span
+                                              data-tooltip-id="attachment-tooltip"
+                                              data-tooltip-content={filename}
+                                              className="cursor-pointer block truncate max-w-[120px]"
                                             >
-                                              <span
-                                                data-tooltip-id="attachment-tooltip"
-                                                data-tooltip-content={filename}
-                                                className="cursor-help block truncate max-w-[120px]"
-                                              >
-                                                {filename}
-                                              </span>
-                                            </a>
-                                          </div>
+                                              {filename}
+                                            </span>
+                                          </a>
                                         </div>
                                       );
                                     });
