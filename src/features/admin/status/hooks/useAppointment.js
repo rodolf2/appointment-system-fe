@@ -11,7 +11,7 @@ const useAppointment = () => {
 
   // States for filtering and search
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("PENDING");
+  const [selectedFilter, setSelectedFilter] = useState("Filter by");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -68,13 +68,11 @@ const useAppointment = () => {
         return "text-gray-500";
     }
   };
-
   // ====================================================================
-  // === CORRECTED FILTERING LOGIC ======================================
+  // === FILTERING LOGIC ================================================
   // ====================================================================
   const filteredAppointments = appointments.filter((data) => {
     // Step 1: Filter by Search Term
-    // If there's no search term, everything matches by default.
     const searchString = searchTerm.toLowerCase();
     const matchesSearch = searchTerm
       ? data.transactionNumber?.toLowerCase().includes(searchString) ||
@@ -84,7 +82,6 @@ const useAppointment = () => {
       : true;
 
     // Step 2: Filter by Status
-    // If the filter is "Filter by", everything matches by default.
     const matchesFilter =
       selectedFilter === "Filter by"
         ? true
@@ -607,9 +604,9 @@ const useAppointment = () => {
 
   return {
     // Data states
-    appointments,
     loading,
     error,
+    appointments,
 
     // Pagination states
     currentPage,
@@ -629,9 +626,7 @@ const useAppointment = () => {
     handleEntriesPerPageChange,
     handleNextPage,
     handlePreviousPage,
-    handlePageChange,
-
-    // Search and filter states
+    handlePageChange, // Search and filter states
     searchTerm,
     selectedFilter,
 

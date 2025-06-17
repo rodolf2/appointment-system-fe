@@ -33,9 +33,7 @@ const Appointments = () => {
     handleEntriesPerPageChange,
     handleNextPage,
     handlePreviousPage,
-    handlePageChange,
-
-    // Search and filter states
+    handlePageChange, // Search and filter states
     searchTerm,
     selectedFilter,
 
@@ -149,7 +147,7 @@ const Appointments = () => {
                           </td>
                           <td className="border p-4">
                             <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
-                          </td>
+                          </td>{" "}
                           <td className="border p-4">
                             <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
                           </td>
@@ -241,12 +239,12 @@ const Appointments = () => {
                         onChange={handleFilterChange}
                         className="bg-white border-2 border-gray-300 px-2 text-gray-400 py-2"
                       >
-                        {" "}
+                        <option value="Filter by">Filter by</option>
                         <option value="PENDING">Pending</option>
                         <option value="APPROVED">Approved</option>
                         <option value="REJECTED">Rejected</option>
                         <option value="COMPLETED">Completed</option>
-                      </select>
+                      </select>{" "}
                     </div>
                     <div className="relative">
                       <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
