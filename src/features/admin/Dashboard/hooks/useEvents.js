@@ -22,7 +22,7 @@ const useEvents = () => {
     description: "",
     startDate: "",
     endDate: "",
-    color: "bg-blue-500",
+    color: "bg-[#F09E18]",
   }; // Added default color
   const [newEventForm, setNewEventForm] = useState(initialEventFormState);
   const [selectedEventForModal, setSelectedEventForModal] = useState(null); // For displaying event details in modal
@@ -89,7 +89,7 @@ const useEvents = () => {
           description: event.description || "", // Ensure description is at least an empty string
           startDate: dayjs(event.startDate).format("YYYY-MM-DD"), // Standard format for display/edit
           endDate: dayjs(event.endDate).format("YYYY-MM-DD"),
-          color: event.color || "bg-blue-500", // Use event's color or default
+          color: event.color || "bg-[#F09E18]", // Use event's color or default
           // originalEvent: event, // Optionally keep the full original event object
         };
         currentDateIterator = currentDateIterator.add(1, "day");
