@@ -483,42 +483,6 @@ const Students = () => {
                                           key={index}
                                           className="flex items-center space-x-2 group"
                                         >
-                                          <img
-                                            src={thumbnailUrl}
-                                            alt="Attachment thumbnail"
-                                            className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
-                                            onClick={() =>
-                                              window.open(viewableUrl, "_blank")
-                                            }
-                                            onError={(e) => {
-                                              console.log(
-                                                "❌ Real URL failed to load:",
-                                                viewableUrl
-                                              );
-                                              // Show placeholder for failed real URLs
-                                              e.target.style.display = "none";
-                                              const placeholder =
-                                                document.createElement("div");
-                                              placeholder.className =
-                                                "w-8 h-8 bg-gray-300 rounded border flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors";
-                                              placeholder.innerHTML = `
-                                              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                              </svg>
-                                            `;
-                                              placeholder.addEventListener(
-                                                "click",
-                                                () =>
-                                                  window.open(
-                                                    viewableUrl,
-                                                    "_blank"
-                                                  )
-                                              );
-                                              e.target.parentElement.appendChild(
-                                                placeholder
-                                              );
-                                            }}
-                                          />
                                           <div className="flex-1 min-w-0">
                                             <a
                                               href={viewableUrl}
@@ -694,7 +658,9 @@ const Students = () => {
 
                                         // Construct the URLs with version
                                         viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/v${versionTimestamp}/appointment-system/attachments/${publicId}`;
-                                        thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_60,h_60,g_face/v${versionTimestamp}/appointment-system/attachments/${publicId}`;
+                                        {
+                                          /* thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_60,h_60,g_face/v${versionTimestamp}/appointment-system/attachments/${publicId}`; */
+                                        }
 
                                         // Also create fallback URLs without version (more forgiving)
                                         const fallbackViewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/appointment-system/attachments/${publicId}`;
