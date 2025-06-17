@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { UserProvider } from "./context/UserContext.jsx";
+import { useEffect } from "react";
+import { testAPIConnection } from "./utils/debugAPI";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Announcement from "./pages/Announcement";
@@ -35,6 +37,17 @@ import NotFound from "./pages/NotFound.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
 const App = () => {
+  useEffect(() => {
+    const debugAPI = async () => {
+      try {
+        await testAPIConnection();
+      } catch (error) {
+        console.error("API connection test failed");
+      }
+    };
+    debugAPI();
+  }, []);
+
   return (
     <ErrorBoundary>
       <UserProvider>
