@@ -176,6 +176,7 @@ const useSignIn = () => {
         if (response.data) {
           const { token, user: userData } = response.data;
           localStorage.setItem("token", token);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
           // Store user data with consistent picture handling
           const enhancedUserData = {
@@ -188,12 +189,15 @@ const useSignIn = () => {
               null,
           };
 
-      updateUser(userData);
-      setIsGoogleLoading(false);
+          updateUser(enhancedUserData);
+          localStorage.setItem("user", JSON.stringify(enhancedUserData));
+          setIsGoogleLoading(false);
 
-      // Redirect to the originally requested page or default to registrarHome
-      const from = location.state?.from?.pathname || "/registrarHome";
-      navigate(from, { replace: true });
+          // Redirect to the originally requested page or default to registrarHome
+          const from = location.state?.from?.pathname || "/registrarHome";
+          navigate(from, { replace: true });
+        }
+      }
     } catch (error) {
       console.error("Google signin error:", error);
       // Don't show error message if user just closed the popup
