@@ -102,7 +102,8 @@ const useAnnouncements = () => {
       !announcement.description ||
       announcement.description.trim() === "" ||
       announcement.description === "<p><br></p>" ||
-      announcement.description === "<p></p>"
+      announcement.description === "<p></p>" ||
+      announcement.description.replace(/<[^>]*>/g, "").trim() === "" // Remove HTML tags and check if only spaces remain
     ) {
       errors.description = "Description is required";
     }

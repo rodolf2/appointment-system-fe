@@ -151,6 +151,7 @@ const Announcement = () => {
               </p>
             </div>
           </div>
+
           <div>{facebookEmbed()}</div>
         </div>
 

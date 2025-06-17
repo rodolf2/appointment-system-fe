@@ -140,13 +140,47 @@ const useProfileForm = () => {
 
         console.log("📤 Uploading to server...");
         const uploadResponse = await uploadProfilePicture(user.id, file, token);
+        console.log("📤 Upload response received:", uploadResponse);
+        console.log("📤 Response type:", typeof uploadResponse);
+        console.log("📤 Response keys:", Object.keys(uploadResponse || {}));
+        console.log("📤 profilePicture:", uploadResponse?.profilePicture);
+        console.log(
+          "📤 cloudinaryPublicId:",
+          uploadResponse?.cloudinaryPublicId
+        );
 
-        // Log the full response for debugging
-        console.log("📥 Server response:", uploadResponse);
+        // Extract cloudinaryPublicId from URL if not provided by server
+        let cloudinaryPublicId = uploadResponse?.cloudinaryPublicId;
+        if (!cloudinaryPublicId && uploadResponse?.profilePicture) {
+          try {
+            // Extract from Cloudinary URL: https://res.cloudinary.com/.../upload/v123/folder/public_id.ext
+            const url = uploadResponse.profilePicture;
+            const urlParts = url.split("/");
+            const uploadIndex = urlParts.findIndex((part) => part === "upload");
+            if (uploadIndex !== -1 && uploadIndex + 2 < urlParts.length) {
+              const publicIdParts = urlParts.slice(uploadIndex + 2);
+              const fullPath = publicIdParts.join("/");
+              cloudinaryPublicId = fullPath.replace(/\.[^/.]+$/, "");
+              console.log(
+                "🔧 Frontend extracted cloudinaryPublicId:",
+                cloudinaryPublicId
+              );
+            }
+          } catch (error) {
+            console.error(
+              "Error extracting cloudinaryPublicId from URL:",
+              error
+            );
+          }
+        }
 
-        if (!uploadResponse || !uploadResponse.profilePicture) {
-          console.error("Invalid response from server:", uploadResponse);
-          throw new Error("Server returned an invalid response");
+        if (!uploadResponse?.profilePicture) {
+          console.error("❌ Invalid response structure:", {
+            hasProfilePicture: !!uploadResponse?.profilePicture,
+            hasCloudinaryPublicId: !!cloudinaryPublicId,
+            fullResponse: uploadResponse,
+          });
+          throw new Error("Invalid response from server");
         }
 
         const imageUrl = uploadResponse.profilePicture;
@@ -164,7 +198,7 @@ const useProfileForm = () => {
           ...user,
           picture: uploadResponse.profilePicture,
           profilePicture: uploadResponse.profilePicture,
-          cloudinaryPublicId: uploadResponse.cloudinaryPublicId,
+          cloudinaryPublicId: cloudinaryPublicId,
         });
 
         console.log("✅ Profile picture updated successfully");

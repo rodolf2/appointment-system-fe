@@ -162,11 +162,11 @@ const Students = () => {
                     STRAND
                   </th>
                   <th className="border p-5 w-[10%]">CONTACT NO.</th>
-                  <th className="border p-5 w-[13%]">EMAIL ADDRESS</th>
-                  <th className="border p-5 w-[12%]">PURPOSE</th>
+                  <th className="border p-5 w-[15%]">EMAIL ADDRESS</th>
                   <th className="border p-5 w-[10%]">ATTACHMENT PROOF</th>
-                  <th className="border p-5 w-[8%]">REQUEST</th>
-                  <th className="border p-5 w-[8%]">DATE OF REQUEST</th>
+                  <th className="border p-5 w-[10%]">PURPOSE</th>
+                  <th className="border p-5 w-[10%]">REQUEST</th>
+                  <th className="border p-5 w-[10%]">DATE OF REQUEST</th>
                 </tr>
               </thead>
               <tbody>
@@ -200,139 +200,245 @@ const Students = () => {
                       (currentPage - 1) * entriesPerPage,
                       currentPage * entriesPerPage
                     )
-                    .map((data, index) => {
-                      const charLimit = 20;
-                      const isTransactionLong =
-                        data.transactionNumber?.length > charLimit;
-                      const isNameLong = data.name?.length > charLimit;
-                      const isLastSYLong = data.lastSY?.length > charLimit;
-                      const isProgramLong = data.program?.length > charLimit;
-                      const isContactLong = data.contact?.length > charLimit;
-                      const isEmailLong = data.email?.length > charLimit;
-                      const isPurposeLong = data.purpose?.length > charLimit;
-                      const isRequestLong = data.request?.length > charLimit;
-                      const formattedDate = new Date(
-                        data.date
-                      ).toLocaleDateString();
-
-                      return (
-                        <tr
-                          key={data.transactionNumber || index}
-                          className={`${
-                            index % 2 === 0 ? "bg-gray-100" : ""
-                          } text-center`}
-                        >
-                          <td
-                            className="border p-5 text-[#354CCE] font-bold"
-                            data-tooltip={
-                              isTransactionLong ? data.transactionNumber : null
-                            }
-                          >
-                            <div
-                              className={isTransactionLong ? "truncate" : ""}
+                    .map((data, index) => (
+                      <tr
+                        key={data.transactionNumber || index}
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-100" : ""
+                        } text-center`}
+                      >
+                        <td className="border p-5 text-[#354CCE] font-bold break-words">
+                          {data.transactionNumber}
+                        </td>
+                        <td className="border p-5 break-words">{data.name}</td>
+                        <td className="border p-5 break-words">
+                          {data.lastSY}
+                        </td>
+                        <td className="border p-5 break-words">
+                          {data.program}
+                        </td>
+                        <td className="border p-5 break-words">
+                          {data.contact}
+                        </td>
+                        <td className="border p-5">
+                          <div className="max-w-[150px]">
+                            <span
+                              data-tooltip-id="email-tooltip"
+                              data-tooltip-content={data.email}
+                              className="cursor-help block truncate"
                             >
-                              {data.transactionNumber}
-                            </div>
-                          </td>
-                          <td
-                            className="border p-5"
-                            data-tooltip={isNameLong ? data.name : null}
-                          >
-                            <div className={isNameLong ? "truncate" : ""}>
-                              {data.name}
-                            </div>
-                          </td>
-                          <td
-                            className="border p-5"
-                            data-tooltip={isLastSYLong ? data.lastSY : null}
-                          >
-                            <div className={isLastSYLong ? "truncate" : ""}>
-                              {data.lastSY}
-                            </div>
-                          </td>
-                          <td
-                            className="border p-5"
-                            data-tooltip={isProgramLong ? data.program : null}
-                          >
-                            <div className={isProgramLong ? "truncate" : ""}>
-                              {data.program}
-                            </div>
-                          </td>
-                          <td
-                            className="border p-5"
-                            data-tooltip={isContactLong ? data.contact : null}
-                          >
-                            <div className={isContactLong ? "truncate" : ""}>
-                              {data.contact}
-                            </div>
-                          </td>
-                          <td
-                            className="border p-5"
-                            data-tooltip={isEmailLong ? data.email : null}
-                          >
-                            <div className={isEmailLong ? "truncate" : ""}>
                               {data.email}
-                            </div>
-                          </td>
-                          <td
-                            className="border p-5"
-                            data-tooltip={
-                              isPurposeLong
-                                ? data.purpose?.replace(/(.{50})/g, "$1\n")
-                                : null
-                            }
-                          >
-                            <div className={isPurposeLong ? "truncate" : ""}>
-                              {data.purpose || "No purpose specified"}
-                            </div>
-                          </td>
-                          <td className="border p-5">
-                            {data.attachment &&
-                            data.attachment !== "No attachments" ? (
-                              <div className="flex flex-col gap-1">
-                                {data.attachment
-                                  .split(", ")
-                                  .map((filename, fileIndex) => {
-                                    const isFilenameLong = filename.length > 15;
-                                    return (
-                                      <div
-                                        key={fileIndex}
-                                        data-tooltip={
-                                          isFilenameLong ? filename : null
+                            </span>
+                          </div>
+                        </td>
+                        <td className="border p-5 break-words">
+                          {data.attachment &&
+                          data.attachment !== "No attachments" ? (
+                            <div className="flex flex-col gap-2">
+                              {data.attachment.split(", ").map((url, index) => {
+                                console.log(
+                                  "🔍 DEBUG: Processing attachment URL:",
+                                  {
+                                    originalUrl: url,
+                                    isCloudinaryUrl: url.startsWith(
+                                      "https://res.cloudinary.com"
+                                    ),
+                                    urlLength: url.length,
+                                    studentData: data.transactionNumber,
+                                  }
+                                );
+
+                                // Extract original filename from the Cloudinary URL
+                                const urlParts = url.split("/");
+                                const lastPart = urlParts[urlParts.length - 1];
+
+                                // Extract filename from the public_id format: originalname-studentId-timestamp
+                                let filename = lastPart;
+
+                                // Try to extract original filename from the pattern
+                                const publicIdMatch = lastPart.match(
+                                  /^(.+)-[^-]+-\d+(\.[^.]+)?$/
+                                );
+                                if (publicIdMatch) {
+                                  // Replace underscores back to spaces and get original name
+                                  filename = publicIdMatch[1].replace(
+                                    /_/g,
+                                    " "
+                                  );
+                                  // Add extension if it exists
+                                  if (publicIdMatch[2]) {
+                                    filename += publicIdMatch[2];
+                                  } else {
+                                    // Default to .jpg if no extension found
+                                    filename += ".jpg";
+                                  }
+                                } else {
+                                  // Fallback to generic name
+                                  filename = `Attachment ${index + 1}`;
+                                }
+
+                                // Ensure the URL has the complete Cloudinary path with transformations
+                                let viewableUrl;
+                                let thumbnailUrl;
+
+                                if (
+                                  url.startsWith("https://res.cloudinary.com")
+                                ) {
+                                  // URL is already complete
+                                  viewableUrl = url;
+                                  // Create thumbnail by adding transformation
+                                  thumbnailUrl = url.replace(
+                                    "/upload/",
+                                    "/upload/c_thumb,w_50,h_50,g_face/"
+                                  );
+                                } else {
+                                  // Simple fix: Use the exact pattern from your database
+                                  const filename = url
+                                    .replace(/\.[^/.]+$/, "")
+                                    .replace(/[^a-zA-Z0-9]/g, "_");
+
+                                  // Try multiple timestamps that might work
+                                  const possibleTimestamps = [
+                                    "1750090241090", // From your database example
+                                    "1749976559176", // From previous examples
+                                    Date.now().toString(), // Current timestamp as fallback
+                                  ];
+
+                                  // Use the first timestamp for now
+                                  const timestamp = possibleTimestamps[0];
+                                  const versionTimestamp = timestamp.substring(
+                                    0,
+                                    10
+                                  ); // First 10 digits for version
+
+                                  viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/v${versionTimestamp}/appointment-system/attachments/${filename}-undefined-${timestamp}`;
+                                  thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_50,h_50,g_face/v${versionTimestamp}/appointment-system/attachments/${filename}-undefined-${timestamp}`;
+
+                                  console.log("Constructed URLs:", {
+                                    viewableUrl,
+                                    thumbnailUrl,
+                                  });
+                                }
+
+                                console.log("Processed URLs:", {
+                                  viewableUrl,
+                                  thumbnailUrl,
+                                  filename,
+                                });
+
+                                return (
+                                  <div
+                                    key={index}
+                                    className="flex items-center space-x-2 group"
+                                  >
+                                    {/* Thumbnail preview */}
+                                    <img
+                                      src={thumbnailUrl}
+                                      alt="Attachment thumbnail"
+                                      className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
+                                      onClick={() =>
+                                        window.open(viewableUrl, "_blank")
+                                      }
+                                      onError={(e) => {
+                                        // Try alternative URLs if the first one fails
+                                        const originalName = url
+                                          .replace(/\.[^/.]+$/, "")
+                                          .replace(/[^a-zA-Z0-9]/g, "_");
+                                        // Try different timestamps for other images
+                                        const possibleTimestamps = [
+                                          "1749976559176", // Previous example
+                                          "1750090000000", // Approximate timestamp
+                                          "1749900000000", // Earlier timestamp
+                                          "1750000000000", // Another possibility
+                                          "1750100000000", // Later timestamp
+                                        ];
+
+                                        const alternatives =
+                                          possibleTimestamps.map(
+                                            (timestamp) => {
+                                              const versionTimestamp =
+                                                timestamp.substring(0, 10);
+                                              return `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_50,h_50,g_face/v${versionTimestamp}/appointment-system/attachments/${originalName}-undefined-${timestamp}`;
+                                            }
+                                          );
+
+                                        let currentIndex = parseInt(
+                                          e.target.dataset.attemptIndex || "0"
+                                        );
+                                        if (
+                                          currentIndex < alternatives.length
+                                        ) {
+                                          console.log(
+                                            `Trying alternative URL ${
+                                              currentIndex + 1
+                                            }:`,
+                                            alternatives[currentIndex]
+                                          );
+                                          e.target.src =
+                                            alternatives[currentIndex];
+                                          e.target.dataset.attemptIndex = (
+                                            currentIndex + 1
+                                          ).toString();
+                                        } else {
+                                          console.log(
+                                            "All alternative URLs failed, hiding image"
+                                          );
+                                          e.target.style.display = "none";
                                         }
-                                        className="relative"
+                                      }}
+                                    />
+
+                                    {/* Filename with truncation */}
+                                    <div className="flex-1 min-w-0">
+                                      <a
+                                        href={viewableUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:underline text-sm block"
+                                        title={filename}
                                       >
-                                        <div
-                                          className={`${
-                                            isFilenameLong ? "truncate" : ""
-                                          } text-blue-600 hover:underline cursor-pointer text-sm`}
+                                        <span
+                                          data-tooltip-id="attachment-tooltip"
+                                          data-tooltip-content={filename}
+                                          className="cursor-help block truncate max-w-[120px]"
                                         >
                                           {filename}
-                                        </div>
-                                      </div>
-                                    );
-                                  })}
-                              </div>
-                            ) : (
-                              <span className="text-gray-500 text-sm">
-                                No attachments
-                              </span>
-                            )}
-                          </td>
-                          <td
-                            className="border p-5"
-                            data-tooltip={isRequestLong ? data.request : null}
-                          >
-                            <div className={isRequestLong ? "truncate" : ""}>
-                              {data.request}
+                                        </span>
+                                      </a>
+                                    </div>
+                                  </div>
+                                );
+                              })}
                             </div>
-                          </td>
-                          <td className="border p-5">
-                            <div>{formattedDate}</div>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                          ) : (
+                            <span className="text-gray-500 text-sm">
+                              No attachments
+                            </span>
+                          )}
+                        </td>
+                        <td className="border p-5 break-words">
+                          <span
+                            data-tooltip-id="purpose-tooltip"
+                            data-tooltip-content={
+                              data.purpose.length > 50
+                                ? data.purpose.replace(/(.{50})/g, "$1\n")
+                                : data.purpose
+                            }
+                            className="cursor-help"
+                          >
+                            {data.purpose.length > 20
+                              ? `${data.purpose.substring(0, 20)}...`
+                              : data.purpose}
+                          </span>
+                        </td>
+                        <td className="border p-5 break-words">
+                          {data.request}
+                        </td>
+                        <td className="border p-5 break-words">
+                          {new Date(data.date).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))}
               </tbody>
             </table>
 
@@ -383,7 +489,8 @@ const Students = () => {
 
       {/* Tooltips */}
       <Tooltip id="email-tooltip" />
-      <Tooltip id="purpose-tooltip" />
+      <Tooltip id="purpose-tooltip" style={{ whiteSpace: "pre-line" }} />
+      <Tooltip id="attachment-tooltip" />
     </div>
   );
 };

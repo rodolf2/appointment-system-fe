@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/attachment`;
 
@@ -6,19 +6,36 @@ const API_URL = `${import.meta.env.VITE_API_URL}/api/attachment`;
 export const uploadAttachments = async (files, studentId) => {
   try {
     const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files', file);
+    files.forEach((file) => {
+      formData.append("files", file);
     });
-    formData.append('studentId', studentId);
+
+    // Handle undefined studentId by passing it as string
+    formData.append("studentId", studentId || "undefined");
+
+    console.log("Uploading attachments:", {
+      fileCount: files.length,
+      studentId: studentId || "undefined",
+      files: files.map((f) => ({ name: f.name, size: f.size, type: f.type })),
+    });
 
     const response = await fetch(`${API_URL}/upload`, {
-      method: 'POST',
+      method: "POST",
       body: formData,
-      credentials: 'include'
-    })
-    return response.data;
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to upload attachments");
+    }
+
+    const result = await response.json();
+    console.log("Upload successful:", result);
+    return result;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to upload attachments' };
+    console.error("Upload error:", error);
+    throw error;
   }
 };
 
@@ -28,7 +45,7 @@ export const getAllAttachments = async () => {
     const response = await axios.get(`${API_URL}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to fetch attachments' };
+    throw error.response?.data || { message: "Failed to fetch attachments" };
   }
 };
 
@@ -38,7 +55,7 @@ export const getAttachmentById = async (attachmentId) => {
     const response = await axios.get(`${API_URL}/${attachmentId}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to fetch attachment' };
+    throw error.response?.data || { message: "Failed to fetch attachment" };
   }
 };
 
@@ -48,6 +65,6 @@ export const deleteAttachmentById = async (attachmentId) => {
     const response = await axios.delete(`${API_URL}/${attachmentId}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to delete attachment' };
+    throw error.response?.data || { message: "Failed to delete attachment" };
   }
 };

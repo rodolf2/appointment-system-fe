@@ -264,8 +264,19 @@ const Schedule = () => {
                 value={newSchedule.slots}
                 onChange={handleInputChange}
                 placeholder="Enter number of slots"
-                className="border w-full p-2 mb-2"
+                className={`w-full p-2 mb-2 ${
+                  !newSchedule.slots && addModalError
+                    ? "border-2 border-red-500"
+                    : "border"
+                }`}
               />
+              <div className="h-6 mb-2">
+                {!newSchedule.slots && addModalError && (
+                  <p className="text-red-500 text-sm">
+                    Slots field is required
+                  </p>
+                )}
+              </div>
               <p>DATE</p>
               <input
                 name="date"
@@ -273,8 +284,17 @@ const Schedule = () => {
                 value={newSchedule.date}
                 onChange={handleInputChange}
                 placeholder="Date"
-                className="border w-full p-2 mb-2"
+                className={`w-full p-2 mb-2 ${
+                  !newSchedule.date && addModalError
+                    ? "border-2 border-red-500"
+                    : "border"
+                }`}
               />
+              <div className="h-6 mb-2">
+                {!newSchedule.date && addModalError && (
+                  <p className="text-red-500 text-sm">Date field is required</p>
+                )}
+              </div>
               <p>START TIME</p>
               <input
                 name="startTime"
@@ -282,8 +302,19 @@ const Schedule = () => {
                 value={newSchedule.startTime}
                 onChange={handleInputChange}
                 placeholder="Start Time"
-                className="border w-full p-2 mb-2"
+                className={`w-full p-2 mb-2 ${
+                  !newSchedule.startTime && addModalError
+                    ? "border-2 border-red-500"
+                    : "border"
+                }`}
               />
+              <div className="h-6 mb-2">
+                {!newSchedule.startTime && addModalError && (
+                  <p className="text-red-500 text-sm">
+                    Start time field is required
+                  </p>
+                )}
+              </div>
               <p>END TIME</p>
               <input
                 name="endTime"
@@ -291,16 +322,22 @@ const Schedule = () => {
                 value={newSchedule.endTime}
                 onChange={handleInputChange}
                 placeholder="End Time"
-                className="border w-full p-2 mb-2"
+                className={`w-full p-2 mb-2 ${
+                  !newSchedule.endTime && addModalError
+                    ? "border-2 border-red-500"
+                    : "border"
+                }`}
               />
+              <div className="h-6 mb-2">
+                {!newSchedule.endTime && addModalError && (
+                  <p className="text-red-500 text-sm">
+                    End time field is required
+                  </p>
+                )}
+              </div>
             </div>
-            {addModalError && (
-              <p className="mt-4 text-center text-red-500 text-sm">
-                {addModalError}
-              </p>
-            )}
 
-            <div className="flex justify-center gap-10 mt-6">
+            <div className="flex justify-end gap-4 mt-6">
               <button
                 className="bg-gray-300 text-black px-8 py-2 rounded-2xl"
                 onClick={closeAddModal}
@@ -328,50 +365,86 @@ const Schedule = () => {
             {/* Consider consistent styling with ADD SCHEDULE */}
             <div className="border-b-2 border-[#F3BC62] w-60 my-2"></div>
             <div className="w-96">
-              <p>Edit Slots</p>
+              <p className="uppercase">Edit Slots</p>
               <input
                 name="slots"
                 type="number"
                 value={newSchedule.slots}
                 onChange={handleInputChange}
                 placeholder="Enter number of slots"
-                className="border w-full p-2 mb-2"
+                className={`w-full p-2 mb-2 ${
+                  !newSchedule.slots && editModalError
+                    ? "border-2 border-red-500"
+                    : "border"
+                }`}
               />
-              <p>Date</p>
+              <div className="h-6 mb-2">
+                {!newSchedule.slots && editModalError && (
+                  <p className="text-red-500 text-sm">
+                    Slots field is required
+                  </p>
+                )}
+              </div>
+              <p className="uppercase">Date</p>
               <input
                 name="date"
                 type="date"
                 value={newSchedule.date}
                 onChange={handleInputChange}
                 placeholder="Date"
-                className="border w-full p-2 mb-2"
+                className={`w-full p-2 mb-2 ${
+                  !newSchedule.date && editModalError
+                    ? "border-2 border-red-500"
+                    : "border"
+                }`}
               />
-              <p>Start Time</p>
+              <div className="h-6 mb-2">
+                {!newSchedule.date && editModalError && (
+                  <p className="text-red-500 text-sm">Date field is required</p>
+                )}
+              </div>
+              <p className="uppercase">Start Time</p>
               <input
                 name="startTime"
                 type="time"
                 value={newSchedule.startTime}
                 onChange={handleInputChange}
                 placeholder="Start Time"
-                className="border w-full p-2 mb-2"
+                className={`w-full p-2 mb-2 ${
+                  !newSchedule.startTime && editModalError
+                    ? "border-2 border-red-500"
+                    : "border"
+                }`}
               />
-              <p>End Time</p>
+              <div className="h-6 mb-2">
+                {!newSchedule.startTime && editModalError && (
+                  <p className="text-red-500 text-sm">
+                    Start time field is required
+                  </p>
+                )}
+              </div>
+              <p className="uppercase">End Time</p>
               <input
                 name="endTime"
                 type="time"
                 value={newSchedule.endTime}
                 onChange={handleInputChange}
                 placeholder="End Time"
-                className="border w-full p-2 mb-2"
+                className={`w-full p-2 mb-2 ${
+                  !newSchedule.endTime && editModalError
+                    ? "border-2 border-red-500"
+                    : "border"
+                }`}
               />
+              <div className="h-6 mb-2">
+                {!newSchedule.endTime && editModalError && (
+                  <p className="text-red-500 text-sm">
+                    End time field is required
+                  </p>
+                )}
+              </div>
             </div>
-            {/* Display the error message here */}
-            {editModalError && (
-              <p className="mt-4 text-center text-red-500 text-sm">
-                {editModalError}
-              </p>
-            )}
-            <div className="flex justify-center gap-10 mt-6">
+            <div className="flex justify-end gap-4 mt-6">
               {" "}
               {/* Ensure editModalError doesn't push buttons too far if it appears */}
               <button

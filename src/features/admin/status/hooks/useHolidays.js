@@ -18,7 +18,12 @@ const useHolidays = () => {
   const initialHolidayState = { date: "", description: "" };
   const [newHoliday, setNewHoliday] = useState(initialHolidayState);
   const [editingHolidayId, setEditingHolidayId] = useState(null);
+<<<<<<< HEAD
   const [validationErrors, setValidationErrors] = useState({});
+=======
+  const [addModalError, setAddModalError] = useState("");
+  const [editModalError, setEditModalError] = useState("");
+>>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
   const [allHolidays, setAllHolidays] = useState([]);
   const [displayedHolidays, setDisplayedHolidays] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -149,12 +154,17 @@ const useHolidays = () => {
   const openAddModal = () => {
     setNewHoliday(initialHolidayState);
     setEditingHolidayId(null);
+    setAddModalError("");
     setIsAddModalOpen(true);
   };
   const closeAddModal = () => {
     setIsAddModalOpen(false);
+<<<<<<< HEAD
     setValidationErrors({});
     setNewHoliday(initialHolidayState);
+=======
+    setAddModalError("");
+>>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
   };
 
   const openEditModal = (holidayToEdit) => {
@@ -163,13 +173,18 @@ const useHolidays = () => {
       description: holidayToEdit.description,
     });
     setEditingHolidayId(holidayToEdit.id);
+    setEditModalError("");
     setIsEditModalOpen(true);
   };
   const closeEditModal = () => {
     setIsEditModalOpen(false);
     setEditingHolidayId(null);
     setNewHoliday(initialHolidayState);
+<<<<<<< HEAD
     setValidationErrors({});
+=======
+    setEditModalError("");
+>>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
   };
 
   const openDeleteModal = (holidayId) => {
@@ -197,6 +212,7 @@ const useHolidays = () => {
 
   // CRUD functions - fetchAllHolidaysFromAPI is called after success
   const addHolidays = async () => {
+<<<<<<< HEAD
     // Clear previous validation errors
     setValidationErrors({});
 
@@ -213,6 +229,10 @@ const useHolidays = () => {
     // If there are validation errors, set them and return
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
+=======
+    if (!newHoliday.date || !newHoliday.description) {
+      setAddModalError("All fields are required");
+>>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
       return;
     }
 
@@ -233,13 +253,18 @@ const useHolidays = () => {
       } else {
         errorMessage = `Error: ${error.message}`;
       }
+<<<<<<< HEAD
       setValidationErrors({
         general: errorMessage,
       });
+=======
+      setAddModalError(errorMessage);
+>>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
     }
   };
 
   const updateHolidays = async () => {
+<<<<<<< HEAD
     // Clear previous validation errors
     setValidationErrors({});
 
@@ -259,6 +284,10 @@ const useHolidays = () => {
     // If there are validation errors, set them and return
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
+=======
+    if (!editingHolidayId || !newHoliday.date || !newHoliday.description) {
+      setEditModalError("All fields are required");
+>>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
       return;
     }
 
@@ -282,9 +311,13 @@ const useHolidays = () => {
       } else {
         errorMessage = `Error: ${error.message}`;
       }
+<<<<<<< HEAD
       setValidationErrors({
         general: errorMessage,
       });
+=======
+      setEditModalError(errorMessage);
+>>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
     }
   };
 
@@ -299,17 +332,8 @@ const useHolidays = () => {
       closeDeleteModal();
     } catch (error) {
       console.error("Error deleting holiday:", error);
-      let errorMessage = "Could not delete holiday. Please try again.";
-      if (error.response) {
-        errorMessage = `Error: ${
-          error.response.data.message || "Server error."
-        } (Status: ${error.response.status})`;
-      } else if (error.request) {
-        errorMessage = "Error: No response from server.";
-      } else {
-        errorMessage = `Error: ${error.message}`;
-      }
-      alert(errorMessage);
+      // Silently handle the error - no alert
+      closeDeleteModal();
     }
   };
 
@@ -320,7 +344,12 @@ const useHolidays = () => {
     isDeleteModalOpen,
     newHoliday,
     holidays: displayedHolidays,
+<<<<<<< HEAD
     validationErrors,
+=======
+    addModalError,
+    editModalError,
+>>>>>>> e323da738ffc93d153fc06e953fc1bf0fb1d27c2
     toggleSidebar,
     openAddModal,
     closeAddModal,

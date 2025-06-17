@@ -182,7 +182,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 <p className="text-red-600 text-start">{errors.date}</p>
               ) : (
                 <p className="invisible">Placeholder</p> // Keeps space reserved
-              )}
+              )}{" "}
               <div className="flex justify-end space-x-2  ">
                 <button
                   className="px-6 py-2  bg-[#161f55] text-white rounded-md"
