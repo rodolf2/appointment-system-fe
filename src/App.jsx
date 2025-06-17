@@ -131,7 +131,6 @@ const Layout = () => {
             <Route path="/about" element={<About />} />
             <Route path="/faqs" element={<Faqs />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/students" element={<Students />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -207,6 +206,14 @@ const Layout = () => {
               element={
                 <ProtectedRoute>
                   <Announcements />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/students"
+              element={
+                <ProtectedRoute>
+                  <Students />
                 </ProtectedRoute>
               }
             />
