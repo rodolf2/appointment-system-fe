@@ -339,7 +339,7 @@ const Appointments = () => {
                                   ).toLocaleString()}\nRequest Type: ${
                                     data.request
                                   }\nEmail: ${data.emailAddress}`}
-                                  className={`px-4 py-2 rounded text-white font-medium text-sm cursor-help whitespace-nowrap ${getStatusColor(
+                                  className={`w-24 py-2 rounded text-white font-medium text-sm cursor-help text-center inline-block ${getStatusColor(
                                     data.status
                                   )}`}
                                 >
