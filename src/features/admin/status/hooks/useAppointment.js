@@ -68,9 +68,7 @@ const useAppointment = () => {
         return "text-gray-500";
     }
   };
-  // ====================================================================
-  // === FILTERING LOGIC ================================================
-  // ====================================================================
+
   const filteredAppointments = appointments.filter((data) => {
     // Step 1: Filter by Search Term
     const searchString = searchTerm.toLowerCase();

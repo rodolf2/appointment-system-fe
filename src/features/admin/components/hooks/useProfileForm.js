@@ -27,12 +27,10 @@ const useProfileForm = () => {
       // Split the full name into parts, handling multi-part names
       const nameParts = (user.name || "").trim().split(" ");
       const lastName = nameParts.length > 1 ? nameParts.pop() : "";
-      const firstName = nameParts.shift() || "";
-      const middleName = nameParts.join(" ");
+      const firstName = nameParts.join(" ") || "";
 
       return {
         firstName: firstName,
-        middleName: middleName,
         lastName: lastName,
         email: user.email || "",
         password: "",
@@ -41,7 +39,6 @@ const useProfileForm = () => {
 
     return {
       firstName: "",
-      middleName: "",
       lastName: "",
       email: "",
       password: "",
@@ -282,7 +279,6 @@ const useProfileForm = () => {
   const handleSubmit = async () => {
     const fullName = [
       formData.firstName.trim(),
-      formData.middleName.trim(),
       formData.lastName.trim(),
     ]
       .filter(Boolean)
@@ -343,7 +339,6 @@ const useProfileForm = () => {
   const clearProfileData = () => {
     setFormData({
       firstName: "",
-      middleName: "",
       lastName: "",
       email: "",
       password: "",

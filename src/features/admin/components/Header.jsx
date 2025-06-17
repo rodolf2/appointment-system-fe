@@ -88,41 +88,54 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
               className="absolute right-0 top-full mt-2 bg-white border border-gray-200 shadow-lg rounded-lg w-[500px] z-20 max-h-[32rem] overflow-y-auto"
             >
               {/* Header */}
-              <div className="px-6 py-4 border-b flex justify-between items-center">
-                <h3 className="font-semibold text-gray-800 pb-3 relative inline-block text-2xl">
-                  Notifications
-                  <span className="absolute bottom-1 left-0 w-full h-1 bg-[#F3BC62]"></span>
-                </h3>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      refreshNotifications();
-                    }}
-                    className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
-                    title="Refresh notifications"
-                    disabled={isLoadingNotifications}
-                  >
-                    {isLoadingNotifications ? (
-                      <FaSpinner className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                        />
-                      </svg>
-                    )}
-                  </button>
+              <div className="px-6 py-4 border-b">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-semibold text-gray-800 pb-3 relative inline-block text-2xl">
+                    Notifications
+                    <span className="absolute bottom-1 left-0 w-full h-1 bg-[#F3BC62]"></span>
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        refreshNotifications();
+                      }}
+                      className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                      title="Refresh notifications"
+                      disabled={isLoadingNotifications}
+                    >
+                      {isLoadingNotifications ? (
+                        <FaSpinner className="h-5 w-5 animate-spin" />
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
+                {/* Mark all as read button - moved to top */}
+                {filteredNotifications.length > 0 && unreadCount > 0 && (
+                  <div className="text-right">
+                    <button
+                      onClick={markAllAsRead}
+                      className="text-base text-blue-600 hover:underline font-medium"
+                    >
+                      Mark all as read
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Tabs */}
@@ -279,15 +292,7 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                 )}
               </div>
 
-              {/* Footer */}
-              <div className="px-6 py-3 border-t text-right">
-                <button
-                  onClick={markAllAsRead}
-                  className="text-base text-blue-600 hover:underline font-medium"
-                >
-                  Mark all as read
-                </button>
-              </div>
+
             </div>
           )}
         </div>
@@ -302,7 +307,7 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
             className="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-gray-200"
             onClick={toggleProfileDropdown}
           >
-            <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-gray-200">
+            <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-gray-200">
               {profilePicture ? (
                 <img
                   key={profilePicture} // Force re-render when URL changes
@@ -332,23 +337,23 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
                         e.target.onerror = null;
                         e.target.src = "/assets/icons/user 1.png";
                         e.target.classList.remove("object-cover");
-                        e.target.classList.add("p-2", "bg-gray-100");
+                        e.target.classList.add("p-1", "bg-gray-100", "object-contain");
                         console.log("🔄 Using default profile icon");
                       };
                     } else {
                       // For non-Google URLs, use default icon
                       e.target.src = "/assets/icons/user 1.png";
                       e.target.classList.remove("object-cover");
-                      e.target.classList.add("p-2", "bg-gray-100");
+                      e.target.classList.add("p-1", "bg-gray-100", "object-contain");
                     }
                   }}
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center p-2">
+                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center p-1">
                   <img
                     src="/assets/icons/user 1.png"
                     alt="Upload profile picture"
-                    className="w-full h-full"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               )}
