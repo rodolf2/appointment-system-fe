@@ -31,16 +31,20 @@ import Feedback from "./features/admin/status/Feedback.jsx";
 import Announcements from "./features/admin/status/Announcements.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AuthProvider from "./components/AuthProvider.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
 const App = () => {
   return (
-    <UserProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <Layout />
-        </BrowserRouter>
-      </AuthProvider>
-    </UserProvider>
+    <ErrorBoundary>
+      <UserProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Layout />
+          </BrowserRouter>
+        </AuthProvider>
+      </UserProvider>
+    </ErrorBoundary>
   );
 };
 
@@ -64,7 +68,45 @@ const Layout = () => {
     "/feedback",
     "/announcements",
   ];
-  const showHeaderFooter = !excludedPaths.includes(location.pathname);
+
+  // Define all valid routes to detect 404s
+  const validRoutes = [
+    "/",
+    "/home",
+    "/home/announcement",
+    "/home/how_to_appoint",
+    "/home/guidelines",
+    "/about",
+    "/faqs",
+    "/contact",
+    "/appointmentForm",
+    "/announcement",
+    "/how_to_appoint",
+    "/guidelines",
+    "/students",
+    "/signin",
+    "/signup",
+    "/forgot-password",
+    "/new-password",
+    "/registrarHome",
+    "/events",
+    "/schedule",
+    "/holidays",
+    "/profile",
+    "/appointments",
+    "/archived",
+    "/feedback",
+    "/announcements",
+    "/attachment",
+    "/app-schedule",
+  ];
+
+  // Check if current path is a 404 (not in valid routes)
+  const is404Page = !validRoutes.includes(location.pathname);
+
+  // Hide header/footer for excluded paths OR 404 pages
+  const showHeaderFooter =
+    !excludedPaths.includes(location.pathname) && !is404Page;
 
   return (
     <>
@@ -172,6 +214,9 @@ const Layout = () => {
             {/* Non-protected routes */}
             <Route path="/attachment" element={<Attachment />} />
             <Route path="/app-schedule" element={<AppSchedule />} />
+
+            {/* Catch-all route for 404 errors - MUST be last */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
           {showHeaderFooter && <Footer />}
         </TransitionWrapper>
