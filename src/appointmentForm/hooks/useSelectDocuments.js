@@ -1,29 +1,16 @@
 import { useState, useEffect } from "react";
-import { createDocumentRequest } from "../../services/documentRequestServices";
 
 const useSelectDocuments = (onNext) => {
-  const LOCAL_STORAGE_KEY = "selectDocumentsFormData";
-
-  // Initialize state from localStorage or with defaults
-  const [state, setState] = useState(() => {
-    const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return savedData
-      ? JSON.parse(savedData)
-      : {
-          showModal: false,
-          selectedDocuments: [],
-          purpose: "",
-          date: "",
-          claimOption: null,
-        };
+  // Initialize state with defaults (no localStorage persistence)
+  const [state, setState] = useState({
+    showModal: false,
+    selectedDocuments: [],
+    purpose: "",
+    date: "",
+    claimOption: null,
   });
   const [claimOptionError, setClaimOptionError] = useState("");
   const [errors, setErrors] = useState({});
-
-  // Persist to localStorage whenever state changes
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
-  }, [state]);
   // Clear specific errors when values change
   useEffect(() => {
     if (state.purpose.trim()) {
@@ -55,7 +42,7 @@ const useSelectDocuments = (onNext) => {
     },
   ];
 
-  // Helper to update state and automatically persist
+  // Helper to update state (no persistence)
   const updateState = (updates) => {
     setState((prev) => ({ ...prev, ...updates }));
   };
@@ -112,66 +99,22 @@ const useSelectDocuments = (onNext) => {
   };
   
 
-  // Convert selected documents from values to proper format
-  const convertSelectedDocuments = () => {
-    return state.selectedDocuments; // No need to convert since values now match the schema
-  };
-  // Handle Modal Next Button with API integration
-  const handleModalNext = async () => {
+  // Handle Modal Next Button (no API calls or data persistence)
+  const handleModalNext = () => {
     if (!state.claimOption) {
       setClaimOptionError("Please select a claim option.");
       return;
     }
 
     setClaimOptionError(""); // Clear if valid
-    try {
-      if (!state.claimOption) {
-        setErrors((prev) => ({
-          ...prev,
-          claimOption: "Please select how you will claim your document",
-        }));
-        return;
-      }
-      // Prepare the document request data
-      const studentId = localStorage.getItem("studentId");
-      console.log("Student ID from localStorage:", studentId);
 
-      const requestData = {
-        selectedDocuments: convertSelectedDocuments(),
-        purpose: state.purpose,
-        dateOfRequest: state.date,
-        studentId: studentId,
-      };
-
-      // Debug logging
-      console.log("Creating document request with data:", requestData);
-
-      // Create the document request
-      const response = await createDocumentRequest(requestData);
-      console.log("Document request created successfully:", response);      // Only clear form data after the final step
-      // We'll keep the data in localStorage for now
-      
-      // Update UI and navigate
-      updateState({ showModal: false });
-      if (state.claimOption === "personal") {
-        onNext(5); // Calendar page
-      } else if (state.claimOption === "authorized") {
-        onNext(4); // Attachment page
-      }
-      
-      // Data will persist in localStorage until the form is fully completed
-    } catch (error) {
-      setErrors((prev) => ({
-        ...prev,
-        submit: error.message || "Failed to submit document request",
-      }));
-      updateState({ showModal: false });
+    // Update UI and navigate (no data persistence)
+    updateState({ showModal: false });
+    if (state.claimOption === "personal") {
+      onNext(5); // Calendar page
+    } else if (state.claimOption === "authorized") {
+      onNext(4); // Attachment page
     }
-  };
-
-  // Clear saved data when needed (e.g., after successful submission)
-  const clearSavedData = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
   return {
@@ -191,7 +134,6 @@ const useSelectDocuments = (onNext) => {
     handleClaimOption,
     handleModalNext,
     setShowModal: (value) => updateState({ showModal: value }),
-    clearSavedData,
     claimOptionError,
     setClaimOptionError,
   };
