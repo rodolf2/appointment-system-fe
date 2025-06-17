@@ -4,6 +4,7 @@ import Footer from "/src/features/admin/components/Footer";
 import useStudents from "./hooks/useStudents";
 import { FaSearch } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
+import { useState, useEffect } from "react";
 
 const Students = () => {
   const API_URL = `${
@@ -85,6 +86,79 @@ const Students = () => {
     isSidebarOpen,
     toggleSidebar,
   } = useStudents(API_URL);
+
+  // State for storing actual attachment URLs
+  const [attachmentUrls, setAttachmentUrls] = useState({});
+  const [attachmentLoading, setAttachmentLoading] = useState(false);
+
+  // Fetch actual attachment URLs from the backend
+  useEffect(() => {
+    const fetchAttachmentUrls = async () => {
+      if (!filteredAppointments || filteredAppointments.length === 0) return;
+
+      setAttachmentLoading(true);
+      try {
+        const ATTACHMENT_API_URL = `${import.meta.env.VITE_API_URL}/api/attachment`;
+        const response = await fetch(ATTACHMENT_API_URL);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch attachments');
+        }
+
+        const result = await response.json();
+        console.log("🔍 Fetched attachment data:", result);
+
+        // Create a mapping of student ID to attachment URLs
+        const urlMapping = {};
+        const studentIdToTransactionMapping = {};
+
+        // First, create a mapping from student ObjectId to transaction number
+        if (filteredAppointments && Array.isArray(filteredAppointments)) {
+          filteredAppointments.forEach(appointment => {
+            // We need to find a way to map student ObjectId to transaction number
+            // For now, we'll use transaction number as the key
+            studentIdToTransactionMapping[appointment.transactionNumber] = appointment.transactionNumber;
+          });
+        }
+
+        if (result.data && Array.isArray(result.data)) {
+          result.data.forEach(attachment => {
+            if (attachment.files && Array.isArray(attachment.files)) {
+              attachment.files.forEach(file => {
+                if (file.student && file.path) {
+                  const studentObjectId = file.student._id || file.student;
+
+                  // Try to find the transaction number for this student
+                  // Since we don't have a direct mapping, we'll store by ObjectId for now
+                  // and also try to match by transaction number if available
+                  if (!urlMapping[studentObjectId]) {
+                    urlMapping[studentObjectId] = [];
+                  }
+                  urlMapping[studentObjectId].push({
+                    filename: file.filename,
+                    url: file.path, // This is the actual Cloudinary URL!
+                    mimetype: file.mimetype,
+                    size: file.size,
+                    studentObjectId: studentObjectId
+                  });
+                }
+              });
+            }
+          });
+        }
+
+        console.log("🔗 Created URL mapping:", urlMapping);
+        setAttachmentUrls(urlMapping);
+
+      } catch (error) {
+        console.error("❌ Error fetching attachment URLs:", error);
+      } finally {
+        setAttachmentLoading(false);
+      }
+    };
+
+    fetchAttachmentUrls();
+  }, [filteredAppointments]);
 
   return (
     <div className="flex h-screen font-LatoRegular">
@@ -235,7 +309,90 @@ const Students = () => {
                           {data.attachment &&
                           data.attachment !== "No attachments" ? (
                             <div className="flex flex-col gap-2">
-                              {data.attachment.split(", ").map((url, index) => {
+                              {(() => {
+                                // First, try to get actual URLs from the fetched attachment data
+                                // We need to find attachments by matching student data
+                                let studentAttachments = [];
+
+                                // Try to find attachments by looking through all attachment data
+                                Object.values(attachmentUrls).forEach(attachmentList => {
+                                  if (Array.isArray(attachmentList)) {
+                                    attachmentList.forEach(attachment => {
+                                      // We'll match by checking if the attachment filename appears in the data.attachment string
+                                      if (data.attachment && data.attachment.includes(attachment.filename)) {
+                                        studentAttachments.push(attachment);
+                                      }
+                                    });
+                                  }
+                                });
+
+                                if (studentAttachments.length > 0) {
+                                  console.log("✅ Using actual attachment URLs for student:", data.transactionNumber, studentAttachments);
+
+                                  return studentAttachments.map((attachment, index) => {
+                                    const viewableUrl = attachment.url;
+                                    const thumbnailUrl = attachment.url.replace(
+                                      "/upload/",
+                                      "/upload/c_thumb,w_60,h_60,g_face/"
+                                    );
+                                    const filename = attachment.filename;
+
+                                    console.log("🔗 Using real Cloudinary URL:", {
+                                      filename: filename,
+                                      viewableUrl: viewableUrl,
+                                      thumbnailUrl: thumbnailUrl,
+                                      studentId: data.transactionNumber
+                                    });
+
+                                    return (
+                                      <div
+                                        key={index}
+                                        className="flex items-center space-x-2 group"
+                                      >
+                                        <img
+                                          src={thumbnailUrl}
+                                          alt="Attachment thumbnail"
+                                          className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
+                                          onClick={() => window.open(viewableUrl, "_blank")}
+                                          onError={(e) => {
+                                            console.log("❌ Real URL failed to load:", viewableUrl);
+                                            // Show placeholder for failed real URLs
+                                            e.target.style.display = "none";
+                                            const placeholder = document.createElement("div");
+                                            placeholder.className = "w-8 h-8 bg-gray-300 rounded border flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors";
+                                            placeholder.innerHTML = `
+                                              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                              </svg>
+                                            `;
+                                            placeholder.addEventListener("click", () => window.open(viewableUrl, "_blank"));
+                                            e.target.parentElement.appendChild(placeholder);
+                                          }}
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                          <a
+                                            href={viewableUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:underline text-sm block"
+                                            title={filename}
+                                          >
+                                            <span
+                                              data-tooltip-id="attachment-tooltip"
+                                              data-tooltip-content={filename}
+                                              className="cursor-help block truncate max-w-[120px]"
+                                            >
+                                              {filename}
+                                            </span>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    );
+                                  });
+                                } else {
+                                  // Fallback to the old method if no real URLs found
+                                  console.log("⚠️ No real URLs found, falling back to reconstruction for:", data.transactionNumber);
+                                  return data.attachment.split(", ").map((url, index) => {
                                 console.log(
                                   "🔍 DEBUG: Processing attachment URL:",
                                   {
@@ -277,46 +434,141 @@ const Students = () => {
                                   filename = `Attachment ${index + 1}`;
                                 }
 
-                                // Ensure the URL has the complete Cloudinary path with transformations
+                                // Smart URL handling for Cloudinary attachments
                                 let viewableUrl;
                                 let thumbnailUrl;
+
+                                console.log("🔍 Processing attachment URL:", {
+                                  originalUrl: url,
+                                  studentData: data.transactionNumber,
+                                  studentName: data.name,
+                                });
 
                                 if (
                                   url.startsWith("https://res.cloudinary.com")
                                 ) {
-                                  // URL is already complete
+                                  // URL is already complete - use as-is
                                   viewableUrl = url;
                                   // Create thumbnail by adding transformation
                                   thumbnailUrl = url.replace(
                                     "/upload/",
-                                    "/upload/c_thumb,w_50,h_50,g_face/"
+                                    "/upload/c_thumb,w_60,h_60,g_face/"
+                                  );
+                                  console.log(
+                                    "✅ Using complete Cloudinary URL:",
+                                    {
+                                      originalUrl: url,
+                                      viewableUrl,
+                                      thumbnailUrl,
+                                      hasUndefined: url.includes("undefined")
+                                        ? "❌ ORIGINAL HAS UNDEFINED!"
+                                        : "✅ Original URL is clean",
+                                    }
                                   );
                                 } else {
-                                  // Simple fix: Use the exact pattern from your database
-                                  const filename = url
-                                    .replace(/\.[^/.]+$/, "")
-                                    .replace(/[^a-zA-Z0-9]/g, "_");
+                                  // Handle filenames that need to be converted to Cloudinary URLs
+                                  console.log(
+                                    "🔧 Converting filename to Cloudinary URL:",
+                                    url
+                                  );
 
-                                  // Try multiple timestamps that might work
-                                  const possibleTimestamps = [
-                                    "1750090241090", // From your database example
-                                    "1749976559176", // From previous examples
-                                    Date.now().toString(), // Current timestamp as fallback
+                                  // Since the backend stores only filenames but uploads to Cloudinary with pattern:
+                                  // ${originalName}-${studentId}-${timestamp}
+                                  // We need to try to find the actual uploaded file
+
+                                  // Clean the original filename to match Cloudinary's sanitization
+                                  const originalName = url
+                                    .replace(/\.[^/.]+$/, "") // Remove extension
+                                    .replace(/[^a-zA-Z0-9]/g, "_"); // Replace special chars with underscore
+
+                                  // Get student ID from transaction number
+                                  const studentId =
+                                    data.transactionNumber || "unknown";
+
+                                  console.log("🔧 Filename processing:", {
+                                    originalUrl: url,
+                                    cleanedName: originalName,
+                                    studentId: studentId,
+                                    note: "Backend uses studentId as-is (no sanitization)",
+                                    expectedPattern: `${originalName}-${studentId}-{timestamp}`
+                                  });
+
+                                  // Since we don't have the exact timestamp, we need to try multiple approaches:
+                                  // 1. Try known working timestamps
+                                  // 2. Use a more flexible URL construction that works with Cloudinary's delivery
+
+                                  // Try to construct URLs with multiple timestamp strategies
+                                  // Strategy 1: Use known working timestamps
+                                  // Strategy 2: Try recent timestamps around current time
+                                  // Strategy 3: Try timestamps from the past few days
+
+                                  const currentTime = Date.now();
+                                  const oneDayMs = 24 * 60 * 60 * 1000;
+
+                                  const knownTimestamps = [
+                                    "1750090241090", // Known working timestamp from logs
+                                    "1749976559176", // Another known timestamp
+                                    // Add some recent timestamps that might work
+                                    currentTime.toString(),
+                                    (currentTime - oneDayMs).toString(),
+                                    (currentTime - 2 * oneDayMs).toString(),
+                                    (currentTime - 3 * oneDayMs).toString(),
                                   ];
 
-                                  // Use the first timestamp for now
-                                  const timestamp = possibleTimestamps[0];
-                                  const versionTimestamp = timestamp.substring(
-                                    0,
-                                    10
-                                  ); // First 10 digits for version
+                                  // For the primary attempt, use the first known timestamp
+                                  const primaryTimestamp = knownTimestamps[0];
+                                  const versionTimestamp = primaryTimestamp.substring(0, 10);
+                                  const publicId = `${originalName}-${studentId}-${primaryTimestamp}`;
 
-                                  viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/v${versionTimestamp}/appointment-system/attachments/${filename}-undefined-${timestamp}`;
-                                  thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_50,h_50,g_face/v${versionTimestamp}/appointment-system/attachments/${filename}-undefined-${timestamp}`;
+                                  // Construct the URLs with version
+                                  viewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/v${versionTimestamp}/appointment-system/attachments/${publicId}`;
+                                  thumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_60,h_60,g_face/v${versionTimestamp}/appointment-system/attachments/${publicId}`;
 
-                                  console.log("Constructed URLs:", {
-                                    viewableUrl,
-                                    thumbnailUrl,
+                                  // Also create fallback URLs without version (more forgiving)
+                                  const fallbackViewableUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/appointment-system/attachments/${publicId}`;
+                                  const fallbackThumbnailUrl = `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_60,h_60,g_face/appointment-system/attachments/${publicId}`;
+
+                                  // Store fallback URLs for error handling
+                                  window.cloudinaryFallbacks = {
+                                    viewable: fallbackViewableUrl,
+                                    thumbnail: fallbackThumbnailUrl
+                                  };
+
+                                  // Store alternative timestamps for error handling
+                                  window.cloudinaryAlternatives =
+                                    knownTimestamps.slice(1).concat([
+                                      "1750000000000", // Round number fallbacks
+                                      "1749900000000", // Earlier
+                                      "1750100000000", // Later
+                                      "1750200000000", // Even later
+                                    ]);
+
+                                  console.log("🔗 Constructed URLs:", {
+                                    originalUrl: url,
+                                    cleanedName: originalName,
+                                    studentId: studentId,
+                                    publicId: publicId,
+                                    versionTimestamp: versionTimestamp,
+                                    viewableUrl: viewableUrl,
+                                    thumbnailUrl: thumbnailUrl,
+                                    fallbackViewableUrl: window.cloudinaryFallbacks?.viewable,
+                                    fallbackThumbnailUrl: window.cloudinaryFallbacks?.thumbnail,
+                                    hasUndefined: viewableUrl.includes("undefined")
+                                      ? "❌ STILL HAS UNDEFINED!"
+                                      : "✅ No undefined found",
+                                    publicIdBreakdown: {
+                                      filename: originalName,
+                                      studentId: studentId,
+                                      timestamp: primaryTimestamp,
+                                      fullPattern: `${originalName}-${studentId}-${primaryTimestamp}`,
+                                      note: "If this fails, will try fallback URLs without version"
+                                    },
+                                    troubleshooting: {
+                                      expectedCloudinaryPattern: "filename-studentId-timestamp",
+                                      actualStudentId: studentId,
+                                      containsHyphens: studentId.includes('-') ? 'YES - This might cause issues' : 'NO',
+                                      backendSanitization: 'Backend does NOT sanitize studentId'
+                                    }
                                   });
                                 }
 
@@ -340,13 +592,39 @@ const Students = () => {
                                         window.open(viewableUrl, "_blank")
                                       }
                                       onError={(e) => {
-                                        // Try alternative URLs if the first one fails
+                                        console.log(
+                                          "❌ Image failed to load, trying alternatives..."
+                                        );
+
+                                        // Try to construct alternative URLs using the same logic as above
                                         const originalName = url
                                           .replace(/\.[^/.]+$/, "")
                                           .replace(/[^a-zA-Z0-9]/g, "_");
-                                        // Try different timestamps for other images
+
+                                        // Get student ID from context for better URL construction
+                                        const studentId =
+                                          data.transactionNumber || "unknown";
+
+                                        console.log(
+                                          "🔄 Trying alternative URLs for:",
+                                          {
+                                            originalUrl: url,
+                                            cleanedName: originalName,
+                                            studentId: studentId,
+                                          }
+                                        );
+
+                                        // Try different timestamp patterns that might exist
+                                        const currentTime = Date.now();
+                                        const oneDayMs = 24 * 60 * 60 * 1000;
+
                                         const possibleTimestamps = [
+                                          "1750090241090", // Current example
                                           "1749976559176", // Previous example
+                                          currentTime.toString(),
+                                          (currentTime - oneDayMs).toString(),
+                                          (currentTime - 2 * oneDayMs).toString(),
+                                          (currentTime - 3 * oneDayMs).toString(),
                                           "1750090000000", // Approximate timestamp
                                           "1749900000000", // Earlier timestamp
                                           "1750000000000", // Another possibility
@@ -358,32 +636,50 @@ const Students = () => {
                                             (timestamp) => {
                                               const versionTimestamp =
                                                 timestamp.substring(0, 10);
-                                              return `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_50,h_50,g_face/v${versionTimestamp}/appointment-system/attachments/${originalName}-undefined-${timestamp}`;
+                                              const publicId = `${originalName}-${studentId}-${timestamp}`;
+                                              return `https://res.cloudinary.com/dp9hjzio8/image/upload/c_thumb,w_60,h_60,g_face/v${versionTimestamp}/appointment-system/attachments/${publicId}`;
                                             }
                                           );
 
                                         let currentIndex = parseInt(
                                           e.target.dataset.attemptIndex || "0"
                                         );
-                                        if (
-                                          currentIndex < alternatives.length
-                                        ) {
+
+                                        if (currentIndex < alternatives.length) {
                                           console.log(
-                                            `Trying alternative URL ${
-                                              currentIndex + 1
-                                            }:`,
+                                            `🔄 Trying alternative URL ${currentIndex + 1}:`,
                                             alternatives[currentIndex]
                                           );
-                                          e.target.src =
-                                            alternatives[currentIndex];
-                                          e.target.dataset.attemptIndex = (
-                                            currentIndex + 1
-                                          ).toString();
+                                          e.target.src = alternatives[currentIndex];
+                                          e.target.dataset.attemptIndex = (currentIndex + 1).toString();
+                                        } else if (window.cloudinaryFallbacks && !e.target.dataset.triedFallback) {
+                                          // Try fallback URLs without version
+                                          console.log("🔄 Trying fallback URL without version:", window.cloudinaryFallbacks.thumbnail);
+                                          e.target.src = window.cloudinaryFallbacks.thumbnail;
+                                          e.target.dataset.triedFallback = "true";
                                         } else {
                                           console.log(
-                                            "All alternative URLs failed, hiding image"
+                                            "❌ All alternative URLs failed, showing placeholder"
                                           );
+                                          // Replace with a placeholder icon
                                           e.target.style.display = "none";
+                                          const placeholder =
+                                            document.createElement("div");
+                                          placeholder.className =
+                                            "w-8 h-8 bg-gray-300 rounded border flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors";
+                                          placeholder.innerHTML = `
+                                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                          `;
+                                          placeholder.addEventListener(
+                                            "click",
+                                            () =>
+                                              window.open(viewableUrl, "_blank")
+                                          );
+                                          e.target.parentElement.appendChild(
+                                            placeholder
+                                          );
                                         }
                                       }}
                                     />
@@ -408,7 +704,9 @@ const Students = () => {
                                     </div>
                                   </div>
                                 );
-                              })}
+                                  });
+                                }
+                              })()}
                             </div>
                           ) : (
                             <span className="text-gray-500 text-sm">
