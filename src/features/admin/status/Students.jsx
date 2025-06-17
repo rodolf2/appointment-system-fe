@@ -8,6 +8,9 @@ import { useState, useEffect } from "react";
 import { AdminSkeleton } from "../../../components/skeleton/AdminSkeleton";
 
 const Students = () => {
+  // State for tracking image loading errors
+  const [imgErrors, setImgErrors] = useState({});
+
   const API_URL = `${
     import.meta.env.VITE_API_URL
   }/api/document-requests/docs-with-details`;
@@ -483,42 +486,74 @@ const Students = () => {
                                           key={index}
                                           className="flex items-center space-x-2 group"
                                         >
-                                          <img
-                                            src={thumbnailUrl}
-                                            alt="Attachment thumbnail"
-                                            className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
-                                            onClick={() =>
-                                              window.open(viewableUrl, "_blank")
-                                            }
-                                            onError={(e) => {
-                                              console.log(
-                                                "❌ Real URL failed to load:",
-                                                viewableUrl
-                                              );
-                                              // Show placeholder for failed real URLs
-                                              e.target.style.display = "none";
-                                              const placeholder =
-                                                document.createElement("div");
-                                              placeholder.className =
-                                                "w-8 h-8 bg-gray-300 rounded border flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors";
-                                              placeholder.innerHTML = `
-                                              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                          {" "}
+                                          {!imgErrors[
+                                            `${data.transactionNumber}-${index}`
+                                          ] ? (
+                                            <img
+                                              src={thumbnailUrl}
+                                              alt="Attachment thumbnail"
+                                              className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
+                                              onClick={() =>
+                                                window.open(
+                                                  viewableUrl,
+                                                  "_blank"
+                                                )
+                                              }
+                                              onError={(e) => {
+                                                // Try fallback URLs first
+                                                const fallbacks =
+                                                  window.cloudinaryFallbacks;
+                                                if (fallbacks) {
+                                                  console.log(
+                                                    "🔄 Trying fallback URLs..."
+                                                  );
+                                                  e.target.src =
+                                                    fallbacks.thumbnail;
+                                                  // Update the onClick handler to use fallback viewable URL
+                                                  e.target.onclick = () =>
+                                                    window.open(
+                                                      fallbacks.viewable,
+                                                      "_blank"
+                                                    );
+                                                  return;
+                                                }
+
+                                                console.log(
+                                                  "❌ Image failed to load:",
+                                                  thumbnailUrl
+                                                );
+                                                setImgErrors((prev) => ({
+                                                  ...prev,
+                                                  [`${data.transactionNumber}-${index}`]: true,
+                                                }));
+                                              }}
+                                            />
+                                          ) : (
+                                            <div
+                                              className="w-8 h-8 bg-gray-300 rounded border flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors"
+                                              onClick={() =>
+                                                window.open(
+                                                  viewableUrl,
+                                                  "_blank"
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                className="w-4 h-4 text-gray-500"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                              >
+                                                <path
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth="2"
+                                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                />
                                               </svg>
-                                            `;
-                                              placeholder.addEventListener(
-                                                "click",
-                                                () =>
-                                                  window.open(
-                                                    viewableUrl,
-                                                    "_blank"
-                                                  )
-                                              );
-                                              e.target.parentElement.appendChild(
-                                                placeholder
-                                              );
-                                            }}
-                                          />
+                                            </div>
+                                          )}
                                           <div className="flex-1 min-w-0">
                                             <a
                                               href={viewableUrl}
@@ -948,8 +983,8 @@ const Students = () => {
                         </td>
                         <td className="border p-5 break-words">
                           {data.request}
-                        </td>
-                        <td className="border p-5 break-words">
+                        </td>{" "}
+                        <td className="border p-5 break-words text-center">
                           {new Date(data.date).toLocaleDateString()}
                         </td>
                       </tr>
