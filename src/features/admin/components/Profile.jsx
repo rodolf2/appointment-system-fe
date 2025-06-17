@@ -145,12 +145,6 @@ const Profile = () => {
                         try {
                           setError(null);
                           await handleImageUpload(e);
-                          setSuccessMessage(
-                            "Profile picture updated successfully!"
-                          );
-                          setTimeout(() => {
-                            setSuccessMessage(null);
-                          }, 3000);
                         } catch (err) {
                           setError(
                             err.message || "Failed to upload profile picture"
@@ -174,13 +168,12 @@ const Profile = () => {
                         setIsLoading(true);
 
                         await handleImageRemove();
-
                         setSuccessMessage(
                           "Profile picture removed successfully!"
                         );
                         setTimeout(() => {
                           setSuccessMessage(null);
-                        }, 2000);
+                        }, 3000); // Match the 3 second timeout used for other messages
                       } catch (err) {
                         console.error("Error removing profile picture:", err);
                         setError(
@@ -188,7 +181,7 @@ const Profile = () => {
                         );
                         setTimeout(() => {
                           setError(null);
-                        }, 5000);
+                        }, 3000);
                       } finally {
                         setIsLoading(false);
                       }
@@ -199,24 +192,29 @@ const Profile = () => {
                   </button>
                 </div>
               </div>
-
-              {/* Form Section */}
+              {/* Form Section */}{" "}
               <div className="w-2/3 pl-8">
                 <h2 className="text-[32px] font-LatoSemiBold text-[#161f55] mb-6">
                   Edit Profile
                 </h2>
 
+                {/* Error message */}
                 {error && (
                   <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
                     {error}
                   </div>
                 )}
 
-                {successMessage && (
-                  <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
-                    {successMessage}
-                  </div>
-                )}
+                {/* Success message with placeholder to maintain spacing */}
+                <div className="h-[52px]">
+                  {" "}
+                  {/* Height matches the success message height */}
+                  {successMessage && (
+                    <div className="p-2 bg-green-100 text-green-700 rounded">
+                      {successMessage}
+                    </div>
+                  )}
+                </div>
 
                 <form className="flex flex-col" onSubmit={onSubmit}>
                   <div className="mb-4 flex items-center justify-start">
