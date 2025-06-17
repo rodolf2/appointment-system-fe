@@ -18,7 +18,7 @@ const Buttons = () => {
     },
     {
       label: "How to Appoint",
-      path: "hta",
+      path: "how_to_appoint",
       icon: "/assets/icons/howtoappoint.svg",
     },
     {

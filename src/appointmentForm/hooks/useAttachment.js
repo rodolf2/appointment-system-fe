@@ -34,24 +34,26 @@ const useAttachment = (onNext) => {
 
     const selectedFiles = Array.from(event.target.files);
 
-    // Filter only image files
-    const imageFiles = selectedFiles.filter((file) =>
-      file.type.match("image.*")
+    // Filter allowed file types (images, PDFs, and DOC files)
+    const allowedFiles = selectedFiles.filter((file) =>
+      file.type.match(
+        /^(image\/.*|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document)$/
+      )
     );
 
-    if (imageFiles.length !== selectedFiles.length) {
-      setError("Only image files (JPG, PNG, GIF, etc.) are allowed");
+    if (allowedFiles.length !== selectedFiles.length) {
+      setError("Only images, PDF, DOC, and DOCX files are allowed");
       return;
     }
 
     // Check if adding these files would exceed the 3-file limit
-    const totalFilesAfterAdd = files.length + imageFiles.length;
+    const totalFilesAfterAdd = files.length + allowedFiles.length;
     if (totalFilesAfterAdd > 3) {
       setError("You can only upload a maximum of 3 files");
       return;
     }
 
-    setFiles((prev) => [...prev, ...imageFiles]);
+    setFiles((prev) => [...prev, ...allowedFiles]);
     setError("");
   };
 

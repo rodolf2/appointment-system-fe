@@ -83,7 +83,7 @@ const Attachment = ({ onNext, onBack, currentStep }) => {
                   error ? "border-red-500" : "border-[#000] border-opacity-40"
                 }`}
               multiple
-              accept="image/*"
+              accept=".pdf,.doc,.docx,image/*"
               disabled={files.length >= 3}
             />
 

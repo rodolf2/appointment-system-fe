@@ -65,6 +65,133 @@ const Appointments = () => {
     toggleSidebar,
   } = useAppointment();
 
+  if (loading) {
+    return (
+      <div className="flex h-screen font-LatoRegular">
+        <Sidebar />
+        <div className="flex-1 overflow-y-auto">
+          <Header />
+          <div>
+            <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
+              {/* Header Section */}
+              <div className="bg-[#D9D9D9] h-48 m-4">
+                <div className="text-[#161F55] px-3 ml-3 pt-2">
+                  <div className="h-10 w-[450px] bg-gray-300 rounded animate-pulse mt-2"></div>
+                  <div className="border-b-4 border-[#F3BC62] w-[450px] my-3"></div>
+                </div>
+
+                {/* Controls Section */}
+                <div className="flex justify-between items-center mt-[78px] ml-4 mr-5">
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-16 bg-gray-300 rounded animate-pulse"></div>
+                    <div className="h-10 w-20 bg-gray-300 rounded animate-pulse"></div>
+                    <div className="h-8 w-20 bg-gray-300 rounded animate-pulse"></div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="h-10 w-32 bg-gray-300 rounded animate-pulse"></div>
+                    <div className="h-10 w-48 bg-gray-300 rounded animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Table Section */}
+              <div className="overflow-y-auto m-4 mt-8">
+                <table
+                  className="text-[15px] w-full"
+                  style={{ tableLayout: "fixed" }}
+                >
+                  <thead>
+                    <tr className="bg-gray-200 text-center">
+                      <th className="border p-4 w-[12%]">STATUS</th>
+                      <th className="border p-4 w-[13%]">
+                        TRANSACTION
+                        <br />
+                        NUMBER
+                      </th>
+                      <th className="border p-4 w-[10%]">REQUEST</th>
+                      <th className="border p-4 w-[10%]">PURPOSE</th>
+                      <th className="border p-4 w-[12%]">
+                        EMAIL <br />
+                        ADDRESS
+                      </th>
+                      <th className="border p-4 w-[10%]">
+                        DATE OF
+                        <br />
+                        APPOINTMENT
+                      </th>
+                      <th className="border p-4 w-[10%]">TIME SLOT</th>
+                      <th className="border p-4 w-[10%]">
+                        DATE OF
+                        <br />
+                        REQUEST
+                      </th>
+                      <th className="border p-4 w-[13%]">ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Array(5)
+                      .fill(null)
+                      .map((_, index) => (
+                        <tr
+                          key={index}
+                          className={index % 2 === 0 ? "bg-gray-100" : ""}
+                        >
+                          <td className="border p-4">
+                            <div className="flex justify-center">
+                              <div className="h-8 w-24 bg-gray-300 rounded animate-pulse"></div>
+                            </div>
+                          </td>
+                          <td className="border p-4">
+                            <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-28"></div>
+                          </td>
+                          <td className="border p-4">
+                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
+                          </td>
+                          <td className="border p-4">
+                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
+                          </td>
+                          <td className="border p-4">
+                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
+                          </td>
+                          <td className="border p-4">
+                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
+                          </td>
+                          <td className="border p-4">
+                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
+                          </td>
+                          <td className="border p-4">
+                            <div className="h-6 bg-gray-300 rounded animate-pulse"></div>
+                          </td>
+                          <td className="border p-4">
+                            <div className="flex gap-2 justify-center">
+                              <div className="h-8 w-8 bg-gray-300 rounded animate-pulse"></div>
+                              <div className="h-8 w-8 bg-gray-300 rounded animate-pulse"></div>
+                              <div className="h-8 w-8 bg-gray-300 rounded animate-pulse"></div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Section */}
+              <div className="flex justify-between items-center mt-10 text-[18px] px-4">
+                <div className="h-6 w-64 bg-gray-300 rounded animate-pulse"></div>
+                <div className="flex gap-2">
+                  <div className="h-8 w-20 bg-gray-300 rounded animate-pulse"></div>
+                  <div className="h-8 w-32 bg-gray-300 rounded animate-pulse"></div>
+                  <div className="h-8 w-20 bg-gray-300 rounded animate-pulse"></div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <Footer />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen font-LatoRegular">
       <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>

@@ -11,6 +11,7 @@ const useRegistrarHome = () => {
     const saved = localStorage.getItem("sidebarOpen");
     return saved !== null ? JSON.parse(saved) : true;
   });
+  const [loading, setLoading] = useState(true); // Loading state
 
   const [allFetchedHolidays, setAllFetchedHolidays] = useState([]);
   const [currentMonthCalendarHolidays, setCurrentMonthCalendarHolidays] =
@@ -182,6 +183,7 @@ const useRegistrarHome = () => {
   // Create a fetchStats function that uses EXACT same logic as appointments page
   const fetchStats = useCallback(async () => {
     try {
+      setLoading(true);
       console.log(
         "🔄 Dashboard: Fetching appointment data using SAME logic as appointments page..."
       );
@@ -321,9 +323,9 @@ const useRegistrarHome = () => {
       console.log("📊 Dashboard final stats:", calculatedStats);
       console.log("✅ This should now match your appointments page count!");
       setStats(calculatedStats);
+      setLoading(false);
     } catch (error) {
       console.error("❌ Error calculating dashboard stats:", error);
-      // Set empty stats on error
       setStats({
         APPROVED: 0,
         PENDING: 0,
@@ -333,6 +335,7 @@ const useRegistrarHome = () => {
         morning: { APPROVED: 0, PENDING: 0, COMPLETED: 0, REJECTED: 0 },
         afternoon: { APPROVED: 0, PENDING: 0, COMPLETED: 0, REJECTED: 0 },
       });
+      setLoading(false);
     }
   }, []);
 
@@ -372,6 +375,7 @@ const useRegistrarHome = () => {
   }, [fetchStats]);
 
   return {
+    loading,
     isSidebarOpen,
     setIsSidebarOpen,
     currentDate,

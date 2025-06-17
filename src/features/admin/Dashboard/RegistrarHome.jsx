@@ -3,9 +3,11 @@ import Sidebar from "/src/components/Sidebar";
 import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 import useRegistrarHome from "./hooks/useRegistrarHome";
+import { AdminSkeleton } from "../../../components/skeleton/AdminSkeleton";
 
 const RegistrarHome = () => {
   const {
+    loading,
     isSidebarOpen,
     setIsSidebarOpen,
     currentDate,
@@ -22,6 +24,114 @@ const RegistrarHome = () => {
     isWeekend,
     stats,
   } = useRegistrarHome();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen font-LatoRegular">
+        {/* Sidebar */}
+        <div
+          className={`sidebar-container ${
+            isSidebarOpen ? "w-[300px]" : "w-[100px]"
+          } z-20`}
+        >
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
+
+        {/* Background Image with Dark Overlay */}
+        <div
+          className="absolute inset-0 bg-cover bg-center z-0"
+          style={{
+            backgroundImage: `url("/assets/image/BackGround.png")`,
+          }}
+        >
+          <div className="absolute inset-0 bg-[#161f55] bg-opacity-90"></div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto z-10 relative">
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            title="Registrar Office Dashboard"
+          />
+
+          <div className="p-6">
+            {/* Overview of the Month Section */}
+            <section className="h-auto bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg">
+              <div className="p-6">
+                <h2 className="text-3xl font-LatoRegular tracking-[5px] text-[#000]">
+                  Overview of the Month
+                </h2>
+                <div className="border-b-4 border-[#F3BC62] w-[410px] my-3"></div>
+
+                {/* Statistics Cards Skeleton */}
+                <div className="grid grid-cols-3 gap-6 mt-6">
+                  <AdminSkeleton.Statistics count={3} />
+                </div>
+              </div>
+            </section>
+
+            {/* Calendar and Holidays Section */}
+            <section className="bg-white max-w-[1300px] mx-auto p-5 my-5 rounded-lg shadow-lg grid grid-cols-3 gap-6">
+              {/* Calendar Section Skeleton */}
+              <div className="col-span-2 p-5 border-2 border-[#161f55] rounded-lg">
+                <div className="flex justify-between items-center mb-5">
+                  <div className="h-8 bg-gray-200 rounded w-48 animate-pulse"></div>
+                  <div className="flex space-x-2">
+                    <div className="h-10 w-10 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-10 w-10 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-7 gap-[1px] bg-[#161f55]">
+                  {/* Days Header */}
+                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                    (_, idx) => (
+                      <div
+                        key={idx}
+                        className="h-10 bg-gray-200 animate-pulse"
+                      ></div>
+                    )
+                  )}
+
+                  {/* Calendar Days Skeleton */}
+                  {Array(35)
+                    .fill(null)
+                    .map((_, idx) => (
+                      <div
+                        key={idx}
+                        className="h-[90px] bg-gray-200 animate-pulse"
+                      ></div>
+                    ))}
+                </div>
+              </div>
+
+              {/* Holidays Section Skeleton */}
+              <div className="p-5 border-2 border-[#161f55] rounded-lg">
+                <div className="h-8 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
+                <div className="space-y-4">
+                  {Array(6)
+                    .fill(null)
+                    .map((_, idx) => (
+                      <div key={idx} className="flex items-center space-x-2">
+                        <div className="h-6 bg-gray-200 rounded w-16 animate-pulse"></div>
+                        <div className="h-6 bg-gray-200 rounded w-full animate-pulse"></div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <Footer />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen font-LatoRegular">
       {/* Sidebar */}
