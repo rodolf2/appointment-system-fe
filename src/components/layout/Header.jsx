@@ -15,18 +15,14 @@ const Header = () => {
       <div className="max-w-[1440px] h-14 mx-auto w-full flex justify-between items-center px-4">
         {/* LEFT SIDE: Logo and Brand */}
         <div className="flex items-center group hover:opacity-80 transition-opacity">
-          <a
-            href="https://www.facebook.com/lvcc.apalit"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center"
-          >
+          {" "}
+          <Link to="/home/announcement" className="flex items-center">
             <img
               src="/assets/image/LV_logo.png"
               alt="LV logo"
               className="w-16 h-16 md:w-20 md:h-20 mr-2 mb-1 hover:scale-105 transition-transform"
             />
-          </a>
+          </Link>
           <Link to="/home/announcement" className="flex items-center">
             <span className="font-regular text-xl md:text-2xl text-LBackground">
               LVCC
