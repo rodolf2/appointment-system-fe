@@ -51,6 +51,15 @@ const useAppInfo = (onNext) => {
         continue;
       }
 
+      // Check for numbers in name fields
+      if (
+        (key === "firstName" || key === "surname" || key === "middleName") &&
+        /\d/.test(trimmedValue)
+      ) {
+        newErrors[key] = "Name fields cannot contain numbers.";
+        continue;
+      }
+
       if (key === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue)) {
         newErrors[key] = "Invalid email format.";
       }
@@ -59,7 +68,10 @@ const useAppInfo = (onNext) => {
         newErrors[key] = "Contact number must start with 09 and be 11 digits.";
       }
 
-      if (key === "schoolYear" && !/^\d{4}\s*[-–]\s*\d{4}$/.test(trimmedValue)) {
+      if (
+        key === "schoolYear" &&
+        !/^\d{4}\s*[-–]\s*\d{4}$/.test(trimmedValue)
+      ) {
         newErrors[key] = "School year format should be YYYY-YYYY";
       }
     }
@@ -91,22 +103,23 @@ const useAppInfo = (onNext) => {
       };
 
       const response = await createStudent(studentData);
-      
+
       // Store the student ID for later use
-      localStorage.setItem('studentId', response.studentId);
-      
+      localStorage.setItem("studentId", response.studentId);
+
       // Prepare name and transaction number for feedback
-      const fullName = `${formData.firstName.trim()} ${formData.middleName.trim()} ${formData.surname.trim()}`.trim();
-      
+      const fullName =
+        `${formData.firstName.trim()} ${formData.middleName.trim()} ${formData.surname.trim()}`.trim();
+
       // Move to next step with name and transaction number
       onNext(undefined, {
         name: fullName,
-        transactionNumber: response.studentId
+        transactionNumber: response.studentId,
       });
     } catch (error) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        submit: error.message || 'Failed to create student record'
+        submit: error.message || "Failed to create student record",
       }));
     } finally {
       setIsSubmitting(false);
