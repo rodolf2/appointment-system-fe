@@ -417,63 +417,71 @@ const Appointments = () => {
                                 {/* Approve Button - show for Pending and Rejected statuses */}
                                 {(data.status === "PENDING" ||
                                   data.status === "REJECTED") && (
-                                  <div
+                                  <button
+                                    type="button"
                                     data-tooltip-id="approve-tooltip"
                                     data-tooltip-content="Approve"
                                     className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
                                     onClick={(e) => {
                                       e.preventDefault();
+                                      e.stopPropagation();
                                       approveAppointment(data, e);
                                     }}
                                   >
                                     <FaThumbsUp className="text-white" />
-                                  </div>
+                                  </button>
                                 )}
 
                                 {/* Complete Button - show for Pending and Approved statuses */}
                                 {(data.status === "PENDING" ||
                                   data.status === "APPROVED") && (
-                                  <div
+                                  <button
+                                    type="button"
                                     data-tooltip-id="complete-tooltip"
                                     data-tooltip-content="Complete"
                                     className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
                                     onClick={(e) => {
                                       e.preventDefault();
+                                      e.stopPropagation();
                                       completeAppointment(data, e);
                                     }}
                                   >
                                     <LuCircleCheckBig className="text-white" />
-                                  </div>
+                                  </button>
                                 )}
 
                                 {/* Reject Button - show for Pending and Approved statuses */}
                                 {(data.status === "PENDING" ||
                                   data.status === "APPROVED") && (
-                                  <div
+                                  <button
+                                    type="button"
                                     data-tooltip-id="reject-tooltip"
                                     data-tooltip-content="Reject"
                                     className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
                                     onClick={(e) => {
                                       e.preventDefault();
+                                      e.stopPropagation();
                                       rejectAppointment(data, e);
                                     }}
                                   >
                                     <FaThumbsDown className="text-white transform scale-x-[-1]" />
-                                  </div>
+                                  </button>
                                 )}
 
                                 {/* Delete Button - show for all statuses */}
-                                <div
+                                <button
+                                  type="button"
                                   data-tooltip-id="delete-tooltip"
                                   data-tooltip-content="Delete"
                                   className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
                                   onClick={(e) => {
                                     e.preventDefault();
+                                    e.stopPropagation();
                                     openModal(data);
                                   }}
                                 >
                                   <BsTrash3 className="text-white" />
-                                </div>
+                                </button>
                               </div>
                             </td>
                           </tr>

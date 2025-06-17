@@ -35,16 +35,16 @@ const Header = ({ toggleSidebar, title: initialTitle }) => {
   // Debug: Log current user to verify name is available
   // console.log("Current user in Header:", user);
   // Debug: Log when user context changes
-  useEffect(() => {
-    console.log("📌 Header: User context updated:", user);
-  }, [user]);
+  // useEffect(() => {
+  //   // console.log("📌 Header: User context updated:", user);
+  // }, [user]);
 
   // Get the profile picture URL, trying all possible fields
   const profilePicture = user?.profilePicture || user?.picture || null;
 
-  useEffect(() => {
-    console.log("🖼️ Header: Profile picture updated:", profilePicture);
-  }, [profilePicture]);
+  // useEffect(() => {
+  //   console.log("🖼️ Header: Profile picture updated:", profilePicture);
+  // }, [profilePicture]);
 
   return (
     <header className="z-10 flex justify-between items-center bg-Bbackground h-[87px] px-5 shadow-md">

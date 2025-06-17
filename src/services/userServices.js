@@ -8,19 +8,21 @@ const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000, // 15 seconds default timeout
   headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    "Content-Type": "application/json",
+    Accept: "application/json",
   },
 });
 
 // Add request interceptor for debugging
 apiClient.interceptors.request.use(
   (config) => {
-    console.log(`🔄 API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    console.log(
+      `🔄 API Request: ${config.method?.toUpperCase()} ${config.url}`
+    );
     return config;
   },
   (error) => {
-    console.error('❌ Request interceptor error:', error);
+    console.error("❌ Request interceptor error:", error);
     return Promise.reject(error);
   }
 );
@@ -32,7 +34,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('❌ Response interceptor error:', {
+    console.error("❌ Response interceptor error:", {
       url: error.config?.url,
       method: error.config?.method,
       status: error.response?.status,
@@ -61,7 +63,7 @@ const retryRequest = async (requestFn, maxRetries = 2, delay = 1000) => {
       }
 
       // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, delay * attempt));
+      await new Promise((resolve) => setTimeout(resolve, delay * attempt));
     }
   }
 };
@@ -78,13 +80,17 @@ export const uploadProfilePicture = async (userId, imageFile, token) => {
     const formData = new FormData();
     formData.append("profilePicture", imageFile);
 
-    const response = await apiClient.post(`/profile/${userId}/profile-picture`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-      timeout: 30000, // 30 seconds for file uploads
-    });
+    const response = await apiClient.post(
+      `/profile/${userId}/profile-picture`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+        timeout: 30000, // 30 seconds for file uploads
+      }
+    );
 
     console.log("✅ Profile picture uploaded successfully");
     return response.data;
@@ -101,38 +107,42 @@ export const uploadProfilePicture = async (userId, imageFile, token) => {
       status: error.response?.status,
     });
 
-    if (error.code === 'ECONNABORTED') {
+    if (error.code === "ECONNABORTED") {
       throw {
-        message: "Upload timed out. Please check your internet connection and try again.",
-        code: 'TIMEOUT'
+        message:
+          "Upload timed out. Please check your internet connection and try again.",
+        code: "TIMEOUT",
       };
     }
 
     if (error.response?.status === 413) {
       throw {
-        message: "Image file is too large. Please choose a smaller image (max 5MB).",
-        code: 'FILE_TOO_LARGE'
+        message:
+          "Image file is too large. Please choose a smaller image (max 5MB).",
+        code: "FILE_TOO_LARGE",
       };
     }
 
     if (error.response?.status === 415) {
       throw {
         message: "Invalid file type. Please upload an image file.",
-        code: 'INVALID_FILE_TYPE'
+        code: "INVALID_FILE_TYPE",
       };
     }
 
     if (error.response?.status === 401) {
       throw {
         message: "Authentication failed. Please sign in again.",
-        code: 'UNAUTHORIZED'
+        code: "UNAUTHORIZED",
       };
     }
 
-    throw error.response?.data || {
-      message: "Failed to upload profile picture. Please try again.",
-      code: 'UPLOAD_ERROR'
-    };
+    throw (
+      error.response?.data || {
+        message: "Failed to upload profile picture. Please try again.",
+        code: "UPLOAD_ERROR",
+      }
+    );
   }
 };
 
@@ -171,38 +181,41 @@ export const getUserProfile = async (userId, token) => {
     });
 
     // Provide more specific error messages
-    if (error.code === 'ECONNABORTED') {
+    if (error.code === "ECONNABORTED") {
       throw {
-        message: "Request timed out. Please check your internet connection and try again.",
-        code: 'TIMEOUT'
+        message:
+          "Request timed out. Please check your internet connection and try again.",
+        code: "TIMEOUT",
       };
     }
 
     if (error.response?.status === 401) {
       throw {
         message: "Authentication failed. Please sign in again.",
-        code: 'UNAUTHORIZED'
+        code: "UNAUTHORIZED",
       };
     }
 
     if (error.response?.status === 404) {
       throw {
         message: "User profile not found.",
-        code: 'NOT_FOUND'
+        code: "NOT_FOUND",
       };
     }
 
     if (error.response?.status >= 500) {
       throw {
         message: "Server error. Please try again later.",
-        code: 'SERVER_ERROR'
+        code: "SERVER_ERROR",
       };
     }
 
-    throw error.response?.data || {
-      message: "Failed to fetch user profile. Please try again.",
-      code: 'UNKNOWN_ERROR'
-    };
+    throw (
+      error.response?.data || {
+        message: "Failed to fetch user profile. Please try again.",
+        code: "UNKNOWN_ERROR",
+      }
+    );
   }
 };
 
@@ -235,31 +248,33 @@ export const updateUserProfile = async (userId, userData, token) => {
       status: error.response?.status,
     });
 
-    if (error.code === 'ECONNABORTED') {
+    if (error.code === "ECONNABORTED") {
       throw {
         message: "Update timed out. Please try again.",
-        code: 'TIMEOUT'
+        code: "TIMEOUT",
       };
     }
 
     if (error.response?.status === 401) {
       throw {
         message: "Authentication failed. Please sign in again.",
-        code: 'UNAUTHORIZED'
+        code: "UNAUTHORIZED",
       };
     }
 
     if (error.response?.status === 404) {
       throw {
         message: "User profile not found.",
-        code: 'NOT_FOUND'
+        code: "NOT_FOUND",
       };
     }
 
-    throw error.response?.data || {
-      message: "Failed to update user profile. Please try again.",
-      code: 'UPDATE_ERROR'
-    };
+    throw (
+      error.response?.data || {
+        message: "Failed to update user profile. Please try again.",
+        code: "UPDATE_ERROR",
+      }
+    );
   }
 };
 
@@ -272,12 +287,15 @@ export const deleteProfilePicture = async (userId, token) => {
   const requestFn = async () => {
     console.log("🗑️ Deleting profile picture for user:", userId);
 
-    const response = await apiClient.delete(`/profile/${userId}/profile-picture`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      timeout: 15000, // 15 seconds for deletion
-    });
+    const response = await apiClient.delete(
+      `/profile/${userId}/profile-picture`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        timeout: 15000, // 15 seconds for deletion
+      }
+    );
 
     console.log("✅ Profile picture deleted successfully");
     return response.data;
@@ -292,38 +310,40 @@ export const deleteProfilePicture = async (userId, token) => {
       status: error.response?.status,
     });
 
-    if (error.code === 'ECONNABORTED') {
+    if (error.code === "ECONNABORTED") {
       throw {
         message: "Deletion timed out. Please try again.",
-        code: 'TIMEOUT'
+        code: "TIMEOUT",
       };
     }
 
     if (error.response?.status === 401) {
       throw {
         message: "Authentication failed. Please sign in again.",
-        code: 'UNAUTHORIZED'
+        code: "UNAUTHORIZED",
       };
     }
 
     if (error.response?.status === 404) {
       throw {
         message: "No profile picture found to delete.",
-        code: 'NOT_FOUND'
+        code: "NOT_FOUND",
       };
     }
 
-    throw error.response?.data || {
-      message: "Failed to delete profile picture. Please try again.",
-      code: 'DELETE_ERROR'
-    };
+    throw (
+      error.response?.data || {
+        message: "Failed to delete profile picture. Please try again.",
+        code: "DELETE_ERROR",
+      }
+    );
   }
 };
 
 // Health check function to test API connectivity
 export const checkApiHealth = async () => {
   try {
-    const response = await apiClient.get('/profile/ping', {
+    const response = await apiClient.get("/profile/ping", {
       timeout: 5000,
     });
     return { healthy: true, response: response.data };
@@ -332,7 +352,7 @@ export const checkApiHealth = async () => {
     return {
       healthy: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     };
   }
 };
