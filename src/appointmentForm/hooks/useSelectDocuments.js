@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createDocumentRequest } from "../../services/documentRequestServices";
 
 const useSelectDocuments = (onNext) => {
   // Initialize state with defaults (no localStorage persistence)
@@ -11,6 +12,7 @@ const useSelectDocuments = (onNext) => {
   });
   const [claimOptionError, setClaimOptionError] = useState("");
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // Clear specific errors when values change
   useEffect(() => {
     if (state.purpose.trim()) {
@@ -65,17 +67,17 @@ const useSelectDocuments = (onNext) => {
   // Form Validation
   const handleValidation = () => {
     let newErrors = {};
-    
+
     // Check for documents selection
     if (state.selectedDocuments.length === 0) {
       newErrors.selectedDocuments = "Please select at least one document.";
     }
-    
+
     // Check for purpose with trimmed spaces
     if (!state.purpose.trim()) {
       newErrors.purpose = "This field is required.";
     }
-    
+
     // Check for date
     if (!state.date) {
       newErrors.date = "Please select a date.";
@@ -97,23 +99,62 @@ const useSelectDocuments = (onNext) => {
     updateState({ claimOption: option });
     setClaimOptionError(""); // Clear error once user selects
   };
-  
 
-  // Handle Modal Next Button (no API calls or data persistence)
-  const handleModalNext = () => {
+  // Handle Modal Next Button - Create document request and navigate
+  const handleModalNext = async () => {
     if (!state.claimOption) {
       setClaimOptionError("Please select a claim option.");
       return;
     }
 
     setClaimOptionError(""); // Clear if valid
+    setIsSubmitting(true);
 
-    // Update UI and navigate (no data persistence)
-    updateState({ showModal: false });
-    if (state.claimOption === "personal") {
-      onNext(5); // Calendar page
-    } else if (state.claimOption === "authorized") {
-      onNext(4); // Attachment page
+    try {
+      // Get student ID from localStorage (created in AppInfo step)
+      const studentId = localStorage.getItem("studentId");
+      if (!studentId) {
+        throw new Error(
+          "Student information not found. Please complete the previous steps."
+        );
+      }
+
+      // Create document request
+      const documentRequestData = {
+        studentId: studentId,
+        selectedDocuments: state.selectedDocuments,
+        purpose: state.purpose,
+        dateOfRequest: state.date,
+      };
+
+      console.log("Creating document request:", documentRequestData);
+      const response = await createDocumentRequest(documentRequestData);
+      console.log("Document request created successfully:", response);
+
+      // Store document request data for later use in appointment scheduling
+      localStorage.setItem("documentRequestId", response._id || response.id);
+      localStorage.setItem("appointmentPurpose", state.purpose);
+      localStorage.setItem(
+        "selectedDocuments",
+        JSON.stringify(state.selectedDocuments)
+      );
+
+      // Update UI and navigate
+      updateState({ showModal: false });
+      if (state.claimOption === "personal") {
+        onNext(5); // Calendar page
+      } else if (state.claimOption === "authorized") {
+        onNext(4); // Attachment page
+      }
+    } catch (error) {
+      console.error("Error creating document request:", error);
+      setErrors({
+        general:
+          error.message ||
+          "Failed to create document request. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -136,6 +177,7 @@ const useSelectDocuments = (onNext) => {
     setShowModal: (value) => updateState({ showModal: value }),
     claimOptionError,
     setClaimOptionError,
+    isSubmitting,
   };
 };
 
