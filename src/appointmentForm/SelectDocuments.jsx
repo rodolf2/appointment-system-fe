@@ -21,6 +21,7 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
     handleModalNext,
     setShowModal,
     claimOptionError,
+    isSubmitting,
   } = useSelectDocuments(onNext);
 
   return (
@@ -259,10 +260,15 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
                 </li>
               </ul>
             </div>
-            {/* Error message */}
+            {/* Error messages */}
             {errors.claimOption && (
               <p className="text-red-600 text-sm mt-4 text-left">
                 {errors.claimOption}
+              </p>
+            )}
+            {errors.general && (
+              <p className="text-red-600 text-sm mt-4 text-left">
+                {errors.general}
               </p>
             )}
             {/* Modal Buttons */}
@@ -270,15 +276,21 @@ const SelectDocuments = ({ onNext, onBack, currentStep }) => {
               <button
                 className="px-6 py-2 bg-gray-300 rounded-md"
                 onClick={() => setShowModal(false)} // Close modal
+                disabled={isSubmitting}
               >
                 Back
               </button>
 
               <button
-                className="px-6 py-2 bg-[#161f55] text-white rounded-md hover:bg-[#1b2a6b]"
+                className={`px-6 py-2 text-white rounded-md ${
+                  isSubmitting
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#161f55] hover:bg-[#1b2a6b]"
+                }`}
                 onClick={handleModalNext} // Handle modal next
+                disabled={isSubmitting}
               >
-                Next
+                {isSubmitting ? "Creating Request..." : "Next"}
               </button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/document-requests`;
 
@@ -8,7 +8,9 @@ export const createDocumentRequest = async (requestData) => {
     const response = await axios.post(`${API_URL}/docs`, requestData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to create document request' };
+    throw (
+      error.response?.data || { message: "Failed to create document request" }
+    );
   }
 };
 
@@ -18,7 +20,9 @@ export const getAllDocumentRequests = async () => {
     const response = await axios.get(`${API_URL}/docs`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to fetch document requests' };
+    throw (
+      error.response?.data || { message: "Failed to fetch document requests" }
+    );
   }
 };
 
@@ -28,27 +32,40 @@ export const getDocumentRequestById = async (requestId) => {
     const response = await axios.get(`${API_URL}/docs/${requestId}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to fetch document request' };
+    throw (
+      error.response?.data || { message: "Failed to fetch document request" }
+    );
   }
 };
 
 // Get document request with student details
 export const getDocumentRequestWithStudent = async (requestId) => {
   try {
-    const response = await axios.get(`${API_URL}/docs/with-student/${requestId}`);
+    const response = await axios.get(
+      `${API_URL}/docs/with-student/${requestId}`
+    );
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to fetch document request with student details' };
+    throw (
+      error.response?.data || {
+        message: "Failed to fetch document request with student details",
+      }
+    );
   }
 };
 
 // Update a document request
 export const updateDocumentRequest = async (requestId, updateData) => {
   try {
-    const response = await axios.put(`${API_URL}/docs/${requestId}`, updateData);
+    const response = await axios.put(
+      `${API_URL}/docs/${requestId}`,
+      updateData
+    );
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to update document request' };
+    throw (
+      error.response?.data || { message: "Failed to update document request" }
+    );
   }
 };
 
@@ -58,6 +75,22 @@ export const deleteDocumentRequest = async (requestId) => {
     const response = await axios.delete(`${API_URL}/docs/${requestId}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Failed to delete document request' };
+    throw (
+      error.response?.data || { message: "Failed to delete document request" }
+    );
+  }
+};
+
+// Get all document requests with details
+export const getAllDocumentRequestsWithDetails = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/docs-with-details`);
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        message: "Failed to fetch document requests with details",
+      }
+    );
   }
 };
