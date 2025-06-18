@@ -135,16 +135,7 @@ const useProfileForm = () => {
           throw new Error("Image size should be less than 5MB");
         }
 
-        console.log("📤 Uploading to server...");
         const uploadResponse = await uploadProfilePicture(user.id, file, token);
-        console.log("📤 Upload response received:", uploadResponse);
-        console.log("📤 Response type:", typeof uploadResponse);
-        console.log("📤 Response keys:", Object.keys(uploadResponse || {}));
-        console.log("📤 profilePicture:", uploadResponse?.profilePicture);
-        console.log(
-          "📤 cloudinaryPublicId:",
-          uploadResponse?.cloudinaryPublicId
-        );
 
         // Extract cloudinaryPublicId from URL if not provided by server
         let cloudinaryPublicId = uploadResponse?.cloudinaryPublicId;
@@ -198,7 +189,6 @@ const useProfileForm = () => {
           cloudinaryPublicId: cloudinaryPublicId,
         });
 
-        console.log("✅ Profile picture updated successfully");
         return imageUrl;
       } catch (error) {
         // Log the full error object
@@ -232,8 +222,6 @@ const useProfileForm = () => {
   // Handle image removal
   const handleImageRemove = async () => {
     try {
-      console.log("🗑️ Starting profile picture removal process...");
-
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error(
@@ -277,10 +265,7 @@ const useProfileForm = () => {
 
   // Handle form submission
   const handleSubmit = async () => {
-    const fullName = [
-      formData.firstName.trim(),
-      formData.lastName.trim(),
-    ]
+    const fullName = [formData.firstName.trim(), formData.lastName.trim()]
       .filter(Boolean)
       .join(" ");
 

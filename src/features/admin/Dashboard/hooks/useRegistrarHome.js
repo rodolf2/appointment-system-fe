@@ -184,9 +184,6 @@ const useRegistrarHome = () => {
   const fetchStats = useCallback(async () => {
     try {
       setLoading(true);
-      console.log(
-        "🔄 Dashboard: Fetching appointment data using SAME logic as appointments page..."
-      );
 
       const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
@@ -255,10 +252,6 @@ const useRegistrarHome = () => {
           };
         });
 
-      console.log(
-        `📊 Dashboard: Found ${transformedAppointments.length} active appointments (matching appointments page logic)`
-      );
-
       // 6. Initialize stats counters
       const calculatedStats = {
         APPROVED: 0,
@@ -320,8 +313,6 @@ const useRegistrarHome = () => {
         }
       });
 
-      console.log("📊 Dashboard final stats:", calculatedStats);
-      console.log("✅ This should now match your appointments page count!");
       setStats(calculatedStats);
       setLoading(false);
     } catch (error) {
@@ -343,7 +334,7 @@ const useRegistrarHome = () => {
   useEffect(() => {
     fetchStats();
     // Set up a refresh interval
-    const interval = setInterval(fetchStats, 30000); // Refresh every 30 seconds
+    const interval = setInterval(fetchStats, 60000); // Refresh every 60 seconds
 
     return () => clearInterval(interval);
   }, [fetchStats]); // Use fetchStats as dependency

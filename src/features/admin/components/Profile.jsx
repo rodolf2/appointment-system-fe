@@ -90,16 +90,12 @@ const Profile = () => {
                           "❌ Failed to load profile image:",
                           profileImage
                         );
-                        console.error("Error details:", e);
 
                         // If it's a Google profile picture, try alternative URL
                         if (
                           profileImage &&
                           profileImage.includes("googleusercontent.com")
                         ) {
-                          console.log(
-                            "🔄 Trying alternative Google profile picture URL..."
-                          );
                           const baseUrl = profileImage.split("=")[0];
                           e.target.src = baseUrl + "=s400-c";
 
