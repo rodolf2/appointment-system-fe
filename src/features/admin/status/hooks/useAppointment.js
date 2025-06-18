@@ -24,6 +24,7 @@ const useAppointment = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   // Sidebar state
+  // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     const saved = localStorage.getItem("sidebarOpen");
     return saved !== null ? JSON.parse(saved) : true;
@@ -460,145 +461,141 @@ const useAppointment = () => {
       if (!statusResponse.ok) {
         throw new Error(`Failed to fetch statuses: ${statusResponse.status}`);
       }
-        const statusData = await statusResponse.json();
+      const statusData = await statusResponse.json();
 
-        // Debug: Log all status data to see what we're getting
-        console.log("All status data from API:", statusData);
-        console.log("Number of status records:", statusData.length);
+      // Debug: Log all status data to see what we're getting
+      console.log("All status data from API:", statusData);
+      console.log("Number of status records:", statusData.length);
 
-        // 3. Create a map of statuses using `transactionNumber` as the key.
-        const statusMap = statusData.reduce((acc, statusItem) => {
-          if (statusItem && statusItem.transactionNumber) {
-            acc[statusItem.transactionNumber] = statusItem;
-            console.log(`Status mapped for ${statusItem.transactionNumber}:`, {
-              appointmentDate: statusItem.appointmentDate,
-              timeSlot: statusItem.timeSlot,
-              status: statusItem.status,
+      // 3. Create a map of statuses using `transactionNumber` as the key.
+      const statusMap = statusData.reduce((acc, statusItem) => {
+        if (statusItem && statusItem.transactionNumber) {
+          acc[statusItem.transactionNumber] = statusItem;
+          console.log(`Status mapped for ${statusItem.transactionNumber}:`, {
+            appointmentDate: statusItem.appointmentDate,
+            timeSlot: statusItem.timeSlot,
+            status: statusItem.status,
+          });
+        }
+        return acc;
+      }, {});
+
+      // 4. Get archived appointments from localStorage to filter them out
+      const archivedAppointments = JSON.parse(
+        localStorage.getItem("archivedAppointments") || "[]"
+      );
+      const archivedIds = new Set(archivedAppointments.map((appt) => appt.id));
+
+      // 5. Transform, merge, and SORT the data
+      const transformedAppointments = studentsData
+        .filter(
+          (student) =>
+            student &&
+            student.transactionNumber &&
+            !archivedIds.has(student.transactionNumber)
+        )
+        .map((student) => {
+          const statusInfo = statusMap[student.transactionNumber] || {};
+
+          // Debug logging for appointment date and time issues
+          if (student.transactionNumber) {
+            console.log(`Debug - Transaction ${student.transactionNumber}:`, {
+              hasStatusInfo: Object.keys(statusInfo).length > 0,
+              appointmentDate: statusInfo.appointmentDate,
+              timeSlot: statusInfo.timeSlot,
+              status: statusInfo.status,
+              fullStatusInfo: statusInfo,
             });
-          }
-          return acc;
-        }, {});
 
-        // 4. Get archived appointments from localStorage to filter them out
-        const archivedAppointments = JSON.parse(
-          localStorage.getItem("archivedAppointments") || "[]"
-        );
-        const archivedIds = new Set(
-          archivedAppointments.map((appt) => appt.id)
-        );
-
-        // 5. Transform, merge, and SORT the data
-        const transformedAppointments = studentsData
-          .filter(
-            (student) =>
-              student &&
-              student.transactionNumber &&
-              !archivedIds.has(student.transactionNumber)
-          )
-          .map((student) => {
-            const statusInfo = statusMap[student.transactionNumber] || {};
-
-            // Debug logging for appointment date and time issues
-            if (student.transactionNumber) {
-              console.log(`Debug - Transaction ${student.transactionNumber}:`, {
-                hasStatusInfo: Object.keys(statusInfo).length > 0,
-                appointmentDate: statusInfo.appointmentDate,
-                timeSlot: statusInfo.timeSlot,
-                status: statusInfo.status,
-                fullStatusInfo: statusInfo,
+            // Auto-fix missing appointment data
+            if (
+              statusInfo.status &&
+              (!statusInfo.appointmentDate || !statusInfo.timeSlot)
+            ) {
+              console.log(
+                `Attempting to fix missing data for ${student.transactionNumber}`
+              );
+              console.log("Student data available:", student);
+              fixMissingAppointmentData(
+                student.transactionNumber,
+                student
+              ).then((fixed) => {
+                if (fixed) {
+                  // Refresh the data after fixing
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 1000);
+                }
               });
-
-              // Auto-fix missing appointment data
-              if (
-                statusInfo.status &&
-                (!statusInfo.appointmentDate || !statusInfo.timeSlot)
-              ) {
-                console.log(
-                  `Attempting to fix missing data for ${student.transactionNumber}`
-                );
-                console.log("Student data available:", student);
-                fixMissingAppointmentData(
-                  student.transactionNumber,
-                  student
-                ).then((fixed) => {
-                  if (fixed) {
-                    // Refresh the data after fixing
-                    setTimeout(() => {
-                      window.location.reload();
-                    }, 1000);
-                  }
-                });
-              }
             }
+          }
 
-            const validStatuses = [
-              "PENDING",
-              "APPROVED",
-              "REJECTED",
-              "COMPLETED",
-            ];
-            const normalizedStatus = (
-              statusInfo.status || "PENDING"
-            ).toUpperCase();
-            const status = validStatuses.includes(normalizedStatus)
-              ? normalizedStatus
-              : "PENDING";
+          const validStatuses = [
+            "PENDING",
+            "APPROVED",
+            "REJECTED",
+            "COMPLETED",
+          ];
+          const normalizedStatus = (
+            statusInfo.status || "PENDING"
+          ).toUpperCase();
+          const status = validStatuses.includes(normalizedStatus)
+            ? normalizedStatus
+            : "PENDING";
 
-            return {
-              id: student.transactionNumber,
-              status: status,
-              transactionNumber: student.transactionNumber,
-              request: student.request || "No request specified",
-              purpose:
-                student.purpose ||
-                (student.documentRequest &&
-                Array.isArray(student.documentRequest.purpose)
-                  ? student.documentRequest.purpose.join(", ")
-                  : student.documentRequest?.purpose) ||
-                "No purpose specified",
-              emailAddress: student.email || "No email specified",
-              dateOfAppointment: statusInfo?.appointmentDate
-                ? new Date(statusInfo.appointmentDate).toLocaleDateString(
-                    "en-US",
-                    {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    }
-                  )
-                : student.appointmentDate &&
-                  student.appointmentDate !== "Not scheduled"
-                ? student.appointmentDate
-                : "Not scheduled",
-              timeSlot:
-                statusInfo?.timeSlot ||
-                (student.timeSlot && student.timeSlot !== "Not scheduled"
-                  ? student.timeSlot
-                  : "Not scheduled"),
-              // This is the key field for sorting by submission time
-              dateOfRequest:
-                student.date || new Date().toISOString().split("T")[0],
-              name: student.name,
-              lastSY: student.lastSY,
-              program: student.program,
-              contact: student.contact,
-              attachment: student.attachment,
-            };
-          })
-          // --- THIS IS THE NEW LINE OF CODE ---
-          // 6. Sort by request date in descending order (newest first)
-          .sort(
-            (a, b) => new Date(b.dateOfRequest) - new Date(a.dateOfRequest)
-          );
+          return {
+            id: student.transactionNumber,
+            status: status,
+            transactionNumber: student.transactionNumber,
+            request: student.request || "No request specified",
+            purpose:
+              student.purpose ||
+              (student.documentRequest &&
+              Array.isArray(student.documentRequest.purpose)
+                ? student.documentRequest.purpose.join(", ")
+                : student.documentRequest?.purpose) ||
+              "No purpose specified",
+            emailAddress: student.email || "No email specified",
+            dateOfAppointment: statusInfo?.appointmentDate
+              ? new Date(statusInfo.appointmentDate).toLocaleDateString(
+                  "en-US",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }
+                )
+              : student.appointmentDate &&
+                student.appointmentDate !== "Not scheduled"
+              ? student.appointmentDate
+              : "Not scheduled",
+            timeSlot:
+              statusInfo?.timeSlot ||
+              (student.timeSlot && student.timeSlot !== "Not scheduled"
+                ? student.timeSlot
+                : "Not scheduled"),
+            // This is the key field for sorting by submission time
+            dateOfRequest:
+              student.date || new Date().toISOString().split("T")[0],
+            name: student.name,
+            lastSY: student.lastSY,
+            program: student.program,
+            contact: student.contact,
+            attachment: student.attachment,
+          };
+        })
+        // --- THIS IS THE NEW LINE OF CODE ---
+        // 6. Sort by request date in descending order (newest first)
+        .sort((a, b) => new Date(b.dateOfRequest) - new Date(a.dateOfRequest));
 
-        setAppointments(transformedAppointments);
-      } catch (err) {
-        console.error("Failed to fetch appointments:", err);
-        setError(err.message || "An error occurred while fetching data.");
-      } finally {
-        setLoading(false);
-      }
-    }, []);
+      setAppointments(transformedAppointments);
+    } catch (err) {
+      console.error("Failed to fetch appointments:", err);
+      setError(err.message || "An error occurred while fetching data.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // Fetch data on mount
   useEffect(() => {
@@ -615,7 +612,10 @@ const useAppointment = () => {
     window.addEventListener("appointmentStatusUpdated", handleStatusUpdate);
 
     return () => {
-      window.removeEventListener("appointmentStatusUpdated", handleStatusUpdate);
+      window.removeEventListener(
+        "appointmentStatusUpdated",
+        handleStatusUpdate
+      );
     };
   }, [fetchAppointments]);
 

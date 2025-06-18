@@ -8,8 +8,6 @@ import { useState, useEffect } from "react";
 import { AdminSkeleton } from "../../../components/skeleton/AdminSkeleton";
 
 const Students = () => {
-  // State for tracking image loading errors
-  const [imgErrors, setImgErrors] = useState({});
 
   const API_URL = `${
     import.meta.env.VITE_API_URL
@@ -93,14 +91,12 @@ const Students = () => {
 
   // State for storing actual attachment URLs
   const [attachmentUrls, setAttachmentUrls] = useState({});
-  const [attachmentLoading, setAttachmentLoading] = useState(false);
 
   // Fetch actual attachment URLs from the backend
   useEffect(() => {
     const fetchAttachmentUrls = async () => {
       if (!filteredAppointments || filteredAppointments.length === 0) return;
 
-      setAttachmentLoading(true);
       try {
         const ATTACHMENT_API_URL = `${
           import.meta.env.VITE_API_URL
@@ -158,8 +154,6 @@ const Students = () => {
         setAttachmentUrls(urlMapping);
       } catch (error) {
         console.error("❌ Error fetching attachment URLs:", error);
-      } finally {
-        setAttachmentLoading(false);
       }
     };
 
@@ -214,24 +208,24 @@ const Students = () => {
               </div>
               <table
                 className="text-[15px] w-[97%] border-collapse text-[#161F55] mt-8 mx-auto"
-                style={{ tableLayout: "fixed" }}
+                style={{ tableLayout: "fixed", minWidth: "1200px" }}
               >
                 <thead>
                   <tr className="bg-gray-200 text-center">
-                    <th className="border p-4 w-[12%]">TRANSACTION NO.</th>
-                    <th className="border p-4 w-[15%]">NAME</th>
-                    <th className="border p-4 w-[10%]">LAST S.Y. ATTENDED</th>
-                    <th className="border p-4 w-[12%]">
-                      PROGRAM/GRADE
+                    <th className="border p-5 w-[11%]">TRANSACTION NO.</th>
+                    <th className="border p-5 w-[13%]">NAME</th>
+                    <th className="border p-5 w-[9%]">LAST S.Y. ATTENDED</th>
+                    <th className="border p-5 w-[13%]">
+                      PROGRAM/GRADE/
                       <br />
                       STRAND
                     </th>
-                    <th className="border p-4 w-[10%]">CONTACT NO.</th>
-                    <th className="border p-4 w-[15%]">EMAIL ADDRESS</th>
-                    <th className="border p-4 w-[10%]">ATTACHMENT PROOF</th>
-                    <th className="border p-4 w-[10%]">PURPOSE</th>
-                    <th className="border p-4 w-[10%]">REQUEST</th>
-                    <th className="border p-4 w-[10%]">DATE OF REQUEST</th>
+                    <th className="border p-5 w-[11%]">CONTACT NO.</th>
+                    <th className="border p-5 w-[14%]">EMAIL ADDRESS</th>
+                    <th className="border p-5 w-[12%]">ATTACHMENT PROOF</th>
+                    <th className="border p-5 w-[9%]">PURPOSE</th>
+                    <th className="border p-5 w-[9%]">REQUEST</th>
+                    <th className="border p-5 w-[9%]">DATE OF REQUEST</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -242,36 +236,34 @@ const Students = () => {
                         key={index}
                         className={index % 2 === 0 ? "bg-gray-100" : ""}
                       >
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-28"></div>
                         </td>
-                        <td className="border p-4">
-                          <div className="flex items-center justify-center">
-                            <div className="h-6 bg-gray-300 rounded animate-pulse w-32"></div>
-                          </div>
+                        <td className="border p-5 text-center">
+                          <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-32"></div>
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-20"></div>
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-24"></div>
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-28"></div>
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-36"></div>
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-8 w-8 bg-gray-300 rounded animate-pulse mx-auto"></div>
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-24"></div>
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-24"></div>
                         </td>
-                        <td className="border p-4">
+                        <td className="border p-5 text-center">
                           <div className="h-6 bg-gray-300 rounded animate-pulse mx-auto w-28"></div>
                         </td>
                       </tr>
@@ -358,24 +350,24 @@ const Students = () => {
 
             <table
               className="text-[15px] w-[97%] border-collapse text-[#161F55] mt-8 mx-auto"
-              style={{ tableLayout: "fixed" }}
+              style={{ tableLayout: "fixed", minWidth: "1200px" }}
             >
               <thead>
                 <tr className="bg-gray-200 text-center">
-                  <th className="border p-5 w-[12%]">TRANSACTION NO.</th>
-                  <th className="border p-5 w-[15%]">NAME</th>
-                  <th className="border p-5 w-[10%]">LAST S.Y. ATTENDED</th>
-                  <th className="border p-5 w-[12%]">
+                  <th className="border p-5 w-[11%]">TRANSACTION NO.</th>
+                  <th className="border p-5 w-[13%]">NAME</th>
+                  <th className="border p-5 w-[9%]">LAST S.Y. ATTENDED</th>
+                  <th className="border p-5 w-[13%]">
                     PROGRAM/GRADE/
                     <br />
                     STRAND
                   </th>
-                  <th className="border p-5 w-[10%]">CONTACT NO.</th>
-                  <th className="border p-5 w-[15%]">EMAIL ADDRESS</th>
-                  <th className="border p-5 w-[10%]">ATTACHMENT PROOF</th>
-                  <th className="border p-5 w-[10%]">PURPOSE</th>
-                  <th className="border p-5 w-[10%]">REQUEST</th>
-                  <th className="border p-5 w-[10%]">DATE OF REQUEST</th>
+                  <th className="border p-5 w-[11%]">CONTACT NO.</th>
+                  <th className="border p-5 w-[14%]">EMAIL ADDRESS</th>
+                  <th className="border p-5 w-[12%]">ATTACHMENT PROOF</th>
+                  <th className="border p-5 w-[9%]">PURPOSE</th>
+                  <th className="border p-5 w-[9%]">REQUEST</th>
+                  <th className="border p-5 w-[9%]">DATE OF REQUEST</th>
                 </tr>
               </thead>
               <tbody>
@@ -416,34 +408,34 @@ const Students = () => {
                           index % 2 === 0 ? "bg-gray-100" : ""
                         } text-center`}
                       >
-                        <td className="border p-5 text-[#354CCE] font-bold break-words">
+                        <td className="border p-5 text-[#354CCE] font-bold text-center">
                           {data.transactionNumber}
                         </td>
-                        <td className="border p-5 break-words">{data.name}</td>
-                        <td className="border p-5 break-words">
+                        <td className="border p-5 text-center">{data.name}</td>
+                        <td className="border p-5 text-center">
                           {data.lastSY}
                         </td>
-                        <td className="border p-5 break-words">
+                        <td className="border p-5 text-center">
                           {data.program}
                         </td>
-                        <td className="border p-5 break-words">
+                        <td className="border p-5 text-center">
                           {data.contact}
                         </td>
-                        <td className="border p-5">
-                          <div className="max-w-[150px]">
+                        <td className="border p-5 text-center">
+                          <div className="mx-auto max-w-[150px]">
                             <span
                               data-tooltip-id="email-tooltip"
                               data-tooltip-content={data.email}
-                              className="cursor-help block truncate"
+                              className="cursor-help block truncate text-center"
                             >
                               {data.email}
                             </span>
                           </div>
                         </td>
-                        <td className="border p-5 break-words">
+                        <td className="border p-5 text-center">
                           {data.attachment &&
                           data.attachment !== "No attachments" ? (
-                            <div className="flex flex-col gap-2">
+                            <div className="flex flex-col gap-2 items-center justify-center">
                               {(() => {
                                 // First, try to get actual URLs from the fetched attachment data
                                 // We need to find attachments by matching student data
@@ -496,11 +488,6 @@ const Students = () => {
                                   return studentAttachments.map(
                                     (attachment, index) => {
                                       const viewableUrl = attachment.url;
-                                      const thumbnailUrl =
-                                        attachment.url.replace(
-                                          "/upload/",
-                                          "/upload/c_thumb,w_60,h_60,g_face/"
-                                        );
                                       const filename = attachment.filename;
 
                                       console.log(
@@ -508,7 +495,6 @@ const Students = () => {
                                         {
                                           filename: filename,
                                           viewableUrl: viewableUrl,
-                                          thumbnailUrl: thumbnailUrl,
                                           studentId: data.transactionNumber,
                                         }
                                       );
@@ -516,93 +502,23 @@ const Students = () => {
                                       return (
                                         <div
                                           key={index}
-                                          className="flex items-center space-x-2 group"
+                                          className="flex items-center justify-center"
                                         >
-                                          {" "}
-                                          {!imgErrors[
-                                            `${data.transactionNumber}-${index}`
-                                          ] ? (
-                                            <img
-                                              src={thumbnailUrl}
-                                              alt="Attachment thumbnail"
-                                              className="w-8 h-8 object-cover rounded border cursor-pointer hover:scale-110 transition-transform"
-                                              onClick={() =>
-                                                window.open(
-                                                  viewableUrl,
-                                                  "_blank"
-                                                )
-                                              }
-                                              onError={(e) => {
-                                                // Try fallback URLs first
-                                                const fallbacks =
-                                                  window.cloudinaryFallbacks;
-                                                if (fallbacks) {
-                                                  console.log(
-                                                    "🔄 Trying fallback URLs..."
-                                                  );
-                                                  e.target.src =
-                                                    fallbacks.thumbnail;
-                                                  // Update the onClick handler to use fallback viewable URL
-                                                  e.target.onclick = () =>
-                                                    window.open(
-                                                      fallbacks.viewable,
-                                                      "_blank"
-                                                    );
-                                                  return;
-                                                }
-
-                                                console.log(
-                                                  "❌ Image failed to load:",
-                                                  thumbnailUrl
-                                                );
-                                                setImgErrors((prev) => ({
-                                                  ...prev,
-                                                  [`${data.transactionNumber}-${index}`]: true,
-                                                }));
-                                              }}
-                                            />
-                                          ) : (
-                                            <div
-                                              className="w-8 h-8 bg-gray-300 rounded border flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors"
-                                              onClick={() =>
-                                                window.open(
-                                                  viewableUrl,
-                                                  "_blank"
-                                                )
-                                              }
+                                          <a
+                                            href={viewableUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:underline text-sm block"
+                                            title={filename}
+                                          >
+                                            <span
+                                              data-tooltip-id="attachment-tooltip"
+                                              data-tooltip-content={filename}
+                                              className="cursor-help block truncate max-w-[100px] text-xs"
                                             >
-                                              <svg
-                                                className="w-4 h-4 text-gray-500"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                              >
-                                                <path
-                                                  strokeLinecap="round"
-                                                  strokeLinejoin="round"
-                                                  strokeWidth="2"
-                                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                                />
-                                              </svg>
-                                            </div>
-                                          )}
-                                          <div className="flex-1 min-w-0">
-                                            <a
-                                              href={viewableUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="text-blue-600 hover:underline text-sm block"
-                                              title={filename}
-                                            >
-                                              <span
-                                                data-tooltip-id="attachment-tooltip"
-                                                data-tooltip-content={filename}
-                                                className="cursor-help block truncate max-w-[120px]"
-                                              >
-                                                {filename}
-                                              </span>
-                                            </a>
-                                          </div>
+                                              {filename}
+                                            </span>
+                                          </a>
                                         </div>
                                       );
                                     }
@@ -664,7 +580,6 @@ const Students = () => {
 
                                       // Smart URL handling for Cloudinary attachments
                                       let viewableUrl;
-                                      let thumbnailUrl;
 
                                       console.log(
                                         "🔍 Processing attachment URL:",
@@ -682,17 +597,11 @@ const Students = () => {
                                       ) {
                                         // URL is already complete - use as-is
                                         viewableUrl = url;
-                                        // Create thumbnail by adding transformation
-                                        thumbnailUrl = url.replace(
-                                          "/upload/",
-                                          "/upload/c_thumb,w_60,h_60,g_face/"
-                                        );
                                         console.log(
                                           "✅ Using complete Cloudinary URL:",
                                           {
                                             originalUrl: url,
                                             viewableUrl,
-                                            thumbnailUrl,
                                             hasUndefined: url.includes(
                                               "undefined"
                                             )
@@ -790,7 +699,6 @@ const Students = () => {
                                           publicId: publicId,
                                           versionTimestamp: versionTimestamp,
                                           viewableUrl: viewableUrl,
-                                          thumbnailUrl: thumbnailUrl,
                                           fallbackViewableUrl:
                                             window.cloudinaryFallbacks
                                               ?.viewable,
@@ -826,14 +734,13 @@ const Students = () => {
 
                                       console.log("Processed URLs:", {
                                         viewableUrl,
-                                        thumbnailUrl,
                                         filename,
                                       });
 
                                       return (
                                         <div
                                           key={`fallback-${data.transactionNumber}-${index}-${url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('/') + 20)}`}
-                                          className="flex items-center group"
+                                          className="flex items-center justify-center group"
                                         >
                                           <a
                                             href={viewableUrl}
@@ -857,12 +764,12 @@ const Students = () => {
                               })()}
                             </div>
                           ) : (
-                            <span className="text-gray-500 text-sm">
+                            <span className="text-gray-500 text-sm text-center block">
                               No attachments
                             </span>
                           )}
                         </td>
-                        <td className="border p-5 break-words">
+                        <td className="border p-5 text-center">
                           <span
                             data-tooltip-id="purpose-tooltip"
                             data-tooltip-content={
@@ -870,17 +777,17 @@ const Students = () => {
                                 ? data.purpose.replace(/(.{50})/g, "$1\n")
                                 : data.purpose
                             }
-                            className="cursor-help"
+                            className="cursor-help block"
                           >
                             {data.purpose.length > 20
                               ? `${data.purpose.substring(0, 20)}...`
                               : data.purpose}
                           </span>
                         </td>
-                        <td className="border p-5 break-words">
+                        <td className="border p-5 text-center">
                           {data.request}
-                        </td>{" "}
-                        <td className="border p-5 break-words text-center">
+                        </td>
+                        <td className="border p-5 text-center">
                           {new Date(data.date).toLocaleDateString()}
                         </td>
                       </tr>
