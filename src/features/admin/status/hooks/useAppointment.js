@@ -225,6 +225,7 @@ const useAppointment = () => {
     }
   };
   const updateAppointmentStatus = async (appointment, newStatus) => {
+    // Don't set loading state for status updates
     try {
       console.log("Updating status for appointment:", {
         transactionNumber: appointment.transactionNumber,
@@ -368,26 +369,23 @@ const useAppointment = () => {
 
       localStorage.setItem("appointmentStatusUpdated", Date.now().toString());
 
-      // Refetch appointments to ensure data consistency
-      await fetchAppointments();
+      // Remove the fetchAppointments call as we've already updated the state
+      // await fetchAppointments();
     } catch (error) {
       console.error("Error updating status:", error);
       setError(error.message);
     }
   };
 
-  const approveAppointment = (appointment, event) => {
-    event?.preventDefault();
+  const approveAppointment = (appointment) => {
     updateAppointmentStatus(appointment, "APPROVED");
   };
 
-  const rejectAppointment = (appointment, event) => {
-    event?.preventDefault();
+  const rejectAppointment = (appointment) => {
     updateAppointmentStatus(appointment, "REJECTED");
   };
 
-  const completeAppointment = (appointment, event) => {
-    event?.preventDefault();
+  const completeAppointment = (appointment) => {
     updateAppointmentStatus(appointment, "COMPLETED");
   };
 
@@ -435,7 +433,10 @@ const useAppointment = () => {
   // Fetch data function
   const fetchAppointments = useCallback(async () => {
     const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
-    setLoading(true);
+    // Only show loading on initial fetch
+    if (appointments.length === 0) {
+      setLoading(true);
+    }
     setError(null);
 
     try {
@@ -595,7 +596,7 @@ const useAppointment = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [appointments.length]);
 
   // Fetch data on mount
   useEffect(() => {

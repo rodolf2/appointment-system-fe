@@ -438,8 +438,7 @@ const Appointments = () => {
                                     className="bg-[#3A993D] p-2 rounded cursor-pointer hover:bg-green-700"
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      e.stopPropagation();
-                                      approveAppointment(data, e);
+                                      approveAppointment(data);
                                     }}
                                   >
                                     <FaThumbsUp className="text-white" />
@@ -456,8 +455,7 @@ const Appointments = () => {
                                     className="bg-[#354CCE] p-2 rounded cursor-pointer hover:bg-blue-700"
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      e.stopPropagation();
-                                      completeAppointment(data, e);
+                                      completeAppointment(data);
                                     }}
                                   >
                                     <LuCircleCheckBig className="text-white" />
@@ -474,8 +472,7 @@ const Appointments = () => {
                                     className="bg-[#D52121] p-2 rounded cursor-pointer hover:bg-red-700"
                                     onClick={(e) => {
                                       e.preventDefault();
-                                      e.stopPropagation();
-                                      rejectAppointment(data, e);
+                                      rejectAppointment(data);
                                     }}
                                   >
                                     <FaThumbsDown className="text-white transform scale-x-[-1]" />
@@ -490,7 +487,6 @@ const Appointments = () => {
                                   className="bg-[#6F6F6F] p-2 rounded cursor-pointer hover:bg-gray-700"
                                   onClick={(e) => {
                                     e.preventDefault();
-                                    e.stopPropagation();
                                     openModal(data);
                                   }}
                                 >
