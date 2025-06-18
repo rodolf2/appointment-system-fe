@@ -4,6 +4,8 @@ import Header from "/src/features/admin/components/Header";
 import Footer from "/src/features/admin/components/Footer";
 import useRegistrarHome from "./hooks/useRegistrarHome";
 import { AdminSkeleton } from "../../../components/skeleton/AdminSkeleton";
+import { useState, useEffect } from "react";
+import { getAllSchedules } from "../../../services/scheduleServices";
 
 const RegistrarHome = () => {
   const {
@@ -24,6 +26,24 @@ const RegistrarHome = () => {
     isWeekend,
     stats,
   } = useRegistrarHome();
+
+  // Schedule state
+  const [schedules, setSchedules] = useState([]);
+
+  // Fetch schedules
+  useEffect(() => {
+    const fetchSchedules = async () => {
+      try {
+        const response = await getAllSchedules();
+        setSchedules(response || []);
+      } catch (error) {
+        console.error("Error fetching schedules:", error);
+        setSchedules([]);
+      }
+    };
+
+    fetchSchedules();
+  }, []);
 
   if (loading) {
     return (
@@ -336,24 +356,43 @@ const RegistrarHome = () => {
                   const eventInfo =
                     events[currentDate.format("YYYY-MM")]?.[dayOfMonth]; // 'events' is calendarDashboardEvents
 
+                  // Find schedule for this date
+                  const scheduleInfo = schedules.find(schedule => {
+                    const scheduleDate = dayjs(schedule.date).format("YYYY-MM-DD");
+                    return scheduleDate === dateStringForComparison;
+                  });
+
                   let dayCellClasses =
                     "p-2 h-[90px] cursor-pointer relative hover:bg-blue-100"; // Base classes
                   let displayItem = null;
                   let itemColor = "";
                   let itemLabel = "";
 
-                  // Determine background and label based on priority: Event > Holiday > Weekend
+                  // Determine background and label based on priority: Event > Holiday > Schedule > Weekend
                   if (eventInfo) {
                     displayItem = "Event";
                     itemLabel = eventInfo.label; // This is the event title
                     itemColor = eventInfo.color;
                     dayCellClasses += " bg-white"; // Explicitly set to white if there's an event
-                    // This will be overridden by current day highlight if applicable
                   } else if (holidayInfo) {
                     displayItem = "Holiday";
                     itemLabel = holidayInfo.name || "Holiday";
-                    itemColor = "bg-purple-500"; // Standard Holiday color
+                    itemColor = "bg-[#AF1EB9]"; // Standard Holiday color
                     dayCellClasses += " bg-purple-100"; // Background for holiday if no event
+                  } else if (scheduleInfo) {
+                    // Only show "Appointment" or "Fully Booked" for schedules
+                    const availableSlots = parseInt(scheduleInfo?.availableSlots || 0);
+                    const isFullyBooked = availableSlots === 0;
+
+                    displayItem = "Appointment";
+                    if (isFullyBooked) {
+                      itemLabel = "Fully Booked";
+                      itemColor = "bg-[#F63838]";
+                    } else {
+                      itemLabel = "Appointment";
+                      itemColor = "bg-[#48E14D]";
+                    }
+                    dayCellClasses += " bg-white";
                   } else if (isDayWeekend) {
                     // No specific label/item for weekend unless it's also a holiday/event
                     dayCellClasses += " bg-gray-100"; // Background for weekend if no event/holiday
@@ -362,17 +401,16 @@ const RegistrarHome = () => {
                     dayCellClasses += " bg-white";
                   }
 
-                  // Current day highlighting (this will override other bg-colors if it's the current day)
+                  // Current day highlighting
                   if (
                     currentDate.date() === dayOfMonth &&
                     currentDate.month() === dayjs().month() &&
                     currentDate.year() === dayjs().year()
                   ) {
-                    // Remove previous background before applying current day highlight
                     dayCellClasses = dayCellClasses.replace(
                       /bg-(white|purple-100|gray-100)/g,
                       ""
-                    ); // Remove other BGs
+                    );
                     dayCellClasses +=
                       " bg-blue-300 font-bold ring-2 ring-blue-500";
                   }
@@ -383,7 +421,7 @@ const RegistrarHome = () => {
                       className={dayCellClasses.trim()} // Apply the constructed classes, trim for safety
                     >
                       {dayOfMonth}
-                      {displayItem && ( // If there's a holiday or an event to display
+                      {displayItem && ( // If there's a holiday, event, or appointment to display
                         <span
                           className={`absolute bottom-1 left-1 right-1 text-center text-xs text-white px-1 py-0.5 rounded ${itemColor}`}
                         >

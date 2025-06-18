@@ -150,6 +150,7 @@ const Schedule = () => {
                               : ""
                           }`}
                         >
+                          {/* Display: Available / Total */}
                           {schedule?.availableSlots || "0"} /{" "}
                           {schedule?.slots || "0"}
                           {parseInt(schedule?.availableSlots || 0) === 0 && (

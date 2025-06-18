@@ -49,11 +49,15 @@ const useSchedule = () => {
 
   // Format schedule data for display
   const formatScheduleForDisplay = useCallback((schedule, index) => {
+    const availableSlots = schedule.availableSlots || schedule.slots || 0;
+    const totalSlots = schedule.totalSlots || availableSlots;
+    const bookedSlots = schedule.bookedSlots || 0;
+
     return {
       no: (index + 1).toString(),
-      slots: schedule.slots.toString(),
-      availableSlots: (schedule.slots - (schedule.bookedSlots || 0)).toString(),
-      bookedSlots: (schedule.bookedSlots || 0).toString(),
+      slots: totalSlots.toString(), // Total slots (original amount)
+      availableSlots: availableSlots.toString(), // Available slots (decreases when booked)
+      bookedSlots: bookedSlots.toString(), // Booked slots
       date: formatDateForStorage(schedule.date.split("T")[0]),
       startTime: schedule.startTime,
       endTime: schedule.endTime,
@@ -250,11 +254,12 @@ const useSchedule = () => {
       const scheduleToUpdate = schedules[editIndex];
 
       // Prepare update data with slot calculations
+      // Important: Backend currently treats 'slots' as available slots
+      // When updating, we need to account for existing bookings
       const updateData = {
         ...newSchedule,
-        slots: newSlots,
-        bookedSlots: bookedSlots,
-        availableSlots: newSlots - bookedSlots,
+        slots: newSlots, // This will be the new total slots
+        // The backend will need to handle the booking logic properly
       };
 
       const response = await updateSchedule(scheduleToUpdate._id, updateData);

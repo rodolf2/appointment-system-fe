@@ -31,7 +31,7 @@ const useHeader = (initialTitle = "") => {
           const token = localStorage.getItem("token");
           if (!token) return;
 
-          console.log("🔄 Header: Fetching latest user profile...");
+          // console.log("🔄 Header: Fetching latest user profile...");
           const userProfile = await getUserProfile(user.id, token);
           if (userProfile) {
             // Only update if there are actual changes
@@ -51,14 +51,14 @@ const useHeader = (initialTitle = "") => {
                   userProfile.cloudinaryPublicId || user.cloudinaryPublicId,
               });
             }
-            console.log("✅ Header: Got latest profile:", userProfile);
+            // console.log("✅ Header: Got latest profile:", userProfile);
             // Update user context with latest profile data
             const updatedUser = {
               ...user,
               picture: userProfile.profilePicture || userProfile.picture,
               profilePicture: userProfile.profilePicture || userProfile.picture,
             };
-            console.log("👤 Header: Updating user context with:", updatedUser);
+            // console.log("👤 Header: Updating user context with:", updatedUser);
             updateUser(updatedUser);
           }
         } catch (error) {

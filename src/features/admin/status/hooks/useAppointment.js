@@ -276,11 +276,13 @@ const useAppointment = () => {
 
       console.log("Request body being sent:", requestBody);
 
+      const token = localStorage.getItem("token");
       const response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(requestBody),
       });
@@ -364,6 +366,9 @@ const useAppointment = () => {
       );
 
       localStorage.setItem("appointmentStatusUpdated", Date.now().toString());
+
+      // Refetch appointments to ensure data consistency
+      await fetchAppointments();
     } catch (error) {
       console.error("Error updating status:", error);
       setError(error.message);
@@ -426,37 +431,35 @@ const useAppointment = () => {
     return false;
   };
 
-  // Fetch data
-  useEffect(() => {
+  // Fetch data function
+  const fetchAppointments = useCallback(async () => {
     const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+    setLoading(true);
+    setError(null);
 
-    const fetchAppointments = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        // 1. Fetch student records (document requests)
-        const studentsResponse = await fetch(
-          `${API_BASE_URL}/document-requests/docs-with-details`,
-          { headers: { Accept: "application/json" } }
+    try {
+      // 1. Fetch student records (document requests)
+      const studentsResponse = await fetch(
+        `${API_BASE_URL}/document-requests/docs-with-details`,
+        { headers: { Accept: "application/json" } }
+      );
+      if (!studentsResponse.ok) {
+        throw new Error(
+          `Failed to fetch student details: ${studentsResponse.status}`
         );
-        if (!studentsResponse.ok) {
-          throw new Error(
-            `Failed to fetch student details: ${studentsResponse.status}`
-          );
-        }
-        const studentsData = await studentsResponse.json();
-        if (!Array.isArray(studentsData)) {
-          throw new Error("Invalid response format: expected an array");
-        }
+      }
+      const studentsData = await studentsResponse.json();
+      if (!Array.isArray(studentsData)) {
+        throw new Error("Invalid response format: expected an array");
+      }
 
-        // 2. Fetch all appointment statuses
-        const statusResponse = await fetch(`${API_BASE_URL}/status`, {
-          headers: { Accept: "application/json" },
-        });
-        if (!statusResponse.ok) {
-          throw new Error(`Failed to fetch statuses: ${statusResponse.status}`);
-        }
+      // 2. Fetch all appointment statuses
+      const statusResponse = await fetch(`${API_BASE_URL}/status`, {
+        headers: { Accept: "application/json" },
+      });
+      if (!statusResponse.ok) {
+        throw new Error(`Failed to fetch statuses: ${statusResponse.status}`);
+      }
         const statusData = await statusResponse.json();
 
         // Debug: Log all status data to see what we're getting
@@ -595,10 +598,26 @@ const useAppointment = () => {
       } finally {
         setLoading(false);
       }
+    }, []);
+
+  // Fetch data on mount
+  useEffect(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
+
+  // Listen for appointment status updates from other components
+  useEffect(() => {
+    const handleStatusUpdate = () => {
+      console.log("Status update event received, refreshing appointments...");
+      fetchAppointments();
     };
 
-    fetchAppointments();
-  }, []);
+    window.addEventListener("appointmentStatusUpdated", handleStatusUpdate);
+
+    return () => {
+      window.removeEventListener("appointmentStatusUpdated", handleStatusUpdate);
+    };
+  }, [fetchAppointments]);
 
   return {
     // Data states
@@ -644,6 +663,9 @@ const useAppointment = () => {
     approveAppointment,
     rejectAppointment,
     completeAppointment,
+
+    // Data refresh
+    fetchAppointments,
 
     // Style helpers
     getStatusColor,
