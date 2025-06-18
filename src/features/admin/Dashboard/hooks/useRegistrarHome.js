@@ -343,7 +343,7 @@ const useRegistrarHome = () => {
   useEffect(() => {
     fetchStats();
     // Set up a refresh interval
-    const interval = setInterval(fetchStats, 30000); // Refresh every 30 seconds
+    const interval = setInterval(fetchStats, 60000); // Refresh every 60 seconds
 
     return () => clearInterval(interval);
   }, [fetchStats]); // Use fetchStats as dependency

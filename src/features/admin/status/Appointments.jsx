@@ -66,9 +66,19 @@ const Appointments = () => {
   if (loading) {
     return (
       <div className="flex h-screen font-LatoRegular">
-        <Sidebar />
+        <div
+          className={`${
+            isSidebarOpen ? "w-[300px]" : "w-[100px]"
+          } transition-all duration-300 z-20`}
+        >
+          <Sidebar isSidebarOpen={isSidebarOpen} />
+        </div>
         <div className="flex-1 overflow-y-auto">
-          <Header />
+          <Header
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            title="Appointments"
+          />
           <div>
             <section className="min-h-[calc(100vh-160px)] z-10 bg-white p-5 my-5">
               {/* Header Section */}{" "}
@@ -202,7 +212,11 @@ const Appointments = () => {
 
   return (
     <div className="flex h-screen font-LatoRegular">
-      <div className={`${isSidebarOpen ? "w-[300px]" : "w-[100px]"}`}>
+      <div
+        className={`${
+          isSidebarOpen ? "w-[300px]" : "w-[100px]"
+        } transition-all duration-300 z-20`}
+      >
         <Sidebar isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="flex-1 overflow-y-auto">
