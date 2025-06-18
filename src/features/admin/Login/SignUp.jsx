@@ -23,6 +23,7 @@ const SignUp = () => {
     errors,
     isSubmitting,
     apiError,
+    error, // Add general error state
   } = useSignUp();
 
   return (
@@ -54,6 +55,13 @@ const SignUp = () => {
             </h2>
             <div className="w-[200px] h-1 bg-[#F3BC62] mb-6"></div>
             <div className="bg-[#FEFEFE] bg-opacity-70 p-10 rounded-lg shadow-lg max-w-md h-[530px] w-full">
+              {/* General Error Message */}
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+                  <p className="font-medium">{error}</p>
+                </div>
+              )}
+
               {/* Display API-level errors */}
               {apiError && (
                 <div className="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
