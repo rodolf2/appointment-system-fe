@@ -76,7 +76,7 @@ const Sidebar = ({ isSidebarOpen }) => {
             <ImageIcon
               src="/assets/icons/feedback.png"
               alt="Feedback Icon"
-              className={`w-6 h-6 ${
+              className={`w-8 h-8 ${
                 isActive("/feedback") ? "opacity-100" : "opacity-100"
               }`}
               color={isActive("/feedback") ? "black" : "white"}
